@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 3
-    </ion-title>
+    <ion-title class="ml-2"> Sugerencias </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,5 +11,13 @@
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+  <div class="h-full flex flex-col justify-center items-center">
+    <ion-textarea
+      label="Escribe una sugerencia o queja"
+      labelPlacement="floating"
+      placeholder="Enter text"
+      class="border-1 border-solid border-gray-300 rounded-md p-2"
+    ></ion-textarea>
+    <ion-button class="m-4">Enviar</ion-button>
+  </div>
 </ion-content>
