@@ -3,39 +3,62 @@ import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: 'cliente',
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'inicio',
         loadComponent: () =>
-          import('../features/routine/tab1.page').then((m) => m.Tab1Page),
+          import('../features/home/pages/home/home.page').then(
+            (m) => m.HomePage,
+          ),
       },
       {
-        path: 'tab2',
+        path: 'horarios',
         loadComponent: () =>
-          import('../features/schedule/tab2.page').then((m) => m.Tab2Page),
+          import('@feature/schedule/pages/schedule-page/schedule.page').then(
+            (m) => m.SchedulePageComponent,
+          ),
       },
       {
-        path: 'tab3',
+        path: 'feedback',
         loadComponent: () =>
           import('../features/feedback/tab3.page').then((m) => m.Tab3Page),
       },
       {
-        path: 'tab4',
+        path: 'rutinas',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('../features/routine/pages/routine.page').then(
+                (m) => m.RoutinePage,
+              ),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('../features/routine/pages/routine-detail.page').then(
+                (m) => m.RoutineDetailPage,
+              ),
+          },
+        ],
+      },
+      {
+        path: 'perfil',
         loadComponent: () =>
           import('../features/profile/tab4.page').then((m) => m.Tab4Page),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/cliente/inicio',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/cliente/inicio',
     pathMatch: 'full',
   },
 ];

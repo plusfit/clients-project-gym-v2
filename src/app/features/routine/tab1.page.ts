@@ -6,6 +6,8 @@ import {
   IonContent,
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from 'src/app/explore-container/explore-container.component';
+import {ButtonComponent} from "../../shared/components/button/button.component";
+import {InputComponent} from "../../shared/components/input/input.component";
 
 @Component({
   selector: 'app-tab1',
@@ -17,6 +19,8 @@ import { ExploreContainerComponent } from 'src/app/explore-container/explore-con
     IonTitle,
     IonContent,
     ExploreContainerComponent,
+    ButtonComponent,
+    InputComponent,
   ],
 })
 export class Tab1Page {

@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Horarios Disponibles</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+ <ion-grid>
+   <ion-row>
+     <ion-col size="12">
+       <app-day-selector (daySelected)="onDaySelected($event)"></app-day-selector>
+     </ion-col>
+   </ion-row>
+   <ion-row>
+     <ion-col>
+       <div class="schedule-list">
+         <app-schedule-card
+           *ngFor="let schedule of schedulesForDay"
+           [schedule]="schedule"
+           [currentUserId]="currentUserId"
+           (scheduleClicked)="onScheduleClicked($event)"
+         >
+         </app-schedule-card>
+       </div>
+     </ion-col>
+   </ion-row>
+ </ion-grid>
+
+
+
+  <!-- Modal de Confirmación de Inscripción -->
+<!--  <ion-modal [isOpen]="showModal">-->
+<!--    <app-enroll-confirmation-modal-->
+<!--      [schedule]="selectedSchedule"-->
+<!--      (confirm)="onEnrollConfirmed()"-->
+<!--      (cancel)="onModalDismiss()"-->
+<!--    >-->
+<!--    </app-enroll-confirmation-modal>-->
+<!--  </ion-modal>-->
+
+  <ion-modal [isOpen]="showModal">
+    <ng-template>
+      <app-enroll-confirmation-modal
+        [schedule]="selectedSchedule"
+        (confirm)="onEnrollConfirmed()"
+        (cancel)="onModalDismiss()"
+      >
+      </app-enroll-confirmation-modal>
+    </ng-template>
+  </ion-modal>
+
+
+  <!-- Alert para límite de inscripciones -->
+<!--  <ion-alert-->
+<!--    [isOpen]="showAlert"-->
+<!--    (ionAlertDidDismiss)="onAlertDismiss()"-->
+<!--    header="Límite de Inscripciones"-->
+<!--    message="{{ alertMessage }}"-->
+<!--    buttons="OK"-->
+<!--  >-->
+<!--  </ion-alert>-->
+</ion-content>

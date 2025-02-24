@@ -5,7 +5,7 @@ import {
   IonTitle,
   IonContent,
 } from '@ionic/angular/standalone';
-import { ExploreContainerComponent } from 'src/app/explore-container/explore-container.component';
+import { ExploreContainerComponent } from '../../explore-container/explore-container.component';
 
 @Component({
   selector: 'app-tab4',

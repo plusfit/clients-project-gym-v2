@@ -12,6 +12,8 @@ import {
   timeOutline,
   chatboxEllipsesOutline,
   personOutline,
+  homeOutline,
+  walkOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -29,6 +31,8 @@ export class TabsPage {
       timeOutline,
       chatboxEllipsesOutline,
       personOutline,
+      homeOutline,
+      walkOutline,
     });
   }
 }

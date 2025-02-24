@@ -8,9 +8,9 @@ import {
 import { ExploreContainerComponent } from 'src/app/explore-container/explore-container.component';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
+  selector: 'app-login',
+  templateUrl: 'login.page.html',
+  styleUrls: ['login.page.scss'],
   imports: [
     IonHeader,
     IonToolbar,

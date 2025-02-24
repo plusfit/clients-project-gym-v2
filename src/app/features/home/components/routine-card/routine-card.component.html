@@ -1,0 +1,29 @@
+<ion-card>
+  <ng-container *ngIf="routine; else noRoutine">
+    <ion-card-header>
+      <ion-card-title>
+        {{ routine.name }} <ion-icon name="barbell-outline"></ion-icon>
+      </ion-card-title>
+      <ion-card-subtitle>{{ routine.category | uppercase }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <p>{{ routine.description }}</p>
+      <ion-list class="exercise-list">
+        <ion-list-header>
+          <ion-label>Ejercicios</ion-label>
+        </ion-list-header>
+        <ng-container *ngFor="let exercise of routine.exercises">
+          <app-exercise-item [exercise]="exercise"></app-exercise-item>
+        </ng-container>
+      </ion-list>
+    </ion-card-content>
+  </ng-container>
+  <ng-template #noRoutine>
+    <ion-card-header>
+      <ion-card-title>No hay rutina para hoy</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>¡Descansa! No hay rutina para hoy.</p>
+    </ion-card-content>
+  </ng-template>
+</ion-card>

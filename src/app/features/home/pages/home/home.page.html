@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Inicio </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <h1>{{ today | date: 'EEEE' }}</h1>
+        <h2>¡Hola, Bienvenido!</h2>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="p-4">
+          <h3>Tu rutina para hoy:</h3>
+          <app-routine-card [routine]="routine$ | async"></app-routine-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

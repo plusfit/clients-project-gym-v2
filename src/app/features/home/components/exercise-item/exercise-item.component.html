@@ -1,0 +1,11 @@
+<ion-item>
+  <ion-icon
+    slot="start"
+    [name]="exercise.type === 'cardio' ? 'walk-outline' : 'barbell-outline'"
+  ></ion-icon>
+  <ion-label>
+    <h4>{{ exercise.name }}</h4>
+    <p *ngIf="exercise.type === 'cardio'">Tiempo: {{ exercise.minutes }}</p>
+    <p *ngIf="exercise.type === 'sala'">Series: {{ exercise.series }}</p>
+  </ion-label>
+</ion-item>
