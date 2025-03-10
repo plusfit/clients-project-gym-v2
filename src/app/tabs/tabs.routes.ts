@@ -31,15 +31,15 @@ export const routes: Routes = [
           {
             path: '',
             loadComponent: () =>
-              import('../features/routine/pages/routine.page').then(
-                (m) => m.RoutinePage,
+              import('../features/routine/pages/routine-detail.page').then(
+                (m) => m.RoutineDetailPage,
               ),
           },
           {
-            path: ':id',
+            path: 'ejercicio/:id',
             loadComponent: () =>
-              import('../features/routine/pages/routine-detail.page').then(
-                (m) => m.RoutineDetailPage,
+              import('../features/routine/pages/exercise-detail.page').then(
+                (m) => m.ExerciseDetailPage,
               ),
           },
         ],
@@ -47,7 +47,9 @@ export const routes: Routes = [
       {
         path: 'perfil',
         loadComponent: () =>
-          import('../features/profile/tab4.page').then((m) => m.Tab4Page),
+          import('@feature/profile/pages/profile.page').then(
+            (m) => m.ProfilePage,
+          ),
       },
       {
         path: '',

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngxs/store';
-
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import {
   IonBackButton,
   IonButtons,
@@ -13,7 +11,10 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { Routine } from '@shared/interfaces/routines.interface';
-import { RoutineState } from '@feature/routine/state/routine.state';
+import {
+  RoutineState,
+  LoadRoutines,
+} from '@feature/routine/state/routine.state';
 import { SubroutineCardComponent } from '@feature/routine/components/subroutine-card.component';
 
 @Component({
@@ -22,28 +23,53 @@ import { SubroutineCardComponent } from '@feature/routine/components/subroutine-
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button defaultHref="/cliente/rutinas"></ion-back-button>
+          <ion-back-button
+            defaultHref="/cliente/rutinas"
+            text="Atrás"
+          ></ion-back-button>
         </ion-buttons>
-        <ion-title>{{ routine?.name }}</ion-title>
+        <ion-title>Tus Rutinas</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
+      <h1>{{ routine?.name }}</h1>
       <p class="description">{{ routine?.description }}</p>
       <div class="subroutines">
         <app-subroutine-card
-          *ngFor="let sub of routine?.subRoutines"
+          *ngFor="let sub of routine?.subRoutines; let i = index"
           [subroutine]="sub"
-        >
-        </app-subroutine-card>
+          [index]="i"
+        ></app-subroutine-card>
       </div>
     </ion-content>
   `,
   styles: [
     `
-      .description {
-        font-size: 1rem;
+      ion-header {
+        background-color: var(--ion-color-primary);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      ion-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+      }
+      ion-content {
+        background-color: var(--ion-color-primary);
+      }
+      h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
         margin-bottom: 16px;
-        color: #424242;
+        line-height: 1.2;
+        color: var(--ion-color-primary);
+      }
+      .description {
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin-bottom: 24px;
+        color: var(--ion-color-secondary);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
       }
       .subroutines {
         display: flex;
@@ -68,16 +94,18 @@ import { SubroutineCardComponent } from '@feature/routine/components/subroutine-
 export class RoutineDetailPage implements OnInit {
   routine?: Routine;
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store,
-  ) {}
+  constructor(private store: Store) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
     this.store
-      .select(RoutineState.getRoutines)
-      .pipe(map((routines: any) => routines.find((r: Routine) => r._id === id)))
+      .dispatch(new LoadRoutines())
+      .pipe(
+        switchMap(() =>
+          this.store
+            .select(RoutineState.getRoutines)
+            .pipe(map((routines: Routine[]) => routines[0])),
+        ),
+      )
       .subscribe((routine) => {
         this.routine = routine;
       });

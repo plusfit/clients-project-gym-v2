@@ -19,6 +19,9 @@ import { environment } from './environments/environment';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { ScheduleState } from '@feature/schedule/state/schedule.state';
 import { RoutineState } from '@feature/routine/state/routine.state';
+import { register } from 'swiper/element/bundle';
+import { UserState } from '@feature/profile/state/user.state';
+register();
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -26,7 +29,7 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
     importProvidersFrom(
-      NgxsModule.forRoot([HomeState, ScheduleState, RoutineState], {
+      NgxsModule.forRoot([HomeState, ScheduleState, RoutineState, UserState], {
         developmentMode: !environment.production,
         selectorOptions: {
           suppressErrors: false,

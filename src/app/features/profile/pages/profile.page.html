@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="profile-container" *ngIf="user$ | async as user">
+    <ion-card class="profile-card">
+      <img
+        class="profile-image"
+        ngSrc="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
+        width="800"
+        height="350"
+        alt="Imagen de perfil"
+      />
+      <ion-card-header>
+        <ion-card-title>
+          <ion-icon
+            name="person-circle-outline"
+            class="profile-icon"
+          ></ion-icon>
+         <span class="title">
+            {{ user.userInfo.name }}
+         </span></ion-card-title
+        >
+        <ion-card-subtitle
+          ><ion-icon name="calendar-outline" class="info-icon"></ion-icon> {{
+          age }} años</ion-card-subtitle
+        >
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
+          Mejorar la condición física
+        </p>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Información</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <ion-icon name="mail-outline" class="info-icon"></ion-icon> {{
+          user.email }}
+        </p>
+        <p>
+          <ion-icon name="phone-portrait-outline" class="info-icon"></ion-icon> {{
+          user.userInfo.phone }}
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -27,6 +27,7 @@ export interface Exercise {
   rest?: number;
   reps?: number;
   series?: number;
+  imageUrl?: string;
   createdAt: string;
   updatedAt: string;
 }

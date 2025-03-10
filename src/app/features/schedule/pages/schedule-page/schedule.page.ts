@@ -1,10 +1,8 @@
-// schedule-page.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
   IonModal,
-  // IonAlert,
   IonTitle,
   IonToolbar,
   IonHeader,
@@ -12,6 +10,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonAlert,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { EnrollConfirmationModalComponent } from '@feature/schedule/components/enroll-confirmation-modal/enroll-confirmation-modal.component';
@@ -19,9 +18,12 @@ import { ScheduleCardComponent } from '@feature/schedule/components/schedule-car
 import { DaySelectorComponent } from '@feature/schedule/components/day-selector/day-selector.component';
 import {
   EnrollInSchedule,
+  // Suponemos que existe una acción de desinscripción:
+  UnenrollFromSchedule,
   Schedule,
   ScheduleState,
 } from '@feature/schedule/state/schedule.state';
+import { UnsubscribeConfirmationModalComponent } from '@feature/schedule/components/unsubscribe-confirmation-modal/unsubscribe-confirmation-modal.component';
 
 @Component({
   selector: 'app-schedule-page',
@@ -33,8 +35,9 @@ import {
     DaySelectorComponent,
     ScheduleCardComponent,
     EnrollConfirmationModalComponent,
+    // Suponiendo que también importas el modal de desinscripción:
+    // UnsubscribeConfirmationModalComponent,
     IonModal,
-    // IonAlert,
     IonTitle,
     IonToolbar,
     IonHeader,
@@ -42,6 +45,8 @@ import {
     IonGrid,
     IonRow,
     IonCol,
+    UnsubscribeConfirmationModalComponent,
+    IonAlert,
   ],
 })
 export class SchedulePageComponent implements OnInit {
@@ -53,8 +58,11 @@ export class SchedulePageComponent implements OnInit {
   userPlan = { days: 2 };
   enrolledDaysCount: number = 0;
 
-  showModal: boolean = false;
+  // Variables para modal
+  showEnrollModal: boolean = false;
+  showUnsubscribeModal: boolean = false;
   selectedSchedule: Schedule | null = null;
+
   showAlert: boolean = false;
   alertMessage: string = '';
 
@@ -92,22 +100,21 @@ export class SchedulePageComponent implements OnInit {
   }
 
   onScheduleClicked(schedule: Schedule) {
-    // Si el usuario ya está inscrito en este horario, no se hace nada
-    if (schedule.clients.includes(this.currentUserId)) {
-      return;
-    }
-
-    // Si ya alcanzó el límite de días permitidos, se muestra un alert
-    if (this.enrolledDaysCount >= this.userPlan.days) {
-      this.alertMessage =
-        'Ya estás inscrito en el número máximo de días permitidos. Debes desinscribirte de un horario para inscribirte en otro.';
-      this.showAlert = true;
-      return;
-    }
-
-    // Abrir el modal de confirmación
     this.selectedSchedule = schedule;
-    this.showModal = true;
+    if (schedule.clients.includes(this.currentUserId)) {
+      // Si el usuario ya está inscrito, se abre el modal de desinscripción
+      this.showUnsubscribeModal = true;
+    } else {
+      // Si no está inscrito, validar límite de días
+      if (this.enrolledDaysCount >= this.userPlan.days) {
+        this.alertMessage =
+          'Ya estás inscrito en el número máximo de días permitidos. Debes desinscribirte de un horario para inscribirte en otro.';
+        this.showAlert = true;
+        return;
+      }
+      // Abrir el modal de inscripción
+      this.showEnrollModal = true;
+    }
   }
 
   onEnrollConfirmed() {
@@ -115,18 +122,37 @@ export class SchedulePageComponent implements OnInit {
       this.store.dispatch(
         new EnrollInSchedule(this.selectedSchedule._id, this.currentUserId),
       );
-      this.showModal = false;
-      this.selectedSchedule = null;
+      this.closeModals();
     }
   }
 
-  onModalDismiss() {
-    this.showModal = false;
+  onUnsubscribeConfirmed() {
+    if (this.selectedSchedule) {
+      this.store.dispatch(
+        new UnenrollFromSchedule(this.selectedSchedule._id, this.currentUserId),
+      );
+      this.closeModals();
+    }
+  }
+
+  onEnrollModalDismiss() {
+    this.showEnrollModal = false;
+    this.selectedSchedule = null;
+  }
+
+  onUnsubscribeModalDismiss() {
+    this.showUnsubscribeModal = false;
     this.selectedSchedule = null;
   }
 
   onAlertDismiss() {
     this.showAlert = false;
     this.alertMessage = '';
+  }
+
+  private closeModals() {
+    this.showEnrollModal = false;
+    this.showUnsubscribeModal = false;
+    this.selectedSchedule = null;
   }
 }

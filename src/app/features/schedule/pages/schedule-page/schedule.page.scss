@@ -1,10 +1,50 @@
-.container {
-  padding: 16px;
+:host {
+  display: block;
+  --ion-background-color: #f8f9fa;
 }
 
+/* HEADER */
+ion-header {
+  background: var(--ion-color-primary) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+ion-toolbar.custom-toolbar {
+  padding: 0 16px;
+}
+ion-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--ion-color-primary)
+}
+
+/* CONTENT */
+.container {
+  padding: 16px;
+  background-color: var(--ion-color-light);
+}
+
+.schedule-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--ion-color-primary);
+  margin-bottom: 16px;
+}
+
+/* LISTA DE HORARIOS */
 .schedule-list {
   display: flex;
   flex-direction: column;
+  gap: 16px;
   overflow-y: auto;
   max-height: calc(100vh - 200px);
+}
+
+app-schedule-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Estilos opcionales para el modal */
+ion-modal {
+  --background: var(--ion-color-light);
 }

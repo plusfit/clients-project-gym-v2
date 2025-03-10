@@ -1,11 +1,24 @@
-<ion-item>
+<ion-item style="border-bottom: 1px solid var(--ion-color-light-shade);">
   <ion-icon
     slot="start"
     [name]="exercise.type === 'cardio' ? 'walk-outline' : 'barbell-outline'"
+    style="color: var(--ion-color-primary); font-size: 1.5rem;"
   ></ion-icon>
   <ion-label>
-    <h4>{{ exercise.name }}</h4>
-    <p *ngIf="exercise.type === 'cardio'">Tiempo: {{ exercise.minutes }}</p>
-    <p *ngIf="exercise.type === 'sala'">Series: {{ exercise.series }}</p>
+    <h4 style="color: var(--ion-color-dark); font-size: 1rem;">
+      {{ exercise.name }}
+    </h4>
+    <p
+      *ngIf="exercise.type === 'cardio'"
+      style="color: var(--ion-color-secondary); font-size: 0.85rem;"
+    >
+      Tiempo: {{ exercise.minutes }}
+    </p>
+    <p
+      *ngIf="exercise.type === 'sala'"
+      style="color: var(--ion-color-secondary); font-size: 0.85rem;"
+    >
+      Series: {{ exercise.series }}
+    </p>
   </ion-label>
 </ion-item>

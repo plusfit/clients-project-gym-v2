@@ -88,10 +88,12 @@ export class RoutinePage implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new LoadRoutines());
+    this.routines$.subscribe((routines) => {
+      this.router.navigate(['/cliente/rutinas', routines[0]._id]);
+    });
   }
 
   openRoutine(routine: Routine) {
-    // Se redirige a la página de detalle, pasando él, id de la rutina
     this.router.navigate(['/cliente/rutinas', routine._id]);
   }
 }

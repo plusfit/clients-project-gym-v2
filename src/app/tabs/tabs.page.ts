@@ -14,6 +14,19 @@ import {
   personOutline,
   homeOutline,
   walkOutline,
+  bicycleOutline,
+  repeatOutline,
+  layersOutline,
+  peopleOutline,
+  checkmarkCircleOutline,
+  calendarOutline,
+  trashOutline,
+  personCircleOutline,
+  trophyOutline,
+  mailOutline,
+  phonePortraitOutline,
+  documentTextOutline,
+  fitnessOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -26,6 +39,7 @@ export class TabsPage {
   public environmentInjector = inject(EnvironmentInjector);
 
   constructor() {
+    // TODO: Move to a new file
     addIcons({
       barbellOutline,
       timeOutline,
@@ -33,6 +47,19 @@ export class TabsPage {
       personOutline,
       homeOutline,
       walkOutline,
+      bicycleOutline,
+      layersOutline,
+      repeatOutline,
+      peopleOutline,
+      checkmarkCircleOutline,
+      calendarOutline,
+      trashOutline,
+      personCircleOutline,
+      trophyOutline,
+      mailOutline,
+      phonePortraitOutline,
+      documentTextOutline,
+      fitnessOutline,
     });
   }
 }

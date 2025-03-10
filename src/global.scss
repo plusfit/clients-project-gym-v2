@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'swiper/css';
 
 /*
  * App Global CSS
@@ -28,22 +29,6 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
-
-
-
-h1 {
-  font-weight: bold;
-  font-size: 3rem;
-  padding-left: 1.2rem;
-}
-h2 {
-  font-size: 1.2rem;
-  padding-left: 1.2rem;
-}
-h3 {
-  font-size: 1rem;
-  padding-left: 1.2rem;
-}
 
 p {
   padding-top: 0.3rem;
