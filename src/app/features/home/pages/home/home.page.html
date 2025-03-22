@@ -13,22 +13,28 @@
 
 <ion-content>
   <div class="ion-padding">
-    <!-- Encabezado con día y hora -->
     <div class="welcome-container ion-padding">
       <ion-row>
         <ion-col size="8">
-          <h1 class="day-display">{{ today | dayTranslate }}</h1>
+          <h2 class="day-display">{{ today | dayTranslate }}</h2>
         </ion-col>
-        <ion-col size="4" class="ion-text-end">
-          <h2 class="time-display">{{ today | date:'shortTime' }}</h2>
+        <ion-col size="4" class="ion-text-end time-display">
+          <h2 class="time-display">{{ currentTime | date:'shortTime' }}</h2>
         </ion-col>
       </ion-row>
 
       <!-- Saludo personalizado -->
       <div class="greeting">
-        <ion-icon color="primary" name="sunny-outline"></ion-icon>
         <h2>¡Hola, Bienvenido!</h2>
       </div>
+    </div>
+
+    <!-- Motivación del día -->
+    <div
+      class="motivation-banner"
+      *ngIf="motivationalMessage$ | async as message"
+    >
+      <p class="ion-text-center">"{{ message }}"</p>
     </div>
 
     <!-- Sección de rutina actual -->
@@ -55,18 +61,6 @@
           </ion-button>
         </div>
       </ng-template>
-    </div>
-
-    <!-- Tips o motivaciones del día -->
-    <div class="content-card" *ngIf="motivationalMessage$ | async as message">
-      <div class="section-title ion-padding-start ion-padding-top">
-        <ion-icon name="flame-outline" color="primary"></ion-icon>
-        <h3>Motivación del día</h3>
-      </div>
-
-      <div class="ion-padding">
-        <p class="ion-text-center">"{{ message }}"</p>
-      </div>
     </div>
   </div>
 </ion-content>

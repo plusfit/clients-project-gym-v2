@@ -27,6 +27,8 @@ import {
   phonePortraitOutline,
   documentTextOutline,
   fitnessOutline,
+  notificationsOutline,
+  sunnyOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -60,6 +62,8 @@ export class TabsPage {
       phonePortraitOutline,
       documentTextOutline,
       fitnessOutline,
+      notificationsOutline,
+      sunnyOutline,
     });
   }
 }
