@@ -3,71 +3,87 @@
 /* Variables de colores globales */
 :root {
   /* Color primario */
-  --ion-color-primary: #1565c0;                   /* Blue 800 */
+  --ion-color-primary: #1565c0; /* Blue 800 */
   --ion-color-primary-rgb: 21, 101, 192;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #0d47a1;             /* Blue 900 */
-  --ion-color-primary-tint: #1976d2;              /* Blue 700 */
+  --ion-color-primary-shade: #0d47a1; /* Blue 900 */
+  --ion-color-primary-tint: #1976d2; /* Blue 700 */
 
   /* Color secundario */
   --ion-color-secondary: #6c757d;
-  --ion-color-secondary-rgb: 108,117,125;
+  --ion-color-secondary-rgb: 108, 117, 125;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
   --ion-color-secondary-shade: #5a6268;
   --ion-color-secondary-tint: #7a8288;
 
   /* Color terciario (amarillo mostaza) */
-  --ion-color-tertiary: #FFB300;
+  --ion-color-tertiary: #ffb300;
   --ion-color-tertiary-rgb: 255, 179, 0;
   --ion-color-tertiary-contrast: #000000;
   --ion-color-tertiary-contrast-rgb: 0, 0, 0;
-  --ion-color-tertiary-shade: #C68400;
-  --ion-color-tertiary-tint: #FFD54F;
+  --ion-color-tertiary-shade: #c68400;
+  --ion-color-tertiary-tint: #ffd54f;
 
   /* Color de éxito */
   --ion-color-success: #198754;
-  --ion-color-success-rgb: 25,135,84;
+  --ion-color-success-rgb: 25, 135, 84;
   --ion-color-success-contrast: #ffffff;
-  --ion-color-success-contrast-rgb: 255,255,255;
+  --ion-color-success-contrast-rgb: 255, 255, 255;
   --ion-color-success-shade: #157347;
   --ion-color-success-tint: #2e9d65;
 
   /* Color de advertencia */
   --ion-color-warning: #ffc107;
-  --ion-color-warning-rgb: 255,193,7;
+  --ion-color-warning-rgb: 255, 193, 7;
   --ion-color-warning-contrast: #000000;
-  --ion-color-warning-contrast-rgb: 0,0,0;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
   --ion-color-warning-shade: #e0a800;
   --ion-color-warning-tint: #ffca2c;
 
   /* Color de peligro */
   --ion-color-danger: #dc3545;
-  --ion-color-danger-rgb: 220,53,69;
+  --ion-color-danger-rgb: 220, 53, 69;
   --ion-color-danger-contrast: #ffffff;
-  --ion-color-danger-contrast-rgb: 255,255,255;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
   --ion-color-danger-shade: #c82333;
   --ion-color-danger-tint: #e4606d;
 
   /* Colores claros y oscuros */
   --ion-color-light: #f8f9fa;
-  --ion-color-light-rgb: 248,249,250;
+  --ion-color-light-rgb: 248, 249, 250;
   --ion-color-light-contrast: #000000;
-  --ion-color-light-contrast-rgb: 0,0,0;
+  --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #e9ecef;
   --ion-color-light-tint: #f8f9fa;
 
   --ion-color-dark: #212529;
-  --ion-color-dark-rgb: 33,37,41;
+  --ion-color-dark-rgb: 33, 37, 41;
   --ion-color-dark-contrast: #ffffff;
-  --ion-color-dark-contrast-rgb: 255,255,255;
+  --ion-color-dark-contrast-rgb: 255, 255, 255;
   --ion-color-dark-shade: #1d2124;
   --ion-color-dark-tint: #343a40;
+
+  /* Fuente principal */
+  --ion-font-family: 'APEXPRO', sans-serif;
 }
 
 /* Estilos globales para la fuente */
 * {
   font-family: 'Inter', sans-serif;
   letter-spacing: 1px;
+}
+
+/* Font-face (debe estar al inicio del archivo) */
+@font-face {
+  font-family: 'APEXPRO';
+  src: url('../assets/fonts/APEXPRO.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+h2 {
+  font-family: 'APEXPRO' !important;
+  letter-spacing: 0.5px;
 }

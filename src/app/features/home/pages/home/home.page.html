@@ -1,42 +1,72 @@
-<ion-header [translucent]="true" style="background-color: var(--ion-color-primary);">
+<ion-header class="header-container">
   <ion-toolbar>
-    <ion-title style="color: var(--ion-color-primary-contrast);">Inicio</ion-title>
+    <ion-title>
+      <strong>Fitness</strong><span style="opacity: 0.7">Plus</span>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" style="background-color: var(--ion-color-light);">
-  <ion-grid>
+<ion-content>
+  <div class="ion-padding">
     <!-- Encabezado con día y hora -->
-    <ion-row class="header-row">
-      <ion-col size="8">
-        <h1 style="color: var(--ion-color-primary);">
-          {{ today | date: 'EEEE' }}
-        </h1>
-      </ion-col>
-      <ion-col size="4" class="time-col" style="text-align: right;">
-        <h2 style="color: var(--ion-color-secondary);">
-          {{ today | date:'shortTime' }}
-        </h2>
-      </ion-col>
-    </ion-row>
-    <!-- Mensaje de bienvenida -->
-    <ion-row>
-      <ion-col size="12">
-        <h2 style="color: var(--ion-color-secondary);">¡Hola, Bienvenido!</h2>
-      </ion-col>
-    </ion-row>
-    <!-- Sección de rutina -->
-    <ion-row>
-      <ion-col size="12">
-        <div class="p-4">
-          <h3 style="color: var(--ion-color-primary);">Tu rutina para hoy:</h3>
-          <!-- Se asume que el componente routine-card emite el evento exerciseClicked -->
-          <app-routine-card
-            [routine]="routine$ | async"
-            (exerciseClicked)="onExerciseClicked($event)"
-          ></app-routine-card>
+    <div class="welcome-container ion-padding">
+      <ion-row>
+        <ion-col size="8">
+          <h1 class="day-display">{{ today | dayTranslate }}</h1>
+        </ion-col>
+        <ion-col size="4" class="ion-text-end">
+          <h2 class="time-display">{{ today | date:'shortTime' }}</h2>
+        </ion-col>
+      </ion-row>
+
+      <!-- Saludo personalizado -->
+      <div class="greeting">
+        <ion-icon color="primary" name="sunny-outline"></ion-icon>
+        <h2>¡Hola, Bienvenido!</h2>
+      </div>
+    </div>
+
+    <!-- Sección de rutina actual -->
+    <div class="content-card">
+      <div class="section-title ion-padding-start ion-padding-top">
+        <ion-icon name="barbell-outline" color="primary"></ion-icon>
+        <h3>Tu rutina para hoy</h3>
+      </div>
+
+      <ng-container *ngIf="(routine$ | async) as routine; else emptyRoutine">
+        <app-routine-card
+          [routine]="routine"
+          (exerciseClicked)="onExerciseClicked($event)"
+        ></app-routine-card>
+      </ng-container>
+
+      <ng-template #emptyRoutine>
+        <div class="empty-state">
+          <ion-icon name="fitness-outline" color="medium"></ion-icon>
+          <p>No tienes una rutina asignada para hoy</p>
+          <ion-button fill="outline" size="small">
+            Ver catálogo
+            <ion-icon slot="end" name="arrow-forward"></ion-icon>
+          </ion-button>
         </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+      </ng-template>
+    </div>
+
+    <!-- Tips o motivaciones del día -->
+    <div class="content-card" *ngIf="motivationalMessage$ | async as message">
+      <div class="section-title ion-padding-start ion-padding-top">
+        <ion-icon name="flame-outline" color="primary"></ion-icon>
+        <h3>Motivación del día</h3>
+      </div>
+
+      <div class="ion-padding">
+        <p class="ion-text-center">"{{ message }}"</p>
+      </div>
+    </div>
+  </div>
 </ion-content>

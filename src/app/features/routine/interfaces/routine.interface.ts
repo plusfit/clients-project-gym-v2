@@ -2,14 +2,15 @@ export interface Exercise {
   _id: string;
   name: string;
   description: string;
-  type: string;
-  mode: string;
-  minutes: number;
-  rest: number;
-  reps: number;
-  series: number;
-  createdAt: Date;
-  updatedAt: Date;
+  type: 'cardio' | 'room';
+  rest?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  reps?: number;
+  series?: number;
+  minutes?: number;
+  imageUrl?: string;
+  videoUrl?: string;
 }
 
 export interface SubRoutine {
@@ -17,16 +18,33 @@ export interface SubRoutine {
   name: string;
   description: string;
   exercises: Exercise[];
+  updatedAt: string;
+  createdAt: string;
   category: string;
-  createdAt: Date;
-  updatedAt: Date;
+  __v?: number;
 }
 
 export interface Routine {
   _id: string;
   name: string;
   description: string;
-  category: string;
   isCustom: boolean;
+  isGeneral: boolean;
+  type: string;
   subRoutines: SubRoutine[];
+}
+
+export interface RoutineResponse {
+  success: boolean;
+  data: Routine;
+}
+
+export interface SubRoutineWithExerciseDetails {
+  _id: string;
+  name: string;
+  description: string;
+  exercises: Exercise[];
+  category: string;
+  updatedAt: string;
+  createdAt: string;
 }

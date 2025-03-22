@@ -16,13 +16,14 @@ import {
   IonCardSubtitle,
 } from '@ionic/angular/standalone';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Exercise } from '@shared/interfaces/routines.interface';
+
 import {
-  LoadSelectedExercise,
   RoutineState,
+  LoadSelectedExercise,
 } from '@feature/routine/state/routine.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { Exercise } from '../interfaces/routine.interface';
 
 @Component({
   selector: 'app-exercise-detail',

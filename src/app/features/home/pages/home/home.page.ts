@@ -10,11 +10,12 @@ import {
 } from '@ionic/angular/standalone';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { RoutineCardComponent } from '../../components/routine-card/routine-card.component';
-import { SubRoutine } from '@shared/interfaces/routines.interface';
 import { Observable } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
 import { HomeState } from '@feature/home/state/home.state';
 import { Router } from '@angular/router';
+import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
+import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +32,7 @@ import { Router } from '@angular/router';
     IonRow,
     IonCol,
     AsyncPipe,
+    DayTranslatePipe,
   ],
   standalone: true,
 })
@@ -46,12 +48,9 @@ export class HomePage implements OnInit {
     private router: Router,
   ) {}
 
-  ngOnInit(): void {
-    // Aquí podrías despachar acciones para cargar datos si fuera necesario
-  }
+  ngOnInit(): void {}
 
   onExerciseClicked(exercise: any) {
-    // Suponemos que el ejercicio posee una propiedad 'id'
     this.router.navigate(['/cliente/rutinas', exercise.id]);
   }
 }

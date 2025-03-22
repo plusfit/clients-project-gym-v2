@@ -6,3 +6,104 @@ h1 {
   font-size: 2rem;
   line-height: 1.2;
 }
+
+/* Estilos mejorados para el home */
+:host {
+  --header-height: 56px;
+}
+
+.header-container {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.welcome-container {
+  margin-top: 16px;
+  margin-bottom: 24px;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: rgba(var(--ion-color-primary-rgb), 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.day-display {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+  transform: translateY(2px);
+}
+
+.time-display {
+  font-size: 1.2rem;
+  font-weight: 500;
+  opacity: 0.9;
+  margin: 0;
+}
+
+.greeting {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  ion-icon {
+    margin-right: 8px;
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.3rem;
+  }
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+
+  ion-icon {
+    margin-right: 8px;
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+}
+
+.content-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: 24px;
+  transition: transform 0.2s ease-in-out;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 36px;
+
+  ion-icon {
+    font-size: 3rem;
+    color: var(--ion-color-medium);
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+  }
+
+  ion-button {
+    margin-top: 16px;
+  }
+}

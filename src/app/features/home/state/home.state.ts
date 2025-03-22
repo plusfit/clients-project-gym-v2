@@ -1,5 +1,5 @@
+import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { Routine, SubRoutine } from '@shared/interfaces/routines.interface';
 
 export interface HomeStateModel {
   routine: SubRoutine;
@@ -23,12 +23,11 @@ export class SetHomeData {
         {
           _id: '673b55140c0e5a4e3cd664b1',
           name: 'Flexiones',
-          type: 'sala',
+          type: 'room',
           series: 3,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b2',
@@ -38,47 +37,42 @@ export class SetHomeData {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b3',
           name: 'Sentadillas',
-          type: 'sala',
+          type: 'room',
           series: 4,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b4',
           name: 'Abdominales',
-          type: 'sala',
+          type: 'room',
           series: 3,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b5',
           name: 'Burpees',
-          type: 'sala',
+          type: 'room',
           series: 2,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b6',
           name: 'Plancha',
-          type: 'sala',
+          type: 'room',
           series: 3,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
         {
           _id: '673b55140c0e5a4e3cd664b7',
@@ -88,7 +82,6 @@ export class SetHomeData {
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           description: '',
-          mode: '',
         },
       ],
       createdAt: new Date('2025-01-19T17:22:34.993Z').toISOString(),

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonItem, IonLabel, IonIcon } from '@ionic/angular/standalone';
-import { Exercise } from '@shared/interfaces/routines.interface';
+import { Exercise } from '../interfaces/routine.interface';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -20,13 +20,19 @@ import { RouterLink } from '@angular/router';
       <ion-label>
         <h2>{{ exercise.name }}</h2>
         <p class="description">{{ exercise.description }}</p>
-        <p class="details">
+        <p class="details" *ngIf="isCardio">
           <ion-icon name="time-outline"></ion-icon> Minutos:
-          {{ exercise.minutes }} |
+          {{ exercise.minutes || 0 }} |
+          <ion-icon name="pause-outline"></ion-icon> Descanso:
+          {{ exercise.rest || 0 }} min
+        </p>
+        <p class="details" *ngIf="!isCardio">
           <ion-icon name="repeat-outline"></ion-icon> Reps:
-          {{ exercise.reps }} |
+          {{ exercise.reps || 0 }} |
           <ion-icon name="layers-outline"></ion-icon> Series:
-          {{ exercise.series }}
+          {{ exercise.series || 0 }} |
+          <ion-icon name="pause-outline"></ion-icon> Descanso:
+          {{ exercise.rest || 0 }} min
         </p>
       </ion-label>
     </ion-item>
@@ -71,4 +77,8 @@ import { RouterLink } from '@angular/router';
 })
 export class ExerciseCardComponent {
   @Input() exercise!: Exercise;
+
+  get isCardio(): boolean {
+    return this.exercise.type === 'cardio';
+  }
 }

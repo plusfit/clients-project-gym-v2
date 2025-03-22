@@ -12,7 +12,7 @@ import {
   IonList,
   IonListHeader,
 } from '@ionic/angular/standalone';
-import { SubRoutine } from '@shared/interfaces/routines.interface';
+import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
 
 @Component({
   selector: 'app-routine-card',

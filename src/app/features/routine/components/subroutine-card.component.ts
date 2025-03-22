@@ -9,7 +9,7 @@ import {
   IonIcon,
   IonButton,
 } from '@ionic/angular/standalone';
-import { SubRoutine } from '@shared/interfaces/routines.interface';
+import { SubRoutine } from '../interfaces/routine.interface';
 import { ExerciseCardComponent } from '@feature/routine/components/exercise-card.component';
 
 @Component({
@@ -28,7 +28,7 @@ import { ExerciseCardComponent } from '@feature/routine/components/exercise-card
         <p>{{ subroutine.description }}</p>
         <ion-list>
           <app-exercise-card
-            *ngFor="let exercise of subroutine.exercises"
+            *ngFor="let exercise of exerciseObjects"
             [exercise]="exercise"
           ></app-exercise-card>
         </ion-list>
@@ -104,6 +104,22 @@ export class SubroutineCardComponent {
   @Input() index!: number;
   @Input() isEnrolled: boolean = false; // Determina si el usuario está inscrito en este horario
   @Output() unsubscribe = new EventEmitter<SubRoutine>();
+
+  get exerciseObjects() {
+    if (!this.subroutine.exercises || this.subroutine.exercises.length === 0) {
+      return [];
+    }
+    const exercises = this.subroutine.exercises as any[];
+    if (exercises.length > 0 && typeof exercises[0] === 'string') {
+      return exercises.map((id) => ({
+        _id: id,
+        name: 'Ejercicio',
+        description: 'Cargando detalles...',
+        type: 'room' as 'room' | 'cardio',
+      }));
+    }
+    return exercises;
+  }
 
   onUnsubscribe(event: Event) {
     event.stopPropagation(); // Evita que se active algún click del card
