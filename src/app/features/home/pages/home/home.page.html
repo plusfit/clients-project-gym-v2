@@ -1,7 +1,7 @@
 <ion-header class="header-container">
   <ion-toolbar>
     <ion-title>
-      <strong>Fitness</strong><span style="opacity: 0.7">Plus</span>
+      <strong>STEEL</strong><span style="opacity: 0.8">GYM</span>
     </ion-title>
     <ion-buttons slot="end">
       <ion-button>
@@ -13,6 +13,7 @@
 
 <ion-content>
   <div class="ion-padding">
+    <!-- Encabezado con día y hora -->
     <div class="welcome-container ion-padding">
       <ion-row>
         <ion-col size="8">
@@ -25,7 +26,7 @@
 
       <!-- Saludo personalizado -->
       <div class="greeting">
-        <h2>¡Hola, Bienvenido!</h2>
+        <h2>¡Vamos a entrenar!</h2>
       </div>
     </div>
 
@@ -35,6 +36,20 @@
       *ngIf="motivationalMessage$ | async as message"
     >
       <p class="ion-text-center">"{{ message }}"</p>
+    </div>
+
+    <!-- Estadísticas rápidas -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <ion-icon name="fitness-outline" class="stat-icon"></ion-icon>
+        <h3 class="stat-value">12</h3>
+        <p class="stat-label">Días activos</p>
+      </div>
+      <div class="stat-card">
+        <ion-icon name="flame-outline" class="stat-icon"></ion-icon>
+        <h3 class="stat-value">4.5K</h3>
+        <p class="stat-label">Calorías</p>
+      </div>
     </div>
 
     <!-- Sección de rutina actual -->
@@ -56,11 +71,68 @@
           <ion-icon name="fitness-outline" color="medium"></ion-icon>
           <p>No tienes una rutina asignada para hoy</p>
           <ion-button fill="outline" size="small">
-            Ver catálogo
+            Ver ejercicios
             <ion-icon slot="end" name="arrow-forward"></ion-icon>
           </ion-button>
         </div>
       </ng-template>
+    </div>
+
+    <!-- Próximas clases -->
+    <div class="content-card">
+      <div class="section-title ion-padding-start ion-padding-top">
+        <ion-icon name="calendar-outline" color="primary"></ion-icon>
+        <h3>Clases de hoy</h3>
+      </div>
+
+      <div class="upcoming-class">
+        <div class="class-time">
+          <div class="time">8:00</div>
+          <div class="am-pm">AM</div>
+        </div>
+        <div class="class-info">
+          <h4 class="class-name">Functional Training</h4>
+          <p class="class-instructor">Entrenador: Carlos</p>
+        </div>
+        <ion-button fill="clear" size="small" class="class-action">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="upcoming-class">
+        <div class="class-time">
+          <div class="time">12:30</div>
+          <div class="am-pm">PM</div>
+        </div>
+        <div class="class-info">
+          <h4 class="class-name">Spinning</h4>
+          <p class="class-instructor">Entrenadora: Laura</p>
+        </div>
+        <ion-button fill="clear" size="small" class="class-action">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="upcoming-class">
+        <div class="class-time">
+          <div class="time">18:00</div>
+          <div class="am-pm">PM</div>
+        </div>
+        <div class="class-info">
+          <h4 class="class-name">Crossfit</h4>
+          <p class="class-instructor">Entrenador: Miguel</p>
+        </div>
+        <ion-button fill="clear" size="small" class="class-action">
+          <ion-icon name="add-circle-outline"></ion-icon>
+        </ion-button>
+      </div>
+
+      <div class="ion-padding ion-text-center">
+        <ion-button fill="clear" size="small">
+          Ver todas las clases
+          <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+        </ion-button>
+      </div>
     </div>
   </div>
 </ion-content>

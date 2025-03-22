@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
   IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
   IonRow,
   IonTitle,
@@ -39,6 +38,7 @@ import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
     AsyncPipe,
     DayTranslatePipe,
     NgIf,
+    NgTemplateOutlet,
   ],
   standalone: true,
 })
@@ -57,7 +57,8 @@ export class HomePage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.clockSubscription = interval(10000).subscribe(() => {
+    // Reloj en tiempo real con actualización cada segundo
+    this.clockSubscription = interval(1000).subscribe(() => {
       this.currentTime = new Date();
     });
   }
