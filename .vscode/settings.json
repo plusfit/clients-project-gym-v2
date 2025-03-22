@@ -3,5 +3,26 @@
     "@ionic/angular/common",
     "@ionic/angular"
   ],
-  "cSpell.words": ["Desconocido", "ngxs", "Pendiente", "Resuelto", "Revisado"]
+  "cSpell.words": [
+    "algún",
+    "APEXPRO",
+    "Cargando",
+    "comunes",
+    "descanso",
+    "Desconocido",
+    "Descripción",
+    "detalles",
+    "ejercicio",
+    "específicas",
+    "Imagen",
+    "ngxs",
+    "Pendiente",
+    "Propiedades",
+    "Repeticiones",
+    "Resuelto",
+    "Revisado",
+    "solicitado",
+    "Tiempo",
+    "tipo"
+  ]
 }
