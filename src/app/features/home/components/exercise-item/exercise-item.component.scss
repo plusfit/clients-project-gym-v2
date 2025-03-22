@@ -1,0 +1,84 @@
+.exercise-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  --background: transparent;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  border: none;
+  position: relative;
+  transition: background-color 0.3s ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(
+      to right,
+      rgba(var(--ion-color-primary-rgb), 0.1),
+      rgba(var(--ion-color-primary-rgb), 0.3),
+      rgba(var(--ion-color-primary-rgb), 0.1)
+    );
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+
+  &:active {
+    --background: rgba(var(--ion-color-primary-rgb), 0.1);
+  }
+}
+
+.exercise-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-primary-tint) 0%,
+    var(--ion-color-primary) 100%
+  );
+  margin-right: 12px;
+  box-shadow: 0 2px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+}
+
+.exercise-icon {
+  color: var(--ion-color-primary-contrast);
+  font-size: 1.5rem;
+}
+
+.exercise-label {
+  padding: 8px 0;
+}
+
+.exercise-name {
+  color: var(--ion-color-dark);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.exercise-details {
+  display: flex;
+  align-items: center;
+  color: var(--ion-color-medium);
+  margin-top: 4px;
+}
+
+.detail-icon {
+  font-size: 0.9rem;
+  margin-right: 4px;
+  color: var(--ion-color-primary);
+}
+
+.detail-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ion-color-medium);
+}

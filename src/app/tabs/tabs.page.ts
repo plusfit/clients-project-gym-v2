@@ -29,6 +29,9 @@ import {
   fitnessOutline,
   notificationsOutline,
   sunnyOutline,
+  flameOutline,
+  addCircleOutline,
+  arrowForwardOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -64,6 +67,9 @@ export class TabsPage {
       fitnessOutline,
       notificationsOutline,
       sunnyOutline,
+      flameOutline,
+      addCircleOutline,
+      arrowForwardOutline,
     });
   }
 }

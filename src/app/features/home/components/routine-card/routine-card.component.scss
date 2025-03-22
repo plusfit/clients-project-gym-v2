@@ -1,10 +1,114 @@
-ion-label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--ion-color-dark);
+/* General card styling */
+.routine-card {
+  margin: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: var(--ion-color-light);
 }
 
+/* Header styling */
+.routine-header {
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-primary) 0%,
+    var(--ion-color-primary-shade) 100%
+  );
+  padding: 16px;
+  position: relative;
+}
+
+.routine-title-container {
+  position: relative;
+}
+
+.routine-title {
+  color: var(--ion-color-primary-contrast);
+  font-size: 1.3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.routine-icon {
+  margin-left: 8px;
+  font-size: 1.2rem;
+}
+
+.routine-subtitle {
+  color: var(--ion-color-primary-contrast);
+  opacity: 0.9;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Content styling */
+.routine-content {
+  padding: 16px;
+}
+
+.routine-description {
+  color: var(--ion-color-dark);
+  margin-bottom: 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Exercise list styling */
 .exercise-list {
   max-height: 300px;
   overflow-y: auto;
+  border-radius: 8px;
+  background-color: var(--ion-color-light-shade);
+}
+
+.exercise-list-header {
+  padding-bottom: 8px;
+}
+
+.exercise-list-title {
+  display: flex;
+  align-items: center;
+  color: var(--ion-color-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.exercise-list-icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+/* No routine styling */
+.no-routine-header {
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-warning) 0%,
+    var(--ion-color-warning-shade) 100%
+  );
+  padding: 16px;
+}
+
+.no-routine-title {
+  color: var(--ion-color-warning-contrast);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.no-routine-content {
+  padding: 16px;
+}
+
+.rest-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ion-color-dark);
+  font-size: 1rem;
+}
+
+.rest-icon {
+  margin-right: 8px;
 }
