@@ -14,6 +14,7 @@ export interface UserInfo {
   respiratoryHistory: boolean;
   surgicalHistory: boolean;
   CI: string;
+  createdAt: string;
 }
 
 export interface User {

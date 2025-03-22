@@ -1,114 +1,214 @@
-/* General card styling */
+/* Estilos para la tarjeta de rutina con tema oscuro deportivo */
 .routine-card {
-  margin: 12px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  border-radius: 16px;
   overflow: hidden;
-  background-color: var(--ion-color-light);
+  background-color: rgba(30, 30, 30, 0.7) !important;
+  margin: 16px 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    transform: translateY(-2px);
+  }
 }
 
-/* Header styling */
+/* Estilos para el encabezado */
 .routine-header {
+  padding: 16px;
   background: linear-gradient(
     135deg,
-    var(--ion-color-primary) 0%,
-    var(--ion-color-primary-shade) 100%
+    var(--ion-color-primary-shade) 0%,
+    var(--ion-color-primary) 100%
   );
-  padding: 16px;
   position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 80px;
+    height: 80px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.15)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z'%3E%3C/path%3E%3Cline x1='16' y1='8' x2='2' y2='22'%3E%3C/line%3E%3Cline x1='17.5' y1='15' x2='9' y2='15'%3E%3C/line%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60px;
+    opacity: 0.4;
+    transform: rotate(45deg);
+  }
 }
 
 .routine-title-container {
   position: relative;
+  z-index: 1;
 }
 
 .routine-title {
-  color: var(--ion-color-primary-contrast);
-  font-size: 1.3rem;
+  color: white;
+  font-size: 1.4rem;
   font-weight: 700;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
-  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: 'APEXPRO', sans-serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .routine-icon {
-  margin-left: 8px;
-  font-size: 1.2rem;
+  margin-left: 10px;
+  font-size: 1.3rem;
+  color: white;
 }
 
 .routine-subtitle {
-  color: var(--ion-color-primary-contrast);
-  opacity: 0.9;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin: 0;
 }
 
-/* Content styling */
+/* Estilos para el contenido */
 .routine-content {
   padding: 16px;
+  background-color: transparent;
 }
 
 .routine-description {
-  color: var(--ion-color-dark);
-  margin-bottom: 16px;
+  color: #e0e0e0;
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid var(--ion-color-primary);
 }
 
-/* Exercise list styling */
+/* Estilos para la lista de ejercicios */
 .exercise-list {
-  max-height: 300px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 8px !important;
+  max-height: 350px;
   overflow-y: auto;
-  border-radius: 8px;
-  background-color: var(--ion-color-light-shade);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  /* Estilos para el scrollbar */
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-primary);
+    border-radius: 5px;
+  }
 }
 
 .exercise-list-header {
-  padding-bottom: 8px;
+  padding: 12px 8px 12px 12px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--ion-color-primary-rgb), 0.15);
+  border-radius: 6px;
 }
 
 .exercise-list-title {
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 600;
   display: flex;
   align-items: center;
-  color: var(--ion-color-primary);
-  font-size: 1.1rem;
-  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .exercise-list-icon {
   margin-right: 8px;
   font-size: 1.2rem;
+  color: var(--ion-color-primary);
 }
 
-/* No routine styling */
+/* Estilos para el modo "sin rutina" */
 .no-routine-header {
   background: linear-gradient(
     135deg,
-    var(--ion-color-warning) 0%,
-    var(--ion-color-warning-shade) 100%
+    var(--ion-color-secondary-shade) 0%,
+    var(--ion-color-secondary) 100%
   );
   padding: 16px;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 0;
+  }
 }
 
 .no-routine-title {
-  color: var(--ion-color-warning-contrast);
+  color: var(--ion-color-secondary-contrast);
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .no-routine-content {
-  padding: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 30, 30, 0.7);
 }
 
 .rest-text {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--ion-color-dark);
+  gap: 10px;
+  color: #e0e0e0;
   font-size: 1rem;
+  margin-bottom: 15px;
+  text-align: center;
+  padding: 15px;
+  background: rgba(var(--ion-color-secondary-rgb), 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.2);
 }
 
 .rest-icon {
-  margin-right: 8px;
+  color: var(--ion-color-secondary);
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.exercises-container {
+  padding: 6px 4px;
 }

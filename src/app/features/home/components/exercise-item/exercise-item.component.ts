@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { IonIcon, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { Exercise } from '@feature/routine/interfaces/routine.interface';
@@ -12,4 +12,9 @@ import { Exercise } from '@feature/routine/interfaces/routine.interface';
 })
 export class ExerciseItemComponent {
   @Input() exercise!: Exercise;
+  @Output() exerciseClick = new EventEmitter<Exercise>();
+
+  onExerciseClick(): void {
+    this.exerciseClick.emit(this.exercise);
+  }
 }

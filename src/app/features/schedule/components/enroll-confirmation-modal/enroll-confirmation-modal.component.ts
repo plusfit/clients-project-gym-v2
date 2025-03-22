@@ -17,17 +17,19 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-enroll-confirmation-modal',
   template: `
-    <ion-header>
+    <ion-header class="modal-header">
       <ion-toolbar>
         <ion-title>Inscripción</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content fullscreen>
-      <div class="content">
-        <ion-grid class="card">
+    <ion-content fullscreen class="modal-content">
+      <div class="content-container">
+        <ion-grid class="info-card">
           <ion-row class="info-row">
             <ion-col size="4">
-              <ion-icon name="time-outline" class="info-icon"></ion-icon>
+              <div class="icon-container">
+                <ion-icon name="time-outline" class="info-icon"></ion-icon>
+              </div>
               <ion-label class="label-title">Hora:</ion-label>
             </ion-col>
             <ion-col size="8">
@@ -38,7 +40,9 @@ import { CommonModule } from '@angular/common';
           </ion-row>
           <ion-row class="info-row">
             <ion-col size="4">
-              <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+              <div class="icon-container">
+                <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+              </div>
               <ion-label class="label-title">Día:</ion-label>
             </ion-col>
             <ion-col size="8">
@@ -47,51 +51,55 @@ import { CommonModule } from '@angular/common';
           </ion-row>
           <ion-row class="info-row">
             <ion-col size="4">
-              <ion-icon name="people-outline" class="info-icon"></ion-icon>
+              <div class="icon-container">
+                <ion-icon name="people-outline" class="info-icon"></ion-icon>
+              </div>
               <ion-label class="label-title">Cupos:</ion-label>
             </ion-col>
             <ion-col size="8">
-              <ion-label class="label-value">{{
-                schedule?.maxCount
-              }}</ion-label>
+              <ion-label class="label-value">
+                {{ schedule?.maxCount }}
+              </ion-label>
             </ion-col>
           </ion-row>
-          <ion-row class="info-row">
+          <ion-row>
             <ion-col>
-              <p class="confirmation-text">
-                ¿Deseas inscribirte en el horario de
-                <span class="strong"
-                  >{{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00
-                </span>
-                del día <span class="strong">{{ schedule?.day }}</span
-                >?
-              </p>
+              <div class="confirmation-box">
+                <p class="confirmation-text">
+                  ¿Deseas inscribirte en el horario de
+                  <span class="highlight">
+                    {{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00
+                  </span>
+                  del día <span class="highlight">{{ schedule?.day }}</span
+                  >?
+                </p>
+              </div>
             </ion-col>
           </ion-row>
         </ion-grid>
       </div>
     </ion-content>
-    <ion-footer class="footer">
+    <ion-footer class="modal-footer">
       <ion-toolbar>
-        <ion-button
-          expand="full"
-          shape="round"
-          size="default"
-          (click)="confirm.emit()"
-        >
-          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-          Confirmar
-        </ion-button>
-        <ion-button
-          expand="full"
-          fill="outline"
-          size="default"
-          shape="round"
-          (click)="cancel.emit()"
-        >
-          <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-          Cancelar
-        </ion-button>
+        <div class="button-container">
+          <ion-button
+            expand="block"
+            class="confirm-button"
+            (click)="confirm.emit()"
+          >
+            <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+            Confirmar
+          </ion-button>
+          <ion-button
+            expand="block"
+            fill="outline"
+            class="cancel-button"
+            (click)="cancel.emit()"
+          >
+            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+            Cancelar
+          </ion-button>
+        </div>
       </ion-toolbar>
     </ion-footer>
   `,
@@ -100,73 +108,142 @@ import { CommonModule } from '@angular/common';
       :host {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: 100%;
         font-family: 'Inter', sans-serif;
-      }
-      /* HEADER */
-      ion-header {
-        background: var(--ion-color-primary, #1565c0);
-        --ion-toolbar-background: var(--ion-color-primary, #1565c0);
-        color: var(--ion-color-primary-contrast, #ffffff);
-      }
-      ion-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #f6f7f9;
+        --background: var(--ion-color-dark);
       }
 
-      /* Card estilo */
-      ion-grid.card {
-        background: #ffffff;
-        border-radius: 12px;
+      /* HEADER - Usando los estilos globales */
+      .modal-header ion-title {
+        text-align: center;
+      }
+
+      /* CONTENT */
+      .modal-content {
+        --background: linear-gradient(
+          180deg,
+          var(--ion-color-dark) 0%,
+          #1a1a1a 100%
+        );
+      }
+
+      .content-container {
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100%;
+      }
+
+      /* Info Card */
+      .info-card {
+        background: rgba(30, 30, 30, 0.7);
+        border-radius: 16px;
         padding: 24px;
         width: 100%;
         max-width: 480px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
       }
-      ion-row.info-row {
-        margin-bottom: 16px;
+
+      .info-row {
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
       }
-      ion-label.label-title {
-        font-size: 0.8rem;
+
+      .icon-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: rgba(var(--ion-color-primary-rgb), 0.15);
+        margin-right: 10px;
+      }
+
+      .info-icon {
+        font-size: 1.2rem;
+        color: var(--ion-color-primary);
+      }
+
+      .label-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ion-color-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 8px;
+        display: block;
+      }
+
+      .label-value {
+        font-size: 1.1rem;
+        color: white;
         font-weight: 500;
-        color: #8c8c8c;
-        margin-left: 4px;
       }
-      ion-label.label-value {
-        font-size: 1rem;
-        color: #5a6268;
+
+      .confirmation-box {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 10px;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-left: 3px solid var(--ion-color-primary);
       }
-      p.confirmation-text {
+
+      .confirmation-text {
         font-size: 1rem;
-        color: #7a8288;
-        margin-top: 2rem;
-        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.9);
         text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e0e0e0;
-        border-radius: 18px;
-        padding: 24px;
+        line-height: 1.5;
+        margin: 0;
       }
-      .strong {
-        color: var(--ion-color-primary, #1565c0);
+
+      .highlight {
+        color: var(--ion-color-primary);
         font-weight: 600;
       }
+
       /* FOOTER */
-      .footer {
+      .modal-footer {
+        background-color: rgba(18, 18, 18, 0.9);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        ion-toolbar {
+          --background: transparent;
+          --border-color: transparent;
+          padding: 10px 16px;
+        }
+      }
+
+      .button-container {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        padding: 16px;
+        gap: 10px;
       }
-      ion-footer ion-toolbar {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+
+      .confirm-button {
+        --background: linear-gradient(
+          135deg,
+          var(--ion-color-primary-shade) 0%,
+          var(--ion-color-primary) 100%
+        );
+        --border-radius: 10px;
+        --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
       }
-      .info-icon {
-        font-size: 1rem;
-        margin-right: 8px;
-        color: var(--ion-color-primary, #1565c0);
+
+      .cancel-button {
+        --border-radius: 10px;
+        --border-color: rgba(255, 255, 255, 0.2);
+        --color: white;
+        font-weight: 500;
+        margin: 0;
       }
     `,
   ],

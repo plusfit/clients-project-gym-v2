@@ -30,7 +30,149 @@
 @import '@ionic/angular/css/text-transformation.css';
 @import '@ionic/angular/css/flex-utils.css';
 
+/* Estilos globales para la aplicación de gimnasio con tema oscuro */
+
+/* Estilos de texto */
 p {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Estilos para tarjetas */
+ion-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+  margin: 12px !important;
+  background-color: var(--ion-card-background) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+ion-card-header {
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-primary-shade) 0%,
+    var(--ion-color-primary) 100%
+  );
+  padding: 16px !important;
+}
+
+ion-card-title {
+  font-family: 'APEXPRO', sans-serif !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+ion-card-subtitle {
+  font-size: 0.95rem !important;
+  opacity: 0.9 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+ion-card-content {
+  padding: 16px !important;
+  background-color: var(--ion-card-background) !important;
+}
+
+/* Estilos para listas */
+ion-list {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+ion-item {
+  --background: rgba(30, 30, 30, 0.6) !important;
+  --border-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+/* Estilos para iconos */
+ion-icon {
+  color: var(--ion-color-primary);
+}
+
+/* Estilos para botones */
+ion-button {
+  --border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  height: 44px;
+}
+
+ion-button.button-solid {
+  --background: var(--ion-color-primary);
+  --background-hover: var(--ion-color-primary-shade);
+  --color: var(--ion-color-primary-contrast);
+  --box-shadow: 0 4px 8px rgba(229, 57, 53, 0.3);
+}
+
+/* Estilos para cabeceras */
+ion-header {
+  --background: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  ) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+ion-toolbar {
+  --background: transparent !important;
+  --border-color: transparent;
+  padding: 0 16px;
+}
+
+ion-title {
+  font-family: 'APEXPRO', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para tabs */
+ion-tab-bar {
+  --background: #1a1a1a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  height: 60px;
+}
+
+ion-tab-button {
+  --color: rgba(255, 255, 255, 0.6);
+  --color-selected: var(--ion-color-primary);
+}
+
+/* Estilos para mejorar elementos de entrada */
+ion-input,
+ion-textarea,
+ion-select {
+  --background: rgba(30, 30, 30, 0.6) !important;
+  --color: white !important;
+  --placeholder-color: rgba(255, 255, 255, 0.5) !important;
+  --placeholder-opacity: 1 !important;
+  border-radius: 8px !important;
+  margin-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }

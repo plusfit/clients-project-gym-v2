@@ -17,7 +17,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +37,9 @@ import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
+    DatePipe,
   ],
+  standalone: true,
 })
 export class ProfilePage implements OnInit {
   @Select(UserState.getUser) user$!: Observable<User | null>;
@@ -65,5 +67,17 @@ export class ProfilePage implements OnInit {
       age--;
     }
     return age;
+  }
+
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    return date.toLocaleDateString('es-ES', options);
   }
 }

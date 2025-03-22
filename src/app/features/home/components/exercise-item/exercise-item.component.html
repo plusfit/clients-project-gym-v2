@@ -1,4 +1,4 @@
-<ion-item class="exercise-item">
+<ion-item class="exercise-item" lines="none" (click)="onExerciseClick()">
   <div class="exercise-icon-container">
     <ion-icon
       [name]="
@@ -11,13 +11,19 @@
     <h4 class="exercise-name">
       {{ exercise.name }}
     </h4>
-    <div class="exercise-details" *ngIf="exercise.type === 'cardio'">
-      <ion-icon name="time-outline" class="detail-icon"></ion-icon>
-      <span class="detail-text">{{ exercise.minutes }} min</span>
-    </div>
-    <div class="exercise-details" *ngIf="exercise.type === 'room'">
-      <ion-icon name="repeat-outline" class="detail-icon"></ion-icon>
-      <span class="detail-text">{{ exercise.series }} series</span>
+    <div class="details-container">
+      <div class="exercise-details" *ngIf="exercise.type === 'cardio'">
+        <ion-icon name="time-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.minutes }} min</span>
+      </div>
+      <div class="exercise-details" *ngIf="exercise.type === 'room'">
+        <ion-icon name="repeat-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.series }} series</span>
+      </div>
+      <div class="exercise-details" *ngIf="exercise.reps">
+        <ion-icon name="infinite-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.reps }} reps</span>
+      </div>
     </div>
   </ion-label>
 </ion-item>

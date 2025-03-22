@@ -31,6 +31,7 @@ export class UserService {
         respiratoryHistory: false,
         surgicalHistory: false,
         CI: '49911824',
+        createdAt: '2025-03-22T03:00:00.000Z',
       },
       planId: '67c0a9abde6282d107e2788d',
       routineId: '67c0a95cde6282d107e2786d',

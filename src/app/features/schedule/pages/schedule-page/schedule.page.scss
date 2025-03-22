@@ -1,34 +1,67 @@
 :host {
   display: block;
-  --ion-background-color: #f8f9fa;
+  --ion-background-color: var(--ion-color-dark);
 }
 
 /* HEADER */
 ion-header {
-  background: var(--ion-color-primary) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --background: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 ion-toolbar.custom-toolbar {
+  --background: transparent;
   padding: 0 16px;
 }
+
 ion-title {
-  font-family: 'Inter', sans-serif;
+  font-family: 'APEXPRO', sans-serif;
   font-size: 1.5rem;
-  font-weight: bold;
-  color: var(--ion-color-primary)
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 /* CONTENT */
 .container {
+  --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
   padding: 16px;
-  background-color: var(--ion-color-light);
 }
 
 .schedule-title {
+  font-family: 'APEXPRO', sans-serif;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--ion-color-primary);
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  position: relative;
+  padding-left: 16px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(
+      to bottom,
+      var(--ion-color-primary),
+      var(--ion-color-primary-tint)
+    );
+    border-radius: 4px;
+  }
 }
 
 /* LISTA DE HORARIOS */
@@ -38,13 +71,39 @@ ion-title {
   gap: 16px;
   overflow-y: auto;
   max-height: calc(100vh - 200px);
+
+  /* Estilos para el scrollbar */
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-primary);
+    border-radius: 5px;
+  }
 }
 
-app-schedule-card:hover {
-  transform: translateY(-2px);
+app-schedule-card {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
 }
 
-/* Estilos opcionales para el modal */
+/* Estilos para el modal */
 ion-modal {
-  --background: var(--ion-color-light);
+  --background: rgba(0, 0, 0, 0.4);
+  --backdrop-opacity: 0.8;
+  --width: 90%;
+  --max-width: 400px;
+  --height: auto;
+  --max-height: 90%;
+  --border-radius: 16px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
 }

@@ -8,67 +8,182 @@ import { RouterLink } from '@angular/router';
   selector: 'app-exercise-card',
   template: `
     <ion-item
+      class="exercise-item"
       lines="none"
       [routerLink]="['/cliente', 'rutinas', 'ejercicio', exercise._id]"
     >
-      <ion-icon
-        [name]="
-          exercise.type === 'cardio' ? 'bicycle-outline' : 'barbell-outline'
-        "
-        slot="start"
-      ></ion-icon>
-      <ion-label>
-        <h2>{{ exercise.name }}</h2>
-        <p class="description">{{ exercise.description }}</p>
-        <p class="details" *ngIf="isCardio">
-          <ion-icon name="time-outline"></ion-icon> Minutos:
-          {{ exercise.minutes || 0 }} |
-          <ion-icon name="pause-outline"></ion-icon> Descanso:
-          {{ exercise.rest || 0 }} min
-        </p>
-        <p class="details" *ngIf="!isCardio">
-          <ion-icon name="repeat-outline"></ion-icon> Reps:
-          {{ exercise.reps || 0 }} |
-          <ion-icon name="layers-outline"></ion-icon> Series:
-          {{ exercise.series || 0 }} |
-          <ion-icon name="pause-outline"></ion-icon> Descanso:
-          {{ exercise.rest || 0 }} min
-        </p>
+      <div class="exercise-icon-container">
+        <ion-icon
+          [name]="
+            exercise.type === 'cardio' ? 'fitness-outline' : 'barbell-outline'
+          "
+          class="exercise-icon"
+        ></ion-icon>
+      </div>
+      <ion-label class="exercise-label">
+        <h2 class="exercise-name">{{ exercise.name }}</h2>
+        <p class="exercise-description">{{ exercise.description }}</p>
+        <div class="details-container">
+          <div class="exercise-details" *ngIf="isCardio">
+            <ion-icon name="time-outline" class="detail-icon"></ion-icon>
+            <span class="detail-text">{{ exercise.minutes || 0 }} min</span>
+          </div>
+          <div class="exercise-details" *ngIf="isCardio">
+            <ion-icon name="pause-outline" class="detail-icon"></ion-icon>
+            <span class="detail-text"
+              >{{ exercise.rest || 0 }} min descanso</span
+            >
+          </div>
+          <div class="exercise-details" *ngIf="!isCardio">
+            <ion-icon name="repeat-outline" class="detail-icon"></ion-icon>
+            <span class="detail-text">{{ exercise.reps || 0 }} reps</span>
+          </div>
+          <div class="exercise-details" *ngIf="!isCardio">
+            <ion-icon name="layers-outline" class="detail-icon"></ion-icon>
+            <span class="detail-text">{{ exercise.series || 0 }} series</span>
+          </div>
+          <div class="exercise-details" *ngIf="!isCardio">
+            <ion-icon name="pause-outline" class="detail-icon"></ion-icon>
+            <span class="detail-text"
+              >{{ exercise.rest || 0 }} min descanso</span
+            >
+          </div>
+        </div>
       </ion-label>
     </ion-item>
   `,
   styles: [
     `
-      ion-item {
-        margin: 4px 0;
-        padding: 8px 0;
-        border-radius: 8px;
-        border-bottom: 1px solid var(--ion-color-light-shade);
+      .exercise-item {
+        --padding-start: 8px;
+        --inner-padding-end: 8px;
+        --background: rgba(25, 25, 25, 0.7) !important;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        transition: all 0.3s ease;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 3px;
+          background: var(--ion-color-primary);
+          opacity: 0.8;
+        }
+
+        &:hover {
+          --background: rgba(35, 35, 35, 0.8) !important;
+          transform: translateX(3px);
+          box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        &:active {
+          --background: rgba(var(--ion-color-primary-rgb), 0.15) !important;
+          transform: scale(0.98);
+        }
       }
-      ion-icon {
+
+      .exercise-icon-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          rgba(var(--ion-color-primary-rgb), 0.15) 0%,
+          rgba(var(--ion-color-primary-rgb), 0.25) 100%
+        );
+        margin-right: 12px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(var(--ion-color-primary-rgb), 0.2);
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(255, 255, 255, 0) 70%
+          );
+        }
+      }
+
+      .exercise-icon {
+        color: var(--ion-color-primary);
         font-size: 1.5rem;
-        color: var(--ion-color-primary);
+        z-index: 1;
+        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
       }
-      h2 {
-        font-size: 1rem;
-        font-weight: 600;
-        padding: 0;
-        color: var(--ion-color-primary);
+
+      .exercise-label {
+        padding: 10px 0;
       }
-      .description {
-        margin: 2px 0;
+
+      .exercise-name {
+        color: white !important;
+        font-size: 1.05rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 6px;
+        text-transform: capitalize;
+        letter-spacing: 0.3px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+      }
+
+      .exercise-description {
+        color: rgba(255, 255, 255, 0.7) !important;
         font-size: 0.9rem;
-        color: var(--ion-color-secondary);
+        margin-bottom: 8px;
+        line-height: 1.4;
       }
-      .details {
-        margin: 2px 0;
+
+      .details-container {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 4px;
+      }
+
+      .exercise-details {
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 4px 8px;
+        border-radius: 5px;
+        width: -moz-fit-content;
+        width: fit-content;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background: rgba(var(--ion-color-primary-rgb), 0.15);
+        }
+      }
+
+      .detail-icon {
+        font-size: 0.9rem !important;
+        margin-right: 6px;
+        color: var(--ion-color-primary) !important;
+      }
+
+      .detail-text {
         font-size: 0.85rem;
-        color: var(--ion-color-secondary-tint);
-      }
-      .details ion-icon {
-        font-size: 1rem;
-        vertical-align: middle;
-        color: var(--ion-color-primary);
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+        letter-spacing: 0.5px;
       }
     `,
   ],

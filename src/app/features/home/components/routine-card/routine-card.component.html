@@ -22,12 +22,17 @@
               name="fitness-outline"
               class="exercise-list-icon"
             ></ion-icon>
-            Ejercicios
+            Ejercicios ({{ routine.exercises.length }})
           </ion-label>
         </ion-list-header>
-        <ng-container *ngFor="let exercise of routine.exercises">
-          <app-exercise-item [exercise]="exercise"></app-exercise-item>
-        </ng-container>
+        <div class="exercises-container">
+          <ng-container *ngFor="let exercise of routine.exercises">
+            <app-exercise-item
+              [exercise]="exercise"
+              (exerciseClick)="onExerciseClick($event)"
+            ></app-exercise-item>
+          </ng-container>
+        </div>
       </ion-list>
     </ion-card-content>
   </ng-container>
@@ -41,7 +46,7 @@
     <ion-card-content class="no-routine-content">
       <p class="rest-text">
         <ion-icon name="bed-outline"></ion-icon>
-        ¡Descansa! No hay rutina para hoy.
+        ¡Descansa! No hay rutina programada para hoy.
       </p>
     </ion-card-content>
   </ng-template>

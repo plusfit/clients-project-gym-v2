@@ -25,17 +25,34 @@ import { CommonModule } from '@angular/common';
         gap: 12px;
         overflow-x: auto;
         padding: 1rem;
-        background: var(--ion-color-light, #f5f5f5);
+        background: rgba(30, 30, 30, 0.6);
         border-radius: 12px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+
+        /* Estilos para el scrollbar horizontal */
+        &::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 2px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: var(--ion-color-primary);
+          border-radius: 2px;
+        }
       }
       button {
         flex: 0 0 auto;
         padding: 10px 20px;
-        border: 1px solid rgba(0, 0, 0, 0.23);
+        border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 8px;
-        background: transparent;
-        color: var(--ion-color-dark, #424242);
+        background: rgba(0, 0, 0, 0.2);
+        color: rgba(255, 255, 255, 0.8);
         font-size: 1rem;
         font-weight: 500;
         cursor: pointer;
@@ -45,21 +62,25 @@ import { CommonModule } from '@angular/common';
           transform 250ms;
       }
       button:hover {
-        background: rgba(0, 0, 0, 0.04);
+        background: rgba(var(--ion-color-primary-rgb), 0.15);
+        border-color: rgba(var(--ion-color-primary-rgb), 0.3);
       }
       button:focus {
         outline: none;
-        box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.5);
+        box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.4);
       }
       button.selected {
-        background: var(--ion-color-primary, #1976d2);
-        color: var(--ion-color-primary-contrast, #ffffff);
+        background: linear-gradient(
+          135deg,
+          var(--ion-color-primary-shade) 0%,
+          var(--ion-color-primary) 100%
+        );
+        color: var(--ion-color-primary-contrast);
         border: none;
-        box-shadow:
-          0 3px 1px -2px rgba(0, 0, 0, 0.2),
-          0 2px 2px rgba(0, 0, 0, 0.14),
-          0 1px 5px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
         transform: scale(1.05);
+        font-weight: 600;
+        letter-spacing: 0.5px;
       }
       .label {
         text-transform: capitalize;

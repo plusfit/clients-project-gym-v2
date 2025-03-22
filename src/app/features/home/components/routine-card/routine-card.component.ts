@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ExerciseItemComponent } from '../exercise-item/exercise-item.component';
 import { NgForOf, NgIf, UpperCasePipe } from '@angular/common';
 import {
@@ -12,7 +12,10 @@ import {
   IonList,
   IonListHeader,
 } from '@ionic/angular/standalone';
-import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
+import {
+  SubRoutine,
+  Exercise,
+} from '@feature/routine/interfaces/routine.interface';
 
 @Component({
   selector: 'app-routine-card',
@@ -37,4 +40,9 @@ import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
 })
 export class RoutineCardComponent {
   @Input() routine!: SubRoutine | null;
+  @Output() exerciseClicked = new EventEmitter<Exercise>();
+
+  onExerciseClick(exercise: Exercise): void {
+    this.exerciseClicked.emit(exercise);
+  }
 }

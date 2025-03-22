@@ -2,37 +2,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet');
 /* Variables de colores globales */
 :root {
-  /* Color primario */
-  --ion-color-primary: #1565c0; /* Blue 800 */
+  /* Color primario - Turquesa energético para gimnasios */
+  --ion-color-primary: #1565c0; /* Turquesa intenso */
   --ion-color-primary-rgb: 21, 101, 192;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #0d47a1; /* Blue 900 */
-  --ion-color-primary-tint: #1976d2; /* Blue 700 */
+  --ion-color-primary-shade: #0d47a1; /* Turquesa más oscuro */
+  --ion-color-primary-tint: #1976d2; /* Turquesa más claro */
 
-  /* Color secundario */
-  --ion-color-secondary: #6c757d;
-  --ion-color-secondary-rgb: 108, 117, 125;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #5a6268;
-  --ion-color-secondary-tint: #7a8288;
+  /* Color secundario - Amarillo energético */
+  --ion-color-secondary: #ffc107;
+  --ion-color-secondary-rgb: 255, 193, 7;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #e0a800;
+  --ion-color-secondary-tint: #ffca2c;
 
-  /* Color terciario (amarillo mostaza) */
-  --ion-color-tertiary: #ffb300;
-  --ion-color-tertiary-rgb: 255, 179, 0;
+  /* Color terciario (acento energético) */
+  --ion-color-tertiary: #ffab00;
+  --ion-color-tertiary-rgb: 255, 171, 0;
   --ion-color-tertiary-contrast: #000000;
   --ion-color-tertiary-contrast-rgb: 0, 0, 0;
-  --ion-color-tertiary-shade: #c68400;
-  --ion-color-tertiary-tint: #ffd54f;
+  --ion-color-tertiary-shade: #ff8f00;
+  --ion-color-tertiary-tint: #ffca28;
 
-  /* Color de éxito */
-  --ion-color-success: #198754;
-  --ion-color-success-rgb: 25, 135, 84;
+  /* Color de éxito - Verde para logros */
+  --ion-color-success: #43a047;
+  --ion-color-success-rgb: 67, 160, 71;
   --ion-color-success-contrast: #ffffff;
   --ion-color-success-contrast-rgb: 255, 255, 255;
-  --ion-color-success-shade: #157347;
-  --ion-color-success-tint: #2e9d65;
+  --ion-color-success-shade: #2e7d32;
+  --ion-color-success-tint: #66bb6a;
 
   /* Color de advertencia */
   --ion-color-warning: #ffc107;
@@ -43,30 +43,47 @@
   --ion-color-warning-tint: #ffca2c;
 
   /* Color de peligro */
-  --ion-color-danger: #dc3545;
-  --ion-color-danger-rgb: 220, 53, 69;
+  --ion-color-danger: #d32f2f;
+  --ion-color-danger-rgb: 211, 47, 47;
   --ion-color-danger-contrast: #ffffff;
   --ion-color-danger-contrast-rgb: 255, 255, 255;
-  --ion-color-danger-shade: #c82333;
-  --ion-color-danger-tint: #e4606d;
+  --ion-color-danger-shade: #b71c1c;
+  --ion-color-danger-tint: #ef5350;
 
-  /* Colores claros y oscuros */
-  --ion-color-light: #f8f9fa;
-  --ion-color-light-rgb: 248, 249, 250;
-  --ion-color-light-contrast: #000000;
-  --ion-color-light-contrast-rgb: 0, 0, 0;
-  --ion-color-light-shade: #e9ecef;
-  --ion-color-light-tint: #f8f9fa;
+  /* Colores claros y oscuros - Invertidos para tema oscuro */
+  --ion-color-light: #263238; /* Gris oscuro para elementos "claros" */
+  --ion-color-light-rgb: 38, 50, 56;
+  --ion-color-light-contrast: #ffffff;
+  --ion-color-light-contrast-rgb: 255, 255, 255;
+  --ion-color-light-shade: #1c272b; /* Más oscuro */
+  --ion-color-light-tint: #37474f; /* Ligeramente más claro */
 
-  --ion-color-dark: #212529;
-  --ion-color-dark-rgb: 33, 37, 41;
+  --ion-color-dark: #121212; /* Fondo casi negro */
+  --ion-color-dark-rgb: 18, 18, 18;
   --ion-color-dark-contrast: #ffffff;
   --ion-color-dark-contrast-rgb: 255, 255, 255;
-  --ion-color-dark-shade: #1d2124;
-  --ion-color-dark-tint: #343a40;
+  --ion-color-dark-shade: #0a0a0a; /* Más oscuro que el fondo */
+  --ion-color-dark-tint: #212121; /* Ligeramente más claro */
+
+  /* Color de fondo para el tema oscuro */
+  --ion-background-color: #121212;
+  --ion-background-color-rgb: 18, 18, 18;
+
+  /* Color de texto para el tema oscuro */
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255;
+
+  /* Colores de borde para el tema oscuro */
+  --ion-border-color: #2d2d2d;
 
   /* Fuente principal */
   --ion-font-family: 'APEXPRO', sans-serif;
+
+  /* Colores de tarjetas */
+  --ion-card-background: #1e1e1e;
+
+  /* Colores de elementos de entrada */
+  --ion-item-background: #1e1e1e;
 }
 
 /* Estilos globales para la fuente */
@@ -86,9 +103,11 @@
 h2 {
   font-family: 'APEXPRO' !important;
   letter-spacing: 0.5px;
+  color: var(--ion-color-primary);
 }
 
 h3 {
   font-family: 'APEXPRO' !important;
   letter-spacing: 0.5px;
+  color: var(--ion-color-primary-tint);
 }

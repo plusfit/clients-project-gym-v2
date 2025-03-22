@@ -32,6 +32,19 @@ import {
   flameOutline,
   addCircleOutline,
   arrowForwardOutline,
+  pauseOutline,
+  infiniteOutline,
+  bedOutline,
+  calendarClearOutline,
+  checkmarkOutline,
+  closeCircleOutline,
+  chevronBackOutline,
+  analyticsOutline,
+  arrowForward,
+  informationCircleOutline,
+  alertCircleOutline,
+  stopwatchOutline,
+  listOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -71,6 +84,19 @@ export class TabsPage {
       flameOutline,
       addCircleOutline,
       arrowForwardOutline,
+      pauseOutline,
+      infiniteOutline,
+      bedOutline,
+      calendarClearOutline,
+      checkmarkOutline,
+      closeCircleOutline,
+      chevronBackOutline,
+      analyticsOutline,
+      arrowForward,
+      informationCircleOutline,
+      alertCircleOutline,
+      stopwatchOutline,
+      listOutline,
     });
   }
 }
