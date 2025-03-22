@@ -4,6 +4,7 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 export interface HomeStateModel {
   routine: SubRoutine;
   motivationalMessage: string;
+  motivationalMessages: string[];
 }
 
 export class SetHomeData {
@@ -89,6 +90,15 @@ export class SetHomeData {
       category: 'mix',
     },
     motivationalMessage: '¡Vamos a darle con todo hoy! 💪',
+    motivationalMessages: [
+      'Comienza la semana con fuerza y determinación. ¡Hoy es tu día! 💪', // Lunes
+      'El dolor que sientes hoy, es la fuerza que sentirás mañana. ¡Sigue adelante! 💥', // Martes
+      'Mitad de semana, ¡no pierdas el ritmo! Tu cuerpo te lo agradecerá. 🔥', // Miércoles
+      'La disciplina es el puente entre tus metas y tus logros. ¡Ya casi es viernes! 🏋️', // Jueves
+      'Último empujón de la semana! Termina fuerte lo que empezaste. ⚡', // Viernes
+      'El fin de semana es para seguir creciendo. ¡No hay descanso para los campeones! 🏆', // Sábado
+      'Recarga energías y prepárate para la próxima semana. ¡El descanso también es parte del éxito! 🧘', // Domingo
+    ],
   },
 })
 export class HomeState {
@@ -99,7 +109,10 @@ export class HomeState {
 
   @Selector()
   static getMotivationalMessage(state: HomeStateModel): string {
-    return state.motivationalMessage;
+    const dayOfWeek = new Date().getDay();
+    const adjustedDayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+    return state.motivationalMessages[adjustedDayIndex];
   }
 
   @Action(SetHomeData)
