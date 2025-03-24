@@ -1,0 +1,28 @@
+<ion-card class="profile-card">
+  <div class="image-container">
+    <img
+      class="profile-image"
+      [ngSrc]="imageUrl"
+      width="800"
+      height="350"
+      priority="high"
+      alt="Imagen de perfil"
+    />
+  </div>
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon name="person-circle-outline" class="profile-icon"></ion-icon>
+      <span class="title"> {{ name }} </span>
+    </ion-card-title>
+    <ion-card-subtitle>
+      <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+      {{ age }} años
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <p>
+      <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
+      <span>{{ planGoal | goal }}</span>
+    </p>
+  </ion-card-content>
+</ion-card>

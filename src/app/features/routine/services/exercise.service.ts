@@ -28,7 +28,7 @@ export class ExerciseService {
           return null;
         }),
         catchError((error) => {
-          console.error('Error fetching exercise:', error);
+          console.error('Error fetching user:', error);
           return of(null);
         }),
       );
