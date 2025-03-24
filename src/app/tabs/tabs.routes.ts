@@ -56,6 +56,13 @@ export const routes: Routes = [
         redirectTo: '/cliente/inicio',
         pathMatch: 'full',
       },
+      {
+        path: 'onboarding',
+        loadComponent: () =>
+          import('../features/onboarding/pages/onboarding.page').then(
+            (m) => m.OnboardingPage,
+          ),
+      },
     ],
   },
   {
