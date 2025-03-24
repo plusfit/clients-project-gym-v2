@@ -13,63 +13,6 @@
     >
     </app-profile-image-name-info>
 
-    <!-- <ion-card class="profile-card">
-      <div class="image-container">
-        <img
-          class="profile-image"
-          ngSrc="https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg"
-          width="800"
-          height="350"
-          alt="Imagen de perfil"
-        />
-      </div>
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon
-            name="person-circle-outline"
-            class="profile-icon"
-          ></ion-icon>
-          <span class="title"> {{ user.userInfo.name }} </span>
-        </ion-card-title>
-        <ion-card-subtitle>
-          <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
-          {{ age }} años
-        </ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <p>
-          <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
-          <span>Mejorar la condición física</span>
-        </p>
-      </ion-card-content>
-    </ion-card> -->
-
-    <!-- <ion-card class="info-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon
-            name="information-circle-outline"
-            class="profile-icon"
-          ></ion-icon>
-          <span class="title">Información Personal</span>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>
-          <ion-icon name="mail-outline" class="info-icon"></ion-icon>
-          <span>{{ user.email }}</span>
-        </p>
-        <p>
-          <ion-icon name="phone-portrait-outline" class="info-icon"></ion-icon>
-          <span>{{ user.userInfo.phone }}</span>
-        </p>
-        <p>
-          <ion-icon name="fitness-outline" class="info-icon"></ion-icon>
-          <span>Miembro desde {{ formatDate(user.userInfo.createdAt) }}</span>
-        </p>
-      </ion-card-content>
-    </ion-card> -->
-
     <app-profile-personal-info
       [email]="user.email"
       [phone]="user.userInfo.phone"
@@ -77,31 +20,12 @@
     >
     </app-profile-personal-info>
 
-    <app-profile-plan-info></app-profile-plan-info>
-
-    <!-- <ion-card class="stats-card">
-      <ion-card-header>
-        <ion-card-title>
-          <ion-icon name="analytics-outline" class="profile-icon"></ion-icon>
-          <span class="title">Estadísticas</span>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div class="stats-container">
-          <div class="stat-box">
-            <div class="stat-value">12</div>
-            <div class="stat-label">Días activos</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value">3</div>
-            <div class="stat-label">Clases</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-value">4.5K</div>
-            <div class="stat-label">Calorías</div>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card> -->
+    <div *ngIf="plan$ | async as plan">
+      <app-profile-plan-info
+        [planName]="plan.name"
+        [planDays]="plan.days"
+        [planLevel]="plan.experienceLevel"
+      ></app-profile-plan-info>
+    </div>
   </div>
 </ion-content>

@@ -4,6 +4,7 @@ import { catchError, delay, map } from 'rxjs/operators';
 import { User } from '@feature/profile/interfaces/user.interface';
 import { environment } from 'environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Plan } from '../interfaces/plan.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,33 +25,20 @@ export class UserService {
         return of(null);
       }),
     );
+  }
 
-    // const user: User = {
-    //   _id: '67c1e9620dd078c1a869dbc2',
-    //   role: 'User',
-    //   email: 'federicotodaro1995@gmail.com',
-    //   userInfo: {
-    //     name: 'Federico',
-    //     password: 'PlusFit1!',
-    //     identifier: 'Federicotodaro1995@gmail.com',
-    //     dateBirthday: new Date('1995-09-19T03:00:00.000Z'),
-    //     sex: 'Masculino',
-    //     phone: '092744211',
-    //     address: 'Salinas Norte Calle Ceibo M 166 S 22 Esq Ruta 87',
-    //     historyofPathologicalLesions: false,
-    //     medicalSociety: 'Circulo Catolico',
-    //     cardiacHistory: false,
-    //     bloodPressure: 'Normal',
-    //     frequencyOfPhysicalExercise: 'Diario',
-    //     respiratoryHistory: false,
-    //     surgicalHistory: false,
-    //     CI: '49911824',
-    //     createdAt: '2025-03-22T03:00:00.000Z',
-    //   },
-    //   planId: '67c0a9abde6282d107e2788d',
-    //   routineId: '67c0a95cde6282d107e2786d',
-    // };
-
-    // return of(user).pipe(delay(1000));
+  getPlanById(planId: string): Observable<Plan | null> {
+    return this.http.get<any>(`${environment.apiUrl}/plans/${planId}`).pipe(
+      map((response) => {
+        if (response.success) {
+          return response.data;
+        }
+        return null;
+      }),
+      catchError((error) => {
+        console.error('Error fetching plan:', error);
+        return of(null);
+      }),
+    );
   }
 }

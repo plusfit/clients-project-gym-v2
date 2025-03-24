@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { filter, Observable, switchMap } from 'rxjs';
 import { UserState } from '../state/user.state';
 import { User } from '@feature/profile/interfaces/user.interface';
 import {
@@ -10,10 +10,11 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { AsyncPipe, NgIf } from '@angular/common';
-import { LoadUser } from '../state/user.actions';
+import { LoadPlan, LoadUser } from '../state/user.actions';
 import { ProfileImageNameComponent } from '../components/profile-image-name-info/profile-image-name-info.component';
 import { ProfilePersonalInfoComponent } from '../components/profile-personal-info/profile-personal-info.component';
 import { ProfilePlanInfoComponent } from '../components/profile-plan-info/profile-plan-info.component';
+import { Plan } from '../interfaces/plan.interface';
 
 @Component({
   selector: 'app-profile',
@@ -34,6 +35,7 @@ import { ProfilePlanInfoComponent } from '../components/profile-plan-info/profil
 })
 export class ProfilePage implements OnInit {
   @Select(UserState.getUser) user$!: Observable<User | null>;
+  @Select(UserState.getPlan) plan$!: Observable<Plan | null>;
   age: number | null = null;
   id: string | null = null;
 
@@ -43,10 +45,13 @@ export class ProfilePage implements OnInit {
     this.id = '67c1e9620dd078c1a869dbc2';
     this.store.dispatch(new LoadUser(this.id));
 
-    // Calculamos la edad una vez que tenemos la información del usuario
     this.user$.subscribe((user) => {
       if (user && user.userInfo && user.userInfo.dateBirthday) {
         this.age = this.calculateAge(new Date(user.userInfo.dateBirthday));
+      }
+
+      if (user && user.planId) {
+        this.store.dispatch(new LoadPlan(user.planId));
       }
     });
   }

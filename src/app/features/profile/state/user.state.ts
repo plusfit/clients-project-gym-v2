@@ -4,11 +4,13 @@ import { UserService } from '../services/user.service';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from '@feature/profile/interfaces/user.interface';
 import { Injectable } from '@angular/core';
-import { LoadUser } from './user.actions';
+import { LoadPlan, LoadUser } from './user.actions';
 import { of } from 'rxjs';
+import { Plan } from '../interfaces/plan.interface';
 
 export interface UserStateModel {
   user: User | null;
+  plan: any | null;
   loading: boolean;
   error: string | null;
 }
@@ -19,6 +21,7 @@ export interface UserStateModel {
   defaults: {
     loading: false,
     user: null,
+    plan: null,
     error: null,
   },
 })
@@ -28,6 +31,11 @@ export class UserState {
   @Selector()
   static getUser(state: UserStateModel): User | null {
     return state.user;
+  }
+
+  @Selector()
+  static getPlan(state: UserStateModel): Plan | null {
+    return state.plan;
   }
 
   @Action(LoadUser, { cancelUncompleted: true })
@@ -45,6 +53,22 @@ export class UserState {
           error: error.message || 'Error al cargar el usuario',
         });
         return of(error);
+      }),
+    );
+  }
+
+  @Action(LoadPlan, { cancelUncompleted: true })
+  getPlan(ctx: StateContext<UserStateModel>, action: LoadPlan) {
+    ctx.patchState({ loading: true, error: null });
+
+    return this.userService.getPlanById(action.planId).pipe(
+      tap((plan) => ctx.patchState({ plan, loading: false })),
+      catchError((error) => {
+        ctx.patchState({
+          loading: false,
+          error: error.message || 'Error al cargar el plan',
+        });
+        return of(null);
       }),
     );
   }

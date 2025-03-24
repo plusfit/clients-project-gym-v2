@@ -11,11 +11,15 @@
   <ion-card-content>
     <p>
       <ion-icon name="reader-outline" class="info-icon"></ion-icon>
-      <span>aa</span>
+      <span>{{ planName }}</span>
     </p>
     <p>
       <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
-      <span>3</span>
+      <span>{{ planDays }} Días</span>
+    </p>
+    <p>
+      <ion-icon name="flash-outline" class="info-icon"></ion-icon>
+      <span>Nivel {{ planLevel | experienceLevel }}</span>
     </p>
   </ion-card-content>
 </ion-card>
