@@ -1,23 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { LoadUser, UserState } from '../state/user.state';
+import { Observable, switchMap } from 'rxjs';
+import { UserState } from '../state/user.state';
 import { User } from '@feature/profile/interfaces/user.interface';
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
   IonTitle,
   IonToolbar,
+  IonSpinner,
 } from '@ionic/angular/standalone';
-import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
+import { LoadPlan, LoadUser } from '../state/user.actions';
+import { ProfileImageNameComponent } from '../components/profile-image-name-info/profile-image-name-info.component';
+import { ProfilePersonalInfoComponent } from '../components/profile-personal-info/profile-personal-info.component';
+import { ProfilePlanInfoComponent } from '../components/profile-plan-info/profile-plan-info.component';
+import { Plan } from '../interfaces/plan.interface';
 
 @Component({
   selector: 'app-profile',
@@ -29,32 +27,36 @@ import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
     IonHeader,
     IonToolbar,
     IonTitle,
-    NgOptimizedImage,
     NgIf,
-    IonCardContent,
-    IonIcon,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    DatePipe,
+    ProfileImageNameComponent,
+    ProfilePersonalInfoComponent,
+    ProfilePlanInfoComponent,
+    CommonModule,
+    IonSpinner,
   ],
   standalone: true,
 })
 export class ProfilePage implements OnInit {
   @Select(UserState.getUser) user$!: Observable<User | null>;
+  @Select(UserState.getPlan) plan$!: Observable<Plan | null>;
+  @Select(UserState.isLoading) loading$!: Observable<boolean>;
+
   age: number | null = null;
+  id: string | null = null;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    // Despachamos la acción para cargar el usuario
-    this.store.dispatch(new LoadUser());
+    this.id = '67c1e9620dd078c1a869dbc2';
+    this.store.dispatch(new LoadUser(this.id));
 
-    // Calculamos la edad una vez que tenemos la información del usuario
     this.user$.subscribe((user) => {
       if (user && user.userInfo && user.userInfo.dateBirthday) {
         this.age = this.calculateAge(new Date(user.userInfo.dateBirthday));
+      }
+
+      if (user && user.planId) {
+        this.store.dispatch(new LoadPlan(user.planId));
       }
     });
   }

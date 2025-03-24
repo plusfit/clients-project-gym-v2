@@ -1,0 +1,25 @@
+<ion-card class="info-card">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon
+        name="information-circle-outline"
+        class="profile-icon"
+      ></ion-icon>
+      <span class="title">Información Personal</span>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>
+      <ion-icon name="mail-outline" class="info-icon"></ion-icon>
+      <span>{{ email }}</span>
+    </p>
+    <p>
+      <ion-icon name="phone-portrait-outline" class="info-icon"></ion-icon>
+      <span>{{ phone }}</span>
+    </p>
+    <p>
+      <ion-icon name="fitness-outline" class="info-icon"></ion-icon>
+      <span>Mutualista: {{ medicalSociety }}</span>
+    </p>
+  </ion-card-content>
+</ion-card>

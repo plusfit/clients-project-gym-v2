@@ -1,0 +1,25 @@
+<ion-card class="info-card">
+  <ion-card-header>
+    <ion-card-title>
+      <ion-icon
+        name="information-circle-outline"
+        class="profile-icon"
+      ></ion-icon>
+      <span class="title">Información del Plan</span>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>
+      <ion-icon name="reader-outline" class="info-icon"></ion-icon>
+      <span>{{ planName }}</span>
+    </p>
+    <p>
+      <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+      <span>{{ planDays }} Días</span>
+    </p>
+    <p>
+      <ion-icon name="flash-outline" class="info-icon"></ion-icon>
+      <span>Nivel {{ planLevel | experienceLevel }}</span>
+    </p>
+  </ion-card-content>
+</ion-card>
