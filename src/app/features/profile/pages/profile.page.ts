@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { filter, Observable, switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { UserState } from '../state/user.state';
 import { User } from '@feature/profile/interfaces/user.interface';
 import {
@@ -8,8 +8,9 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
+  IonSpinner,
 } from '@ionic/angular/standalone';
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule, NgIf } from '@angular/common';
 import { LoadPlan, LoadUser } from '../state/user.actions';
 import { ProfileImageNameComponent } from '../components/profile-image-name-info/profile-image-name-info.component';
 import { ProfilePersonalInfoComponent } from '../components/profile-personal-info/profile-personal-info.component';
@@ -30,12 +31,16 @@ import { Plan } from '../interfaces/plan.interface';
     ProfileImageNameComponent,
     ProfilePersonalInfoComponent,
     ProfilePlanInfoComponent,
+    CommonModule,
+    IonSpinner,
   ],
   standalone: true,
 })
 export class ProfilePage implements OnInit {
   @Select(UserState.getUser) user$!: Observable<User | null>;
   @Select(UserState.getPlan) plan$!: Observable<Plan | null>;
+  @Select(UserState.isLoading) loading$!: Observable<boolean>;
+
   age: number | null = null;
   id: string | null = null;
 

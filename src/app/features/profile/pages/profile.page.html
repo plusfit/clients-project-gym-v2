@@ -4,6 +4,11 @@
   </ion-toolbar>
 </ion-header>
 
+@if(loading$ | async){
+<div class="spinner-container">
+  <ion-spinner></ion-spinner>
+</div>
+}@else{
 <ion-content [fullscreen]="true">
   <div class="profile-container" *ngIf="user$ | async as user">
     <app-profile-image-name-info
@@ -29,3 +34,4 @@
     </div>
   </div>
 </ion-content>
+}

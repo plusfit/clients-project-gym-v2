@@ -11,7 +11,8 @@ import { Plan } from '../interfaces/plan.interface';
 export interface UserStateModel {
   user: User | null;
   plan: any | null;
-  loading: boolean;
+  loadingUser: boolean;
+  loadingPlan: boolean;
   error: string | null;
 }
 
@@ -19,7 +20,8 @@ export interface UserStateModel {
 @State<UserStateModel>({
   name: 'user',
   defaults: {
-    loading: false,
+    loadingUser: false,
+    loadingPlan: false,
     user: null,
     plan: null,
     error: null,
@@ -38,18 +40,24 @@ export class UserState {
     return state.plan;
   }
 
+  @Selector()
+  static isLoading(state: UserStateModel): boolean {
+    return state.loadingUser || state.loadingPlan;
+  }
+
   @Action(LoadUser, { cancelUncompleted: true })
   loadUser(ctx: StateContext<UserStateModel>, action: LoadUser) {
+    ctx.patchState({ loadingUser: true, error: null });
     return this.userService.getUser(action.id).pipe(
       tap((user) => {
         ctx.patchState({
           user: user,
-          loading: false,
+          loadingUser: false,
         });
       }),
       catchError((error) => {
         ctx.patchState({
-          loading: false,
+          loadingUser: false,
           error: error.message || 'Error al cargar el usuario',
         });
         return of(error);
@@ -59,13 +67,13 @@ export class UserState {
 
   @Action(LoadPlan, { cancelUncompleted: true })
   getPlan(ctx: StateContext<UserStateModel>, action: LoadPlan) {
-    ctx.patchState({ loading: true, error: null });
+    ctx.patchState({ loadingPlan: true, error: null });
 
     return this.userService.getPlanById(action.planId).pipe(
-      tap((plan) => ctx.patchState({ plan, loading: false })),
+      tap((plan) => ctx.patchState({ plan, loadingPlan: false })),
       catchError((error) => {
         ctx.patchState({
-          loading: false,
+          loadingPlan: false,
           error: error.message || 'Error al cargar el plan',
         });
         return of(null);
