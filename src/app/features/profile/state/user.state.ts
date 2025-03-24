@@ -1,25 +1,25 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 import { UserService } from '../services/user.service';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { User } from '@feature/profile/interfaces/user.interface';
 import { Injectable } from '@angular/core';
+import { LoadUser } from './user.actions';
+import { of } from 'rxjs';
 
 export interface UserStateModel {
   user: User | null;
-}
-
-// Actions
-export class LoadUser {
-  static readonly type = '[User] Load';
-  constructor() {}
+  loading: boolean;
+  error: string | null;
 }
 
 @Injectable()
 @State<UserStateModel>({
   name: 'user',
   defaults: {
+    loading: false,
     user: null,
+    error: null,
   },
 })
 export class UserState {
@@ -30,13 +30,21 @@ export class UserState {
     return state.user;
   }
 
-  @Action(LoadUser)
-  loadUser({ patchState }: StateContext<UserStateModel>) {
-    return this.userService.getUser().pipe(
-      tap((result: User) => {
-        patchState({
-          user: result,
+  @Action(LoadUser, { cancelUncompleted: true })
+  loadUser(ctx: StateContext<UserStateModel>, action: LoadUser) {
+    return this.userService.getUser(action.id).pipe(
+      tap((user) => {
+        ctx.patchState({
+          user: user,
+          loading: false,
         });
+      }),
+      catchError((error) => {
+        ctx.patchState({
+          loading: false,
+          error: error.message || 'Error al cargar el usuario',
+        });
+        return of(error);
       }),
     );
   }

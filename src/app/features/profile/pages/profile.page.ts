@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { LoadUser, UserState } from '../state/user.state';
+import { UserState } from '../state/user.state';
 import { User } from '@feature/profile/interfaces/user.interface';
 import {
   IonCard,
@@ -18,6 +18,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { LoadUser } from '../state/user.actions';
 
 @Component({
   selector: 'app-profile',
@@ -44,12 +45,13 @@ import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
 export class ProfilePage implements OnInit {
   @Select(UserState.getUser) user$!: Observable<User | null>;
   age: number | null = null;
+  id: string | null = null;
 
   constructor(private store: Store) {}
 
   ngOnInit(): void {
-    // Despachamos la acción para cargar el usuario
-    this.store.dispatch(new LoadUser());
+    this.id = '67c1e9620dd078c1a869dbc2';
+    this.store.dispatch(new LoadUser(this.id));
 
     // Calculamos la edad una vez que tenemos la información del usuario
     this.user$.subscribe((user) => {
