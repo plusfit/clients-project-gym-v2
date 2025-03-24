@@ -5,5 +5,8 @@
 </ion-header>
 
 <ion-content>
-  <ion-nav [root]="initialComponent"></ion-nav>
+  <ion-nav
+    [root]="initialComponent"
+    [rootParams]="getInitialParams()"
+  ></ion-nav>
 </ion-content>

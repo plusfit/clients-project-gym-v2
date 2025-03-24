@@ -5,6 +5,7 @@ import { OnboardingStep3Component } from '../onboarding.step3/onboarding-step3.c
 @Component({
   selector: 'app-onboarding-step2',
   templateUrl: './onboarding-step2.component.html',
+  standalone: true,
 })
 export class OnboardingStep2Component {
   constructor(private nav: IonNav) {}
