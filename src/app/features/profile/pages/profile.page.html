@@ -6,7 +6,14 @@
 
 <ion-content [fullscreen]="true">
   <div class="profile-container" *ngIf="user$ | async as user">
-    <ion-card class="profile-card">
+    <app-profile-image-name-info
+      [name]="'Federico Todaro'"
+      [age]="29"
+      [imageUrl]="'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
+    >
+    </app-profile-image-name-info>
+
+    <!-- <ion-card class="profile-card">
       <div class="image-container">
         <img
           class="profile-image"
@@ -35,9 +42,9 @@
           <span>Mejorar la condición física</span>
         </p>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
-    <ion-card class="info-card">
+    <!-- <ion-card class="info-card">
       <ion-card-header>
         <ion-card-title>
           <ion-icon
@@ -61,9 +68,18 @@
           <span>Miembro desde {{ formatDate(user.userInfo.createdAt) }}</span>
         </p>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
-    <ion-card class="stats-card">
+    <app-profile-personal-info
+      [email]="user.email"
+      [phone]="user.userInfo.phone"
+      [date]="formatDate(user.userInfo.createdAt)"
+    >
+    </app-profile-personal-info>
+
+    <app-profile-plan-info></app-profile-plan-info>
+
+    <!-- <ion-card class="stats-card">
       <ion-card-header>
         <ion-card-title>
           <ion-icon name="analytics-outline" class="profile-icon"></ion-icon>
@@ -86,6 +102,6 @@
           </div>
         </div>
       </ion-card-content>
-    </ion-card>
+    </ion-card> -->
   </div>
 </ion-content>

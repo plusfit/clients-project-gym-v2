@@ -6,11 +6,9 @@
 /* HEADER */
 ion-header {
   --background: transparent;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 100%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
@@ -70,11 +68,9 @@ ion-card {
 }
 
 ion-card-header {
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-primary-shade) 0%,
-    var(--ion-color-primary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--ion-color-primary-shade) 0%,
+      var(--ion-color-primary) 100%);
   padding: 16px;
   position: relative;
 }

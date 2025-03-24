@@ -45,6 +45,7 @@ import {
   alertCircleOutline,
   stopwatchOutline,
   listOutline,
+  readerOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -97,6 +98,7 @@ export class TabsPage {
       alertCircleOutline,
       stopwatchOutline,
       listOutline,
+      readerOutline,
     });
   }
 }

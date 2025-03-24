@@ -4,21 +4,16 @@ import { Observable } from 'rxjs';
 import { UserState } from '../state/user.state';
 import { User } from '@feature/profile/interfaces/user.interface';
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
-  IonIcon,
-  IonItem,
-  IonLabel,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { AsyncPipe, DatePipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgIf } from '@angular/common';
 import { LoadUser } from '../state/user.actions';
+import { ProfileImageNameComponent } from '../components/profile-image-name-info/profile-image-name-info.component';
+import { ProfilePersonalInfoComponent } from '../components/profile-personal-info/profile-personal-info.component';
+import { ProfilePlanInfoComponent } from '../components/profile-plan-info/profile-plan-info.component';
 
 @Component({
   selector: 'app-profile',
@@ -30,15 +25,10 @@ import { LoadUser } from '../state/user.actions';
     IonHeader,
     IonToolbar,
     IonTitle,
-    NgOptimizedImage,
     NgIf,
-    IonCardContent,
-    IonIcon,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-    DatePipe,
+    ProfileImageNameComponent,
+    ProfilePersonalInfoComponent,
+    ProfilePlanInfoComponent,
   ],
   standalone: true,
 })
