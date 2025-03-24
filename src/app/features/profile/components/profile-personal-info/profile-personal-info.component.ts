@@ -26,5 +26,5 @@ import {
 export class ProfilePersonalInfoComponent {
   @Input() email!: string;
   @Input() phone!: string;
-  @Input() date!: string;
+  @Input() medicalSociety!: string;
 }

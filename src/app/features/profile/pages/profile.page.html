@@ -4,34 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-@if(loading$ | async){
+@if (loading$ | async) {
 <div class="spinner-container">
   <ion-spinner></ion-spinner>
 </div>
-}@else{
+} @else { @if (user$ | async; as user) { @if (plan$ | async; as plan) {
 <ion-content [fullscreen]="true">
-  <div class="profile-container" *ngIf="user$ | async as user">
+  <div class="profile-container">
     <app-profile-image-name-info
-      [name]="'Federico Todaro'"
+      [name]="user.userInfo.name"
       [age]="29"
       [imageUrl]="'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
+      [planGoal]="plan.goal"
     >
     </app-profile-image-name-info>
 
     <app-profile-personal-info
       [email]="user.email"
       [phone]="user.userInfo.phone"
-      [date]="formatDate(user.userInfo.createdAt)"
+      [medicalSociety]="user.userInfo.medicalSociety"
     >
     </app-profile-personal-info>
 
-    <div *ngIf="plan$ | async as plan">
-      <app-profile-plan-info
-        [planName]="plan.name"
-        [planDays]="plan.days"
-        [planLevel]="plan.experienceLevel"
-      ></app-profile-plan-info>
-    </div>
+    <app-profile-plan-info
+      [planName]="plan.name"
+      [planDays]="plan.days"
+      [planLevel]="plan.experienceLevel"
+    >
+    </app-profile-plan-info>
   </div>
 </ion-content>
-}
+} } }
