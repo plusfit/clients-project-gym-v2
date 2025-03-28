@@ -1,52 +1,47 @@
 import { Component, Input } from '@angular/core';
-import { IonNav } from '@ionic/angular';
 import {
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonDatetime,
-  IonButton,
-  IonSelectOption,
-  IonSelect,
-  IonList,
-  IonContent,
-} from '@ionic/angular/standalone';
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
+import { ModalController } from '@ionic/angular';
+import { IonicModule, IonNav } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.component';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
+import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
 
 @Component({
-  selector: 'app-onboarding-step1',
-  templateUrl: './onboarding-step1.component.html',
+  selector: 'app-step1',
   standalone: true,
-  imports: [
-    IonInput,
-    IonItem,
-    IonLabel,
-    IonDatetime,
-    IonButton,
-    IonSelectOption,
-    IonSelect,
-    IonList,
-    IonContent,
-    ReactiveFormsModule,
-  ],
+  imports: [CommonModule, IonicModule, ReactiveFormsModule],
+  templateUrl: './onboarding-step1.component.html',
+  styleUrls: ['./onboarding-step1.component.scss'],
 })
 export class OnboardingStep1Component {
   @Input() nav!: IonNav;
-
   userForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private modalCtrl: ModalController,
+  ) {
     this.userForm = this.fb.group({
-      nombreCompleto: ['', Validators.required],
-      direccion: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.pattern(/^\d{7,15}$/)]],
-      sociedadMedica: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
-      sexo: ['', Validators.required],
-      ci: ['', [Validators.required, Validators.pattern(/^\d{6,10}$/)]],
+      fullName: ['', Validators.required],
+      address: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(/^09\d{7}$/)]],
+      mutual: ['', Validators.required],
+      dateOfBirth: ['', Validators.required],
+      sex: ['', Validators.required],
+      ci: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
     });
+  }
+
+  setDateOfBirth(event: any) {
+    const date = event.detail.value;
+    this.userForm.get('dateOfBirth')?.setValue(date);
   }
 
   nextStep() {
@@ -56,5 +51,32 @@ export class OnboardingStep1Component {
     } else {
       this.userForm.markAllAsTouched();
     }
+  }
+
+  isInvalid(controlName: string): boolean {
+    const control = this.userForm.get(controlName);
+    return (control?.invalid && control?.touched) || false;
+  }
+
+  async openDatePicker() {
+    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+    const modal = await this.modalCtrl.create({
+      component: IonDatetimeModalComponent, // el componente donde tenés el ion-datetime
+      breakpoints: [0, 0.4], // altura tipo action-sheet
+      initialBreakpoint: 0.4,
+      componentProps: {
+        value: this.userForm.get('dateOfBirth')?.value,
+        max: today,
+      },
+      cssClass: 'datepicker-sheet',
+    });
+
+    modal.onWillDismiss().then((data) => {
+      const selected = data.data;
+      if (selected) {
+        this.userForm.get('dateOfBirth')?.setValue(selected);
+      }
+    });
+    await modal.present();
   }
 }

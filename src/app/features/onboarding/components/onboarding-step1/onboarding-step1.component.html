@@ -3,38 +3,37 @@
     <ion-list>
       <ion-item>
         <ion-label position="floating">Nombre completo</ion-label>
-        <ion-input formControlName="nombreCompleto"></ion-input>
+        <ion-input formControlName="fullName"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
-        <ion-input formControlName="direccion"></ion-input>
+        <ion-input formControlName="address"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Teléfono</ion-label>
-        <ion-input type="tel" formControlName="telefono"></ion-input>
+        <ion-input type="tel" formControlName="phone"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">Sociedad médica</ion-label>
-        <ion-input formControlName="sociedadMedica"></ion-input>
+        <ion-input formControlName="mutual"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Fecha de nacimiento</ion-label>
-        <ion-datetime
-          formControlName="fechaNacimiento"
-          presentation="date"
-        ></ion-datetime>
+      <ion-item button (click)="openDatePicker()">
+        <ion-label>Fecha de nacimiento</ion-label>
+        <ion-text slot="end">
+          {{ userForm.get('dateOfBirth')?.value | date: 'dd/MM/yyyy' }}
+        </ion-text>
       </ion-item>
 
       <ion-item>
         <ion-label>Sexo</ion-label>
-        <ion-select formControlName="sexo">
-          <ion-select-option value="masculino">Masculino</ion-select-option>
-          <ion-select-option value="femenino">Femenino</ion-select-option>
-          <ion-select-option value="otro">Otro</ion-select-option>
+        <ion-select formControlName="sex" interface="action-sheet">
+          <ion-select-option value="male">Masculino</ion-select-option>
+          <ion-select-option value="fale">Femenino</ion-select-option>
+          <ion-select-option value="other">Otro</ion-select-option>
         </ion-select>
       </ion-item>
 

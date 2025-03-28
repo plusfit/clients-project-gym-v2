@@ -1,0 +1,14 @@
+<ion-content class="ion-padding sheet-content">
+  <div class="datetime-wrapper">
+    <ion-datetime
+      [value]="value"
+      [max]="max"
+      [min]="min"
+      presentation="date"
+      show-default-buttons="true"
+      doneText="Aceptar"
+      cancelText="Cancelar"
+      (ionChange)="handleChange($event)"
+    ></ion-datetime>
+  </div>
+</ion-content>
