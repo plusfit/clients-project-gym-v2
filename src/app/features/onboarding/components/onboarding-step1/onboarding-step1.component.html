@@ -5,21 +5,33 @@
         <ion-label position="floating">Nombre completo</ion-label>
         <ion-input formControlName="fullName"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('fullName')">
+        El nombre es obligatorio.
+      </ion-text>
 
       <ion-item>
         <ion-label position="floating">Dirección</ion-label>
         <ion-input formControlName="address"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('address')">
+        La dirección es obligatoria.
+      </ion-text>
 
       <ion-item>
         <ion-label position="floating">Teléfono</ion-label>
         <ion-input type="tel" formControlName="phone"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('phone')">
+        El teléfono es obligatorio.
+      </ion-text>
 
       <ion-item>
         <ion-label position="floating">Sociedad médica</ion-label>
         <ion-input formControlName="mutual"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('mutual')">
+        La sociedad médica es obligatoria.
+      </ion-text>
 
       <ion-item button (click)="openDatePicker()">
         <ion-label>Fecha de nacimiento</ion-label>
@@ -27,6 +39,9 @@
           {{ userForm.get('dateOfBirth')?.value | date: 'dd/MM/yyyy' }}
         </ion-text>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('dateOfBirth')">
+        La fecha de nacimiento es obligatoria.
+      </ion-text>
 
       <ion-item>
         <ion-label>Sexo</ion-label>
@@ -36,13 +51,25 @@
           <ion-select-option value="other">Otro</ion-select-option>
         </ion-select>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('sex')">
+        El sexo es obligatorio.
+      </ion-text>
 
       <ion-item>
         <ion-label position="floating">Cédula de identidad</ion-label>
         <ion-input formControlName="ci"></ion-input>
       </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('ci')">
+        La cédula de identidad es obligatoria.
+      </ion-text>
     </ion-list>
 
-    <ion-button expand="block" (click)="nextStep()">Siguiente</ion-button>
+    <!-- <ion-button expand="block" (click)="nextStep()">Siguiente</ion-button> -->
   </form>
 </ion-content>
+
+<ion-footer class="footer-fixed">
+  <ion-toolbar>
+    <ion-button expand="block" (click)="nextStep()">Siguiente</ion-button>
+  </ion-toolbar>
+</ion-footer>

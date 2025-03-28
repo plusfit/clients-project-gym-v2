@@ -22,6 +22,22 @@ import { IonicModule } from '@ionic/angular';
         max-width: 340px;
         width: 100%;
       }
+
+      ion-content.calendar-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .calendar-container {
+        width: 100%;
+        max-width: 360px;
+        min-height: 420px;
+        padding-bottom: 16px;
+        background: var(--ion-background-color, #1e1e1e);
+        border-radius: 16px;
+      }
     `,
   ],
 })

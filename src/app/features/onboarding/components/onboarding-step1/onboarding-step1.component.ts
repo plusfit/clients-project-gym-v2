@@ -46,6 +46,8 @@ export class OnboardingStep1Component {
 
   nextStep() {
     if (this.userForm.valid) {
+      console.log('VALIDO');
+
       const userData = this.userForm.value;
       this.nav.push(OnboardingStep2Component, { userData, nav: this.nav });
     } else {
@@ -59,11 +61,11 @@ export class OnboardingStep1Component {
   }
 
   async openDatePicker() {
-    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+    const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
     const modal = await this.modalCtrl.create({
-      component: IonDatetimeModalComponent, // el componente donde tenés el ion-datetime
-      breakpoints: [0, 0.4], // altura tipo action-sheet
-      initialBreakpoint: 0.4,
+      component: IonDatetimeModalComponent,
+      breakpoints: [0, 0.4],
+      initialBreakpoint: 0.45, //TODO: VER COMO AJUSTAR EL TAMANO PARA TODOS LOS DISPOSITIVOS
       componentProps: {
         value: this.userForm.get('dateOfBirth')?.value,
         max: today,
