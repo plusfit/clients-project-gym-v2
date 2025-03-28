@@ -1,9 +1,27 @@
-<ion-content class="ion-padding sheet-content">
-  <div class="datetime-wrapper">
+<!-- <ion-content
+  class="ion-padding"
+  style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  "
+>
+  <ion-datetime
+    [value]="value"
+    presentation="date"
+    show-default-buttons="true"
+    doneText="Aceptar"
+    cancelText="Cancelar"
+    
+  ></ion-datetime>
+</ion-content> -->
+
+<ion-content class="ion-padding calendar-content">
+  <div class="calendar-container">
     <ion-datetime
       [value]="value"
       [max]="max"
-      [min]="min"
       presentation="date"
       show-default-buttons="true"
       doneText="Aceptar"
