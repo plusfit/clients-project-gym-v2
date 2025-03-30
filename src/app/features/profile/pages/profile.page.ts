@@ -27,7 +27,6 @@ import { Plan } from '../interfaces/plan.interface';
     IonHeader,
     IonToolbar,
     IonTitle,
-    NgIf,
     ProfileImageNameComponent,
     ProfilePersonalInfoComponent,
     ProfilePlanInfoComponent,
