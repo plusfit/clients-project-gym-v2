@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Store, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import {
   IonModal,
   IonTitle,
@@ -11,19 +10,25 @@ import {
   IonRow,
   IonCol,
   IonAlert,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { EnrollConfirmationModalComponent } from '@feature/schedule/components/enroll-confirmation-modal/enroll-confirmation-modal.component';
 import { ScheduleCardComponent } from '@feature/schedule/components/schedule-card/schedule-card.component';
 import { DaySelectorComponent } from '@feature/schedule/components/day-selector/day-selector.component';
-import {
-  EnrollInSchedule,
-  // Suponemos que existe una acción de desinscripción:
-  UnenrollFromSchedule,
-  Schedule,
-  ScheduleState,
-} from '@feature/schedule/state/schedule.state';
+import { Schedule } from '@feature/schedule/state/schedule.state';
 import { UnsubscribeConfirmationModalComponent } from '@feature/schedule/components/unsubscribe-confirmation-modal/unsubscribe-confirmation-modal.component';
+import { ScheduleFacadeService } from '@feature/schedule/services/schedule-facade.service';
+import { Store, Select } from '@ngxs/store';
+import { UserState } from '@feature/profile/state/user.state';
+import { AuthState } from '@feature/auth/state/auth.state';
+import { Plan } from '@feature/profile/interfaces/plan.interface';
+import { LoadPlan } from '@feature/profile/state/user.actions';
+
+interface DayEnrollment {
+  day: string;
+  count: number;
+}
 
 @Component({
   selector: 'app-schedule-page',
@@ -35,8 +40,7 @@ import { UnsubscribeConfirmationModalComponent } from '@feature/schedule/compone
     DaySelectorComponent,
     ScheduleCardComponent,
     EnrollConfirmationModalComponent,
-    // Suponiendo que también importas el modal de desinscripción:
-    // UnsubscribeConfirmationModalComponent,
+    UnsubscribeConfirmationModalComponent,
     IonModal,
     IonTitle,
     IonToolbar,
@@ -45,18 +49,23 @@ import { UnsubscribeConfirmationModalComponent } from '@feature/schedule/compone
     IonGrid,
     IonRow,
     IonCol,
-    UnsubscribeConfirmationModalComponent,
     IonAlert,
+    IonSpinner,
   ],
 })
-export class SchedulePageComponent implements OnInit {
-  @Select(ScheduleState.getSchedules) schedules$!: Observable<Schedule[]>;
+export class SchedulePageComponent implements OnInit, OnDestroy {
+  @Select(UserState.getPlan) plan$!: Observable<Plan | null>;
+
+  schedules$: Observable<Schedule[]>;
+  loading: boolean = true;
+  error: string | null = null;
 
   selectedDay: string = 'Lunes';
   schedulesForDay: Schedule[] = [];
-  currentUserId: string = 'currentUserId';
-  userPlan = { days: 2 };
+  currentUserId: string = '';
+  userPlan = { days: 2 }; // Valor por defecto hasta que se cargue el plan
   enrolledDaysCount: number = 0;
+  enrollmentsByDay: DayEnrollment[] = [];
 
   // Variables para modal
   showEnrollModal: boolean = false;
@@ -66,13 +75,52 @@ export class SchedulePageComponent implements OnInit {
   showAlert: boolean = false;
   alertMessage: string = '';
 
-  constructor(private store: Store) {}
+  private subscriptions: Subscription = new Subscription();
+
+  constructor(
+    private scheduleFacade: ScheduleFacadeService,
+    private store: Store,
+  ) {
+    this.schedules$ = this.scheduleFacade.schedules$;
+  }
 
   ngOnInit(): void {
-    this.schedules$.subscribe((schedules) => {
+    // Load schedules from backend
+    this.loading = true;
+    this.scheduleFacade.loadSchedules();
+
+    // Get current user ID and load plan
+    const userSub = this.store.select(AuthState.getUser).subscribe((user) => {
+      if (user) {
+        this.currentUserId = user._id;
+
+        if (user.planId) {
+          this.store.dispatch(new LoadPlan(user.planId));
+        }
+      }
+    });
+    this.subscriptions.add(userSub);
+
+    // Get plan info
+    const planSub = this.plan$.subscribe((plan) => {
+      if (plan && plan.days) {
+        this.userPlan = { days: plan.days };
+      }
+    });
+    this.subscriptions.add(planSub);
+
+    // Update schedules when they change
+    const schedulesSub = this.schedules$.subscribe((schedules) => {
+      this.loading = false;
       this.filterSchedules(schedules);
       this.calculateEnrolledDays(schedules);
+      this.calculateEnrollmentsByDay(schedules);
     });
+    this.subscriptions.add(schedulesSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   onDaySelected(day: string) {
@@ -83,9 +131,13 @@ export class SchedulePageComponent implements OnInit {
   }
 
   filterSchedules(schedules: Schedule[]) {
-    this.schedulesForDay = schedules.filter(
-      (schedule) => schedule.day === this.selectedDay,
-    );
+    this.schedulesForDay = schedules
+      .filter((schedule) => schedule.day === this.selectedDay)
+      .sort((a, b) => {
+        const timeA = parseInt(a.startTime, 10);
+        const timeB = parseInt(b.startTime, 10);
+        return timeA - timeB;
+      });
   }
 
   calculateEnrolledDays(schedules: Schedule[]) {
@@ -99,6 +151,37 @@ export class SchedulePageComponent implements OnInit {
     this.enrolledDaysCount = enrolledDays.size;
   }
 
+  calculateEnrollmentsByDay(schedules: Schedule[]) {
+    // Mapear días a un objeto para contar inscripciones
+    const dayCountMap = new Map<string, number>();
+
+    // Inicializar todos los días con 0
+    const allDays = [
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+      'Domingo',
+    ];
+    allDays.forEach((day) => dayCountMap.set(day, 0));
+
+    // Contar inscripciones por día
+    schedules.forEach((schedule) => {
+      if (schedule.clients.includes(this.currentUserId)) {
+        const currentCount = dayCountMap.get(schedule.day) || 0;
+        dayCountMap.set(schedule.day, currentCount + 1);
+      }
+    });
+
+    // Convertir a array para pasar al componente
+    this.enrollmentsByDay = Array.from(dayCountMap).map(([day, count]) => ({
+      day,
+      count,
+    }));
+  }
+
   onScheduleClicked(schedule: Schedule) {
     this.selectedSchedule = schedule;
     if (schedule.clients.includes(this.currentUserId)) {
@@ -107,8 +190,7 @@ export class SchedulePageComponent implements OnInit {
     } else {
       // Si no está inscrito, validar límite de días
       if (this.enrolledDaysCount >= this.userPlan.days) {
-        this.alertMessage =
-          'Ya estás inscrito en el número máximo de días permitidos. Debes desinscribirte de un horario para inscribirte en otro.';
+        this.alertMessage = `Ya estás inscrito en el número máximo de días permitidos (${this.userPlan.days}). Debes desinscribirte de un horario para inscribirte en otro.`;
         this.showAlert = true;
         return;
       }
@@ -118,20 +200,46 @@ export class SchedulePageComponent implements OnInit {
   }
 
   onEnrollConfirmed() {
-    if (this.selectedSchedule) {
-      this.store.dispatch(
-        new EnrollInSchedule(this.selectedSchedule._id, this.currentUserId),
-      );
-      this.closeModals();
+    if (this.selectedSchedule && this.currentUserId) {
+      this.loading = true;
+      const enrollSub = this.scheduleFacade
+        .enrollUserInSchedule(this.selectedSchedule._id, this.currentUserId)
+        .subscribe({
+          next: () => {
+            this.loading = false;
+            this.closeModals();
+          },
+          error: (error) => {
+            this.loading = false;
+            this.error = `Error al inscribirse: ${error.message}`;
+            this.showAlert = true;
+            this.alertMessage = this.error;
+            this.closeModals();
+          },
+        });
+      this.subscriptions.add(enrollSub);
     }
   }
 
   onUnsubscribeConfirmed() {
-    if (this.selectedSchedule) {
-      this.store.dispatch(
-        new UnenrollFromSchedule(this.selectedSchedule._id, this.currentUserId),
-      );
-      this.closeModals();
+    if (this.selectedSchedule && this.currentUserId) {
+      this.loading = true;
+      const unenrollSub = this.scheduleFacade
+        .unenrollUserFromSchedule(this.selectedSchedule._id, this.currentUserId)
+        .subscribe({
+          next: () => {
+            this.loading = false;
+            this.closeModals();
+          },
+          error: (error) => {
+            this.loading = false;
+            this.error = `Error al desinscribirse: ${error.message}`;
+            this.showAlert = true;
+            this.alertMessage = this.error;
+            this.closeModals();
+          },
+        });
+      this.subscriptions.add(unenrollSub);
     }
   }
 
