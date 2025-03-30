@@ -16,7 +16,10 @@ import { CommonModule } from '@angular/common';
 import { EnrollConfirmationModalComponent } from '@feature/schedule/components/enroll-confirmation-modal/enroll-confirmation-modal.component';
 import { ScheduleCardComponent } from '@feature/schedule/components/schedule-card/schedule-card.component';
 import { DaySelectorComponent } from '@feature/schedule/components/day-selector/day-selector.component';
-import { Schedule } from '@feature/schedule/state/schedule.state';
+import {
+  Schedule,
+  ScheduleState,
+} from '@feature/schedule/state/schedule.state';
 import { UnsubscribeConfirmationModalComponent } from '@feature/schedule/components/unsubscribe-confirmation-modal/unsubscribe-confirmation-modal.component';
 import { ScheduleFacadeService } from '@feature/schedule/services/schedule-facade.service';
 import { Store, Select } from '@ngxs/store';
@@ -65,6 +68,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
   currentUserId: string = '';
   userPlan = { days: 2 }; // Valor por defecto hasta que se cargue el plan
   enrolledDaysCount: number = 0;
+  totalEnrollments: number = 0; // Nuevo contador para el total de inscripciones
   enrollmentsByDay: DayEnrollment[] = [];
 
   // Variables para modal
@@ -93,6 +97,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
     const userSub = this.store.select(AuthState.getUser).subscribe((user) => {
       if (user) {
         this.currentUserId = user._id;
+        console.log('Usuario actual ID:', this.currentUserId);
 
         if (user.planId) {
           this.store.dispatch(new LoadPlan(user.planId));
@@ -105,6 +110,10 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
     const planSub = this.plan$.subscribe((plan) => {
       if (plan && plan.days) {
         this.userPlan = { days: plan.days };
+        console.log(
+          'Plan del usuario cargado. Máximo horarios:',
+          this.userPlan.days,
+        );
       }
     });
     this.subscriptions.add(planSub);
@@ -113,7 +122,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
     const schedulesSub = this.schedules$.subscribe((schedules) => {
       this.loading = false;
       this.filterSchedules(schedules);
-      this.calculateEnrolledDays(schedules);
+      this.calculateEnrollments(schedules);
       this.calculateEnrollmentsByDay(schedules);
     });
     this.subscriptions.add(schedulesSub);
@@ -125,9 +134,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
   onDaySelected(day: string) {
     this.selectedDay = day;
-    this.schedules$.subscribe((schedules) => {
-      this.filterSchedules(schedules);
-    });
+    // En lugar de crear una nueva suscripción aquí, usamos el último valor de schedules
+    const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+    this.filterSchedules(schedules);
   }
 
   filterSchedules(schedules: Schedule[]) {
@@ -140,15 +149,30 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
       });
   }
 
-  calculateEnrolledDays(schedules: Schedule[]) {
-    // Contar los días distintos en los que el usuario ya está inscrito
+  calculateEnrollments(schedules: Schedule[]) {
+    // Contar los días distintos (para mantener compatibilidad)
     const enrolledDays = new Set<string>();
-    schedules.forEach((schedule) => {
-      if (schedule.clients.includes(this.currentUserId)) {
-        enrolledDays.add(schedule.day);
-      }
-    });
+
+    // Contar total de horarios en los que está inscrito
+    let totalCount = 0;
+
+    // Solo contar si el ID de usuario es válido
+    if (this.currentUserId) {
+      schedules.forEach((schedule) => {
+        if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
+          enrolledDays.add(schedule.day);
+          totalCount++;
+        }
+      });
+    }
+
+    // Actualizar contadores
     this.enrolledDaysCount = enrolledDays.size;
+    this.totalEnrollments = totalCount;
+
+    console.log(
+      `Usuario inscrito en ${this.totalEnrollments} horarios. Máximo permitido: ${this.userPlan.days}`,
+    );
   }
 
   calculateEnrollmentsByDay(schedules: Schedule[]) {
@@ -169,7 +193,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
     // Contar inscripciones por día
     schedules.forEach((schedule) => {
-      if (schedule.clients.includes(this.currentUserId)) {
+      if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
         const currentCount = dayCountMap.get(schedule.day) || 0;
         dayCountMap.set(schedule.day, currentCount + 1);
       }
@@ -182,18 +206,54 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
     }));
   }
 
+  checkMaxEnrollmentsLimit(newSchedule: Schedule): boolean {
+    // Si el usuario ya está inscrito en este horario, no hay problema
+    if (
+      newSchedule.clients &&
+      newSchedule.clients.includes(this.currentUserId)
+    ) {
+      return true;
+    }
+
+    // Obtenemos todos los horarios actuales
+    const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+
+    // Contamos en cuántos horarios está inscrito actualmente
+    const currentEnrollments = allSchedules.filter(
+      (schedule) =>
+        schedule.clients && schedule.clients.includes(this.currentUserId),
+    ).length;
+
+    // Obtenemos el máximo de horarios del plan
+    const plan = this.store.selectSnapshot(UserState.getPlan);
+    const maxEnrollments = plan?.days || this.userPlan.days;
+
+    console.log(
+      `Validación de horarios: Inscritos=${currentEnrollments}, Máximo=${maxEnrollments}`,
+    );
+
+    // Si ya está en el límite, no puede inscribirse en un nuevo horario
+    return currentEnrollments < maxEnrollments;
+  }
+
   onScheduleClicked(schedule: Schedule) {
     this.selectedSchedule = schedule;
-    if (schedule.clients.includes(this.currentUserId)) {
+
+    if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
       // Si el usuario ya está inscrito, se abre el modal de desinscripción
       this.showUnsubscribeModal = true;
     } else {
-      // Si no está inscrito, validar límite de días
-      if (this.enrolledDaysCount >= this.userPlan.days) {
-        this.alertMessage = `Ya estás inscrito en el número máximo de días permitidos (${this.userPlan.days}). Debes desinscribirte de un horario para inscribirte en otro.`;
+      // Verificamos si el usuario puede inscribirse en más horarios
+      if (!this.checkMaxEnrollmentsLimit(schedule)) {
+        // Obtenemos el máximo de horarios del plan
+        const plan = this.store.selectSnapshot(UserState.getPlan);
+        const maxEnrollments = plan?.days || this.userPlan.days;
+
+        this.alertMessage = `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`;
         this.showAlert = true;
         return;
       }
+
       // Abrir el modal de inscripción
       this.showEnrollModal = true;
     }
@@ -208,6 +268,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
           next: () => {
             this.loading = false;
             this.closeModals();
+
+            // Recalcular inscripciones después de inscripción exitosa
+            setTimeout(() => {
+              const updatedSchedules = this.store.selectSnapshot(
+                ScheduleState.getSchedules,
+              );
+              this.calculateEnrollments(updatedSchedules);
+              this.calculateEnrollmentsByDay(updatedSchedules);
+            }, 300);
           },
           error: (error) => {
             this.loading = false;
@@ -230,6 +299,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
           next: () => {
             this.loading = false;
             this.closeModals();
+
+            // Recalcular inscripciones después de desinscripción exitosa
+            setTimeout(() => {
+              const updatedSchedules = this.store.selectSnapshot(
+                ScheduleState.getSchedules,
+              );
+              this.calculateEnrollments(updatedSchedules);
+              this.calculateEnrollmentsByDay(updatedSchedules);
+            }, 300);
           },
           error: (error) => {
             this.loading = false;

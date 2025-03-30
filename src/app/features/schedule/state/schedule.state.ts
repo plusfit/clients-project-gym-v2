@@ -47,6 +47,16 @@ export class ScheduleState {
     return state.schedules;
   }
 
+  @Selector()
+  static getUserTotalEnrollments(state: ScheduleStateModel) {
+    return (userId: string) => {
+      // Contar en cuántos horarios en total está inscrito el usuario
+      return state.schedules.filter(
+        (schedule) => schedule.clients && schedule.clients.includes(userId),
+      ).length;
+    };
+  }
+
   @Action(SetSchedules)
   setSchedules(ctx: StateContext<ScheduleStateModel>, action: SetSchedules) {
     ctx.setState({ schedules: action.payload });
