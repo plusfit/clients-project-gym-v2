@@ -1,5 +1,11 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IonBadge } from '@ionic/angular/standalone';
+
+interface DayEnrollment {
+  day: string;
+  count: number;
+}
 
 @Component({
   selector: 'app-day-selector',
@@ -11,6 +17,9 @@ import { CommonModule } from '@angular/common';
         (click)="selectDay(day)"
       >
         <span class="label">{{ day }}</span>
+        <ion-badge *ngIf="getEnrollmentCount(day) > 0" class="enrollment-badge">
+          {{ getEnrollmentCount(day) }}
+        </ion-badge>
       </button>
     </div>
   `,
@@ -60,6 +69,7 @@ import { CommonModule } from '@angular/common';
           background 250ms,
           box-shadow 250ms,
           transform 250ms;
+        position: relative;
       }
       button:hover {
         background: rgba(var(--ion-color-primary-rgb), 0.15);
@@ -85,12 +95,26 @@ import { CommonModule } from '@angular/common';
       .label {
         text-transform: capitalize;
       }
+      .enrollment-badge {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        font-size: 0.7rem;
+        --padding-top: 3px;
+        --padding-bottom: 3px;
+        --padding-start: 6px;
+        --padding-end: 6px;
+        --background: var(--ion-color-secondary);
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
     `,
   ],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IonBadge],
 })
 export class DaySelectorComponent {
+  @Input() enrollmentsByDay: DayEnrollment[] = [];
   @Output() daySelected = new EventEmitter<string>();
 
   days: string[] = [
@@ -108,5 +132,10 @@ export class DaySelectorComponent {
   selectDay(day: string) {
     this.selectedDay = day;
     this.daySelected.emit(day);
+  }
+
+  getEnrollmentCount(day: string): number {
+    const enrollment = this.enrollmentsByDay.find((e) => e.day === day);
+    return enrollment ? enrollment.count : 0;
   }
 }
