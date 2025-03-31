@@ -13,7 +13,6 @@ import {
   IonToolbar,
   IonButtons,
   IonBackButton,
-  IonCardSubtitle,
   IonButton,
 } from '@ionic/angular/standalone';
 import {
@@ -593,7 +592,6 @@ declare module '../interfaces/routine.interface' {
     IonBackButton,
     AsyncPipe,
     NgOptimizedImage,
-    IonCardSubtitle,
     UpperCasePipe,
     NgClass,
     IonButton,
