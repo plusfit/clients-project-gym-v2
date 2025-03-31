@@ -1,10 +1,22 @@
 import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { HomeService } from '../services/home.service';
+import { tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 export interface HomeStateModel {
-  routine: SubRoutine;
+  routine: SubRoutine | null;
+  routines: SubRoutine[];
+  loading: boolean;
+  error: string | null;
   motivationalMessage: string;
   motivationalMessages: string[];
+}
+
+// Acciones
+export class LoadRoutineForToday {
+  static readonly type = '[Home] Load Routine For Today';
 }
 
 export class SetHomeData {
@@ -15,80 +27,10 @@ export class SetHomeData {
 @State<HomeStateModel>({
   name: 'home',
   defaults: {
-    routine: {
-      _id: '678d38244d6dc701e49cef9d',
-      name: 'MIXTO',
-      description:
-        'Rutina de entrenamiento mixto para hoy. ¡Prepárate para sudar!',
-      exercises: [
-        {
-          _id: '673b55140c0e5a4e3cd664b1',
-          name: 'Flexiones',
-          type: 'room',
-          series: 3,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b2',
-          name: 'Cinta de correr',
-          type: 'cardio',
-          minutes: 10,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b3',
-          name: 'Sentadillas',
-          type: 'room',
-          series: 4,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b4',
-          name: 'Abdominales',
-          type: 'room',
-          series: 3,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b5',
-          name: 'Burpees',
-          type: 'room',
-          series: 2,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b6',
-          name: 'Plancha',
-          type: 'room',
-          series: 3,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-        {
-          _id: '673b55140c0e5a4e3cd664b7',
-          name: 'Bicicleta',
-          type: 'cardio',
-          minutes: 5,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          description: '',
-        },
-      ],
-      createdAt: new Date('2025-01-19T17:22:34.993Z').toISOString(),
-      updatedAt: new Date('2025-01-19T17:22:34.993Z').toISOString(),
-      category: 'mix',
-    },
+    routine: null,
+    routines: [],
+    loading: false,
+    error: null,
     motivationalMessage: '¡Vamos a darle con todo hoy! 💪',
     motivationalMessages: [
       'Comienza la semana con fuerza y determinación. ¡Hoy es tu día! 💪', // Lunes
@@ -101,10 +43,23 @@ export class SetHomeData {
     ],
   },
 })
+@Injectable()
 export class HomeState {
+  constructor(private homeService: HomeService) {}
+
   @Selector()
-  static getRoutine(state: HomeStateModel): SubRoutine {
+  static getRoutine(state: HomeStateModel): SubRoutine | null {
     return state.routine;
+  }
+
+  @Selector()
+  static isLoading(state: HomeStateModel): boolean {
+    return state.loading;
+  }
+
+  @Selector()
+  static getError(state: HomeStateModel): string | null {
+    return state.error;
   }
 
   @Selector()
@@ -113,6 +68,27 @@ export class HomeState {
     const adjustedDayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
 
     return state.motivationalMessages[adjustedDayIndex];
+  }
+
+  @Action(LoadRoutineForToday)
+  loadRoutineForToday(ctx: StateContext<HomeStateModel>): any {
+    ctx.patchState({ loading: true, error: null });
+
+    return this.homeService.getRoutineForToday().pipe(
+      tap((routine) => {
+        ctx.patchState({
+          routine,
+          loading: false,
+        });
+      }),
+      catchError((error) => {
+        ctx.patchState({
+          loading: false,
+          error: error.message || 'Error al cargar la rutina',
+        });
+        return of(error);
+      }),
+    );
   }
 
   @Action(SetHomeData)
