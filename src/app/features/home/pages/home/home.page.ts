@@ -10,7 +10,7 @@ import {
   IonButton,
   IonIcon,
 } from '@ionic/angular/standalone';
-import { NgIf, AsyncPipe, DatePipe, NgTemplateOutlet } from '@angular/common';
+import { NgIf, AsyncPipe, DatePipe } from '@angular/common';
 import { RoutineCardComponent } from '../../components/routine-card/routine-card.component';
 import { Observable, interval, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
@@ -38,7 +38,6 @@ import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
     AsyncPipe,
     DayTranslatePipe,
     NgIf,
-    NgTemplateOutlet,
   ],
   standalone: true,
 })

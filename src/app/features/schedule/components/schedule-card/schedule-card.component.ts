@@ -6,7 +6,6 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonIcon,
-  IonButton,
   IonBadge,
 } from '@ionic/angular/standalone';
 
@@ -298,7 +297,6 @@ export interface Schedule {
     IonCardTitle,
     IonCardContent,
     IonIcon,
-    IonButton,
     IonBadge,
     CommonModule,
   ],
