@@ -25,13 +25,26 @@
             Ejercicios ({{ routine.exercises.length }})
           </ion-label>
         </ion-list-header>
-        <div class="exercises-container">
-          <ng-container *ngFor="let exercise of processedExercises">
+
+        <!-- Indicador de carga -->
+        <div *ngIf="isLoading" class="loading-container">
+          <ion-spinner name="circular"></ion-spinner>
+          <p>Cargando ejercicios...</p>
+        </div>
+
+        <!-- Lista de ejercicios -->
+        <div class="exercises-container" *ngIf="!isLoading">
+          <ng-container *ngFor="let exercise of loadedExercises">
             <app-exercise-item
               [exercise]="exercise"
               (exerciseClick)="onExerciseClick($event)"
             ></app-exercise-item>
           </ng-container>
+
+          <!-- Mensaje si no hay ejercicios -->
+          <div *ngIf="loadedExercises.length === 0" class="no-exercises">
+            <p>No hay ejercicios disponibles en esta rutina.</p>
+          </div>
         </div>
       </ion-list>
     </ion-card-content>
