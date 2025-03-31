@@ -40,7 +40,10 @@
   </ion-grid>
 
   <!-- Modal de inscripción -->
-  <ion-modal [isOpen]="showEnrollModal">
+  <ion-modal
+    [isOpen]="showEnrollModal"
+    (ionModalDidDismiss)="onEnrollModalDismiss()"
+  >
     <ng-template>
       <app-enroll-confirmation-modal
         [schedule]="selectedSchedule"
@@ -51,7 +54,10 @@
   </ion-modal>
 
   <!-- Modal de desinscripción -->
-  <ion-modal [isOpen]="showUnsubscribeModal">
+  <ion-modal
+    [isOpen]="showUnsubscribeModal"
+    (ionModalDidDismiss)="onUnsubscribeModalDismiss()"
+  >
     <ng-template>
       <app-unsubscribe-confirmation-modal
         [schedule]="selectedSchedule"
