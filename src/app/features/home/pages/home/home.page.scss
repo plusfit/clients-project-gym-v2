@@ -5,8 +5,6 @@
     rgba(0, 0, 0, 0.4) 0%,
     rgba(0, 0, 0, 0.2) 100%
   );
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -50,8 +48,6 @@ ion-content {
   );
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
 }
 
 .day-display {
@@ -135,8 +131,6 @@ ion-content {
   transition: transform 0.2s ease-in-out;
   background: rgba(30, 30, 30, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
 
   &:active {
     transform: scale(0.98);
