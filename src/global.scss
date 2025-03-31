@@ -45,10 +45,10 @@ p {
 ion-card {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
   margin: 12px !important;
   background-color: var(--ion-card-background) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 ion-card-header {
@@ -87,8 +87,8 @@ ion-list {
 }
 
 ion-item {
-  --background: rgba(30, 30, 30, 0.6) !important;
-  --border-color: rgba(255, 255, 255, 0.1);
+  --background: rgba(30, 30, 30, 0.9) !important;
+  --border-color: rgba(255, 255, 255, 0.15);
   margin-bottom: 8px;
   border-radius: 8px;
   --padding-start: 12px;
@@ -115,7 +115,7 @@ ion-button.button-solid {
   --background: var(--ion-color-primary);
   --background-hover: var(--ion-color-primary-shade);
   --color: var(--ion-color-primary-contrast);
-  --box-shadow: 0 4px 8px rgba(229, 57, 53, 0.3);
+  --box-shadow: 0 4px 8px rgba(229, 57, 53, 0.4);
 }
 
 /* Estilos para cabeceras */
@@ -123,11 +123,11 @@ ion-header {
   --background: transparent;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 100%
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 100%
   ) !important;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 ion-toolbar {
@@ -162,15 +162,16 @@ ion-tab-button {
 ion-input,
 ion-textarea,
 ion-select {
-  --background: rgba(30, 30, 30, 0.6) !important;
+  --background: rgba(30, 30, 30, 0.9) !important;
   --color: white !important;
-  --placeholder-color: rgba(255, 255, 255, 0.5) !important;
+  --placeholder-color: rgba(255, 255, 255, 0.7) !important;
   --placeholder-opacity: 1 !important;
+  --border-color: rgba(255, 255, 255, 0.15) !important;
   border-radius: 8px !important;
   margin-bottom: 8px;
   --padding-start: 16px;
   --padding-end: 16px;
   --padding-top: 12px;
   --padding-bottom: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
