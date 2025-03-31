@@ -6,7 +6,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonIcon,
-  IonButton,
+  IonBadge,
 } from '@ionic/angular/standalone';
 
 export interface Schedule {
@@ -22,9 +22,9 @@ export interface Schedule {
   selector: 'app-schedule-card',
   template: `
     <ion-card
-      [class.disabled]="isFull"
-      (click)="handleClick()"
+      [class.disabled]="isFull && !isEnrolled"
       [class.enrolled]="isEnrolled"
+      (click)="handleClick()"
     >
       <ion-card-header>
         <ion-card-title>
@@ -49,6 +49,13 @@ export interface Schedule {
               >Plazas: {{ schedule.clients.length }} /
               {{ schedule.maxCount }}</span
             >
+            <ion-badge
+              *ngIf="isFull && !isEnrolled"
+              color="danger"
+              class="full-badge"
+            >
+              COMPLETO
+            </ion-badge>
           </div>
           <div class="progress-bar">
             <div
@@ -57,8 +64,9 @@ export interface Schedule {
                 (schedule.clients.length / schedule.maxCount) * 100
               "
               [class.almost-full]="
-                schedule.clients.length >= schedule.maxCount * 0.7
+                schedule.clients.length >= schedule.maxCount * 0.7 && !isFull
               "
+              [class.full]="isFull"
             ></div>
           </div>
         </div>
@@ -71,6 +79,10 @@ export interface Schedule {
             <span>Ya inscrito</span>
           </div>
         </ng-container>
+        <div *ngIf="isFull && !isEnrolled" class="full-message">
+          <ion-icon name="alert-circle-outline" class="full-icon"></ion-icon>
+          <span>No hay cupos disponibles</span>
+        </div>
       </ion-card-content>
     </ion-card>
   `,
@@ -90,15 +102,44 @@ export interface Schedule {
         overflow: hidden;
       }
 
-      ion-card:hover {
+      ion-card:hover:not(.disabled) {
         transform: translateY(-3px);
         box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
         background: rgba(40, 40, 40, 0.8);
       }
 
       ion-card.disabled {
-        opacity: 0.5;
+        opacity: 0.7;
         pointer-events: none;
+        background: rgba(60, 60, 60, 0.3);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: repeating-linear-gradient(
+            45deg,
+            rgba(0, 0, 0, 0.05),
+            rgba(0, 0, 0, 0.05) 10px,
+            rgba(0, 0, 0, 0.1) 10px,
+            rgba(0, 0, 0, 0.1) 20px
+          );
+          border-radius: 12px;
+          pointer-events: none;
+        }
+
+        ion-card-header {
+          background: linear-gradient(
+            135deg,
+            var(--ion-color-medium-shade) 0%,
+            var(--ion-color-medium) 100%
+          );
+        }
       }
 
       ion-card.enrolled {
@@ -174,6 +215,15 @@ export interface Schedule {
       .status-text {
         color: rgba(255, 255, 255, 0.85);
         font-weight: 500;
+        margin-right: auto;
+      }
+
+      .full-badge {
+        font-size: 0.7rem;
+        --padding-top: 4px;
+        --padding-bottom: 4px;
+        letter-spacing: 0.5px;
+        font-weight: bold;
       }
 
       .progress-bar {
@@ -191,7 +241,11 @@ export interface Schedule {
         transition: width 0.3s ease;
 
         &.almost-full {
-          background-color: var(--ion-color-secondary);
+          background-color: var(--ion-color-warning);
+        }
+
+        &.full {
+          background-color: var(--ion-color-danger);
         }
       }
 
@@ -211,6 +265,22 @@ export interface Schedule {
         color: var(--ion-color-primary);
       }
 
+      .full-message {
+        display: flex;
+        align-items: center;
+        margin-top: 12px;
+        padding: 8px 12px;
+        background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+        border-radius: 8px;
+        border-left: 3px solid var(--ion-color-danger);
+      }
+
+      .full-icon {
+        margin-right: 8px;
+        font-size: 1.2rem;
+        color: var(--ion-color-danger);
+      }
+
       .unsubscribe-button {
         --padding-start: 0;
         --padding-end: 0;
@@ -227,7 +297,7 @@ export interface Schedule {
     IonCardTitle,
     IonCardContent,
     IonIcon,
-    IonButton,
+    IonBadge,
     CommonModule,
   ],
 })
@@ -238,15 +308,22 @@ export class ScheduleCardComponent {
   @Output() unsubscribeClicked = new EventEmitter<Schedule>();
 
   get isFull(): boolean {
-    return this.schedule.clients.length >= this.schedule.maxCount;
+    return (
+      this.schedule.clients &&
+      this.schedule.clients.length >= this.schedule.maxCount
+    );
   }
 
   get isEnrolled(): boolean {
-    return this.schedule.clients.includes(this.currentUserId);
+    return (
+      this.schedule.clients &&
+      this.schedule.clients.includes(this.currentUserId)
+    );
   }
 
   handleClick() {
-    if (!this.isFull) {
+    // Solo permitir hacer clic si no está lleno o si el usuario ya está inscrito
+    if (!this.isFull || this.isEnrolled) {
       this.scheduleClicked.emit(this.schedule);
     }
   }

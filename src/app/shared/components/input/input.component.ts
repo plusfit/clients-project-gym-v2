@@ -1,10 +1,13 @@
 import { Component, Input } from '@angular/core';
-import {IonInput, IonItem, IonLabel} from "@ionic/angular/standalone";
-import {FormsModule} from "@angular/forms";
+import { IonInput, IonItem, IonLabel } from '@ionic/angular/standalone';
+import { FormsModule } from '@angular/forms';
 // import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-input',
+  templateUrl: './input.component.html',
+  styleUrls: ['./input.component.scss'],
+  standalone: true,
   imports: [
     IonItem,
     IonLabel,
@@ -12,17 +15,6 @@ import {FormsModule} from "@angular/forms";
     FormsModule,
     // NgClass
   ],
-  template: `
-    <ion-item>
-      <ion-label position="floating">{{ label }}</ion-label>
-      <ion-input
-        [type]="type"
-        [placeholder]="placeholder"
-        [(ngModel)]="value"
-        >
-      </ion-input>
-    </ion-item>
-  `
 })
 export class InputComponent {
   @Input() label: string = '';
@@ -30,5 +22,6 @@ export class InputComponent {
   @Input() type: string = 'text';
 
   value: string = '';
-  inputClasses: string = 'rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500';
+  inputClasses: string =
+    'rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500';
 }

@@ -1,68 +1,47 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { Schedule } from '@feature/schedule/state/schedule.state';
+
+interface ScheduleResponse {
+  success: boolean;
+  data: Schedule[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleService {
-  constructor() {}
+  private apiUrl = `${environment.apiUrl}/schedules`;
+
+  constructor(private http: HttpClient) {}
 
   getSchedules(): Observable<Schedule[]> {
-    const schedules: Schedule[] = [
-      {
-        _id: '678bfbee653d4a1602d7adfe',
-        startTime: '7',
-        endTime: '8',
-        maxCount: 7,
-        clients: [
-          '6716d37ef04b1f954f0bbbfe',
-          '679a686ea392598c8f90ad24',
-          '679a6d63a3a8c508e7fa132f',
-        ],
-        day: 'Lunes',
-      },
-      {
-        _id: '678d3b3f4d6dc701e49cf035',
-        startTime: '6',
-        endTime: '7',
-        maxCount: 7,
-        clients: [],
-        day: 'Lunes',
-      },
-      {
-        _id: '6793c8c86b0c3d40ba56f8d6',
-        startTime: '6',
-        endTime: '7',
-        maxCount: 7,
-        clients: [],
-        day: 'Martes',
-      },
-      {
-        _id: '6793c8c86b0c3d40ba56f8d8',
-        startTime: '6',
-        endTime: '7',
-        maxCount: 7,
-        clients: [],
-        day: 'Miércoles',
-      },
-      {
-        _id: '6793c8c86b0c3d40ba56f8da',
-        startTime: '6',
-        endTime: '7',
-        maxCount: 7,
-        clients: [],
-        day: 'Jueves',
-      },
-      {
-        _id: '6793c8c86b0c3d40ba56f8dc',
-        startTime: '6',
-        endTime: '7',
-        maxCount: 7,
-        clients: [],
-        day: 'Viernes',
-      },
-    ];
-    return of(schedules);
+    return this.http.get<ScheduleResponse>(this.apiUrl).pipe(
+      map((response) => {
+        if (response.success) {
+          return response.data;
+        } else {
+          return [];
+        }
+      }),
+    );
+  }
+
+  getUserSchedules(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
+  }
+
+  enrollInSchedule(scheduleId: string, userId: string): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/assignClient/${scheduleId}`, {
+      clients: [userId],
+    });
+  }
+
+  unenrollFromSchedule(scheduleId: string, userId: string): Observable<any> {
+    return this.http.delete<any>(
+      `${this.apiUrl}/deleteClient/${scheduleId}/${userId}`,
+    );
   }
 }

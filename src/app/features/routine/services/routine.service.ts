@@ -24,8 +24,7 @@ export class RoutineService {
         }
         return null;
       }),
-      catchError((error) => {
-        console.error('Error fetching routine:', error);
+      catchError(() => {
         return of(null);
       }),
     );
@@ -45,8 +44,7 @@ export class RoutineService {
           }
           return [];
         }),
-        catchError((error) => {
-          console.error('Error fetching routines:', error);
+        catchError(() => {
           return of([]);
         }),
       );
@@ -56,7 +54,6 @@ export class RoutineService {
    * Obtiene las rutinas de un usuario específico por su ID
    */
   getUserRoutines(userId: string): Observable<Routine[]> {
-    console.log(`Fetching routines for user with ID: ${userId}`);
     return this.http
       .get<{
         success: boolean;
@@ -65,18 +62,11 @@ export class RoutineService {
       .pipe(
         map((response) => {
           if (response.success) {
-            console.log(
-              `Retrieved ${response.data.length} routines for user ${userId}`,
-            );
             return response.data;
           }
-          console.log(
-            `No routines found for user ${userId} or API returned error`,
-          );
           return [];
         }),
-        catchError((error) => {
-          console.error(`Error fetching routines for user ${userId}:`, error);
+        catchError(() => {
           return of([]);
         }),
       );

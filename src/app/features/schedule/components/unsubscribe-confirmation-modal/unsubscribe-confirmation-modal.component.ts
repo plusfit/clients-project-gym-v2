@@ -53,7 +53,11 @@ import { Schedule } from '@feature/schedule/state/schedule.state';
             class="unsubscribe-button"
             (click)="confirm.emit()"
           >
-            <ion-icon name="trash-outline" slot="start"></ion-icon>
+            <ion-icon
+              name="trash-outline"
+              slot="start"
+              class="unsubscribe-icon"
+            ></ion-icon>
             Confirmar Desinscripción
           </ion-button>
           <ion-button
@@ -62,7 +66,11 @@ import { Schedule } from '@feature/schedule/state/schedule.state';
             class="cancel-button"
             (click)="cancel.emit()"
           >
-            <ion-icon name="chevron-back-outline" slot="start"></ion-icon>
+            <ion-icon
+              name="chevron-back-outline"
+              slot="start"
+              class="cancel-icon"
+            ></ion-icon>
             Cancelar
           </ion-button>
         </div>
@@ -198,12 +206,20 @@ import { Schedule } from '@feature/schedule/state/schedule.state';
         margin: 0;
       }
 
+      .unsubscribe-icon {
+        color: white; /* Icono blanco para el botón rojo */
+      }
+
       .cancel-button {
         --border-radius: 10px;
         --border-color: rgba(255, 255, 255, 0.2);
         --color: white;
         font-weight: 500;
         margin: 0;
+      }
+
+      .cancel-icon {
+        color: var(--ion-color-danger); /* Icono rojo para el botón blanco */
       }
     `,
   ],

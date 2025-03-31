@@ -87,7 +87,11 @@ import { CommonModule } from '@angular/common';
             class="confirm-button"
             (click)="confirm.emit()"
           >
-            <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+            <ion-icon
+              name="checkmark-outline"
+              slot="start"
+              class="confirm-icon"
+            ></ion-icon>
             Confirmar
           </ion-button>
           <ion-button
@@ -96,7 +100,11 @@ import { CommonModule } from '@angular/common';
             class="cancel-button"
             (click)="cancel.emit()"
           >
-            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+            <ion-icon
+              name="close-circle-outline"
+              slot="start"
+              class="cancel-icon"
+            ></ion-icon>
             Cancelar
           </ion-button>
         </div>
@@ -238,6 +246,10 @@ import { CommonModule } from '@angular/common';
         margin: 0;
       }
 
+      .confirm-icon {
+        color: white; /* Icono blanco para el botón azul */
+      }
+
       .cancel-button {
         --border-radius: 10px;
         --border-color: rgba(255, 255, 255, 0.2);
@@ -245,21 +257,25 @@ import { CommonModule } from '@angular/common';
         font-weight: 500;
         margin: 0;
       }
+
+      .cancel-icon {
+        color: var(--ion-color-primary); /* Icono azul para el botón blanco */
+      }
     `,
   ],
   standalone: true,
   imports: [
+    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonContent,
+    IonFooter,
     IonButton,
-    CommonModule,
     IonGrid,
     IonRow,
     IonCol,
     IonLabel,
-    IonContent,
-    IonFooter,
     IonIcon,
   ],
 })
