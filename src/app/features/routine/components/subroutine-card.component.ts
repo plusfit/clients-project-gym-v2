@@ -7,7 +7,6 @@ import {
   IonCardTitle,
   IonList,
   IonIcon,
-  IonButton,
 } from '@ionic/angular/standalone';
 import { SubRoutine } from '../interfaces/routine.interface';
 import { ExerciseCardComponent } from '@feature/routine/components/exercise-card.component';
@@ -187,7 +186,6 @@ import { ExerciseCardComponent } from '@feature/routine/components/exercise-card
     IonCardContent,
     IonList,
     IonIcon,
-    IonButton,
     CommonModule,
     ExerciseCardComponent,
   ],
