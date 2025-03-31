@@ -61,41 +61,17 @@ export class OnboardingStep1Component {
   }
 
   //PARA ABRIR DESDE ABAJO
-  // async openDatePicker() {
-  //   const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
-  //   const modal = await this.modalCtrl.create({
-  //     component: IonDatetimeModalComponent,
-  //     breakpoints: [0, 0.4],
-  //     initialBreakpoint: 0.45, //TODO: VER COMO AJUSTAR EL TAMANO PARA TODOS LOS DISPOSITIVOS
-  //     componentProps: {
-  //       value: this.userForm.get('dateOfBirth')?.value,
-  //       max: today,
-  //     },
-  //     cssClass: 'datepicker-sheet',
-  //   });
-
-  //   modal.onWillDismiss().then((data) => {
-  //     const selected = data.data;
-  //     if (selected) {
-  //       this.userForm.get('dateOfBirth')?.setValue(selected);
-  //     }
-  //   });
-  //   await modal.present();
-  // }
-
-  //PARA ABRIR MODAL
   async openDatePicker() {
-    const today = new Date().toISOString().split('T')[0];
-
+    const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
     const modal = await this.modalCtrl.create({
       component: IonDatetimeModalComponent,
+      breakpoints: [0, 0.4],
+      initialBreakpoint: 0.6,
       componentProps: {
         value: this.userForm.get('dateOfBirth')?.value,
         max: today,
       },
-      cssClass: 'datepicker-modal',
-      backdropDismiss: true,
-      showBackdrop: true,
+      cssClass: 'datepicker-sheet',
     });
 
     modal.onWillDismiss().then((data) => {
@@ -104,7 +80,6 @@ export class OnboardingStep1Component {
         this.userForm.get('dateOfBirth')?.setValue(selected);
       }
     });
-
     await modal.present();
   }
 }
