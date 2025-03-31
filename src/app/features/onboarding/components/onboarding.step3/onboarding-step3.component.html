@@ -1,1 +1,85 @@
-<h1>STEP 3</h1>
+<ion-content class="ion-padding">
+  <form [formGroup]="form" class="step3-form">
+    <ion-label class="section-title">Días por semana</ion-label>
+    <ion-item lines="none">
+      <ion-range
+        formControlName="trainingDays"
+        min="1"
+        max="6"
+        snaps="true"
+        ticks="true"
+        step="1"
+        pin="true"
+      >
+        <ion-label slot="start">1</ion-label>
+        <ion-label slot="end">6</ion-label>
+      </ion-range>
+    </ion-item>
+
+    <ion-label class="section-title">Objetivo principal</ion-label>
+    <ion-item lines="inset">
+      <ion-select
+        formControlName="goal"
+        interface="popover"
+        placeholder="Seleccioná una opción"
+      >
+        <ion-select-option value="perder_peso">Perder peso</ion-select-option>
+        <ion-select-option value="ganar_musculo"
+          >Ganar masa muscular</ion-select-option
+        >
+        <ion-select-option value="mantener"
+          >Mantenerme saludable</ion-select-option
+        >
+        <ion-select-option value="resistencia"
+          >Mejorar resistencia</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="isInvalid('goal')"
+      >Este campo es obligatorio</ion-text
+    >
+
+    <ion-label class="section-title">Tipo de entrenamiento</ion-label>
+    <ion-segment formControlName="trainingType" mode="ios">
+      <ion-segment-button value="cardio">Cardio</ion-segment-button>
+      <ion-segment-button value="fuerza">Fuerza</ion-segment-button>
+      <ion-segment-button value="mixto">Mixto</ion-segment-button>
+    </ion-segment>
+    <ion-text color="danger" *ngIf="isInvalid('trainingType')"
+      >Este campo es obligatorio</ion-text
+    >
+
+    <ion-label class="section-title">¿Hace cuánto no entrenás?</ion-label>
+    <ion-item lines="inset">
+      <ion-select
+        formControlName="inactiveTime"
+        interface="popover"
+        placeholder="Seleccioná una opción"
+      >
+        <ion-select-option value="menos_1_mes"
+          >Menos de 1 mes</ion-select-option
+        >
+        <ion-select-option value="1_3_meses">1 a 3 meses</ion-select-option>
+        <ion-select-option value="3_6_meses">3 a 6 meses</ion-select-option>
+        <ion-select-option value="mas_6_meses"
+          >Más de 6 meses</ion-select-option
+        >
+        <ion-select-option value="nunca">Nunca entrené</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="isInvalid('inactiveTime')"
+      >Este campo es obligatorio</ion-text
+    >
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="prevStep()">Volver</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextStep()">Finalizar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

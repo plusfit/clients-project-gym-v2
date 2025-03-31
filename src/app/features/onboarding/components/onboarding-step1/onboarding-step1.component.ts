@@ -43,16 +43,16 @@ export class OnboardingStep1Component {
     const date = event.detail.value;
     this.userForm.get('dateOfBirth')?.setValue(date);
   }
-
+  //BORRO PARA IR MAS RAPIDO
   nextStep() {
-    if (this.userForm.valid) {
-      console.log('VALIDO');
+    // if (this.userForm.valid) {
+    console.log('VALIDO');
 
-      const userData = this.userForm.value;
-      this.nav.push(OnboardingStep2Component, { userData, nav: this.nav });
-    } else {
-      this.userForm.markAllAsTouched();
-    }
+    const userData = this.userForm.value;
+    this.nav.push(OnboardingStep2Component, { userData, nav: this.nav });
+    //} else {
+    //   this.userForm.markAllAsTouched();
+    // }
   }
 
   isInvalid(controlName: string): boolean {
@@ -60,17 +60,42 @@ export class OnboardingStep1Component {
     return (control?.invalid && control?.touched) || false;
   }
 
+  //PARA ABRIR DESDE ABAJO
+  // async openDatePicker() {
+  //   const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
+  //   const modal = await this.modalCtrl.create({
+  //     component: IonDatetimeModalComponent,
+  //     breakpoints: [0, 0.4],
+  //     initialBreakpoint: 0.45, //TODO: VER COMO AJUSTAR EL TAMANO PARA TODOS LOS DISPOSITIVOS
+  //     componentProps: {
+  //       value: this.userForm.get('dateOfBirth')?.value,
+  //       max: today,
+  //     },
+  //     cssClass: 'datepicker-sheet',
+  //   });
+
+  //   modal.onWillDismiss().then((data) => {
+  //     const selected = data.data;
+  //     if (selected) {
+  //       this.userForm.get('dateOfBirth')?.setValue(selected);
+  //     }
+  //   });
+  //   await modal.present();
+  // }
+
+  //PARA ABRIR MODAL
   async openDatePicker() {
-    const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
+    const today = new Date().toISOString().split('T')[0];
+
     const modal = await this.modalCtrl.create({
       component: IonDatetimeModalComponent,
-      breakpoints: [0, 0.4],
-      initialBreakpoint: 0.45, //TODO: VER COMO AJUSTAR EL TAMANO PARA TODOS LOS DISPOSITIVOS
       componentProps: {
         value: this.userForm.get('dateOfBirth')?.value,
         max: today,
       },
-      cssClass: 'datepicker-sheet',
+      cssClass: 'datepicker-modal',
+      backdropDismiss: true,
+      showBackdrop: true,
     });
 
     modal.onWillDismiss().then((data) => {
@@ -79,6 +104,7 @@ export class OnboardingStep1Component {
         this.userForm.get('dateOfBirth')?.setValue(selected);
       }
     });
+
     await modal.present();
   }
 }
