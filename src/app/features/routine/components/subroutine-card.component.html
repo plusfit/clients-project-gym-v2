@@ -1,0 +1,27 @@
+<ion-card class="subroutine-card">
+  <ion-card-header class="card-header">
+    <div class="header-title">
+      <ion-icon name="barbell-outline" class="header-icon"></ion-icon>
+      <ion-card-title class="card-title">
+        Día {{ index + 1 }} - {{ subroutine.name }}
+      </ion-card-title>
+    </div>
+  </ion-card-header>
+  <ion-card-content class="card-content">
+    <p class="routine-description">{{ subroutine.description }}</p>
+    <div class="exercises-section">
+      <div class="exercises-header">
+        <ion-icon name="fitness-outline" class="section-icon"></ion-icon>
+        <span class="section-title"
+          >Ejercicios ({{ exerciseObjects.length }})</span
+        >
+      </div>
+      <ion-list class="exercises-list">
+        <app-exercise-card
+          *ngFor="let exercise of exerciseObjects"
+          [exercise]="exercise"
+        ></app-exercise-card>
+      </ion-list>
+    </div>
+  </ion-card-content>
+</ion-card>
