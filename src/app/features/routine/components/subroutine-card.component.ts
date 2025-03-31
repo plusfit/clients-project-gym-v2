@@ -49,7 +49,7 @@ import { ExerciseCardComponent } from '@feature/routine/components/exercise-card
         position: relative;
         border-radius: 16px;
         overflow: hidden;
-        background-color: rgba(30, 30, 30, 0.7) !important;
+        background-color: rgba(30, 30, 30, 0.9) !important;
         margin: 16px 0;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -121,7 +121,7 @@ import { ExerciseCardComponent } from '@feature/routine/components/exercise-card
         line-height: 1.5;
         margin-bottom: 20px;
         padding: 10px 12px;
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.3);
         border-radius: 8px;
         border-left: 3px solid var(--ion-color-primary);
       }
@@ -155,7 +155,7 @@ import { ExerciseCardComponent } from '@feature/routine/components/exercise-card
       }
 
       .exercises-list {
-        background-color: rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.3);
         border-radius: 10px;
         padding: 8px !important;
         max-height: 350px;
