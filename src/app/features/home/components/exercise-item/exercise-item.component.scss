@@ -1,7 +1,7 @@
 .exercise-item {
   --padding-start: 8px;
   --inner-padding-end: 8px;
-  --background: rgba(25, 25, 25, 0.7) !important;
+  --background: rgba(25, 25, 25, 0.9) !important;
   margin-bottom: 8px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -22,13 +22,13 @@
   }
 
   &:hover {
-    --background: rgba(35, 35, 35, 0.8) !important;
+    --background: rgba(35, 35, 35, 0.95) !important;
     transform: translateX(3px);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
   }
 
   &:active {
-    --background: rgba(var(--ion-color-primary-rgb), 0.15) !important;
+    --background: rgba(var(--ion-color-primary-rgb), 0.2) !important;
     transform: scale(0.98);
   }
 }
@@ -83,7 +83,6 @@
   margin-bottom: 6px;
   text-transform: capitalize;
   letter-spacing: 0.3px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
 .exercise-details {
