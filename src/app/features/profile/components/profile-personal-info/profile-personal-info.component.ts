@@ -1,25 +1,15 @@
-import { NgOptimizedImage } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonIcon,
 } from '@ionic/angular/standalone';
 @Component({
   selector: 'app-profile-personal-info',
   standalone: true,
-  imports: [
-    NgOptimizedImage,
-    IonCardContent,
-    IonIcon,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardSubtitle,
-  ],
+  imports: [IonCardContent, IonIcon, IonCard, IonCardHeader, IonCardTitle],
   templateUrl: './profile-personal-info.component.html',
   styleUrl: '../../pages/profile.page.scss',
 })

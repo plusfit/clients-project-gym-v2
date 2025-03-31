@@ -1,7 +1,7 @@
 .exercise-item {
   --padding-start: 8px;
   --inner-padding-end: 8px;
-  --background: rgba(25, 25, 25, 0.95) !important;
+  --background: rgba(25, 25, 25, 0.7) !important;
   margin-bottom: 8px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -22,7 +22,7 @@
   }
 
   &:hover {
-    --background: rgba(35, 35, 35, 0.98) !important;
+    --background: rgba(35, 35, 35, 0.8) !important;
     transform: translateX(3px);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
   }
@@ -77,20 +77,33 @@
 }
 
 .exercise-name {
-  color: white;
-  font-size: 1.05rem;
-  font-weight: 600;
+  color: white !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
   margin-bottom: 6px;
   text-transform: capitalize;
   letter-spacing: 0.3px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
 }
 
+.exercise-description {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.details-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
 .exercise-details {
   display: flex;
   align-items: center;
   color: rgba(255, 255, 255, 0.7);
-  margin-top: 6px;
   font-size: 0.9rem;
   background: rgba(0, 0, 0, 0.2);
   padding: 4px 8px;
@@ -105,9 +118,9 @@
 }
 
 .detail-icon {
-  font-size: 0.9rem;
+  font-size: 0.9rem !important;
   margin-right: 6px;
-  color: var(--ion-color-primary);
+  color: var(--ion-color-primary) !important;
 }
 
 .detail-text {
@@ -115,11 +128,4 @@
   font-weight: 500;
   color: rgba(255, 255, 255, 0.85);
   letter-spacing: 0.5px;
-}
-
-.details-container {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 4px;
 }
