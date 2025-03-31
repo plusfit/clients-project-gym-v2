@@ -9,6 +9,7 @@
     <ion-row>
       <ion-col size="12">
         <app-day-selector
+          [enrollmentsByDay]="enrollmentsByDay"
           (daySelected)="onDaySelected($event)"
         ></app-day-selector>
       </ion-col>
@@ -16,20 +17,33 @@
     <ion-row>
       <ion-col size="12">
         <h2 class="schedule-title">Horarios Disponibles</h2>
-        <div class="schedule-list">
+        <!-- Loading spinner -->
+        <div *ngIf="loading" class="loading-container">
+          <ion-spinner name="circular"></ion-spinner>
+          <p>Cargando horarios...</p>
+        </div>
+        <!-- Schedule cards -->
+        <div *ngIf="!loading" class="schedule-list">
           <app-schedule-card
             *ngFor="let schedule of schedulesForDay"
             [schedule]="schedule"
             [currentUserId]="currentUserId"
             (scheduleClicked)="onScheduleClicked($event)"
           ></app-schedule-card>
+          <!-- Empty state -->
+          <div *ngIf="schedulesForDay.length === 0" class="empty-state">
+            <p>No hay horarios disponibles para este día.</p>
+          </div>
         </div>
       </ion-col>
     </ion-row>
   </ion-grid>
 
   <!-- Modal de inscripción -->
-  <ion-modal [isOpen]="showEnrollModal">
+  <ion-modal
+    [isOpen]="showEnrollModal"
+    (ionModalDidDismiss)="onEnrollModalDismiss()"
+  >
     <ng-template>
       <app-enroll-confirmation-modal
         [schedule]="selectedSchedule"
@@ -40,7 +54,10 @@
   </ion-modal>
 
   <!-- Modal de desinscripción -->
-  <ion-modal [isOpen]="showUnsubscribeModal">
+  <ion-modal
+    [isOpen]="showUnsubscribeModal"
+    (ionModalDidDismiss)="onUnsubscribeModalDismiss()"
+  >
     <ng-template>
       <app-unsubscribe-confirmation-modal
         [schedule]="selectedSchedule"
@@ -50,12 +67,11 @@
     </ng-template>
   </ion-modal>
 
-  <!-- (Opcional) Alert para límite de inscripciones -->
-
+  <!-- Alert para límite de inscripciones o errores -->
   <ion-alert
     [isOpen]="showAlert"
     (ionAlertDidDismiss)="onAlertDismiss()"
-    header="Límite de Inscripciones"
+    header="Información"
     message="{{ alertMessage }}"
     buttons="OK"
   >
