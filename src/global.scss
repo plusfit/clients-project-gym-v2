@@ -175,3 +175,35 @@ ion-select {
   --padding-bottom: 12px;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
+
+/* Estilos para alertas */
+ion-alert {
+  --background: var(--ion-color-dark) !important;
+  --backdrop-opacity: 0.8 !important;
+  --min-width: 300px !important;
+  --max-width: 90% !important;
+  --border-radius: 16px !important;
+  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  --header-color: white !important;
+  --message-color: rgba(255, 255, 255, 0.9) !important;
+  --button-color: var(--ion-color-primary) !important;
+  --button-background-color: transparent !important;
+  --button-background-color-hover: rgba(
+    var(--ion-color-primary-rgb),
+    0.1
+  ) !important;
+  --button-background-color-activated: rgba(
+    var(--ion-color-primary-rgb),
+    0.2
+  ) !important;
+  --button-background-color-selected: rgba(
+    var(--ion-color-primary-rgb),
+    0.15
+  ) !important;
+  --button-background-color-disabled: rgba(255, 255, 255, 0.1) !important;
+  --button-color-disabled: rgba(255, 255, 255, 0.4) !important;
+  --button-border-radius: 8px !important;
+  --button-font-weight: 600 !important;
+  --button-text-transform: uppercase !important;
+  --button-letter-spacing: 0.5px !important;
+}
