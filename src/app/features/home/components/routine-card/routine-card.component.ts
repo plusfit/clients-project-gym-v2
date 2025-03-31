@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
   ChangeDetectorRef,
 } from '@angular/core';
@@ -19,6 +20,7 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import {
   SubRoutine,
@@ -46,14 +48,13 @@ import { catchError, forkJoin, map, of, Subject, takeUntil } from 'rxjs';
     IonListHeader,
     IonLabel,
     NgIf,
+    IonSpinner,
   ],
 })
-export class RoutineCardComponent implements OnChanges {
+export class RoutineCardComponent implements OnChanges, OnDestroy {
   @Input() routine!: SubRoutine | null;
   @Output() exerciseClicked = new EventEmitter<Exercise>();
 
-  // Array que contendrá los ejercicios procesados para mostrar en la vista
-  processedExercises: Exercise[] = [];
   isLoading = true;
   loadedExercises: Exercise[] = [];
   private destroy$ = new Subject<void>();
@@ -69,11 +70,18 @@ export class RoutineCardComponent implements OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   /**
    * Procesa los ejercicios de la rutina, convirtiendo IDs en objetos Exercise si es necesario
    */
   processExercises(): void {
     if (!this.routine?.exercises) {
+      this.loadedExercises = [];
+      this.isLoading = false;
       return;
     }
 
@@ -89,6 +97,7 @@ export class RoutineCardComponent implements OnChanges {
     const exerciseIds = this.routine.exercises as string[];
 
     if (exerciseIds.length === 0) {
+      this.loadedExercises = [];
       this.isLoading = false;
       return;
     }
@@ -96,7 +105,7 @@ export class RoutineCardComponent implements OnChanges {
     // Cargamos los ejercicios en paralelo
     const observables = exerciseIds.map((id) =>
       this.exerciseService.getExerciseById(id).pipe(
-        catchError((error) => {
+        catchError(() => {
           return of(null);
         }),
       ),
@@ -114,6 +123,7 @@ export class RoutineCardComponent implements OnChanges {
           this.cd.markForCheck();
         },
         error: () => {
+          this.loadedExercises = [];
           this.isLoading = false;
           this.cd.markForCheck();
         },

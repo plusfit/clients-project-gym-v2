@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { User, UserInfo, UserRole } from '../interfaces/user.interface';
+import { User, UserRole } from '../interfaces/user.interface';
 import {
   Login,
   Logout,
@@ -10,7 +10,6 @@ import {
   AuthState,
   SetMockUser,
 } from '../state/auth.state';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -20,37 +19,15 @@ export class AuthFacadeService {
 
   // Getters del estado
   get user$(): Observable<User | null> {
-    console.log('AuthFacade: Obteniendo observable user$');
-    return this.store
-      .select(AuthState.getUser)
-      .pipe(tap((user) => console.log('AuthFacade: Emitiendo user:', user)));
-  }
-
-  get userInfo$(): Observable<UserInfo | undefined> {
-    return this.store.select(AuthState.getUserInfo);
-  }
-
-  get userRole$(): Observable<UserRole | undefined> {
-    return this.store.select(AuthState.getUserRole);
+    return this.store.select(AuthState.getUser);
   }
 
   get isAuthenticated$(): Observable<boolean> {
-    console.log('AuthFacade: Obteniendo observable isAuthenticated$');
-    return this.store
-      .select(AuthState.isAuthenticated)
-      .pipe(
-        tap((isAuth) =>
-          console.log('AuthFacade: Emitiendo isAuthenticated:', isAuth),
-        ),
-      );
-  }
-
-  get token$(): Observable<string | null> {
-    return this.store.select(AuthState.getToken);
+    return this.store.select(AuthState.isAuthenticated);
   }
 
   get loading$(): Observable<boolean> {
-    return this.store.select(AuthState.getLoading);
+    return this.store.select(AuthState.isLoading);
   }
 
   get error$(): Observable<string | null> {
@@ -59,7 +36,7 @@ export class AuthFacadeService {
 
   // Acciones
   login(email: string, password: string): void {
-    this.store.dispatch(new Login(email, password));
+    this.store.dispatch(new Login({ email, password }));
   }
 
   logout(): void {
@@ -76,7 +53,6 @@ export class AuthFacadeService {
 
   // Método para establecer rápidamente el estado del usuario si ya tenemos uno por defecto
   setMockUserState(): void {
-    console.log('AuthFacade: Estableciendo estado de usuario directamente');
     // Este método es para pruebas - establece directamente el estado sin pasar por el login
     const mockUser = {
       _id: '67c1e7f693b18ac69b4482d1',
