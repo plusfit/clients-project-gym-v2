@@ -9,13 +9,14 @@ import {
   IonButtons,
   IonButton,
   IonIcon,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { NgIf, AsyncPipe, DatePipe } from '@angular/common';
 import { RoutineCardComponent } from '../../components/routine-card/routine-card.component';
 import { Observable, interval, Subscription } from 'rxjs';
 import { Select, Store } from '@ngxs/store';
-import { HomeState } from '@feature/home/state/home.state';
-import { Router } from '@angular/router';
+import { HomeState, LoadRoutineForToday } from '@feature/home/state/home.state';
+import { Router, RouterLink } from '@angular/router';
 import { SubRoutine } from '@feature/routine/interfaces/routine.interface';
 import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
 
@@ -31,6 +32,7 @@ import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
     IonButtons,
     IonButton,
     IonIcon,
+    IonSpinner,
     DatePipe,
     RoutineCardComponent,
     IonRow,
@@ -38,6 +40,7 @@ import { DayTranslatePipe } from '@shared/pipes/day-translate.pipe';
     AsyncPipe,
     DayTranslatePipe,
     NgIf,
+    RouterLink,
   ],
   standalone: true,
 })
@@ -47,6 +50,8 @@ export class HomePage implements OnInit, OnDestroy {
   private clockSubscription!: Subscription;
 
   @Select(HomeState.getRoutine) routine$!: Observable<SubRoutine | null>;
+  @Select(HomeState.isLoading) loading$!: Observable<boolean>;
+  @Select(HomeState.getError) error$!: Observable<string | null>;
   @Select(HomeState.getMotivationalMessage)
   motivationalMessage$!: Observable<string>;
 
@@ -60,6 +65,9 @@ export class HomePage implements OnInit, OnDestroy {
     this.clockSubscription = interval(1000).subscribe(() => {
       this.currentTime = new Date();
     });
+
+    // Cargar la rutina para hoy
+    this.store.dispatch(new LoadRoutineForToday());
   }
 
   ngOnDestroy(): void {
@@ -70,5 +78,16 @@ export class HomePage implements OnInit, OnDestroy {
 
   onExerciseClicked(exercise: any) {
     this.router.navigate(['/cliente/rutinas', exercise.id]);
+  }
+
+  reloadRoutine() {
+    this.store.dispatch(new LoadRoutineForToday());
+  }
+
+  /**
+   * Navega a la página de horarios disponibles
+   */
+  goToSchedules() {
+    this.router.navigate(['/cliente/horarios']);
   }
 }
