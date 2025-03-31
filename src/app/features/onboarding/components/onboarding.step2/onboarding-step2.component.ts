@@ -25,11 +25,11 @@ export class OnboardingStep2Component {
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       bloodPressure: ['', Validators.required],
-      antecedentes: this.fb.group({
-        respiratorios: ['', Validators.required],
-        cardiacos: ['', Validators.required],
-        quirurgicos: ['', Validators.required],
-        lesiones: ['', Validators.required],
+      history: this.fb.group({
+        respiratory: ['', Validators.required],
+        cardiac: ['', Validators.required],
+        chirurgical: ['', Validators.required],
+        injuries: ['', Validators.required],
       }),
     });
   }
