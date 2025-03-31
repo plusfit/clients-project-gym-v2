@@ -337,8 +337,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
   }
 
   private closeModals() {
+    // Resetear todas las variables de modales
     this.showEnrollModal = false;
     this.showUnsubscribeModal = false;
-    this.selectedSchedule = null;
+
+    // Importante: resetear el schedule seleccionado después de un breve delay
+    // para evitar problemas de sincronización
+    setTimeout(() => {
+      this.selectedSchedule = null;
+    }, 100);
   }
 }
