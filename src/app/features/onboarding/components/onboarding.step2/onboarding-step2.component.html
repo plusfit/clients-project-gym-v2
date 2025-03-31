@@ -1,1 +1,83 @@
-<h1>STEP 2</h1>
+<ion-content class="ion-padding">
+  <form [formGroup]="form" class="step2-form">
+    <ion-label class="section-title">Presión Arterial</ion-label>
+    <ion-item lines="inset">
+      <ion-select
+        formControlName="bloodPressure"
+        interface="popover"
+        placeholder="Seleccioná una opción"
+      >
+        <ion-select-option value="alta">Alta</ion-select-option>
+        <ion-select-option value="baja">Baja</ion-select-option>
+        <ion-select-option value="normal">Normal</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" *ngIf="isInvalid('bloodPressure')">
+      Este campo es obligatorio
+    </ion-text>
+
+    <div formGroupName="antecedentes" class="antecedentes-group">
+      <ion-label class="section-title antecedentes-label"
+        >ANTECEDENTES</ion-label
+      >
+
+      <ion-item lines="none">
+        <ion-label>Respiratorios</ion-label>
+        <ion-segment formControlName="respiratorios">
+          <ion-segment-button value="si">Sí</ion-segment-button>
+          <ion-segment-button value="no">No</ion-segment-button>
+        </ion-segment>
+      </ion-item>
+      <ion-text
+        color="danger"
+        *ngIf="isInvalid('respiratorios', 'antecedentes')"
+      >
+        Este campo es obligatorio
+      </ion-text>
+
+      <ion-item lines="none">
+        <ion-label>Cardíacos</ion-label>
+        <ion-segment formControlName="cardiacos">
+          <ion-segment-button value="si">Sí</ion-segment-button>
+          <ion-segment-button value="no">No</ion-segment-button>
+        </ion-segment>
+      </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('cardiacos', 'antecedentes')">
+        Este campo es obligatorio
+      </ion-text>
+
+      <ion-item lines="none">
+        <ion-label>Quirúrgicos</ion-label>
+        <ion-segment formControlName="quirurgicos">
+          <ion-segment-button value="si">Sí</ion-segment-button>
+          <ion-segment-button value="no">No</ion-segment-button>
+        </ion-segment>
+      </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('quirurgicos', 'antecedentes')">
+        Este campo es obligatorio
+      </ion-text>
+
+      <ion-item lines="none">
+        <ion-label>Lesiones Patológicas</ion-label>
+        <ion-segment formControlName="lesiones">
+          <ion-segment-button value="si">Sí</ion-segment-button>
+          <ion-segment-button value="no">No</ion-segment-button>
+        </ion-segment>
+      </ion-item>
+      <ion-text color="danger" *ngIf="isInvalid('lesiones', 'antecedentes')">
+        Este campo es obligatorio
+      </ion-text>
+    </div>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="prevStep()">Volver</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextStep()">Siguiente</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

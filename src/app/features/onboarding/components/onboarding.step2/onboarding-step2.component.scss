@@ -1,0 +1,50 @@
+.step2-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ion-color-medium); 
+    margin: 20px 0 8px 4px;
+}
+
+ion-item {
+    --background: #1a1a1a;
+    border-radius: 8px;
+}
+
+ion-segment {
+    margin-top: 8px;
+}
+
+ion-segment-button {
+    font-size: 0.85rem;
+}
+
+ion-text[color="danger"] {
+    font-size: 0.7rem;
+    margin-left: 8px;
+    margin-top: -4px;
+}
+
+ion-footer {
+    --padding-bottom: env(safe-area-inset-bottom);
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ion-color-medium);
+    margin: 20px 0 8px 4px;
+}
+
+.antecedentes-label {
+    margin-top: 32px !important;
+}
