@@ -17,11 +17,12 @@ export interface SubRoutine {
   _id: string;
   name: string;
   description: string;
-  exercises: Exercise[];
-  updatedAt: string;
+  exercises: Exercise[] | string[];
   createdAt: string;
-  category: string;
-  __v?: number;
+  updatedAt: string;
+  category?: string;
+  day?: string;
+  dayNumber?: number;
 }
 
 export interface Routine {

@@ -28,7 +28,7 @@ register();
 
 // Factory para el inicializador de autenticación
 export function initializeAuthFactory(authInitializer: AuthInitializerService) {
-  return () => authInitializer.initializeAuth();
+  return () => authInitializer.init();
 }
 
 bootstrapApplication(AppComponent, {

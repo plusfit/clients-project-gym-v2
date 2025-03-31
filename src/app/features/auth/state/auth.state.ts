@@ -8,10 +8,7 @@ import { of } from 'rxjs';
 // Acciones
 export class Login {
   static readonly type = '[Auth] Login';
-  constructor(
-    public email: string,
-    public password: string,
-  ) {}
+  constructor(public credentials: { email: string; password: string }) {}
 }
 
 export class Logout {
@@ -36,7 +33,6 @@ export class SetMockUser {
 export interface AuthStateModel {
   user: User | null;
   token: string | null;
-  isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
 }
@@ -46,7 +42,6 @@ export interface AuthStateModel {
   defaults: {
     user: null,
     token: null,
-    isAuthenticated: false,
     loading: false,
     error: null,
   },
@@ -54,75 +49,58 @@ export interface AuthStateModel {
 @Injectable()
 export class AuthState {
   constructor(private authService: AuthService) {
-    // Al inicializar, verificamos si hay un token para iniciar automáticamente
+    // Intenta recuperar el token al inicializar el estado
     const token = localStorage.getItem('token');
     if (token) {
-      console.log('AuthState: Token encontrado en localStorage');
+      // Token encontrado, actualizamos el estado
+      setTimeout(() => {
+        this.authService.getCurrentUser().subscribe();
+      }, 0);
     }
   }
 
   @Selector()
-  static getUser(state: AuthStateModel) {
+  static getUser(state: AuthStateModel): User | null {
     return state.user;
   }
 
   @Selector()
-  static getUserInfo(state: AuthStateModel) {
-    return state.user?.userInfo;
+  static isAuthenticated(state: AuthStateModel): boolean {
+    return !!state.user;
   }
 
   @Selector()
-  static getUserRole(state: AuthStateModel) {
-    return state.user?.role;
-  }
-
-  @Selector()
-  static isAuthenticated(state: AuthStateModel) {
-    return state.isAuthenticated;
-  }
-
-  @Selector()
-  static getToken(state: AuthStateModel) {
-    return state.token;
-  }
-
-  @Selector()
-  static getLoading(state: AuthStateModel) {
+  static isLoading(state: AuthStateModel): boolean {
     return state.loading;
   }
 
   @Selector()
-  static getError(state: AuthStateModel) {
+  static getError(state: AuthStateModel): string | null {
     return state.error;
   }
 
   @Action(Login)
   login(ctx: StateContext<AuthStateModel>, action: Login) {
     ctx.patchState({ loading: true, error: null });
-    console.log('AuthState: Procesando acción Login');
 
     return this.authService
       .login({
-        email: action.email,
-        password: action.password,
+        email: action.credentials.email,
+        password: action.credentials.password,
       })
       .pipe(
         tap((response) => {
-          console.log('AuthState: Login exitoso, actualizando estado');
           ctx.patchState({
             user: response.user,
             token: response.token,
-            isAuthenticated: true,
             loading: false,
             error: null,
           });
         }),
         catchError((error) => {
-          console.error('AuthState: Error en login', error);
           ctx.patchState({
             loading: false,
-            error: error.message,
-            isAuthenticated: false,
+            error: error.message || 'Error de autenticación',
           });
           return of(error);
         }),
@@ -132,25 +110,20 @@ export class AuthState {
   @Action(Logout)
   logout(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({ loading: true });
-    console.log('AuthState: Procesando acción Logout');
 
     return this.authService.logout().pipe(
       tap(() => {
-        console.log('AuthState: Logout exitoso, reseteando estado');
-        // Reset del estado
         ctx.setState({
           user: null,
           token: null,
-          isAuthenticated: false,
           loading: false,
           error: null,
         });
       }),
       catchError((error) => {
-        console.error('AuthState: Error en logout', error);
         ctx.patchState({
           loading: false,
-          error: error.message,
+          error: error.message || 'Error al cerrar sesión',
         });
         return of(error);
       }),
@@ -160,24 +133,22 @@ export class AuthState {
   @Action(GetCurrentUser)
   getCurrentUser(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({ loading: true });
-    console.log('AuthState: Procesando acción GetCurrentUser');
 
     return this.authService.getCurrentUser().pipe(
       tap((user) => {
-        console.log('AuthState: Usuario obtenido correctamente');
         ctx.patchState({
           user,
-          isAuthenticated: true,
           loading: false,
+          error: null,
         });
       }),
       catchError((error) => {
-        console.error('AuthState: Error al obtener usuario actual', error);
         ctx.patchState({
           loading: false,
-          error: error.message,
-          isAuthenticated: false,
+          error: error.message || 'Error al obtener usuario',
         });
+        // Desconectamos al usuario en caso de error
+        ctx.dispatch(new Logout());
         return of(error);
       }),
     );
@@ -186,23 +157,20 @@ export class AuthState {
   @Action(RefreshSession)
   refreshSession(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({ loading: true });
-    console.log('AuthState: Procesando acción RefreshSession');
 
     return this.authService.refreshSession().pipe(
       tap((response) => {
-        console.log('AuthState: Sesión refrescada correctamente');
         ctx.patchState({
           user: response.user,
           token: response.token,
-          isAuthenticated: true,
           loading: false,
+          error: null,
         });
       }),
       catchError((error) => {
-        console.error('AuthState: Error al refrescar sesión', error);
         ctx.patchState({
           loading: false,
-          error: error.message,
+          error: error.message || 'Error al refrescar sesión',
         });
         return of(error);
       }),
@@ -211,17 +179,10 @@ export class AuthState {
 
   @Action(SetMockUser)
   setMockUser(ctx: StateContext<AuthStateModel>, action: SetMockUser) {
-    console.log('AuthState: Estableciendo usuario mock', action.user);
-
-    // Actualiza el estado directamente con el usuario proporcionado
     ctx.patchState({
       user: action.user,
-      token: 'mock-token',
-      isAuthenticated: true,
       loading: false,
       error: null,
     });
-
-    return of(null);
   }
 }
