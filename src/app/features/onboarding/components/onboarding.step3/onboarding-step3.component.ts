@@ -26,7 +26,7 @@ export class OnboardingStep3Component {
       trainingDays: [3, Validators.required],
       goal: ['', Validators.required],
       trainingType: ['', Validators.required],
-      inactiveTime: ['', Validators.required],
+      trainingLevel: ['', Validators.required],
     });
   }
 

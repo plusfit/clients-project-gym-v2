@@ -7,8 +7,8 @@
         interface="popover"
         placeholder="Seleccioná una opción"
       >
-        <ion-select-option value="alta">Alta</ion-select-option>
-        <ion-select-option value="baja">Baja</ion-select-option>
+        <ion-select-option value="high">Alta</ion-select-option>
+        <ion-select-option value="low">Baja</ion-select-option>
         <ion-select-option value="normal">Normal</ion-select-option>
       </ion-select>
     </ion-item>
@@ -16,55 +16,50 @@
       Este campo es obligatorio
     </ion-text>
 
-    <div formGroupName="antecedentes" class="antecedentes-group">
-      <ion-label class="section-title antecedentes-label"
-        >ANTECEDENTES</ion-label
-      >
+    <div formGroupName="history" class="history-group">
+      <ion-label class="section-title history-label">ANTECEDENTES</ion-label>
 
       <ion-item lines="none">
         <ion-label>Respiratorios</ion-label>
-        <ion-segment formControlName="respiratorios">
-          <ion-segment-button value="si">Sí</ion-segment-button>
-          <ion-segment-button value="no">No</ion-segment-button>
+        <ion-segment formControlName="respiratory">
+          <ion-segment-button value="true">Sí</ion-segment-button>
+          <ion-segment-button value="false">No</ion-segment-button>
         </ion-segment>
       </ion-item>
-      <ion-text
-        color="danger"
-        *ngIf="isInvalid('respiratorios', 'antecedentes')"
-      >
+      <ion-text color="danger" *ngIf="isInvalid('respiratory', 'history')">
         Este campo es obligatorio
       </ion-text>
 
       <ion-item lines="none">
         <ion-label>Cardíacos</ion-label>
-        <ion-segment formControlName="cardiacos">
-          <ion-segment-button value="si">Sí</ion-segment-button>
-          <ion-segment-button value="no">No</ion-segment-button>
+        <ion-segment formControlName="cardiac">
+          <ion-segment-button value="true">Sí</ion-segment-button>
+          <ion-segment-button value="false">No</ion-segment-button>
         </ion-segment>
       </ion-item>
-      <ion-text color="danger" *ngIf="isInvalid('cardiacos', 'antecedentes')">
+      <ion-text color="danger" *ngIf="isInvalid('cardiac', 'history')">
         Este campo es obligatorio
       </ion-text>
 
       <ion-item lines="none">
         <ion-label>Quirúrgicos</ion-label>
-        <ion-segment formControlName="quirurgicos">
-          <ion-segment-button value="si">Sí</ion-segment-button>
-          <ion-segment-button value="no">No</ion-segment-button>
+        <ion-segment formControlName="chirurgical">
+          <ion-segment-button value="true">Sí</ion-segment-button>
+          <ion-segment-button value="false">No</ion-segment-button>
         </ion-segment>
       </ion-item>
-      <ion-text color="danger" *ngIf="isInvalid('quirurgicos', 'antecedentes')">
+      <ion-text color="danger" *ngIf="isInvalid('chirurgical', 'history')">
         Este campo es obligatorio
       </ion-text>
 
       <ion-item lines="none">
         <ion-label>Lesiones Patológicas</ion-label>
-        <ion-segment formControlName="lesiones">
-          <ion-segment-button value="si">Sí</ion-segment-button>
-          <ion-segment-button value="no">No</ion-segment-button>
+        <ion-segment formControlName="injuries">
+          <ion-segment-button value="true">Sí</ion-segment-button>
+          <ion-segment-button value="false">No</ion-segment-button>
         </ion-segment>
       </ion-item>
-      <ion-text color="danger" *ngIf="isInvalid('lesiones', 'antecedentes')">
+      <ion-text color="danger" *ngIf="isInvalid('injuries', 'history')">
         Este campo es obligatorio
       </ion-text>
     </div>
