@@ -219,15 +219,12 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Escuchar cuando LoadRoutineById se complete exitosamente
     this.actions$
       .pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$))
       .subscribe(() => {
-        // Obtener la rutina directamente del estado
         const routine = this.store.selectSnapshot(
           RoutineState.getSelectedRoutine,
         );
-        console.log('RoutineDetailPage: Rutina cargada con éxito:', routine);
 
         if (routine) {
           this.routine = routine;
@@ -236,24 +233,13 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
       });
 
     this.authFacade.user$.subscribe((user) => {
-      console.log(
-        'RoutineDetailPage: Usuario obtenido del estado de autenticación:',
-        user,
-      );
-
       if (user && user.routineId) {
         this.store.dispatch(new LoadRoutineById(user.routineId));
       } else {
-        console.log(
-          'RoutineDetailPage: Usuario sin routineId, cargando rutinas generales',
-        );
         this.store.dispatch(new LoadRoutines()).subscribe(() => {
           const routines = this.store.selectSnapshot(RoutineState.getRoutines);
 
           if (routines && routines.length > 0) {
-            console.log(
-              `RoutineDetailPage: Cargando primera rutina: ${routines[0]._id}`,
-            );
             this.store.dispatch(new LoadRoutineById(routines[0]._id));
           }
         });
