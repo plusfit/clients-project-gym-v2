@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+ion-card {
+  margin: 0 0 16px;
+  border-radius: 16px;
+  background: rgba(30, 30, 30, 0.7);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+ion-card-header {
+  padding: 16px;
+  text-align: center;
+}
+
+ion-card-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: 'APEXPRO', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+ion-card-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+  text-transform: none;
+}
+
+ion-card-content {
+  padding: 0 16px 16px;
+  text-align: center;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+  border: 3px solid var(--ion-color-primary);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.profile-goal {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--ion-color-primary-contrast);
+}
+
+ion-icon {
+  font-size: 1.2rem;
+  color: var(--ion-color-primary);
+}

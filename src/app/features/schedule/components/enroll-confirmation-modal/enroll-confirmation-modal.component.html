@@ -1,0 +1,93 @@
+<ion-header class="modal-header">
+  <ion-toolbar>
+    <ion-title>Inscripción</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content fullscreen class="modal-content">
+  <div class="content-container">
+    <ion-grid class="info-card">
+      <ion-row class="info-row">
+        <ion-col size="4">
+          <div class="icon-container">
+            <ion-icon name="time-outline" class="info-icon"></ion-icon>
+          </div>
+          <ion-label class="label-title">Hora:</ion-label>
+        </ion-col>
+        <ion-col size="8">
+          <ion-label class="label-value">
+            {{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row class="info-row">
+        <ion-col size="4">
+          <div class="icon-container">
+            <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+          </div>
+          <ion-label class="label-title">Día:</ion-label>
+        </ion-col>
+        <ion-col size="8">
+          <ion-label class="label-value">{{ schedule?.day }}</ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row class="info-row">
+        <ion-col size="4">
+          <div class="icon-container">
+            <ion-icon name="people-outline" class="info-icon"></ion-icon>
+          </div>
+          <ion-label class="label-title">Cupos:</ion-label>
+        </ion-col>
+        <ion-col size="8">
+          <ion-label class="label-value">
+            {{ schedule?.maxCount }}
+          </ion-label>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="confirmation-box">
+            <p class="confirmation-text">
+              ¿Deseas inscribirte en el horario de
+              <span class="highlight">
+                {{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00
+              </span>
+              del día <span class="highlight">{{ schedule?.day }}</span
+              >?
+            </p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
+<ion-footer class="modal-footer">
+  <ion-toolbar>
+    <div class="button-container">
+      <ion-button
+        expand="block"
+        class="confirm-button"
+        (click)="confirm.emit()"
+      >
+        <ion-icon
+          name="checkmark-outline"
+          slot="start"
+          class="confirm-icon"
+        ></ion-icon>
+        Confirmar
+      </ion-button>
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="cancel-button"
+        (click)="cancel.emit()"
+      >
+        <ion-icon
+          name="close-circle-outline"
+          slot="start"
+          class="cancel-icon"
+        ></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
