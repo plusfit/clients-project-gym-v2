@@ -31,6 +31,8 @@
 .modal-content {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
   --color: white;
+  max-height: calc(100vh - 13rem);
+  overflow-y: auto;
 }
 
 .content-container {
