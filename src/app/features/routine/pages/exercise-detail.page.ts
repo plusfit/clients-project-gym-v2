@@ -7,7 +7,7 @@ import {
   IonCardTitle,
   IonContent,
   IonHeader,
-  IonLoading,
+  IonSpinner,
   IonIcon,
   IonTitle,
   IonToolbar,
@@ -30,9 +30,8 @@ import {
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Exercise } from '../interfaces/routine.interface';
+import { PluralizePipe } from '@shared/pipes/pluralize.pipe';
 
-// Extendemos la interfaz Exercise para incluir las propiedades que faltan
-// Esta interfaz solo es para el compilador, no afecta la definición original
 declare module '../interfaces/routine.interface' {
   interface Exercise {
     instructions?: string;
@@ -56,14 +55,22 @@ declare module '../interfaces/routine.interface' {
     </ion-header>
     <ion-content class="content">
       <div class="container">
-        <!-- Loader overlay -->
-        <ion-loading
-          [isOpen]="isLoading"
-          message="Cargando ejercicio..."
-        ></ion-loading>
+        <!-- Loading state -->
+        <div class="loading-container" *ngIf="isLoading">
+          <div class="loading-card">
+            <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+            <h3 class="loading-title">Cargando ejercicio</h3>
+            <p class="loading-text">
+              Por favor espera mientras cargamos la información...
+            </p>
+          </div>
+        </div>
 
         <ng-container
-          *ngIf="selectedExercise$ | async as exercise; else noExercise"
+          *ngIf="
+            !isLoading && (selectedExercise$ | async) as exercise;
+            else noExercise
+          "
         >
           <ion-card class="exercise-card">
             <div class="image-container">
@@ -125,7 +132,9 @@ declare module '../interfaces/routine.interface' {
                   </div>
                   <div class="detail-content">
                     <span class="detail-label">Tiempo de descanso</span>
-                    <p class="detail-text">{{ exercise.rest }} minutos</p>
+                    <p class="detail-text">
+                      {{ exercise.rest | pluralize: 'minuto' }}
+                    </p>
                   </div>
                 </div>
 
@@ -138,7 +147,11 @@ declare module '../interfaces/routine.interface' {
                   </div>
                   <div class="detail-content">
                     <span class="detail-label">Repeticiones</span>
-                    <p class="detail-text">{{ exercise.reps }}</p>
+                    <p class="detail-text">
+                      {{
+                        exercise.reps | pluralize: 'repetición' : 'repeticiones'
+                      }}
+                    </p>
                   </div>
                 </div>
 
@@ -151,7 +164,9 @@ declare module '../interfaces/routine.interface' {
                   </div>
                   <div class="detail-content">
                     <span class="detail-label">Series</span>
-                    <p class="detail-text">{{ exercise.series }}</p>
+                    <p class="detail-text">
+                      {{ exercise.series | pluralize: 'serie' }}
+                    </p>
                   </div>
                 </div>
 
@@ -167,7 +182,9 @@ declare module '../interfaces/routine.interface' {
                   </div>
                   <div class="detail-content">
                     <span class="detail-label">Duración</span>
-                    <p class="detail-text">{{ exercise.minutes }} minutos</p>
+                    <p class="detail-text">
+                      {{ exercise.minutes | pluralize: 'minuto' }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -186,7 +203,7 @@ declare module '../interfaces/routine.interface' {
         </ng-container>
 
         <ng-template #noExercise>
-          <ion-card class="not-found-card">
+          <ion-card class="not-found-card" *ngIf="!isLoading">
             <ion-card-header class="not-found-header">
               <ion-card-title class="not-found-title">
                 <ion-icon
@@ -235,6 +252,67 @@ declare module '../interfaces/routine.interface' {
         align-items: center;
         max-width: 800px;
         margin: 0 auto;
+        min-height: 100%;
+      }
+
+      /* LOADING */
+      .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 400px;
+        width: 100%;
+      }
+
+      .loading-card {
+        background: rgba(30, 30, 30, 0.7);
+        border-radius: 16px;
+        padding: 32px;
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(var(--ion-color-primary-rgb), 0.4);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(var(--ion-color-primary-rgb), 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(var(--ion-color-primary-rgb), 0);
+        }
+      }
+
+      .loading-spinner {
+        width: 70px;
+        height: 70px;
+        color: var(--ion-color-primary);
+        margin-bottom: 20px;
+      }
+
+      .loading-title {
+        font-family: 'APEXPRO', sans-serif;
+        color: white;
+        font-size: 1.5rem;
+        margin: 0 0 10px;
+        text-align: center;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .loading-text {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        margin: 0;
+        text-align: center;
       }
 
       /* CARDS */
@@ -397,34 +475,29 @@ declare module '../interfaces/routine.interface' {
       }
 
       .section-icon {
-        font-size: 1.2rem;
-        margin-right: 8px;
+        font-size: 1.3rem;
         color: var(--ion-color-primary);
+        margin-right: 10px;
       }
 
       .section-title {
+        font-size: 1.1rem;
         color: white;
-        font-size: 1.05rem;
         font-weight: 600;
-        letter-spacing: 0.5px;
         text-transform: uppercase;
+        letter-spacing: 0.5px;
       }
 
-      /* DETAIL ITEMS */
       .detail-item {
         display: flex;
-        align-items: flex-start;
         margin-bottom: 16px;
-        padding: 12px;
-        border-radius: 10px;
-        background-color: rgba(25, 25, 25, 0.7);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
-        &:hover {
-          background-color: rgba(35, 35, 35, 0.8);
-          transform: translateX(5px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        &:last-child {
+          margin-bottom: 0;
+          padding-bottom: 0;
+          border-bottom: none;
         }
       }
 
@@ -432,39 +505,17 @@ declare module '../interfaces/routine.interface' {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 45px;
-        height: 45px;
+        width: 40px;
+        height: 40px;
+        background: rgba(var(--ion-color-primary-rgb), 0.15);
         border-radius: 50%;
-        background: linear-gradient(
-          135deg,
-          rgba(var(--ion-color-primary-rgb), 0.15) 0%,
-          rgba(var(--ion-color-primary-rgb), 0.25) 100%
-        );
-        margin-right: 12px;
-        position: relative;
-        overflow: hidden;
+        margin-right: 16px;
         flex-shrink: 0;
-        box-shadow: 0 2px 6px rgba(var(--ion-color-primary-rgb), 0.2);
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(255, 255, 255, 0) 70%
-          );
-        }
       }
 
       .detail-icon {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         color: var(--ion-color-primary);
-        z-index: 1;
       }
 
       .detail-content {
@@ -472,99 +523,87 @@ declare module '../interfaces/routine.interface' {
       }
 
       .detail-label {
-        color: var(--ion-color-secondary);
-        font-size: 0.9rem;
-        font-weight: 600;
         display: block;
-        margin-bottom: 4px;
+        font-size: 0.8rem;
+        color: var(--ion-color-medium);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        margin-bottom: 4px;
       }
 
       .detail-text {
-        color: #e0e0e0;
-        font-size: 1rem;
-        line-height: 1.5;
+        font-size: 1.1rem;
+        color: white;
         margin: 0;
+        font-weight: 500;
       }
 
       .instructions-content {
-        background-color: rgba(25, 25, 25, 0.7);
         padding: 16px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+        border-left: 3px solid var(--ion-color-primary);
       }
 
       .instructions-text {
-        color: #e0e0e0;
+        margin: 0;
         font-size: 1rem;
         line-height: 1.6;
-        margin: 0;
+        color: rgba(255, 255, 255, 0.9);
       }
 
-      /* NO EXERCISE FOUND CARD */
+      /* Not Found */
       .not-found-card {
         border-radius: 16px;
         overflow: hidden;
         margin: 16px 0;
         width: 100%;
+        max-width: 600px;
         background-color: rgba(30, 30, 30, 0.7);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .not-found-header {
         background: linear-gradient(
           135deg,
-          var(--ion-color-secondary-shade) 0%,
-          var(--ion-color-secondary) 100%
+          var(--ion-color-danger-shade) 0%,
+          var(--ion-color-danger) 100%
         );
         padding: 16px;
-        position: relative;
-        overflow: hidden;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: -30px;
-          right: -30px;
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          background: rgba(255, 255, 255, 0.1);
-          z-index: 0;
-        }
       }
 
       .not-found-title {
-        color: var(--ion-color-secondary-contrast);
-        font-size: 1.3rem;
+        color: white;
+        font-size: 1.4rem;
         font-weight: 700;
         display: flex;
         align-items: center;
-        position: relative;
-        z-index: 1;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        font-family: 'APEXPRO', sans-serif;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
       }
 
       .not-found-icon {
         margin-right: 10px;
         font-size: 1.5rem;
-        color: var(--ion-color-secondary-contrast);
       }
 
       .not-found-content {
-        padding: 24px;
+        padding: 16px;
       }
 
       .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
         text-align: center;
-        padding: 30px 20px;
       }
 
       .empty-icon {
-        font-size: 3.5rem;
-        color: var(--ion-color-secondary);
+        font-size: 4rem;
+        color: var(--ion-color-danger);
         margin-bottom: 16px;
         opacity: 0.7;
       }
@@ -572,21 +611,54 @@ declare module '../interfaces/routine.interface' {
       .empty-text {
         color: rgba(255, 255, 255, 0.7);
         font-size: 1.1rem;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
+      }
+
+      /* Media Queries */
+      @media (max-width: 576px) {
+        .container {
+          padding: 12px;
+        }
+
+        .exercise-card,
+        .not-found-card {
+          margin: 8px 0;
+        }
+
+        .card-title {
+          font-size: 1.2rem;
+        }
+
+        .image-container {
+          height: 200px;
+        }
+
+        .loading-card {
+          padding: 24px;
+        }
+
+        .loading-spinner {
+          width: 50px;
+          height: 50px;
+        }
+
+        .loading-title {
+          font-size: 1.2rem;
+        }
       }
     `,
   ],
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
     NgIf,
+    IonHeader,
+    IonContent,
+    IonTitle,
+    IonToolbar,
     IonCard,
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    IonLoading,
+    IonSpinner,
     IonIcon,
     IonButtons,
     IonBackButton,
@@ -596,6 +668,7 @@ declare module '../interfaces/routine.interface' {
     NgClass,
     IonButton,
     RouterLink,
+    PluralizePipe,
   ],
 })
 export class ExerciseDetailPage implements OnInit {
