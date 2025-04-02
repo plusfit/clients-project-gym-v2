@@ -3,7 +3,7 @@
     <ion-title>Inscripción</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content fullscreen class="modal-content">
+<div class="modal-content" fullscreen>
   <div class="content-container">
     <ion-grid class="info-card">
       <ion-row class="info-row">
@@ -39,7 +39,12 @@
         </ion-col>
         <ion-col size="8">
           <ion-label class="label-value">
-            {{ schedule?.maxCount }}
+            {{
+              schedule?.clients
+                ? schedule!.maxCount - schedule!.clients!.length
+                : 0
+            }}
+            disponibles de {{ schedule?.maxCount ?? 0 }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -59,7 +64,7 @@
       </ion-row>
     </ion-grid>
   </div>
-</ion-content>
+</div>
 <ion-footer class="modal-footer">
   <ion-toolbar>
     <div class="button-container">
@@ -82,7 +87,7 @@
         (click)="cancel.emit()"
       >
         <ion-icon
-          name="close-circle-outline"
+          name="chevron-back-outline"
           slot="start"
           class="cancel-icon"
         ></ion-icon>
