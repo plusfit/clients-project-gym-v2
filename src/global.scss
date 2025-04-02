@@ -133,7 +133,7 @@ ion-header {
 ion-toolbar {
   --background: transparent !important;
   --border-color: transparent;
-  padding: 0 16px;
+  padding: 0 16px 0 8px;
 }
 
 ion-title {
@@ -144,6 +144,10 @@ ion-title {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 40px;
+  margin-left: 0;
 }
 
 /* Estilos para tabs */
@@ -238,9 +242,12 @@ ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
   display: none;
 }
 
-/* Aplicar espacio adicional para el título cuando está el logo */
+/* Aplicar espacio adicional para el título y alinearlo a la izquierda */
 ion-header ion-toolbar ion-title {
   padding-right: 40px;
+  padding-left: 12px;
+  margin-left: 0;
+  text-align: left;
 }
 
 /* Fuentes personalizadas */
