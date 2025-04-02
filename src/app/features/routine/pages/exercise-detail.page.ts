@@ -255,6 +255,47 @@ declare module '../interfaces/routine.interface' {
         min-height: 100%;
       }
 
+      ion-header {
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 100%
+          );
+          opacity: 0;
+          animation: exercise-light-sweep 2.5s ease-in-out infinite;
+        }
+
+        ion-toolbar {
+          position: relative;
+          z-index: 1;
+        }
+      }
+
+      @keyframes exercise-light-sweep {
+        0% {
+          opacity: 0;
+          transform: translateX(-100%);
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(100%);
+        }
+      }
+
       /* LOADING */
       .loading-container {
         display: flex;
@@ -403,6 +444,7 @@ declare module '../interfaces/routine.interface' {
         padding: 16px;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.5);
 
         &::before {
           content: '';
@@ -415,6 +457,25 @@ declare module '../interfaces/routine.interface' {
           background-repeat: no-repeat;
           background-position: center;
           background-size: 60px;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 100%
+          );
+          opacity: 0;
+          animation: exercise-light-sweep 2.5s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 0;
         }
       }
 
@@ -571,6 +632,28 @@ declare module '../interfaces/routine.interface' {
           var(--ion-color-danger) 100%
         );
         padding: 16px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(var(--ion-color-danger-rgb), 0.5);
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 100%
+          );
+          opacity: 0;
+          animation: exercise-light-sweep 2.5s ease-in-out infinite;
+          pointer-events: none;
+          z-index: 0;
+        }
       }
 
       .not-found-title {

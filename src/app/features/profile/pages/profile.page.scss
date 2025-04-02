@@ -13,9 +13,30 @@ ion-header {
   );
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: profile-light-sweep 2.5s ease-in-out infinite;
+  }
 
   ion-toolbar {
     --background: transparent;
+    position: relative;
+    z-index: 1;
   }
 
   ion-title {
@@ -25,6 +46,20 @@ ion-header {
     color: white;
     letter-spacing: 0.5px;
     text-transform: uppercase;
+  }
+}
+
+@keyframes profile-light-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 
@@ -76,6 +111,26 @@ ion-card-header {
   );
   padding: 16px;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.5);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: profile-light-sweep 2.5s ease-in-out infinite;
+    pointer-events: none;
+  }
 }
 
 ion-card-title {
