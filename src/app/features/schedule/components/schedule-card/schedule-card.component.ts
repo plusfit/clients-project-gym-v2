@@ -9,6 +9,9 @@ import {
   IonBadge,
 } from '@ionic/angular/standalone';
 
+/**
+ * Interfaz Schedule que representa un horario
+ */
 export interface Schedule {
   _id: string;
   startTime: string;
@@ -18,6 +21,10 @@ export interface Schedule {
   day: string;
 }
 
+/**
+ * Componente para mostrar un horario de entrenamiento
+ * Responsabilidad única: Visualizar la información de un horario y permitir interacción
+ */
 @Component({
   selector: 'app-schedule-card',
   templateUrl: './schedule-card.component.html',
@@ -39,6 +46,9 @@ export class ScheduleCardComponent {
   @Output() scheduleClicked = new EventEmitter<Schedule>();
   @Output() unsubscribeClicked = new EventEmitter<Schedule>();
 
+  /**
+   * Determina si el horario está lleno
+   */
   get isFull(): boolean {
     return (
       this.schedule.clients &&
@@ -46,6 +56,9 @@ export class ScheduleCardComponent {
     );
   }
 
+  /**
+   * Determina si el usuario actual está inscrito en este horario
+   */
   get isEnrolled(): boolean {
     return (
       this.schedule.clients &&
@@ -53,14 +66,21 @@ export class ScheduleCardComponent {
     );
   }
 
-  handleClick() {
-    // Solo permitir hacer clic si no está lleno o si el usuario ya está inscrito
+  /**
+   * Manejador de click en el horario
+   * Solo permite hacer clic si no está lleno o si el usuario ya está inscrito
+   */
+  handleClick(): void {
     if (!this.isFull || this.isEnrolled) {
       this.scheduleClicked.emit(this.schedule);
     }
   }
 
-  handleUnsubscribe(event: Event) {
+  /**
+   * Manejador para desinscribirse de un horario
+   * Detiene la propagación para evitar activar el click del card
+   */
+  handleUnsubscribe(event: Event): void {
     event.stopPropagation();
     this.unsubscribeClicked.emit(this.schedule);
   }
