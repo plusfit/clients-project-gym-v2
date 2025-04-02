@@ -31,15 +31,8 @@ import { Subject } from 'rxjs';
   template: `
     <ion-header [translucent]="true">
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button
-            defaultHref="/cliente/inicio"
-            text="Atrás"
-          ></ion-back-button>
-        </ion-buttons>
         <ion-title>
-          <strong style="font-family: 'APEXPRO'">TUS</strong>
-          <span style="opacity: 0.9; font-family: 'APEXPRO'"> RUTINAS</span>
+          <span style="opacity: 0.9; font-family: 'APEXPRO'">RUTINAS</span>
         </ion-title>
       </ion-toolbar>
     </ion-header>

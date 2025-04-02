@@ -11,6 +11,14 @@
   text-align: center;
 }
 
+.modal-header ion-toolbar::after {
+  /* El logo ya se añade automáticamente con el estilo global */
+  /* Solo ajustamos el tamaño para que sea más pequeño en modales */
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
+}
+
 /* CONTENT */
 .modal-content {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
@@ -54,7 +62,7 @@
 
 .info-icon {
   font-size: 1.2rem;
-  color: var(--ion-color-primary);
+  color: white;
 }
 
 .label-title {
@@ -109,36 +117,64 @@
 
 .button-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirm-button,
+.cancel-button {
+  flex: 1;
+  font-weight: 600;
+  margin: 0;
+  height: 44px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
 .confirm-button {
   --background: linear-gradient(
     135deg,
-    var(--ion-color-primary-shade) 0%,
-    var(--ion-color-primary) 100%
+    var(--ion-color-primary) 0%,
+    var(--ion-color-primary-shade) 100%
   );
   --border-radius: 10px;
-  --box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.3);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-}
-
-.confirm-icon {
-  color: white;
+  --box-shadow: 0 4px 15px rgba(var(--ion-color-primary-rgb), 0.3);
 }
 
 .cancel-button {
   --border-radius: 10px;
-  --border-color: rgba(255, 255, 255, 0.2);
-  --color: white;
-  font-weight: 500;
-  margin: 0;
+  --border-width: 1px;
+  --border-color: rgba(var(--ion-color-light-rgb), 0.3);
+  --background: transparent;
+  --color: var(--ion-color-light);
+  --box-shadow: none;
 }
 
+.confirm-icon,
 .cancel-icon {
-  color: var(--ion-color-primary);
+  font-size: 1.2rem;
+  margin-right: 6px;
+  color: white;
+}
+
+/* Estilos responsivos */
+@media (max-width: 576px) {
+  .info-card {
+    padding: 16px;
+  }
+
+  .confirmation-box {
+    padding: 16px;
+  }
+
+  .button-container {
+    flex-direction: column;
+  }
+
+  .confirm-button,
+  .cancel-button {
+    width: 100%;
+  }
 }

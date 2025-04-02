@@ -1,16 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/**
- * Pipe para manejar la pluralización de unidades en español
- *
- * Uso:
- * {{ 1 | pluralize:'minuto' }} => '1 minuto'
- * {{ 2 | pluralize:'minuto' }} => '2 minutos'
- * {{ 1 | pluralize:'serie' }} => '1 serie'
- * {{ 5 | pluralize:'serie' }} => '5 series'
- * {{ 1 | pluralize:'repetición':'repeticiones' }} => '1 repetición'
- * {{ 10 | pluralize:'repetición':'repeticiones' }} => '10 repeticiones'
- */
 @Pipe({
   name: 'pluralize',
   standalone: true,
@@ -28,7 +17,6 @@ export class PluralizePipe implements PipeTransform {
     singular: string,
     plural?: string,
   ): string {
-    // Si no hay valor, retornar un mensaje por defecto
     if (value === undefined || value === null) {
       return `- ${plural || singular + 's'}`;
     }
@@ -37,13 +25,10 @@ export class PluralizePipe implements PipeTransform {
       return `${value} ${singular}`;
     }
 
-    // Si no se proporciona una forma plural específica, añadir 's' al singular
-    // Excepto para casos especiales
     if (!plural) {
       if (singular === 'repetición') {
         plural = 'repeticiones';
       } else if (singular.endsWith('s') || singular.endsWith('x')) {
-        // Palabras que terminan en 's' o 'x' permanecen igual en plural
         plural = singular;
       } else {
         plural = `${singular}s`;
