@@ -150,7 +150,6 @@ ion-title {
   margin-left: 0;
 }
 
-/* Estilos para tabs */
 ion-tab-bar {
   --background: #1a1a1a;
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -162,7 +161,6 @@ ion-tab-button {
   --color-selected: var(--ion-color-primary);
 }
 
-/* Estilos para mejorar elementos de entrada */
 ion-input,
 ion-textarea,
 ion-select {
@@ -180,7 +178,6 @@ ion-select {
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Estilos para alertas */
 ion-alert {
   --background: var(--ion-color-dark) !important;
   --backdrop-opacity: 0.8 !important;
@@ -212,7 +209,6 @@ ion-alert {
   --button-letter-spacing: 0.5px !important;
 }
 
-/* Logo en headers */
 ion-header ion-toolbar {
   position: relative;
 
@@ -232,17 +228,14 @@ ion-header ion-toolbar {
   }
 }
 
-/* No mostrar logo en headers colapsados */
 ion-header[collapse='condense'] ion-toolbar::after {
   display: none;
 }
 
-/* Excepción para headers con botones a la derecha */
 ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
   display: none;
 }
 
-/* Aplicar espacio adicional para el título y alinearlo a la izquierda */
 ion-header ion-toolbar ion-title {
   padding-right: 40px;
   padding-left: 12px;
@@ -250,7 +243,6 @@ ion-header ion-toolbar ion-title {
   text-align: left;
 }
 
-/* Fuentes personalizadas */
 @font-face {
   font-family: 'APEXPRO';
   src: url('/assets/fonts/APEXPRO.OTF') format('opentype');
