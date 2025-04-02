@@ -29,7 +29,6 @@ import { Schedule } from '../schedule-card/schedule-card.component';
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonContent,
     IonFooter,
     IonButton,
     IonGrid,

@@ -25,7 +25,6 @@ import { Schedule } from '@feature/schedule/state/schedule.state';
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonContent,
     IonFooter,
     IonButton,
     IonIcon,
