@@ -207,3 +207,46 @@ ion-alert {
   --button-text-transform: uppercase !important;
   --button-letter-spacing: 0.5px !important;
 }
+
+/* Logo en headers */
+ion-header ion-toolbar {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background-image: url('/assets/logos/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.9;
+  }
+}
+
+/* No mostrar logo en headers colapsados */
+ion-header[collapse='condense'] ion-toolbar::after {
+  display: none;
+}
+
+/* Excepción para headers con botones a la derecha */
+ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
+  display: none;
+}
+
+/* Aplicar espacio adicional para el título cuando está el logo */
+ion-header ion-toolbar ion-title {
+  padding-right: 40px;
+}
+
+/* Fuentes personalizadas */
+@font-face {
+  font-family: 'APEXPRO';
+  src: url('/assets/fonts/APEXPRO.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}

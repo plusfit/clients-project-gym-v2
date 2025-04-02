@@ -43,15 +43,9 @@ import { catchError, forkJoin, map, of, Subject, takeUntil } from 'rxjs';
     IonCardHeader,
     IonCardTitle,
     IonIcon,
-    IonCardSubtitle,
-    UpperCasePipe,
     IonCardContent,
-    IonList,
-    IonListHeader,
-    IonLabel,
     NgIf,
     IonSpinner,
-    IonItem,
   ],
 })
 export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {

@@ -1,5 +1,7 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   font-family: 'Inter', sans-serif;
   --background: var(--ion-color-dark);
 }
@@ -17,16 +19,24 @@
   text-align: center;
 }
 
+.modal-header ion-toolbar::after {
+  /* El logo ya se añade automáticamente con el estilo global */
+  /* Solo ajustamos el tamaño para que sea más pequeño en modales */
+  width: 32px;
+  height: 32px;
+  opacity: 0.8;
+}
+
 /* CONTENT */
 .modal-content {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
 }
 
 .content-container {
-  padding: 24px;
+  padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   min-height: 100%;
 }
 
@@ -34,35 +44,38 @@
 .warning-card {
   background: rgba(30, 30, 30, 0.7);
   border-radius: 16px;
-  padding: 30px 24px;
+  padding: 24px;
   width: 100%;
   max-width: 480px;
-  text-align: center;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(var(--ion-color-danger-rgb), 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .warning-icon-container {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: rgba(var(--ion-color-danger-rgb), 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(var(--ion-color-danger-rgb), 0.15);
+  margin-bottom: 16px;
 }
 
 .warning-icon {
-  font-size: 48px;
-  color: var(--ion-color-danger);
+  font-size: 2.2rem;
+  color: white;
 }
 
 .warning-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: white;
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   font-family: 'APEXPRO', sans-serif;
   letter-spacing: 0.5px;
 }
@@ -75,17 +88,18 @@
 }
 
 .warning-subtext {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
   line-height: 1.5;
   margin: 0;
   padding: 12px;
-  background: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
+  border-left: 3px solid var(--ion-color-danger);
 }
 
 .highlight {
-  color: var(--ion-color-danger-tint);
+  color: var(--ion-color-danger);
   font-weight: 600;
 }
 
@@ -103,36 +117,60 @@
 
 .button-container {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
+}
+
+.unsubscribe-button,
+.cancel-button {
+  flex: 1;
+  font-weight: 600;
+  margin: 0;
+  height: 44px;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
 .unsubscribe-button {
   --background: linear-gradient(
     135deg,
-    var(--ion-color-danger-shade) 0%,
-    var(--ion-color-danger) 100%
+    var(--ion-color-danger) 0%,
+    var(--ion-color-danger-shade) 100%
   );
   --border-radius: 10px;
-  --box-shadow: 0 4px 10px rgba(var(--ion-color-danger-rgb), 0.3);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-}
-
-.unsubscribe-icon {
-  color: white;
+  --box-shadow: 0 4px 15px rgba(var(--ion-color-danger-rgb), 0.3);
 }
 
 .cancel-button {
   --border-radius: 10px;
-  --border-color: rgba(255, 255, 255, 0.2);
-  --color: white;
-  font-weight: 500;
-  margin: 0;
+  --border-width: 1px;
+  --border-color: rgba(var(--ion-color-light-rgb), 0.3);
+  --background: transparent;
+  --color: var(--ion-color-light);
+  --box-shadow: none;
 }
 
+.unsubscribe-icon,
 .cancel-icon {
-  color: var(--ion-color-danger);
+  font-size: 1.2rem;
+  margin-right: 6px;
+  color: white;
+}
+
+/* Estilos responsivos */
+@media (max-width: 576px) {
+  .warning-card {
+    padding: 16px;
+  }
+
+  .button-container {
+    flex-direction: column;
+  }
+
+  .unsubscribe-button,
+  .cancel-button {
+    width: 100%;
+  }
 }
