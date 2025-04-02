@@ -50,7 +50,7 @@ declare module '../interfaces/routine.interface' {
             text="Atrás"
           ></ion-back-button>
         </ion-buttons>
-        <ion-title>Detalle del Ejercicio</ion-title>
+        <ion-title>Ejercicio</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="content">
@@ -253,33 +253,6 @@ declare module '../interfaces/routine.interface' {
         max-width: 800px;
         margin: 0 auto;
         min-height: 100%;
-      }
-
-      ion-header {
-        position: relative;
-        overflow: hidden;
-
-        &::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(
-            to right,
-            transparent 0%,
-            rgba(255, 255, 255, 0.2) 50%,
-            transparent 100%
-          );
-          opacity: 0;
-          animation: exercise-light-sweep 2.5s ease-in-out infinite;
-        }
-
-        ion-toolbar {
-          position: relative;
-          z-index: 1;
-        }
       }
 
       @keyframes exercise-light-sweep {
