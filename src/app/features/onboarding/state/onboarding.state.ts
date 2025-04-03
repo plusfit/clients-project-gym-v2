@@ -20,7 +20,7 @@ export interface OnBoardingStateModel {
     step3: null,
   },
 })
-export class UserState {
+export class OnboardingState {
   constructor(private onboardingService: OnboardingService) {}
 
   @Action(SetStep1, { cancelUncompleted: true })

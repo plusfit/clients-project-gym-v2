@@ -43,7 +43,7 @@
         La sociedad médica es obligatoria.
       </ion-text>
 
-      <ion-item button (click)="openDatePicker()">
+      <ion-item button (click)="openBirthdateModal()">
         <ion-label>Fecha de nacimiento</ion-label>
         <ion-text slot="end">
           {{ userForm.get('dateOfBirth')?.value | date: 'dd/MM/yyyy' }}

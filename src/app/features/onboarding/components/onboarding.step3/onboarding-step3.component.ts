@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { IonicModule, IonNav } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { Store } from '@ngxs/store';
+import { SetStep3 } from '../../state/onboarding.actions';
 
 @Component({
   selector: 'app-onboarding-step3',
@@ -21,7 +23,10 @@ export class OnboardingStep3Component {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+  ) {
     this.form = this.fb.group({
       trainingDays: [3, Validators.required],
       goal: ['', Validators.required],
@@ -33,8 +38,7 @@ export class OnboardingStep3Component {
   nextStep() {
     if (this.form.valid) {
       const step3Data = this.form.value;
-      const finalData = { ...this.userData, ...step3Data };
-      console.log('Datos completos del usuario:', finalData);
+      this.store.dispatch(new SetStep3(step3Data));
     } else {
       this.form.markAllAsTouched();
     }
