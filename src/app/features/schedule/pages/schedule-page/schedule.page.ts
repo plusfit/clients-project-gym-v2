@@ -251,10 +251,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
         const plan = this.store.selectSnapshot(UserState.getPlan);
         const maxEnrollments = plan?.days || this.userPlan.days;
 
-        // Show warning toast instead of alert
-        this.toastService.showWarning(
-          `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`,
-        );
+        this.alertMessage = `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`;
+        this.showAlert = true;
+
         return;
       }
 
@@ -328,14 +327,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
               `Te has desinscrito exitosamente del horario de ${scheduleInfo.startTime}:00 el día ${scheduleInfo.day}.`,
             );
 
-            // Recalcular inscripciones después de desinscripción exitosa
-            setTimeout(() => {
-              const updatedSchedules = this.store.selectSnapshot(
-                ScheduleState.getSchedules,
-              );
-              this.calculateEnrollments(updatedSchedules);
-              this.calculateEnrollmentsByDay(updatedSchedules);
-            }, 300);
+            const updatedSchedules = this.store.selectSnapshot(
+              ScheduleState.getSchedules,
+            );
+            this.calculateEnrollments(updatedSchedules);
+            this.calculateEnrollmentsByDay(updatedSchedules);
           },
           error: (error) => {
             this.loading = false;
