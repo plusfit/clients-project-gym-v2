@@ -31,15 +31,8 @@ import { Subject } from 'rxjs';
   template: `
     <ion-header [translucent]="true">
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button
-            defaultHref="/cliente/inicio"
-            text="Atrás"
-          ></ion-back-button>
-        </ion-buttons>
         <ion-title>
-          <strong style="font-family: 'APEXPRO'">TUS</strong>
-          <span style="opacity: 0.9; font-family: 'APEXPRO'"> RUTINAS</span>
+          <span style="opacity: 0.9; font-family: 'APEXPRO'">RUTINAS</span>
         </ion-title>
       </ion-toolbar>
     </ion-header>
@@ -219,15 +212,12 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    // Escuchar cuando LoadRoutineById se complete exitosamente
     this.actions$
       .pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$))
       .subscribe(() => {
-        // Obtener la rutina directamente del estado
         const routine = this.store.selectSnapshot(
           RoutineState.getSelectedRoutine,
         );
-        console.log('RoutineDetailPage: Rutina cargada con éxito:', routine);
 
         if (routine) {
           this.routine = routine;
@@ -236,24 +226,13 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
       });
 
     this.authFacade.user$.subscribe((user) => {
-      console.log(
-        'RoutineDetailPage: Usuario obtenido del estado de autenticación:',
-        user,
-      );
-
       if (user && user.routineId) {
         this.store.dispatch(new LoadRoutineById(user.routineId));
       } else {
-        console.log(
-          'RoutineDetailPage: Usuario sin routineId, cargando rutinas generales',
-        );
         this.store.dispatch(new LoadRoutines()).subscribe(() => {
           const routines = this.store.selectSnapshot(RoutineState.getRoutines);
 
           if (routines && routines.length > 0) {
-            console.log(
-              `RoutineDetailPage: Cargando primera rutina: ${routines[0]._id}`,
-            );
             this.store.dispatch(new LoadRoutineById(routines[0]._id));
           }
         });

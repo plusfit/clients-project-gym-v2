@@ -133,7 +133,7 @@ ion-header {
 ion-toolbar {
   --background: transparent !important;
   --border-color: transparent;
-  padding: 0 16px;
+  padding: 0 16px 0 8px;
 }
 
 ion-title {
@@ -144,9 +144,12 @@ ion-title {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 40px;
+  margin-left: 0;
 }
 
-/* Estilos para tabs */
 ion-tab-bar {
   --background: #1a1a1a;
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
@@ -158,7 +161,6 @@ ion-tab-button {
   --color-selected: var(--ion-color-primary);
 }
 
-/* Estilos para mejorar elementos de entrada */
 ion-input,
 ion-textarea,
 ion-select {
@@ -176,7 +178,6 @@ ion-select {
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
-/* Estilos para alertas */
 ion-alert {
   --background: var(--ion-color-dark) !important;
   --backdrop-opacity: 0.8 !important;
@@ -206,4 +207,91 @@ ion-alert {
   --button-font-weight: 600 !important;
   --button-text-transform: uppercase !important;
   --button-letter-spacing: 0.5px !important;
+}
+
+ion-header ion-toolbar {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background-image: url('/assets/logos/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.9;
+  }
+}
+
+ion-header[collapse='condense'] ion-toolbar::after {
+  display: none;
+}
+
+ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
+  display: none;
+}
+
+ion-header ion-toolbar ion-title {
+  padding-right: 40px;
+  padding-left: 12px;
+  margin-left: 0;
+  text-align: left;
+}
+
+@font-face {
+  font-family: 'APEXPRO';
+  src: url('/assets/fonts/APEXPRO.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Custom Toast Styles */
+.custom-toast {
+  --border-radius: 8px;
+  --box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  padding: 4px 8px;
+
+  &::part(message) {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  &::part(icon) {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  &::part(button) {
+    color: currentColor;
+    font-size: 20px;
+  }
+}
+
+/* Toast colors */
+.custom-toast.toast-success {
+  --background: #2dd36f;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-error {
+  --background: #eb445a;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-warning {
+  --background: #ffc409;
+  --color: #000000;
+}
+
+.custom-toast.toast-info {
+  --background: #3880ff;
+  --color: #ffffff;
 }

@@ -35,13 +35,42 @@ ion-title {
 .container {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
   padding: 16px;
+  --overflow: hidden; /* Prevent page scroll */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-grid {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.selector-col {
+  padding-bottom: 8px;
+}
+
+.schedule-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.schedule-row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 }
 
 .schedule-title {
   font-family: 'APEXPRO', sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--ion-color-primary);
+  color: white;
   margin-bottom: 20px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -68,9 +97,23 @@ ion-title {
 .schedule-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  max-height: calc(
+    100% - 55px
+  ); /* Slightly adjusted for title to provide more space */
+  margin-bottom: 4px; /* Add a bit of bottom margin */
+}
+
+.schedule-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   overflow-y: auto;
-  max-height: calc(100vh - 200px);
+  height: 100%;
+  padding-right: 8px; /* Padding for the scrollbar */
+  padding-bottom: 32px; /* Increased padding to prevent the last item from being cut off */
 
   /* Estilos para el scrollbar */
   &::-webkit-scrollbar {

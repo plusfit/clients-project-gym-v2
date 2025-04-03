@@ -2,29 +2,27 @@
   <ng-container *ngIf="routine; else noRoutine">
     <ion-card-header class="routine-header">
       <div class="routine-title-container">
-        <ion-card-title class="routine-title">
+        <h2 class="routine-title">
           {{ routine.name }}
           <ion-icon name="barbell-outline" class="routine-icon"></ion-icon>
-        </ion-card-title>
-        <ion-card-subtitle class="routine-subtitle">
-          {{ routine.category | uppercase }}
-        </ion-card-subtitle>
+        </h2>
+        <p class="routine-subtitle">{{ routine.description }}</p>
       </div>
     </ion-card-header>
     <ion-card-content class="routine-content">
-      <p class="routine-description">
+      <div class="routine-description">
         {{ routine.description }}
-      </p>
-      <ion-list class="exercise-list">
-        <ion-list-header class="exercise-list-header">
-          <ion-label class="exercise-list-title">
+      </div>
+      <div class="exercise-list">
+        <div class="exercise-list-header">
+          <h3 class="exercise-list-title">
             <ion-icon
               name="fitness-outline"
               class="exercise-list-icon"
             ></ion-icon>
             Ejercicios ({{ routine.exercises.length }})
-          </ion-label>
-        </ion-list-header>
+          </h3>
+        </div>
 
         <!-- Indicador de carga -->
         <div *ngIf="isLoading" class="loading-container">
@@ -46,7 +44,7 @@
             <p>No hay ejercicios disponibles en esta rutina.</p>
           </div>
         </div>
-      </ion-list>
+      </div>
     </ion-card-content>
   </ng-container>
   <ng-template #noRoutine>

@@ -7,6 +7,7 @@ import {
   OnDestroy,
   SimpleChanges,
   ChangeDetectorRef,
+  OnInit,
 } from '@angular/core';
 import { ExerciseItemComponent } from '../exercise-item/exercise-item.component';
 import { NgForOf, NgIf, UpperCasePipe } from '@angular/common';
@@ -21,6 +22,7 @@ import {
   IonList,
   IonListHeader,
   IonSpinner,
+  IonItem,
 } from '@ionic/angular/standalone';
 import {
   SubRoutine,
@@ -41,22 +43,19 @@ import { catchError, forkJoin, map, of, Subject, takeUntil } from 'rxjs';
     IonCardHeader,
     IonCardTitle,
     IonIcon,
-    IonCardSubtitle,
-    UpperCasePipe,
     IonCardContent,
-    IonList,
-    IonListHeader,
-    IonLabel,
     NgIf,
     IonSpinner,
   ],
 })
-export class RoutineCardComponent implements OnChanges, OnDestroy {
+export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
   @Input() routine!: SubRoutine | null;
+  @Input() isRestDay: boolean = false;
+  @Input() isEnrolled: boolean = false;
   @Output() exerciseClicked = new EventEmitter<Exercise>();
 
-  isLoading = true;
   loadedExercises: Exercise[] = [];
+  isLoading = true;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -64,8 +63,12 @@ export class RoutineCardComponent implements OnChanges, OnDestroy {
     private cd: ChangeDetectorRef,
   ) {}
 
+  ngOnInit(): void {
+    this.processExercises();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['routine']) {
+    if (changes['routine'] && !changes['routine'].firstChange) {
       this.processExercises();
     }
   }
@@ -85,49 +88,50 @@ export class RoutineCardComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    // Si ya tenemos objetos Exercise, usamos la lista directamente
-    if (typeof this.routine.exercises[0] !== 'string') {
-      this.loadedExercises = this.routine.exercises as Exercise[];
-      this.isLoading = false;
-      return;
-    }
+    if (
+      Array.isArray(this.routine.exercises) &&
+      this.routine.exercises.length > 0
+    ) {
+      if (typeof this.routine.exercises[0] === 'object') {
+        this.loadedExercises = this.routine.exercises as Exercise[];
+        this.isLoading = false;
+        return;
+      }
 
-    // Si tenemos IDs, cargamos cada ejercicio
-    this.isLoading = true;
-    const exerciseIds = this.routine.exercises as string[];
+      this.isLoading = true;
+      const exerciseIds = this.routine.exercises as string[];
 
-    if (exerciseIds.length === 0) {
+      if (exerciseIds.length === 0) {
+        this.loadedExercises = [];
+        this.isLoading = false;
+        return;
+      }
+
+      const exerciseRequests = exerciseIds.map((id) =>
+        this.exerciseService.getExerciseById(id),
+      );
+
+      forkJoin(exerciseRequests)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (exercises) => {
+            this.loadedExercises = exercises.filter(
+              (exercise) => exercise !== null,
+            ) as Exercise[];
+            this.isLoading = false;
+            this.cd.markForCheck();
+          },
+          error: (error) => {
+            console.error('Error loading exercises:', error);
+            this.loadedExercises = [];
+            this.isLoading = false;
+            this.cd.markForCheck();
+          },
+        });
+    } else {
       this.loadedExercises = [];
       this.isLoading = false;
-      return;
     }
-
-    // Cargamos los ejercicios en paralelo
-    const observables = exerciseIds.map((id) =>
-      this.exerciseService.getExerciseById(id).pipe(
-        catchError(() => {
-          return of(null);
-        }),
-      ),
-    );
-
-    forkJoin(observables)
-      .pipe(
-        map((exercises) => exercises.filter((ex) => ex !== null) as Exercise[]),
-        takeUntil(this.destroy$),
-      )
-      .subscribe({
-        next: (exercises) => {
-          this.loadedExercises = exercises;
-          this.isLoading = false;
-          this.cd.markForCheck();
-        },
-        error: () => {
-          this.loadedExercises = [];
-          this.isLoading = false;
-          this.cd.markForCheck();
-        },
-      });
   }
 
   /**

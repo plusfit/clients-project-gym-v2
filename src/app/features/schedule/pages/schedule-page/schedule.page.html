@@ -5,34 +5,39 @@
 </ion-header>
 
 <ion-content class="container">
-  <ion-grid>
+  <ion-grid class="main-grid">
     <ion-row>
-      <ion-col size="12">
+      <ion-col size="12" class="selector-col">
         <app-day-selector
           [enrollmentsByDay]="enrollmentsByDay"
           (daySelected)="onDaySelected($event)"
         ></app-day-selector>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col size="12">
+    <ion-row class="schedule-row">
+      <ion-col size="12" class="schedule-col">
         <h2 class="schedule-title">Horarios Disponibles</h2>
+
         <!-- Loading spinner -->
         <div *ngIf="loading" class="loading-container">
           <ion-spinner name="circular"></ion-spinner>
           <p>Cargando horarios...</p>
         </div>
-        <!-- Schedule cards -->
+
+        <!-- Schedule cards - This is the scrollable container -->
         <div *ngIf="!loading" class="schedule-list">
-          <app-schedule-card
-            *ngFor="let schedule of schedulesForDay"
-            [schedule]="schedule"
-            [currentUserId]="currentUserId"
-            (scheduleClicked)="onScheduleClicked($event)"
-          ></app-schedule-card>
-          <!-- Empty state -->
-          <div *ngIf="schedulesForDay.length === 0" class="empty-state">
-            <p>No hay horarios disponibles para este día.</p>
+          <div class="schedule-cards-wrapper">
+            <app-schedule-card
+              *ngFor="let schedule of schedulesForDay"
+              [schedule]="schedule"
+              [currentUserId]="currentUserId"
+              (scheduleClicked)="onScheduleClicked($event)"
+            ></app-schedule-card>
+
+            <!-- Empty state -->
+            <div *ngIf="schedulesForDay.length === 0" class="empty-state">
+              <p>No hay horarios disponibles para este día.</p>
+            </div>
           </div>
         </div>
       </ion-col>
@@ -47,6 +52,7 @@
     <ng-template>
       <app-enroll-confirmation-modal
         [schedule]="selectedSchedule"
+        [isLoading]="loading"
         (confirm)="onEnrollConfirmed()"
         (cancel)="onEnrollModalDismiss()"
       ></app-enroll-confirmation-modal>
@@ -61,6 +67,7 @@
     <ng-template>
       <app-unsubscribe-confirmation-modal
         [schedule]="selectedSchedule"
+        [isLoading]="loading"
         (confirm)="onUnsubscribeConfirmed()"
         (cancel)="onUnsubscribeModalDismiss()"
       ></app-unsubscribe-confirmation-modal>
