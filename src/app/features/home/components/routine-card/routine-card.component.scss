@@ -32,10 +32,11 @@
   &::before {
     content: '';
     position: absolute;
-    top: 2px;
+    top: 50%;
     right: 2px;
     width: 80px;
     height: 80px;
+    transform: translateY(-50%);
     background-image: url('../../../../../assets/logos/logo.png');
     background-repeat: no-repeat;
     background-position: center;
