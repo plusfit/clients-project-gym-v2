@@ -34,19 +34,28 @@
         color="danger"
         class="unsubscribe-button"
         (click)="confirm.emit()"
+        [disabled]="isLoading"
       >
         <ion-icon
+          *ngIf="!isLoading"
           name="trash-outline"
           slot="start"
           class="unsubscribe-icon"
         ></ion-icon>
-        Confirmar Desinscripción
+        <ion-spinner
+          *ngIf="isLoading"
+          name="crescent"
+          slot="start"
+          class="loading-spinner"
+        ></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Confirmar Desinscripción' }}
       </ion-button>
       <ion-button
         expand="block"
         fill="outline"
         class="cancel-button"
         (click)="cancel.emit()"
+        [disabled]="isLoading"
       >
         <ion-icon
           name="chevron-back-outline"

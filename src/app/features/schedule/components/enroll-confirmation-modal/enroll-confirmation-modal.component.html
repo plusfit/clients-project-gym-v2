@@ -77,19 +77,28 @@
         expand="block"
         class="confirm-button"
         (click)="confirm.emit()"
+        [disabled]="isLoading"
       >
         <ion-icon
+          *ngIf="!isLoading"
           name="checkmark-outline"
           slot="start"
           class="confirm-icon"
         ></ion-icon>
-        Confirmar Inscripción
+        <ion-spinner
+          *ngIf="isLoading"
+          name="crescent"
+          slot="start"
+          class="loading-spinner"
+        ></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Confirmar Inscripción' }}
       </ion-button>
       <ion-button
         expand="block"
         fill="outline"
         class="cancel-button"
         (click)="cancel.emit()"
+        [disabled]="isLoading"
       >
         <ion-icon
           name="chevron-back-outline"
