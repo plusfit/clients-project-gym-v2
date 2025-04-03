@@ -100,16 +100,20 @@ ion-title {
   flex: 1;
   overflow: hidden;
   height: 100%;
-  max-height: calc(100% - 60px); /* Adjust for the title */
+  max-height: calc(
+    100% - 55px
+  ); /* Slightly adjusted for title to provide more space */
+  margin-bottom: 4px; /* Add a bit of bottom margin */
 }
 
 .schedule-cards-wrapper {
   display: flex;
   flex-direction: column;
+  gap: 8px;
   overflow-y: auto;
   height: 100%;
   padding-right: 8px; /* Padding for the scrollbar */
-  padding-bottom: 16px; /* Add padding at the bottom for better scrolling */
+  padding-bottom: 32px; /* Increased padding to prevent the last item from being cut off */
 
   /* Estilos para el scrollbar */
   &::-webkit-scrollbar {
