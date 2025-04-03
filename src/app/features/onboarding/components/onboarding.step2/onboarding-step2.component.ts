@@ -8,6 +8,8 @@ import {
 import { IonicModule, IonNav } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { OnboardingStep3Component } from '../onboarding.step3/onboarding-step3.component';
+import { Store } from '@ngxs/store';
+import { SetStep2 } from '../../state/onboarding.actions';
 
 @Component({
   selector: 'app-onboarding-step2',
@@ -22,7 +24,10 @@ export class OnboardingStep2Component {
 
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+  ) {
     this.form = this.fb.group({
       bloodPressure: ['', Validators.required],
       history: this.fb.group({
@@ -35,16 +40,18 @@ export class OnboardingStep2Component {
   }
 
   nextStep() {
-    //   if (this.form.valid) {
-    const step2Data = this.form.value;
+    if (this.form.valid) {
+      const step2Data = this.form.value;
 
-    this.nav.push(OnboardingStep3Component, {
-      nav: this.nav,
-      userData: { ...this.userData, ...step2Data },
-    });
-    //    } else {
-    //      this.form.markAllAsTouched();
-    //    }
+      this.store.dispatch(new SetStep2(step2Data));
+
+      this.nav.push(OnboardingStep3Component, {
+        nav: this.nav,
+        userData: { ...this.userData, ...step2Data },
+      });
+    } else {
+      this.form.markAllAsTouched();
+    }
   }
 
   prevStep() {

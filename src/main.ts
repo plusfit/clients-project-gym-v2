@@ -23,6 +23,7 @@ import { RoutineState } from '@feature/routine/state/routine.state';
 import { register } from 'swiper/element/bundle';
 import { UserState } from '@feature/profile/state/user.state';
 import { AuthState } from '@feature/auth/state/auth.state';
+import { OnboardingState } from '@feature/onboarding/state/onboarding.state';
 import { AuthInitializerService } from '@feature/auth/services/auth-initializer.service';
 register();
 
@@ -46,7 +47,14 @@ bootstrapApplication(AppComponent, {
     },
     importProvidersFrom(
       NgxsModule.forRoot(
-        [HomeState, ScheduleState, RoutineState, UserState, AuthState],
+        [
+          HomeState,
+          ScheduleState,
+          RoutineState,
+          UserState,
+          AuthState,
+          OnboardingState,
+        ],
         {
           developmentMode: !environment.production,
           selectorOptions: {

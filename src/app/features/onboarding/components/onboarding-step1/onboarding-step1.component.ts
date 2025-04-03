@@ -12,6 +12,8 @@ import { IonicModule, IonNav } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.component';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
+import { Store } from '@ngxs/store';
+import { SetStep1 } from '../../state/onboarding.actions';
 
 @Component({
   selector: 'app-step1',
@@ -27,6 +29,7 @@ export class OnboardingStep1Component {
   constructor(
     private fb: FormBuilder,
     private modalCtrl: ModalController,
+    private store: Store,
   ) {
     this.userForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -45,14 +48,13 @@ export class OnboardingStep1Component {
   }
   //BORRO PARA IR MAS RAPIDO
   nextStep() {
-    // if (this.userForm.valid) {
-    console.log('VALIDO');
-
-    const userData = this.userForm.value;
-    this.nav.push(OnboardingStep2Component, { userData, nav: this.nav });
-    //} else {
-    //   this.userForm.markAllAsTouched();
-    // }
+    if (this.userForm.valid) {
+      const step1Data = this.userForm.value;
+      this.store.dispatch(new SetStep1(step1Data));
+      this.nav.push(OnboardingStep2Component, { step1Data, nav: this.nav });
+    } else {
+      this.userForm.markAllAsTouched();
+    }
   }
 
   isInvalid(controlName: string): boolean {
@@ -60,8 +62,7 @@ export class OnboardingStep1Component {
     return (control?.invalid && control?.touched) || false;
   }
 
-  //PARA ABRIR DESDE ABAJO
-  async openDatePicker() {
+  async openBirthdateModal() {
     const today = new Date().toISOString().split('T')[0]; //yyyy-mm-dd
     const modal = await this.modalCtrl.create({
       component: IonDatetimeModalComponent,
