@@ -45,12 +45,9 @@ declare module '../interfaces/routine.interface' {
     <ion-header [translucent]="true">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button
-            defaultHref="/cliente/rutinas"
-            text="Atrás"
-          ></ion-back-button>
+          <ion-back-button defaultHref="/cliente/rutinas"></ion-back-button>
         </ion-buttons>
-        <ion-title>Ejercicio</ion-title>
+        <ion-title class="ion-text-center">Ejercicio</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="content">
@@ -701,6 +698,21 @@ declare module '../interfaces/routine.interface' {
         .loading-title {
           font-size: 1.2rem;
         }
+      }
+
+      ion-toolbar {
+        --padding-start: 8px;
+        --padding-end: 8px;
+      }
+
+      ion-title {
+        padding-right: 0;
+        margin-right: 0;
+        text-align: center;
+      }
+
+      ion-back-button {
+        margin-right: 8px;
       }
     `,
   ],
