@@ -28,6 +28,20 @@ ion-header {
   }
 }
 
+@keyframes profile-light-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
 /* CONTENT */
 ion-content {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
@@ -76,6 +90,26 @@ ion-card-header {
   );
   padding: 16px;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.5);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: profile-light-sweep 2.5s ease-in-out infinite;
+    pointer-events: none;
+  }
 }
 
 ion-card-title {

@@ -27,7 +27,6 @@ h2 {
   line-height: 1.2;
 }
 
-/* Estilos para app de gimnasio con tema oscuro */
 :host {
   --header-height: 56px;
 }
@@ -39,19 +38,66 @@ ion-content {
 .welcome-container {
   margin-top: 16px;
   margin-bottom: 24px;
-  padding: 16px;
+  padding: 20px;
   border-radius: 16px;
   background: linear-gradient(
     135deg,
     rgba(var(--ion-color-primary-rgb), 0.2) 0%,
     rgba(var(--ion-color-primary-rgb), 0.4) 100%
   );
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.25),
+    0 0 15px rgba(var(--ion-color-primary-rgb), 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(var(--ion-color-primary-rgb), 0.4);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 100%
+    );
+    opacity: 0;
+    animation: welcome-light-sweep 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@keyframes welcome-light-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 
 .day-display {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   line-height: 1.1;
   margin: 0;
@@ -64,31 +110,44 @@ ion-content {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(var(--ion-color-primary-rgb), 0.5);
+  position: relative;
+  z-index: 2;
 }
 
 .time-display {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--ion-color-tertiary);
   margin: 0;
   padding-top: 6px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 2;
 }
 
 .greeting {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
-  padding-top: 8px;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  padding-top: 6px;
+  position: relative;
+  z-index: 2;
 
   h2 {
     margin: 0;
-    font-weight: 600;
-    font-size: 1.3rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    font-family: 'APEXPRO', sans-serif;
     background: linear-gradient(90deg, white 0%, rgba(255, 255, 255, 0.8) 80%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-fill-color: transparent;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   }
 }
 

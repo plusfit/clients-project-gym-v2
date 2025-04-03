@@ -1,0 +1,62 @@
+<ion-card
+  [class.disabled]="isFull && !isEnrolled"
+  [class.enrolled]="isEnrolled"
+  (click)="handleClick()"
+>
+  <ion-card-header>
+    <ion-card-title>
+      <div class="title">
+        <span>
+          <ion-icon name="time-outline" class="time-icon"></ion-icon>
+          {{ schedule.startTime }}:00 - {{ schedule.endTime }}:00
+        </span>
+        <ion-icon
+          *ngIf="isEnrolled"
+          name="trash-outline"
+          class="trash-icon"
+          (click)="handleUnsubscribe($event)"
+        ></ion-icon>
+      </div>
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="enrollment-info">
+      <div class="enrollment-status">
+        <ion-icon name="people-outline" class="people-icon"></ion-icon>
+        <span class="status-text"
+          >Plazas: {{ schedule.clients.length }} / {{ schedule.maxCount }}</span
+        >
+        <ion-badge
+          *ngIf="isFull && !isEnrolled"
+          color="danger"
+          class="full-badge"
+        >
+          COMPLETO
+        </ion-badge>
+      </div>
+      <div class="progress-bar">
+        <div
+          class="progress"
+          [style.width.%]="(schedule.clients.length / schedule.maxCount) * 100"
+          [class.almost-full]="
+            schedule.clients.length >= schedule.maxCount * 0.7 && !isFull
+          "
+          [class.full]="isFull"
+        ></div>
+      </div>
+    </div>
+    <ng-container *ngIf="isEnrolled">
+      <div class="enrolled-status">
+        <ion-icon
+          name="checkmark-circle-outline"
+          class="enrolled-icon"
+        ></ion-icon>
+        <span>Ya inscrito</span>
+      </div>
+    </ng-container>
+    <div *ngIf="isFull && !isEnrolled" class="full-message">
+      <ion-icon name="alert-circle-outline" class="full-icon"></ion-icon>
+      <span>No hay cupos disponibles</span>
+    </div>
+  </ion-card-content>
+</ion-card>

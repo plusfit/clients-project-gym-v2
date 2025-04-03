@@ -1,0 +1,69 @@
+<ion-header class="modal-header">
+  <ion-toolbar>
+    <ion-title>Confirmar Desinscripción</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div class="modal-content" fullscreen>
+  <div class="content-container">
+    <div class="warning-card">
+      <div class="warning-icon-container">
+        <ion-icon name="alert-circle-outline" class="warning-icon"></ion-icon>
+      </div>
+      <h2 class="warning-title">¿Estás seguro?</h2>
+      <p class="warning-text">
+        Estás a punto de desinscribirte del horario de
+        <span class="highlight"
+          >{{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00</span
+        >
+        del día <span class="highlight">{{ schedule?.day }}</span
+        >.
+      </p>
+
+      <p class="warning-subtext">
+        Al desinscribirte liberarás tu cupo para que otro usuario pueda
+        aprovecharlo.
+      </p>
+    </div>
+  </div>
+</div>
+<ion-footer class="modal-footer">
+  <ion-toolbar>
+    <div class="button-container">
+      <ion-button
+        expand="block"
+        color="danger"
+        class="unsubscribe-button"
+        (click)="confirm.emit()"
+        [disabled]="isLoading"
+      >
+        <ion-icon
+          *ngIf="!isLoading"
+          name="trash-outline"
+          slot="start"
+          class="unsubscribe-icon"
+        ></ion-icon>
+        <ion-spinner
+          *ngIf="isLoading"
+          name="crescent"
+          slot="start"
+          class="loading-spinner"
+        ></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Confirmar Desinscripción' }}
+      </ion-button>
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="cancel-button"
+        (click)="cancel.emit()"
+        [disabled]="isLoading"
+      >
+        <ion-icon
+          name="chevron-back-outline"
+          slot="start"
+          class="cancel-icon"
+        ></ion-icon>
+        Cancelar
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
