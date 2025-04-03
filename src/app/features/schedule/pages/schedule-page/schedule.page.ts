@@ -27,6 +27,7 @@ import { UserState } from '@feature/profile/state/user.state';
 import { AuthState } from '@feature/auth/state/auth.state';
 import { Plan } from '@feature/profile/interfaces/plan.interface';
 import { LoadPlan } from '@feature/profile/state/user.actions';
+import { ToastService } from '@shared/services/toast.service';
 
 interface DayEnrollment {
   day: string;
@@ -84,6 +85,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
   constructor(
     private scheduleFacade: ScheduleFacadeService,
     private store: Store,
+    private toastService: ToastService,
   ) {
     this.schedules$ = this.scheduleFacade.schedules$;
   }
@@ -249,8 +251,10 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
         const plan = this.store.selectSnapshot(UserState.getPlan);
         const maxEnrollments = plan?.days || this.userPlan.days;
 
-        this.alertMessage = `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`;
-        this.showAlert = true;
+        // Show warning toast instead of alert
+        this.toastService.showWarning(
+          `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`,
+        );
         return;
       }
 
@@ -262,12 +266,22 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
   onEnrollConfirmed() {
     if (this.selectedSchedule && this.currentUserId) {
       this.loading = true;
+      const scheduleInfo = {
+        startTime: this.selectedSchedule.startTime || '',
+        day: this.selectedSchedule.day || '',
+      };
+
       const enrollSub = this.scheduleFacade
         .enrollUserInSchedule(this.selectedSchedule._id, this.currentUserId)
         .subscribe({
           next: () => {
             this.loading = false;
             this.closeModals();
+
+            // Show success toast
+            this.toastService.showSuccess(
+              `Te has inscrito exitosamente en el horario de ${scheduleInfo.startTime}:00 el día ${scheduleInfo.day}.`,
+            );
 
             // Recalcular inscripciones después de inscripción exitosa
             setTimeout(() => {
@@ -281,8 +295,12 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
           error: (error) => {
             this.loading = false;
             this.error = `Error al inscribirse: ${error.message}`;
-            this.showAlert = true;
-            this.alertMessage = this.error;
+
+            // Show error toast
+            this.toastService.showError(
+              `No se pudo completar la inscripción: ${error.message || 'Error desconocido'}`,
+            );
+
             this.closeModals();
           },
         });
@@ -293,12 +311,22 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
   onUnsubscribeConfirmed() {
     if (this.selectedSchedule && this.currentUserId) {
       this.loading = true;
+      const scheduleInfo = {
+        startTime: this.selectedSchedule.startTime || '',
+        day: this.selectedSchedule.day || '',
+      };
+
       const unenrollSub = this.scheduleFacade
         .unenrollUserFromSchedule(this.selectedSchedule._id, this.currentUserId)
         .subscribe({
           next: () => {
             this.loading = false;
             this.closeModals();
+
+            // Show success toast
+            this.toastService.showSuccess(
+              `Te has desinscrito exitosamente del horario de ${scheduleInfo.startTime}:00 el día ${scheduleInfo.day}.`,
+            );
 
             // Recalcular inscripciones después de desinscripción exitosa
             setTimeout(() => {
@@ -312,8 +340,12 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
           error: (error) => {
             this.loading = false;
             this.error = `Error al desinscribirse: ${error.message}`;
-            this.showAlert = true;
-            this.alertMessage = this.error;
+
+            // Show error toast
+            this.toastService.showError(
+              `No se pudo completar la desinscripción: ${error.message || 'Error desconocido'}`,
+            );
+
             this.closeModals();
           },
         });

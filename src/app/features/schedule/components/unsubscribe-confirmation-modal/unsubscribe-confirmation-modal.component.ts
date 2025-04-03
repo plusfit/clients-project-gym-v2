@@ -8,6 +8,7 @@ import {
   IonFooter,
   IonButton,
   IonIcon,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { Schedule } from '@feature/schedule/state/schedule.state';
 
@@ -28,6 +29,7 @@ import { Schedule } from '@feature/schedule/state/schedule.state';
     IonFooter,
     IonButton,
     IonIcon,
+    IonSpinner,
   ],
 })
 export class UnsubscribeConfirmationModalComponent {
@@ -35,6 +37,11 @@ export class UnsubscribeConfirmationModalComponent {
    * El horario del que el usuario quiere desinscribirse
    */
   @Input() schedule!: Schedule | null;
+
+  /**
+   * Indica si se está procesando la solicitud
+   */
+  @Input() isLoading: boolean = false;
 
   /**
    * Evento emitido cuando el usuario confirma la desinscripción

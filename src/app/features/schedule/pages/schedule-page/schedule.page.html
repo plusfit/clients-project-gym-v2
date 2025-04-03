@@ -52,6 +52,7 @@
     <ng-template>
       <app-enroll-confirmation-modal
         [schedule]="selectedSchedule"
+        [isLoading]="loading"
         (confirm)="onEnrollConfirmed()"
         (cancel)="onEnrollModalDismiss()"
       ></app-enroll-confirmation-modal>
@@ -66,6 +67,7 @@
     <ng-template>
       <app-unsubscribe-confirmation-modal
         [schedule]="selectedSchedule"
+        [isLoading]="loading"
         (confirm)="onUnsubscribeConfirmed()"
         (cancel)="onUnsubscribeModalDismiss()"
       ></app-unsubscribe-confirmation-modal>

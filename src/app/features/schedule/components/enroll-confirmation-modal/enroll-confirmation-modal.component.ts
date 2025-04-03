@@ -11,6 +11,7 @@ import {
   IonCol,
   IonLabel,
   IonIcon,
+  IonSpinner,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import { Schedule } from '../schedule-card/schedule-card.component';
@@ -37,6 +38,7 @@ import { Schedule } from '../schedule-card/schedule-card.component';
     IonCol,
     IonLabel,
     IonIcon,
+    IonSpinner,
   ],
 })
 export class EnrollConfirmationModalComponent {
@@ -44,6 +46,11 @@ export class EnrollConfirmationModalComponent {
    * El horario al que el usuario se quiere inscribir
    */
   @Input() schedule!: Schedule | null;
+
+  /**
+   * Indica si se está procesando la solicitud
+   */
+  @Input() isLoading: boolean = false;
 
   /**
    * Evento emitido cuando el usuario confirma la inscripción

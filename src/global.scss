@@ -249,3 +249,49 @@ ion-header ion-toolbar ion-title {
   font-weight: normal;
   font-style: normal;
 }
+
+/* Custom Toast Styles */
+.custom-toast {
+  --border-radius: 8px;
+  --box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  padding: 4px 8px;
+
+  &::part(message) {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  &::part(icon) {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  &::part(button) {
+    color: currentColor;
+    font-size: 20px;
+  }
+}
+
+/* Toast colors */
+.custom-toast.toast-success {
+  --background: #2dd36f;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-error {
+  --background: #eb445a;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-warning {
+  --background: #ffc409;
+  --color: #000000;
+}
+
+.custom-toast.toast-info {
+  --background: #3880ff;
+  --color: #ffffff;
+}
