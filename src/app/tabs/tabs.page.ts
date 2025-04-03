@@ -47,6 +47,7 @@ import {
   listOutline,
   readerOutline,
   flashOutline,
+  warningOutline,
 } from 'ionicons/icons';
 
 @Component({
@@ -101,6 +102,7 @@ export class TabsPage {
       listOutline,
       readerOutline,
       flashOutline,
+      warningOutline,
     });
   }
 }
