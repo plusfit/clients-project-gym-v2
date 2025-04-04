@@ -18,15 +18,7 @@ export class DaySelectorComponent {
 	@Input() enrollmentsByDay: DayEnrollment[] = [];
 	@Output() daySelected = new EventEmitter<string>();
 
-	days: string[] = [
-		"Lunes",
-		"Martes",
-		"Miércoles",
-		"Jueves",
-		"Viernes",
-		"Sábado",
-		"Domingo",
-	];
+	days: string[] = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 
 	selectedDay = "Lunes";
 

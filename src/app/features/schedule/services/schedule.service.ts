@@ -40,8 +40,6 @@ export class ScheduleService {
 	}
 
 	unenrollFromSchedule(scheduleId: string, userId: string): Observable<any> {
-		return this.http.delete<any>(
-			`${this.apiUrl}/deleteClient/${scheduleId}/${userId}`,
-		);
+		return this.http.delete<any>(`${this.apiUrl}/deleteClient/${scheduleId}/${userId}`);
 	}
 }

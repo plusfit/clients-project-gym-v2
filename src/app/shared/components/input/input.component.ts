@@ -22,6 +22,5 @@ export class InputComponent {
 	@Input() type = "text";
 
 	value = "";
-	inputClasses =
-		"rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
+	inputClasses = "rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500";
 }

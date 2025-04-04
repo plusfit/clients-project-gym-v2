@@ -51,9 +51,7 @@ export class ScheduleState {
 	static getUserTotalEnrollments(state: ScheduleStateModel) {
 		return (userId: string) => {
 			// Contar en cuántos horarios en total está inscrito el usuario
-			return state.schedules.filter(
-				(schedule) => schedule.clients && schedule.clients.includes(userId),
-			).length;
+			return state.schedules.filter((schedule) => schedule.clients && schedule.clients.includes(userId)).length;
 		};
 	}
 
@@ -77,10 +75,7 @@ export class ScheduleState {
 	}
 
 	@Action(UnenrollFromSchedule)
-	unenroll(
-		ctx: StateContext<ScheduleStateModel>,
-		action: UnenrollFromSchedule,
-	) {
+	unenroll(ctx: StateContext<ScheduleStateModel>, action: UnenrollFromSchedule) {
 		const state = ctx.getState();
 		const schedules = state.schedules.map((schedule) => {
 			if (schedule._id === action.scheduleId) {

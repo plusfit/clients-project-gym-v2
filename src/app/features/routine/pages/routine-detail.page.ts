@@ -3,11 +3,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
 import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
-import {
-	LoadRoutineById,
-	LoadRoutines,
-	RoutineState,
-} from "@feature/routine/state/routine.state";
+import { LoadRoutineById, LoadRoutines, RoutineState } from "@feature/routine/state/routine.state";
 import {
 	IonBackButton,
 	IonButtons,
@@ -20,11 +16,7 @@ import {
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import {
-	Routine,
-	SubRoutine,
-	SubRoutineWithExerciseDetails,
-} from "../interfaces/routine.interface";
+import { Routine, SubRoutine, SubRoutineWithExerciseDetails } from "../interfaces/routine.interface";
 
 @Component({
 	selector: "app-routine-detail-page",
@@ -212,18 +204,14 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		this.actions$
-			.pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$))
-			.subscribe(() => {
-				const routine = this.store.selectSnapshot(
-					RoutineState.getSelectedRoutine,
-				);
+		this.actions$.pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$)).subscribe(() => {
+			const routine = this.store.selectSnapshot(RoutineState.getSelectedRoutine);
 
-				if (routine) {
-					this.routine = routine;
-					this.subroutines = routine.subRoutines as SubRoutine[];
-				}
-			});
+			if (routine) {
+				this.routine = routine;
+				this.subroutines = routine.subRoutines as SubRoutine[];
+			}
+		});
 
 		this.authFacade.user$.subscribe((user) => {
 			if (user && user.routineId) {

@@ -3,13 +3,7 @@ import { AuthState } from "@feature/auth/state/auth.state";
 import { Store } from "@ngxs/store";
 import { Observable, catchError, map } from "rxjs";
 import { tap } from "rxjs/operators";
-import {
-	EnrollInSchedule,
-	Schedule,
-	ScheduleState,
-	SetSchedules,
-	UnenrollFromSchedule,
-} from "../state/schedule.state";
+import { EnrollInSchedule, Schedule, ScheduleState, SetSchedules, UnenrollFromSchedule } from "../state/schedule.state";
 import { ScheduleService } from "./schedule.service";
 
 @Injectable({
@@ -56,10 +50,7 @@ export class ScheduleFacadeService {
 		);
 	}
 
-	unenrollUserFromSchedule(
-		scheduleId: string,
-		userId: string,
-	): Observable<any> {
+	unenrollUserFromSchedule(scheduleId: string, userId: string): Observable<any> {
 		return this.scheduleService.unenrollFromSchedule(scheduleId, userId).pipe(
 			tap(() => {
 				this.store.dispatch(new UnenrollFromSchedule(scheduleId, userId));

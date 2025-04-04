@@ -1,13 +1,7 @@
 import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { User } from "@feature/profile/interfaces/user.interface";
-import {
-	IonContent,
-	IonHeader,
-	IonSpinner,
-	IonTitle,
-	IonToolbar,
-} from "@ionic/angular/standalone";
+import { IonContent, IonHeader, IonSpinner, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { Observable, switchMap } from "rxjs";
 import { ProfileImageNameComponent } from "../components/profile-image-name-info/profile-image-name-info.component";
@@ -50,11 +44,11 @@ export class ProfilePage implements OnInit {
 		this.store.dispatch(new LoadUser(this.id));
 
 		this.user$.subscribe((user) => {
-			if (user && user.userInfo && user.userInfo.dateBirthday) {
+			if (user?.userInfo?.dateBirthday) {
 				this.age = this.calculateAge(new Date(user.userInfo.dateBirthday));
 			}
 
-			if (user && user.planId) {
+			if (user?.planId) {
 				this.store.dispatch(new LoadPlan(user.planId));
 			}
 		});

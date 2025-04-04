@@ -1,10 +1,4 @@
-import {
-	AsyncPipe,
-	NgClass,
-	NgIf,
-	NgOptimizedImage,
-	UpperCasePipe,
-} from "@angular/common";
+import { AsyncPipe, NgClass, NgIf, NgOptimizedImage, UpperCasePipe } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
@@ -23,10 +17,7 @@ import {
 	IonToolbar,
 } from "@ionic/angular/standalone";
 
-import {
-	LoadSelectedExercise,
-	RoutineState,
-} from "@feature/routine/state/routine.state";
+import { LoadSelectedExercise, RoutineState } from "@feature/routine/state/routine.state";
 import { Select, Store } from "@ngxs/store";
 import { PluralizePipe } from "@shared/pipes/pluralize.pipe";
 import { Observable } from "rxjs";

@@ -1,11 +1,5 @@
 import { Component, Input } from "@angular/core";
-import {
-	IonCard,
-	IonCardContent,
-	IonCardHeader,
-	IonCardTitle,
-	IonIcon,
-} from "@ionic/angular/standalone";
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@ionic/angular/standalone";
 @Component({
 	selector: "app-profile-personal-info",
 	standalone: true,

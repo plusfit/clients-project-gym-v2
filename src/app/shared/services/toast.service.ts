@@ -13,11 +13,7 @@ export class ToastService {
 	 * @param type Tipo de mensaje (success, error, warning, info)
 	 * @param duration Duración del toast en ms (default: 2500ms)
 	 */
-	async showToast(
-		message: string,
-		type: "success" | "error" | "warning" | "info" = "info",
-		duration = 2500,
-	) {
+	async showToast(message: string, type: "success" | "error" | "warning" | "info" = "info", duration = 2500) {
 		const icon = this.getIconForType(type);
 		const color = this.getColorForType(type);
 

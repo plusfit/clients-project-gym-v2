@@ -1,14 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { ExerciseCardComponent } from "@feature/routine/components/exercise-card.component";
-import {
-	IonCard,
-	IonCardContent,
-	IonCardHeader,
-	IonCardTitle,
-	IonIcon,
-	IonList,
-} from "@ionic/angular/standalone";
+import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonList } from "@ionic/angular/standalone";
 import { SubRoutine } from "../interfaces/routine.interface";
 
 @Component({

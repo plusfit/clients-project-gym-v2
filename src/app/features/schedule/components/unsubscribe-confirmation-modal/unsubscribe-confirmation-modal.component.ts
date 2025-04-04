@@ -21,16 +21,7 @@ import {
 	templateUrl: "./unsubscribe-confirmation-modal.component.html",
 	styleUrls: ["./unsubscribe-confirmation-modal.component.scss"],
 	standalone: true,
-	imports: [
-		CommonModule,
-		IonHeader,
-		IonToolbar,
-		IonTitle,
-		IonFooter,
-		IonButton,
-		IonIcon,
-		IonSpinner,
-	],
+	imports: [CommonModule, IonHeader, IonToolbar, IonTitle, IonFooter, IonButton, IonIcon, IonSpinner],
 })
 export class UnsubscribeConfirmationModalComponent {
 	/**
