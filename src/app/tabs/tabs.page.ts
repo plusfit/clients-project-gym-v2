@@ -10,6 +10,7 @@ import {
 	barbellOutline,
 	bedOutline,
 	bicycleOutline,
+	bookmarkOutline,
 	calendarClearOutline,
 	calendarOutline,
 	chatboxEllipsesOutline,
@@ -35,6 +36,8 @@ import {
 	phonePortraitOutline,
 	readerOutline,
 	repeatOutline,
+	starOutline,
+	starSharp,
 	stopwatchOutline,
 	sunnyOutline,
 	timeOutline,
@@ -97,6 +100,9 @@ export class TabsPage {
 			readerOutline,
 			flashOutline,
 			warningOutline,
+			bookmarkOutline,
+			starSharp,
+			starOutline,
 		});
 	}
 }

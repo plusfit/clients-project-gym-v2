@@ -11,6 +11,9 @@ export interface Exercise {
 	minutes?: number;
 	imageUrl?: string;
 	videoUrl?: string;
+	category?: string;
+	gifUrl?: string;
+	__v?: number;
 }
 
 export interface SubRoutine {
