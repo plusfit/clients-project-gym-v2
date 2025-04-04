@@ -19,7 +19,7 @@ export class DayTranslatePipe implements PipeTransform {
 		try {
 			const date = typeof value === "string" ? new Date(value) : value;
 
-			if (isNaN(date.getTime())) return "Fecha inválida";
+			if (Number.isNaN(date.getTime())) return "Fecha inválida";
 
 			return this.daysMap[date.getDay()];
 		} catch (error) {

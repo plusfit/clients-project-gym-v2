@@ -86,7 +86,7 @@ export class HomeService {
 					const subRoutineIndex = userDayIndex % routine.subRoutines.length;
 					return routine.subRoutines[subRoutineIndex];
 				}
-					return null;
+				return null;
 			}),
 			catchError((error) => {
 				return of(null);
