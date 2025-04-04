@@ -25,7 +25,7 @@ import {
 	IonListHeader,
 	IonSpinner,
 } from "@ionic/angular/standalone";
-import { Subject, catchError, forkJoin, map, of, takeUntil } from "rxjs";
+import { Subject, catchError, forkJoin, of, takeUntil } from "rxjs";
 import { ExerciseItemComponent } from "../exercise-item/exercise-item.component";
 
 @Component({
@@ -65,7 +65,7 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["routine"] && !changes["routine"].firstChange) {
+		if (changes["routine"]) {
 			this.processExercises();
 		}
 	}
@@ -101,7 +101,9 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 				return;
 			}
 
-			const exerciseRequests = exerciseIds.map((id) => this.exerciseService.getExerciseById(id));
+			const exerciseRequests = exerciseIds.map((id) =>
+				this.exerciseService.getExerciseById(id).pipe(catchError(() => of(null))),
+			);
 
 			forkJoin(exerciseRequests)
 				.pipe(takeUntil(this.destroy$))
@@ -111,8 +113,8 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 						this.isLoading = false;
 						this.cd.markForCheck();
 					},
-					error: (error) => {
-						console.error("Error loading exercises:", error);
+					error: () => {
+						console.error("Error loading exercises");
 						this.loadedExercises = [];
 						this.isLoading = false;
 						this.cd.markForCheck();

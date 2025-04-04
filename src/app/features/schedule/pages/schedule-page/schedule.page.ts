@@ -11,7 +11,6 @@ import { UnsubscribeConfirmationModalComponent } from "@feature/schedule/compone
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { Schedule, ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
-	IonAlert,
 	IonCol,
 	IonContent,
 	IonGrid,
@@ -50,7 +49,6 @@ interface DayEnrollment {
 		IonGrid,
 		IonRow,
 		IonCol,
-		IonAlert,
 		IonSpinner,
 	],
 })
@@ -73,9 +71,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 	showEnrollModal = false;
 	showUnsubscribeModal = false;
 	selectedSchedule: Schedule | null = null;
-
-	showAlert = false;
-	alertMessage = "";
 
 	private subscriptions = new Subscription();
 
@@ -229,9 +224,10 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 				const plan = this.store.selectSnapshot(UserState.getPlan);
 				const maxEnrollments = plan?.days || this.userPlan.days;
 
-				this.alertMessage = `Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`;
-				this.showAlert = true;
-
+				// Usar toast warning en lugar de alert
+				this.toastService.showWarning(
+					`Ya estás inscrito en el número máximo de horarios permitidos (${maxEnrollments}). Debes desinscribirte de un horario para inscribirte en otro.`,
+				);
 				return;
 			}
 
@@ -329,11 +325,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 	onUnsubscribeModalDismiss() {
 		this.showUnsubscribeModal = false;
 		this.selectedSchedule = null;
-	}
-
-	onAlertDismiss() {
-		this.showAlert = false;
-		this.alertMessage = "";
 	}
 
 	private closeModals() {

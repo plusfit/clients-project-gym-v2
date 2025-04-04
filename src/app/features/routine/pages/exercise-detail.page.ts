@@ -1,5 +1,5 @@
 import { AsyncPipe, NgClass, NgIf, NgOptimizedImage, UpperCasePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
 	IonBackButton,
@@ -20,7 +20,7 @@ import {
 import { LoadSelectedExercise, RoutineState } from "@feature/routine/state/routine.state";
 import { Select, Store } from "@ngxs/store";
 import { PluralizePipe } from "@shared/pipes/pluralize.pipe";
-import { Observable } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
 import { Exercise } from "../interfaces/routine.interface";
 
 declare module "../interfaces/routine.interface" {
@@ -58,10 +58,11 @@ declare module "../interfaces/routine.interface" {
 		PluralizePipe,
 	],
 })
-export class ExerciseDetailPage implements OnInit {
+export class ExerciseDetailPage implements OnInit, OnDestroy {
 	@Select(RoutineState.getSelectedExercise)
 	selectedExercise$!: Observable<Exercise | null>;
 	isLoading = false;
+	private destroy$ = new Subject<void>();
 
 	constructor(
 		private route: ActivatedRoute,
@@ -72,14 +73,22 @@ export class ExerciseDetailPage implements OnInit {
 		const exerciseId = this.route.snapshot.paramMap.get("id");
 		if (exerciseId) {
 			this.isLoading = true;
-			this.store.dispatch(new LoadSelectedExercise(exerciseId)).subscribe({
-				next: () => {
-					this.isLoading = false;
-				},
-				error: () => {
-					this.isLoading = false;
-				},
-			});
+			this.store
+				.dispatch(new LoadSelectedExercise(exerciseId))
+				.pipe(takeUntil(this.destroy$))
+				.subscribe({
+					next: () => {
+						this.isLoading = false;
+					},
+					error: () => {
+						this.isLoading = false;
+					},
+				});
 		}
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
 	}
 }
