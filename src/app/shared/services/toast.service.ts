@@ -81,7 +81,6 @@ export class ToastService {
 				return "alert-circle-outline";
 			case "warning":
 				return "warning-outline";
-			case "info":
 			default:
 				return "information-circle-outline";
 		}
@@ -95,7 +94,6 @@ export class ToastService {
 				return "danger";
 			case "warning":
 				return "warning";
-			case "info":
 			default:
 				return "primary";
 		}
