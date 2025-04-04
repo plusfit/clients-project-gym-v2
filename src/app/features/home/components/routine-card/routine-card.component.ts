@@ -1,152 +1,152 @@
+import { NgForOf, NgIf, UpperCasePipe } from "@angular/common";
 import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ChangeDetectorRef,
-  OnInit,
-} from '@angular/core';
-import { ExerciseItemComponent } from '../exercise-item/exercise-item.component';
-import { NgForOf, NgIf, UpperCasePipe } from '@angular/common';
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	OnDestroy,
+	OnInit,
+	Output,
+	SimpleChanges,
+} from "@angular/core";
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonIcon,
-  IonLabel,
-  IonList,
-  IonListHeader,
-  IonSpinner,
-  IonItem,
-} from '@ionic/angular/standalone';
+	Exercise,
+	SubRoutine,
+} from "@feature/routine/interfaces/routine.interface";
+import { ExerciseService } from "@feature/routine/services/exercise.service";
 import {
-  SubRoutine,
-  Exercise,
-} from '@feature/routine/interfaces/routine.interface';
-import { ExerciseService } from '@feature/routine/services/exercise.service';
-import { catchError, forkJoin, map, of, Subject, takeUntil } from 'rxjs';
+	IonCard,
+	IonCardContent,
+	IonCardHeader,
+	IonCardSubtitle,
+	IonCardTitle,
+	IonIcon,
+	IonItem,
+	IonLabel,
+	IonList,
+	IonListHeader,
+	IonSpinner,
+} from "@ionic/angular/standalone";
+import { Subject, catchError, forkJoin, map, of, takeUntil } from "rxjs";
+import { ExerciseItemComponent } from "../exercise-item/exercise-item.component";
 
 @Component({
-  selector: 'app-routine-card',
-  templateUrl: './routine-card.component.html',
-  styleUrls: ['./routine-card.component.scss'],
-  standalone: true,
-  imports: [
-    ExerciseItemComponent,
-    NgForOf,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonIcon,
-    IonCardContent,
-    NgIf,
-    IonSpinner,
-  ],
+	selector: "app-routine-card",
+	templateUrl: "./routine-card.component.html",
+	styleUrls: ["./routine-card.component.scss"],
+	standalone: true,
+	imports: [
+		ExerciseItemComponent,
+		NgForOf,
+		IonCard,
+		IonCardHeader,
+		IonCardTitle,
+		IonIcon,
+		IonCardContent,
+		NgIf,
+		IonSpinner,
+	],
 })
 export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() routine!: SubRoutine | null;
-  @Input() isRestDay: boolean = false;
-  @Input() isEnrolled: boolean = false;
-  @Output() exerciseClicked = new EventEmitter<Exercise>();
+	@Input() routine!: SubRoutine | null;
+	@Input() isRestDay = false;
+	@Input() isEnrolled = false;
+	@Output() exerciseClicked = new EventEmitter<Exercise>();
 
-  loadedExercises: Exercise[] = [];
-  isLoading = true;
-  private destroy$ = new Subject<void>();
+	loadedExercises: Exercise[] = [];
+	isLoading = true;
+	private destroy$ = new Subject<void>();
 
-  constructor(
-    private exerciseService: ExerciseService,
-    private cd: ChangeDetectorRef,
-  ) {}
+	constructor(
+		private exerciseService: ExerciseService,
+		private cd: ChangeDetectorRef,
+	) {}
 
-  ngOnInit(): void {
-    this.processExercises();
-  }
+	ngOnInit(): void {
+		this.processExercises();
+	}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['routine'] && !changes['routine'].firstChange) {
-      this.processExercises();
-    }
-  }
+	ngOnChanges(changes: SimpleChanges): void {
+		if (changes["routine"] && !changes["routine"].firstChange) {
+			this.processExercises();
+		}
+	}
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 
-  /**
-   * Procesa los ejercicios de la rutina, convirtiendo IDs en objetos Exercise si es necesario
-   */
-  processExercises(): void {
-    if (!this.routine?.exercises) {
-      this.loadedExercises = [];
-      this.isLoading = false;
-      return;
-    }
+	/**
+	 * Procesa los ejercicios de la rutina, convirtiendo IDs en objetos Exercise si es necesario
+	 */
+	processExercises(): void {
+		if (!this.routine?.exercises) {
+			this.loadedExercises = [];
+			this.isLoading = false;
+			return;
+		}
 
-    if (
-      Array.isArray(this.routine.exercises) &&
-      this.routine.exercises.length > 0
-    ) {
-      if (typeof this.routine.exercises[0] === 'object') {
-        this.loadedExercises = this.routine.exercises as Exercise[];
-        this.isLoading = false;
-        return;
-      }
+		if (
+			Array.isArray(this.routine.exercises) &&
+			this.routine.exercises.length > 0
+		) {
+			if (typeof this.routine.exercises[0] === "object") {
+				this.loadedExercises = this.routine.exercises as Exercise[];
+				this.isLoading = false;
+				return;
+			}
 
-      this.isLoading = true;
-      const exerciseIds = this.routine.exercises as string[];
+			this.isLoading = true;
+			const exerciseIds = this.routine.exercises as string[];
 
-      if (exerciseIds.length === 0) {
-        this.loadedExercises = [];
-        this.isLoading = false;
-        return;
-      }
+			if (exerciseIds.length === 0) {
+				this.loadedExercises = [];
+				this.isLoading = false;
+				return;
+			}
 
-      const exerciseRequests = exerciseIds.map((id) =>
-        this.exerciseService.getExerciseById(id),
-      );
+			const exerciseRequests = exerciseIds.map((id) =>
+				this.exerciseService.getExerciseById(id),
+			);
 
-      forkJoin(exerciseRequests)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (exercises) => {
-            this.loadedExercises = exercises.filter(
-              (exercise) => exercise !== null,
-            ) as Exercise[];
-            this.isLoading = false;
-            this.cd.markForCheck();
-          },
-          error: (error) => {
-            console.error('Error loading exercises:', error);
-            this.loadedExercises = [];
-            this.isLoading = false;
-            this.cd.markForCheck();
-          },
-        });
-    } else {
-      this.loadedExercises = [];
-      this.isLoading = false;
-    }
-  }
+			forkJoin(exerciseRequests)
+				.pipe(takeUntil(this.destroy$))
+				.subscribe({
+					next: (exercises) => {
+						this.loadedExercises = exercises.filter(
+							(exercise) => exercise !== null,
+						) as Exercise[];
+						this.isLoading = false;
+						this.cd.markForCheck();
+					},
+					error: (error) => {
+						console.error("Error loading exercises:", error);
+						this.loadedExercises = [];
+						this.isLoading = false;
+						this.cd.markForCheck();
+					},
+				});
+		} else {
+			this.loadedExercises = [];
+			this.isLoading = false;
+		}
+	}
 
-  /**
-   * Función de utilidad para verificar si los ejercicios son objetos o strings
-   */
-  private areExerciseObjects(
-    exercises: Exercise[] | string[],
-  ): exercises is Exercise[] {
-    return (
-      exercises.length === 0 ||
-      (exercises.length > 0 && typeof exercises[0] !== 'string')
-    );
-  }
+	/**
+	 * Función de utilidad para verificar si los ejercicios son objetos o strings
+	 */
+	private areExerciseObjects(
+		exercises: Exercise[] | string[],
+	): exercises is Exercise[] {
+		return (
+			exercises.length === 0 ||
+			(exercises.length > 0 && typeof exercises[0] !== "string")
+		);
+	}
 
-  onExerciseClick(exercise: Exercise): void {
-    this.exerciseClicked.emit(exercise);
-  }
+	onExerciseClick(exercise: Exercise): void {
+		this.exerciseClicked.emit(exercise);
+	}
 }
