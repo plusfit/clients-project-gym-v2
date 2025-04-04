@@ -214,7 +214,7 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 		});
 
 		this.authFacade.user$.subscribe((user) => {
-			if (user && user.routineId) {
+			if (user?.routineId) {
 				this.store.dispatch(new LoadRoutineById(user.routineId));
 			} else {
 				this.store.dispatch(new LoadRoutines()).subscribe(() => {

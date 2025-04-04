@@ -22,9 +22,8 @@ export class ScheduleService {
 			map((response) => {
 				if (response.success) {
 					return response.data;
-				} else {
-					return [];
 				}
+				return [];
 			}),
 		);
 	}

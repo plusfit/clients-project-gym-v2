@@ -37,8 +37,6 @@ export class AuthService {
 
 	private mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockToken";
 
-	constructor() {}
-
 	login(credentials: LoginCredentials): Observable<AuthResponse> {
 		// Simulamos la verificación de credenciales
 		if (credentials.email === this.mockUser.email && credentials.password === this.mockUser.userInfo.password) {
@@ -52,9 +50,8 @@ export class AuthService {
 					localStorage.setItem("token", response.token);
 				}),
 			);
-		} else {
-			return throwError(() => new Error("Credenciales inválidas")).pipe(delay(300));
 		}
+		return throwError(() => new Error("Credenciales inválidas")).pipe(delay(300));
 	}
 
 	getCurrentUser(): Observable<User> {
@@ -78,7 +75,7 @@ export class AuthService {
 		// Simulamos renovación de token
 		return of({
 			user: this.mockUser,
-			token: this.mockToken + ".refreshed",
+			token: `${this.mockToken}.refreshed`,
 		}).pipe(delay(300));
 	}
 }

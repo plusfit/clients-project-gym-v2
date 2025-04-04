@@ -51,7 +51,7 @@ export class ScheduleState {
 	static getUserTotalEnrollments(state: ScheduleStateModel) {
 		return (userId: string) => {
 			// Contar en cuántos horarios en total está inscrito el usuario
-			return state.schedules.filter((schedule) => schedule.clients && schedule.clients.includes(userId)).length;
+			return state.schedules.filter((schedule) => schedule.clients?.includes(userId)).length;
 		};
 	}
 
