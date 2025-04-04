@@ -1,15 +1,7 @@
 import { provideHttpClient } from "@angular/common/http";
 import { bootstrapApplication } from "@angular/platform-browser";
-import {
-	PreloadAllModules,
-	RouteReuseStrategy,
-	provideRouter,
-	withPreloading,
-} from "@angular/router";
-import {
-	IonicRouteStrategy,
-	provideIonicAngular,
-} from "@ionic/angular/standalone";
+import { PreloadAllModules, RouteReuseStrategy, provideRouter, withPreloading } from "@angular/router";
+import { IonicRouteStrategy, provideIonicAngular } from "@ionic/angular/standalone";
 
 import { APP_INITIALIZER, importProvidersFrom } from "@angular/core";
 import { AuthInitializerService } from "@feature/auth/services/auth-initializer.service";
@@ -45,16 +37,13 @@ bootstrapApplication(AppComponent, {
 			multi: true,
 		},
 		importProvidersFrom(
-			NgxsModule.forRoot(
-				[HomeState, ScheduleState, RoutineState, UserState, AuthState],
-				{
-					developmentMode: !environment.production,
-					selectorOptions: {
-						suppressErrors: false,
-						injectContainerState: false,
-					},
+			NgxsModule.forRoot([HomeState, ScheduleState, RoutineState, UserState, AuthState], {
+				developmentMode: !environment.production,
+				selectorOptions: {
+					suppressErrors: false,
+					injectContainerState: false,
 				},
-			),
+			}),
 			NgxsReduxDevtoolsPluginModule.forRoot(),
 		),
 	],

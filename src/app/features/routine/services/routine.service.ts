@@ -35,19 +35,17 @@ export class RoutineService {
 	 *
 	 */
 	getAllRoutines(): Observable<Routine[]> {
-		return this.http
-			.get<{ success: boolean; data: Routine[] }>(`${this.apiUrl}/routines`)
-			.pipe(
-				map((response) => {
-					if (response.success) {
-						return response.data;
-					}
-					return [];
-				}),
-				catchError(() => {
-					return of([]);
-				}),
-			);
+		return this.http.get<{ success: boolean; data: Routine[] }>(`${this.apiUrl}/routines`).pipe(
+			map((response) => {
+				if (response.success) {
+					return response.data;
+				}
+				return [];
+			}),
+			catchError(() => {
+				return of([]);
+			}),
+		);
 	}
 
 	/**

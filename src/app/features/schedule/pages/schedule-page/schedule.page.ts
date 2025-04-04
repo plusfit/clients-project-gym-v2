@@ -9,10 +9,7 @@ import { EnrollConfirmationModalComponent } from "@feature/schedule/components/e
 import { ScheduleCardComponent } from "@feature/schedule/components/schedule-card/schedule-card.component";
 import { UnsubscribeConfirmationModalComponent } from "@feature/schedule/components/unsubscribe-confirmation-modal/unsubscribe-confirmation-modal.component";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
-import {
-	Schedule,
-	ScheduleState,
-} from "@feature/schedule/state/schedule.state";
+import { Schedule, ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
 	IonAlert,
 	IonCol,
@@ -112,10 +109,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		const planSub = this.plan$.subscribe((plan) => {
 			if (plan?.days) {
 				this.userPlan = { days: plan.days };
-				console.log(
-					"Plan del usuario cargado. Máximo horarios:",
-					this.userPlan.days,
-				);
+				console.log("Plan del usuario cargado. Máximo horarios:", this.userPlan.days);
 			}
 		});
 		this.subscriptions.add(planSub);
@@ -172,9 +166,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		this.enrolledDaysCount = enrolledDays.size;
 		this.totalEnrollments = totalCount;
 
-		console.log(
-			`Usuario inscrito en ${this.totalEnrollments} horarios. Máximo permitido: ${this.userPlan.days}`,
-		);
+		console.log(`Usuario inscrito en ${this.totalEnrollments} horarios. Máximo permitido: ${this.userPlan.days}`);
 	}
 
 	calculateEnrollmentsByDay(schedules: Schedule[]) {
@@ -182,15 +174,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		const dayCountMap = new Map<string, number>();
 
 		// Inicializar todos los días con 0
-		const allDays = [
-			"Lunes",
-			"Martes",
-			"Miércoles",
-			"Jueves",
-			"Viernes",
-			"Sábado",
-			"Domingo",
-		];
+		const allDays = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
 		for (const day of allDays) {
 			dayCountMap.set(day, 0);
 		}
@@ -220,18 +204,13 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 
 		// Contamos en cuántos horarios está inscrito actualmente
-		const currentEnrollments = allSchedules.filter(
-			(schedule) =>
-				schedule.clients?.includes(this.currentUserId),
-		).length;
+		const currentEnrollments = allSchedules.filter((schedule) => schedule.clients?.includes(this.currentUserId)).length;
 
 		// Obtenemos el máximo de horarios del plan
 		const plan = this.store.selectSnapshot(UserState.getPlan);
 		const maxEnrollments = plan?.days || this.userPlan.days;
 
-		console.log(
-			`Validación de horarios: Inscritos=${currentEnrollments}, Máximo=${maxEnrollments}`,
-		);
+		console.log(`Validación de horarios: Inscritos=${currentEnrollments}, Máximo=${maxEnrollments}`);
 
 		// Si ya está en el límite, no puede inscribirse en un nuevo horario
 		return currentEnrollments < maxEnrollments;
@@ -283,9 +262,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
 						// Recalcular inscripciones después de inscripción exitosa
 						setTimeout(() => {
-							const updatedSchedules = this.store.selectSnapshot(
-								ScheduleState.getSchedules,
-							);
+							const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 							this.calculateEnrollments(updatedSchedules);
 							this.calculateEnrollmentsByDay(updatedSchedules);
 						}, 300);
@@ -295,9 +272,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 						this.error = `Error al inscribirse: ${error.message}`;
 
 						// Show error toast
-						this.toastService.showError(
-							`No se pudo completar la inscripción: ${error.message || "Error desconocido"}`,
-						);
+						this.toastService.showError(`No se pudo completar la inscripción: ${error.message || "Error desconocido"}`);
 
 						this.closeModals();
 					},
@@ -326,9 +301,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 							`Te has desinscrito exitosamente del horario de ${scheduleInfo.startTime}:00 el día ${scheduleInfo.day}.`,
 						);
 
-						const updatedSchedules = this.store.selectSnapshot(
-							ScheduleState.getSchedules,
-						);
+						const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 						this.calculateEnrollments(updatedSchedules);
 						this.calculateEnrollmentsByDay(updatedSchedules);
 					},

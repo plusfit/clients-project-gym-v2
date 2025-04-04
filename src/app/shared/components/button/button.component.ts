@@ -23,8 +23,7 @@ export class ButtonComponent {
 	@Input() type = "button";
 
 	get customClasses(): string {
-		const baseClasses =
-			"py-2 px-4 rounded transition-colors duration-300 focus:outline-none";
+		const baseClasses = "py-2 px-4 rounded transition-colors duration-300 focus:outline-none";
 		const variants: { [key: string]: string } = {
 			primary: "bg-blue-500 hover:bg-blue-600 text-white",
 			secondary: "bg-gray-500 hover:bg-gray-600 text-white",

@@ -13,16 +13,7 @@ import { GoalPipe } from "../../../../shared/pipes/plan-goal.translate.pipe";
 @Component({
 	selector: "app-profile-image-name-info",
 	standalone: true,
-	imports: [
-		NgOptimizedImage,
-		IonCardContent,
-		IonIcon,
-		IonCard,
-		IonCardHeader,
-		IonCardTitle,
-		IonCardSubtitle,
-		GoalPipe,
-	],
+	imports: [NgOptimizedImage, IonCardContent, IonIcon, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, GoalPipe],
 	templateUrl: "./profile-image-name-info.component.html",
 	styleUrl: "../../pages/profile.page.scss",
 })

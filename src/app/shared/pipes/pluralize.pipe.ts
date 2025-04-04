@@ -12,11 +12,7 @@ export class PluralizePipe implements PipeTransform {
 	 * @param plural La forma plural de la unidad (opcional, se genera automáticamente si no se proporciona)
 	 * @returns La representación textual con la forma plural o singular correcta
 	 */
-	transform(
-		value: number | undefined | null,
-		singular: string,
-		pluralParam?: string,
-	): string {
+	transform(value: number | undefined | null, singular: string, pluralParam?: string): string {
 		if (!pluralParam) {
 			let finalPlural: string;
 			if (singular === "repetición") {

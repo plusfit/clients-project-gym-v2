@@ -123,30 +123,20 @@ export class RoutineState {
 	}
 
 	@Action(LoadUserRoutines)
-	loadUserRoutines(
-		ctx: StateContext<RoutineStateModel>,
-		action: LoadUserRoutines,
-	) {
-		console.log(
-			`RoutineState: Cargando rutinas para usuario con ID: ${action.userId}`,
-		);
+	loadUserRoutines(ctx: StateContext<RoutineStateModel>, action: LoadUserRoutines) {
+		console.log(`RoutineState: Cargando rutinas para usuario con ID: ${action.userId}`);
 		ctx.patchState({ loading: true, error: null });
 
 		return this.routineService.getUserRoutines(action.userId).pipe(
 			tap((routines) => {
-				console.log(
-					`RoutineState: Se cargaron ${routines.length} rutinas para el usuario`,
-				);
+				console.log(`RoutineState: Se cargaron ${routines.length} rutinas para el usuario`);
 				ctx.patchState({
 					routines,
 					loading: false,
 				});
 			}),
 			catchError((error) => {
-				console.error(
-					"RoutineState: Error al cargar las rutinas del usuario",
-					error,
-				);
+				console.error("RoutineState: Error al cargar las rutinas del usuario", error);
 				ctx.patchState({
 					loading: false,
 					error: error.message || "Error al cargar las rutinas del usuario",
@@ -157,10 +147,7 @@ export class RoutineState {
 	}
 
 	@Action(LoadRoutineById)
-	loadRoutineById(
-		ctx: StateContext<RoutineStateModel>,
-		action: LoadRoutineById,
-	) {
+	loadRoutineById(ctx: StateContext<RoutineStateModel>, action: LoadRoutineById) {
 		ctx.patchState({ loading: true, error: null });
 
 		return this.routineService.getRoutineById(action.id).pipe(
@@ -188,10 +175,7 @@ export class RoutineState {
 	}
 
 	@Action(SetSelectedRoutine)
-	setSelectedRoutine(
-		ctx: StateContext<RoutineStateModel>,
-		action: SetSelectedRoutine,
-	) {
+	setSelectedRoutine(ctx: StateContext<RoutineStateModel>, action: SetSelectedRoutine) {
 		ctx.patchState({
 			selectedRoutine: action.routine,
 			selectedSubRoutine: null, // Reseteamos la subrutina seleccionada
@@ -199,20 +183,14 @@ export class RoutineState {
 	}
 
 	@Action(SetSelectedSubRoutine)
-	setSelectedSubRoutine(
-		ctx: StateContext<RoutineStateModel>,
-		action: SetSelectedSubRoutine,
-	) {
+	setSelectedSubRoutine(ctx: StateContext<RoutineStateModel>, action: SetSelectedSubRoutine) {
 		ctx.patchState({
 			selectedSubRoutine: action.subRoutine,
 		});
 	}
 
 	@Action(LoadSelectedExercise)
-	loadSelectedExercise(
-		ctx: StateContext<RoutineStateModel>,
-		action: LoadSelectedExercise,
-	) {
+	loadSelectedExercise(ctx: StateContext<RoutineStateModel>, action: LoadSelectedExercise) {
 		ctx.patchState({ loading: true, error: null });
 
 		return this.exerciseService.getExerciseById(action.exerciseId).pipe(

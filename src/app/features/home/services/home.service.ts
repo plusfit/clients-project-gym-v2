@@ -1,9 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AuthService } from "@feature/auth/services/auth.service";
-import {
-	Routine,
-	SubRoutine,
-} from "@feature/routine/interfaces/routine.interface";
+import { Routine, SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { RoutineService } from "@feature/routine/services/routine.service";
 import { ScheduleService } from "@feature/schedule/services/schedule.service";
 import { Schedule } from "@feature/schedule/state/schedule.state";
@@ -32,7 +29,7 @@ export class HomeService {
 
 	getUserRoutine(): Observable<Routine | null> {
 		const currentUser = this.authService.getCurrentUserSync();
-		if (currentUser && currentUser.routineId) {
+		if (currentUser?.routineId) {
 			return this.routineService.getRoutineById(currentUser.routineId);
 		}
 		return of(null);
@@ -42,10 +39,7 @@ export class HomeService {
 		return this.scheduleService.getSchedules().pipe(
 			map((schedules) => {
 				const currentUser = this.authService.getCurrentUserSync();
-				return schedules.filter(
-					(schedule) =>
-						schedule.clients && schedule.clients.includes(currentUser._id),
-				);
+				return schedules.filter((schedule) => schedule.clients?.includes(currentUser._id));
 			}),
 			catchError((error) => {
 				return of([]);
@@ -53,10 +47,7 @@ export class HomeService {
 		);
 	}
 
-	getRoutineForSpecificDay(
-		routine: Routine,
-		dayNumber: number,
-	): SubRoutine | null {
+	getRoutineForSpecificDay(routine: Routine, dayNumber: number): SubRoutine | null {
 		if (!routine || !routine.subRoutines || routine.subRoutines.length === 0) {
 			return null;
 		}
@@ -69,15 +60,7 @@ export class HomeService {
 		const today = new Date();
 		const currentDayOfWeek = today.getDay();
 
-		const dayNames = [
-			"Domingo",
-			"Lunes",
-			"Martes",
-			"Miércoles",
-			"Jueves",
-			"Viernes",
-			"Sábado",
-		];
+		const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 		const todayName = dayNames[currentDayOfWeek];
 
 		return forkJoin({
@@ -98,15 +81,12 @@ export class HomeService {
 				const todaySchedule = schedules.find((s) => s.day === todayName);
 
 				if (todaySchedule) {
-					const userDayIndex = sortedSchedules.findIndex(
-						(s) => s.day === todayName,
-					);
+					const userDayIndex = sortedSchedules.findIndex((s) => s.day === todayName);
 
 					const subRoutineIndex = userDayIndex % routine.subRoutines.length;
 					return routine.subRoutines[subRoutineIndex];
-				} else {
-					return null;
 				}
+					return null;
 			}),
 			catchError((error) => {
 				return of(null);

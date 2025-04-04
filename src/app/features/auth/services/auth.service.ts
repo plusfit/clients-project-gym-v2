@@ -1,12 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, of, throwError } from "rxjs";
 import { delay, tap } from "rxjs/operators";
-import {
-	AuthResponse,
-	LoginCredentials,
-	User,
-	UserRole,
-} from "../interfaces/user.interface";
+import { AuthResponse, LoginCredentials, User, UserRole } from "../interfaces/user.interface";
 
 @Injectable({
 	providedIn: "root",
@@ -46,10 +41,7 @@ export class AuthService {
 
 	login(credentials: LoginCredentials): Observable<AuthResponse> {
 		// Simulamos la verificación de credenciales
-		if (
-			credentials.email === this.mockUser.email &&
-			credentials.password === this.mockUser.userInfo.password
-		) {
+		if (credentials.email === this.mockUser.email && credentials.password === this.mockUser.userInfo.password) {
 			return of({
 				user: this.mockUser,
 				token: this.mockToken,
@@ -61,9 +53,7 @@ export class AuthService {
 				}),
 			);
 		} else {
-			return throwError(() => new Error("Credenciales inválidas")).pipe(
-				delay(300),
-			);
+			return throwError(() => new Error("Credenciales inválidas")).pipe(delay(300));
 		}
 	}
 

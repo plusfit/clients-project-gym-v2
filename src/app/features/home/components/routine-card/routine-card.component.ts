@@ -10,10 +10,7 @@ import {
 	Output,
 	SimpleChanges,
 } from "@angular/core";
-import {
-	Exercise,
-	SubRoutine,
-} from "@feature/routine/interfaces/routine.interface";
+import { Exercise, SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ExerciseService } from "@feature/routine/services/exercise.service";
 import {
 	IonCard,
@@ -88,10 +85,7 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 			return;
 		}
 
-		if (
-			Array.isArray(this.routine.exercises) &&
-			this.routine.exercises.length > 0
-		) {
+		if (Array.isArray(this.routine.exercises) && this.routine.exercises.length > 0) {
 			if (typeof this.routine.exercises[0] === "object") {
 				this.loadedExercises = this.routine.exercises as Exercise[];
 				this.isLoading = false;
@@ -107,17 +101,13 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 				return;
 			}
 
-			const exerciseRequests = exerciseIds.map((id) =>
-				this.exerciseService.getExerciseById(id),
-			);
+			const exerciseRequests = exerciseIds.map((id) => this.exerciseService.getExerciseById(id));
 
 			forkJoin(exerciseRequests)
 				.pipe(takeUntil(this.destroy$))
 				.subscribe({
 					next: (exercises) => {
-						this.loadedExercises = exercises.filter(
-							(exercise) => exercise !== null,
-						) as Exercise[];
+						this.loadedExercises = exercises.filter((exercise) => exercise !== null) as Exercise[];
 						this.isLoading = false;
 						this.cd.markForCheck();
 					},
@@ -137,13 +127,8 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 	/**
 	 * Función de utilidad para verificar si los ejercicios son objetos o strings
 	 */
-	private areExerciseObjects(
-		exercises: Exercise[] | string[],
-	): exercises is Exercise[] {
-		return (
-			exercises.length === 0 ||
-			(exercises.length > 0 && typeof exercises[0] !== "string")
-		);
+	private areExerciseObjects(exercises: Exercise[] | string[]): exercises is Exercise[] {
+		return exercises.length === 0 || (exercises.length > 0 && typeof exercises[0] !== "string");
 	}
 
 	onExerciseClick(exercise: Exercise): void {

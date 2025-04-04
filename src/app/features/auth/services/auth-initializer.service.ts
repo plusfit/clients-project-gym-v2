@@ -69,9 +69,6 @@ export class AuthInitializerService {
 	 * Implementación simple para evitar dependencias externas
 	 */
 	private isDevelopmentEnvironment(): boolean {
-		return (
-			window.location.hostname === "localhost" ||
-			window.location.hostname === "127.0.0.1"
-		);
+		return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
 	}
 }

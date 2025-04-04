@@ -1,13 +1,6 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import {
-	IonBadge,
-	IonCard,
-	IonCardContent,
-	IonCardHeader,
-	IonCardTitle,
-	IonIcon,
-} from "@ionic/angular/standalone";
+import { IonBadge, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@ionic/angular/standalone";
 
 /**
  * Interfaz Schedule que representa un horario
@@ -30,15 +23,7 @@ export interface Schedule {
 	templateUrl: "./schedule-card.component.html",
 	styleUrls: ["./schedule-card.component.scss"],
 	standalone: true,
-	imports: [
-		CommonModule,
-		IonCard,
-		IonCardContent,
-		IonCardHeader,
-		IonCardTitle,
-		IonIcon,
-		IonBadge,
-	],
+	imports: [CommonModule, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonBadge],
 })
 export class ScheduleCardComponent {
 	@Input() schedule!: Schedule;
@@ -50,19 +35,14 @@ export class ScheduleCardComponent {
 	 * Determina si el horario está lleno
 	 */
 	get isFull(): boolean {
-		return (
-			this.schedule.clients &&
-			this.schedule.clients.length >= this.schedule.maxCount
-		);
+		return this.schedule.clients && this.schedule.clients.length >= this.schedule.maxCount;
 	}
 
 	/**
 	 * Determina si el usuario actual está inscrito en este horario
 	 */
 	get isEnrolled(): boolean {
-		return (
-			this.schedule.clients?.includes(this.currentUserId)
-		);
+		return this.schedule.clients?.includes(this.currentUserId);
 	}
 
 	/**

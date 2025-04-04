@@ -8,22 +8,16 @@ export const routes: Routes = [
 		children: [
 			{
 				path: "inicio",
-				loadComponent: () =>
-					import("../features/home/pages/home/home.page").then(
-						(m) => m.HomePage,
-					),
+				loadComponent: () => import("../features/home/pages/home/home.page").then((m) => m.HomePage),
 			},
 			{
 				path: "horarios",
 				loadComponent: () =>
-					import("@feature/schedule/pages/schedule-page/schedule.page").then(
-						(m) => m.SchedulePageComponent,
-					),
+					import("@feature/schedule/pages/schedule-page/schedule.page").then((m) => m.SchedulePageComponent),
 			},
 			{
 				path: "feedback",
-				loadComponent: () =>
-					import("../features/feedback/tab3.page").then((m) => m.Tab3Page),
+				loadComponent: () => import("../features/feedback/tab3.page").then((m) => m.Tab3Page),
 			},
 			{
 				path: "rutinas",
@@ -31,25 +25,18 @@ export const routes: Routes = [
 					{
 						path: "",
 						loadComponent: () =>
-							import("../features/routine/pages/routine-detail.page").then(
-								(m) => m.RoutineDetailPage,
-							),
+							import("../features/routine/pages/routine-detail.page").then((m) => m.RoutineDetailPage),
 					},
 					{
 						path: "ejercicio/:id",
 						loadComponent: () =>
-							import("../features/routine/pages/exercise-detail.page").then(
-								(m) => m.ExerciseDetailPage,
-							),
+							import("../features/routine/pages/exercise-detail.page").then((m) => m.ExerciseDetailPage),
 					},
 				],
 			},
 			{
 				path: "perfil",
-				loadComponent: () =>
-					import("@feature/profile/pages/profile.page").then(
-						(m) => m.ProfilePage,
-					),
+				loadComponent: () => import("@feature/profile/pages/profile.page").then((m) => m.ProfilePage),
 			},
 			{
 				path: "",
