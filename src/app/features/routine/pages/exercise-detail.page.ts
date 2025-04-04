@@ -16,6 +16,22 @@ import {
 	IonTitle,
 	IonToolbar,
 } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import {
+	alertCircleOutline,
+	arrowForward,
+	barbellOutline,
+	bookmarkOutline,
+	documentTextOutline,
+	fitnessOutline,
+	informationCircleOutline,
+	layersOutline,
+	listOutline,
+	repeatOutline,
+	starOutline,
+	stopwatchOutline,
+	timeOutline,
+} from "ionicons/icons";
 
 import { LoadSelectedExercise, RoutineState } from "@feature/routine/state/routine.state";
 import { Select, Store } from "@ngxs/store";
@@ -67,7 +83,22 @@ export class ExerciseDetailPage implements OnInit, OnDestroy {
 	constructor(
 		private route: ActivatedRoute,
 		private store: Store,
-	) {}
+	) {
+		// Registrar todos los iconos utilizados en el componente
+		addIcons({
+			starOutline,
+			documentTextOutline,
+			informationCircleOutline,
+			timeOutline,
+			repeatOutline,
+			layersOutline,
+			stopwatchOutline,
+			listOutline,
+			alertCircleOutline,
+			fitnessOutline,
+			arrowForward,
+		});
+	}
 
 	ngOnInit() {
 		const exerciseId = this.route.snapshot.paramMap.get("id");
