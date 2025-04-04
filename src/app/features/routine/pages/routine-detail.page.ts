@@ -4,19 +4,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
 import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
 import { LoadRoutineById, LoadRoutines, RoutineState } from "@feature/routine/state/routine.state";
-import {
-	IonBackButton,
-	IonButtons,
-	IonContent,
-	IonHeader,
-	IonIcon,
-	IonTitle,
-	IonToolbar,
-} from "@ionic/angular/standalone";
+import { IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { Routine, SubRoutine, SubRoutineWithExerciseDetails } from "../interfaces/routine.interface";
+import { Routine, SubRoutine } from "../interfaces/routine.interface";
 
 @Component({
 	selector: "app-routine-detail-page",
@@ -178,17 +170,7 @@ import { Routine, SubRoutine, SubRoutineWithExerciseDetails } from "../interface
     `,
 	],
 	standalone: true,
-	imports: [
-		CommonModule,
-		SubroutineCardComponent,
-		IonHeader,
-		IonToolbar,
-		IonButtons,
-		IonBackButton,
-		IonTitle,
-		IonContent,
-		IonIcon,
-	],
+	imports: [CommonModule, SubroutineCardComponent, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon],
 })
 export class RoutineDetailPage implements OnInit, OnDestroy {
 	routine?: Routine;

@@ -5,7 +5,6 @@ import { HomeState, LoadRoutineForToday } from "@feature/home/state/home.state";
 import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import {
 	IonButton,
-	IonButtons,
 	IonCol,
 	IonContent,
 	IonHeader,
@@ -29,7 +28,6 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 		IonHeader,
 		IonToolbar,
 		IonTitle,
-		IonButtons,
 		IonButton,
 		IonIcon,
 		IonSpinner,

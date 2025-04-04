@@ -24,7 +24,7 @@
 		"tipo"
 	],
 	"editor.codeActionsOnSave": {
-		"source.organizeImports.biome": true,
-		"source.fixAll.biome": true
+		"source.organizeImports.biome": "explicit",
+		"source.fixAll.biome": "explicit"
 	}
 }
