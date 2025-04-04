@@ -61,8 +61,7 @@ export class ScheduleCardComponent {
 	 */
 	get isEnrolled(): boolean {
 		return (
-			this.schedule.clients &&
-			this.schedule.clients.includes(this.currentUserId)
+			this.schedule.clients?.includes(this.currentUserId)
 		);
 	}
 

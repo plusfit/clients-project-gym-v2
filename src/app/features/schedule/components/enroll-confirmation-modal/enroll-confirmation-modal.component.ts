@@ -3,7 +3,6 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import {
 	IonButton,
 	IonCol,
-	IonContent,
 	IonFooter,
 	IonGrid,
 	IonHeader,
@@ -30,7 +29,6 @@ import { Schedule } from "../schedule-card/schedule-card.component";
 		IonHeader,
 		IonToolbar,
 		IonTitle,
-		IonContent,
 		IonFooter,
 		IonButton,
 		IonGrid,

@@ -82,8 +82,12 @@ export class ExerciseDetailPage implements OnInit {
 		if (exerciseId) {
 			this.isLoading = true;
 			this.store.dispatch(new LoadSelectedExercise(exerciseId)).subscribe({
-				next: () => (this.isLoading = false),
-				error: () => (this.isLoading = false),
+				next: () => {
+					this.isLoading = false;
+				},
+				error: () => {
+					this.isLoading = false;
+				},
 			});
 		}
 	}

@@ -80,7 +80,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 	showAlert = false;
 	alertMessage = "";
 
-	private subscriptions: Subscription = new Subscription();
+	private subscriptions = new Subscription();
 
 	constructor(
 		private scheduleFacade: ScheduleFacadeService,
@@ -110,7 +110,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
 		// Get plan info
 		const planSub = this.plan$.subscribe((plan) => {
-			if (plan && plan.days) {
+			if (plan?.days) {
 				this.userPlan = { days: plan.days };
 				console.log(
 					"Plan del usuario cargado. Máximo horarios:",
@@ -160,12 +160,12 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
 		// Solo contar si el ID de usuario es válido
 		if (this.currentUserId) {
-			schedules.forEach((schedule) => {
-				if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
+			for (const schedule of schedules) {
+				if (schedule.clients?.includes(this.currentUserId)) {
 					enrolledDays.add(schedule.day);
 					totalCount++;
 				}
-			});
+			}
 		}
 
 		// Actualizar contadores
@@ -191,15 +191,17 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 			"Sábado",
 			"Domingo",
 		];
-		allDays.forEach((day) => dayCountMap.set(day, 0));
+		for (const day of allDays) {
+			dayCountMap.set(day, 0);
+		}
 
 		// Contar inscripciones por día
-		schedules.forEach((schedule) => {
-			if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
+		for (const schedule of schedules) {
+			if (schedule.clients?.includes(this.currentUserId)) {
 				const currentCount = dayCountMap.get(schedule.day) || 0;
 				dayCountMap.set(schedule.day, currentCount + 1);
 			}
-		});
+		}
 
 		// Convertir a array para pasar al componente
 		this.enrollmentsByDay = Array.from(dayCountMap).map(([day, count]) => ({
@@ -210,10 +212,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 
 	checkMaxEnrollmentsLimit(newSchedule: Schedule): boolean {
 		// Si el usuario ya está inscrito en este horario, no hay problema
-		if (
-			newSchedule.clients &&
-			newSchedule.clients.includes(this.currentUserId)
-		) {
+		if (newSchedule.clients?.includes(this.currentUserId)) {
 			return true;
 		}
 
@@ -223,7 +222,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		// Contamos en cuántos horarios está inscrito actualmente
 		const currentEnrollments = allSchedules.filter(
 			(schedule) =>
-				schedule.clients && schedule.clients.includes(this.currentUserId),
+				schedule.clients?.includes(this.currentUserId),
 		).length;
 
 		// Obtenemos el máximo de horarios del plan
@@ -241,7 +240,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 	onScheduleClicked(schedule: Schedule) {
 		this.selectedSchedule = schedule;
 
-		if (schedule.clients && schedule.clients.includes(this.currentUserId)) {
+		if (schedule.clients?.includes(this.currentUserId)) {
 			// Si el usuario ya está inscrito, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {

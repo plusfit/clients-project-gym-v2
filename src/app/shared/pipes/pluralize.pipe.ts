@@ -15,26 +15,20 @@ export class PluralizePipe implements PipeTransform {
 	transform(
 		value: number | undefined | null,
 		singular: string,
-		plural?: string,
+		pluralParam?: string,
 	): string {
-		if (value === undefined || value === null) {
-			return `- ${plural || singular + "s"}`;
-		}
-
-		if (value === 1) {
-			return `${value} ${singular}`;
-		}
-
-		if (!plural) {
+		if (!pluralParam) {
+			let finalPlural: string;
 			if (singular === "repetición") {
-				plural = "repeticiones";
+				finalPlural = "repeticiones";
 			} else if (singular.endsWith("s") || singular.endsWith("x")) {
-				plural = singular;
+				finalPlural = singular;
 			} else {
-				plural = `${singular}s`;
+				finalPlural = `${singular}s`;
 			}
+			return `${value} ${finalPlural}`;
 		}
 
-		return `${value} ${plural}`;
+		return `${value} ${pluralParam}`;
 	}
 }
