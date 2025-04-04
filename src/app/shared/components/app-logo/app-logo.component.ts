@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
+import { Component, Input } from "@angular/core";
 
 /**
  * Componente para mostrar el logo de la aplicación en distintos tamaños y estilos
@@ -9,10 +9,10 @@ import { CommonModule } from '@angular/common';
  * <app-logo [withText]="true"></app-logo> - Logo con texto PLUS FIT
  */
 @Component({
-  selector: 'app-logo',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+	selector: "app-logo",
+	standalone: true,
+	imports: [CommonModule],
+	template: `
     <div
       class="logo-container"
       [style.width.px]="size"
@@ -29,8 +29,8 @@ import { CommonModule } from '@angular/common';
       </div>
     </div>
   `,
-  styles: [
-    `
+	styles: [
+		`
       .logo-container {
         display: flex;
         flex-direction: column;
@@ -67,16 +67,16 @@ import { CommonModule } from '@angular/common';
         opacity: 0.9;
       }
     `,
-  ],
+	],
 })
 export class AppLogoComponent {
-  /**
-   * Tamaño del logo en píxeles
-   */
-  @Input() size: number = 40;
+	/**
+	 * Tamaño del logo en píxeles
+	 */
+	@Input() size = 40;
 
-  /**
-   * Si se debe mostrar el texto "PLUS FIT" bajo el logo
-   */
-  @Input() withText: boolean = false;
+	/**
+	 * Si se debe mostrar el texto "PLUS FIT" bajo el logo
+	 */
+	@Input() withText = false;
 }

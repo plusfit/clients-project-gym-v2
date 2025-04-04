@@ -1,34 +1,34 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Store, Actions, ofActionSuccessful } from '@ngxs/store';
-import { CommonModule } from '@angular/common';
-import { takeUntil } from 'rxjs/operators';
+import { CommonModule } from "@angular/common";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
+import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
 import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonIcon,
-} from '@ionic/angular/standalone';
+	LoadRoutineById,
+	LoadRoutines,
+	RoutineState,
+} from "@feature/routine/state/routine.state";
 import {
-  Routine,
-  SubRoutine,
-  SubRoutineWithExerciseDetails,
-} from '../interfaces/routine.interface';
+	IonBackButton,
+	IonButtons,
+	IonContent,
+	IonHeader,
+	IonIcon,
+	IonTitle,
+	IonToolbar,
+} from "@ionic/angular/standalone";
+import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
-  RoutineState,
-  LoadRoutineById,
-  LoadRoutines,
-} from '@feature/routine/state/routine.state';
-import { SubroutineCardComponent } from '@feature/routine/components/subroutine-card.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AuthFacadeService } from '@feature/auth/services/auth-facade.service';
-import { Subject } from 'rxjs';
+	Routine,
+	SubRoutine,
+	SubRoutineWithExerciseDetails,
+} from "../interfaces/routine.interface";
 
 @Component({
-  selector: 'app-routine-detail-page',
-  template: `
+	selector: "app-routine-detail-page",
+	template: `
     <ion-header [translucent]="true">
       <ion-toolbar>
         <ion-title>
@@ -67,8 +67,8 @@ import { Subject } from 'rxjs';
       </div>
     </ion-content>
   `,
-  styles: [
-    `
+	styles: [
+		`
       /* CONTENT */
       .content {
         --background: linear-gradient(
@@ -184,64 +184,64 @@ import { Subject } from 'rxjs';
         display: none;
       }
     `,
-  ],
-  standalone: true,
-  imports: [
-    CommonModule,
-    SubroutineCardComponent,
-    IonHeader,
-    IonToolbar,
-    IonButtons,
-    IonBackButton,
-    IonTitle,
-    IonContent,
-    IonIcon,
-  ],
+	],
+	standalone: true,
+	imports: [
+		CommonModule,
+		SubroutineCardComponent,
+		IonHeader,
+		IonToolbar,
+		IonButtons,
+		IonBackButton,
+		IonTitle,
+		IonContent,
+		IonIcon,
+	],
 })
 export class RoutineDetailPage implements OnInit, OnDestroy {
-  routine?: Routine;
-  subroutines: SubRoutine[] = [];
-  private destroy$ = new Subject<void>();
+	routine?: Routine;
+	subroutines: SubRoutine[] = [];
+	private destroy$ = new Subject<void>();
 
-  constructor(
-    private store: Store,
-    private actions$: Actions,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authFacade: AuthFacadeService,
-  ) {}
+	constructor(
+		private store: Store,
+		private actions$: Actions,
+		private router: Router,
+		private route: ActivatedRoute,
+		private authFacade: AuthFacadeService,
+	) {}
 
-  ngOnInit() {
-    this.actions$
-      .pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$))
-      .subscribe(() => {
-        const routine = this.store.selectSnapshot(
-          RoutineState.getSelectedRoutine,
-        );
+	ngOnInit() {
+		this.actions$
+			.pipe(ofActionSuccessful(LoadRoutineById), takeUntil(this.destroy$))
+			.subscribe(() => {
+				const routine = this.store.selectSnapshot(
+					RoutineState.getSelectedRoutine,
+				);
 
-        if (routine) {
-          this.routine = routine;
-          this.subroutines = routine.subRoutines as SubRoutine[];
-        }
-      });
+				if (routine) {
+					this.routine = routine;
+					this.subroutines = routine.subRoutines as SubRoutine[];
+				}
+			});
 
-    this.authFacade.user$.subscribe((user) => {
-      if (user && user.routineId) {
-        this.store.dispatch(new LoadRoutineById(user.routineId));
-      } else {
-        this.store.dispatch(new LoadRoutines()).subscribe(() => {
-          const routines = this.store.selectSnapshot(RoutineState.getRoutines);
+		this.authFacade.user$.subscribe((user) => {
+			if (user && user.routineId) {
+				this.store.dispatch(new LoadRoutineById(user.routineId));
+			} else {
+				this.store.dispatch(new LoadRoutines()).subscribe(() => {
+					const routines = this.store.selectSnapshot(RoutineState.getRoutines);
 
-          if (routines && routines.length > 0) {
-            this.store.dispatch(new LoadRoutineById(routines[0]._id));
-          }
-        });
-      }
-    });
-  }
+					if (routines && routines.length > 0) {
+						this.store.dispatch(new LoadRoutineById(routines[0]._id));
+					}
+				});
+			}
+		});
+	}
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }
