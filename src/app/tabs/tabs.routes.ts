@@ -16,10 +16,6 @@ export const routes: Routes = [
 					import("@feature/schedule/pages/schedule-page/schedule.page").then((m) => m.SchedulePageComponent),
 			},
 			{
-				path: "feedback",
-				loadComponent: () => import("../features/feedback/tab3.page").then((m) => m.Tab3Page),
-			},
-			{
 				path: "rutinas",
 				children: [
 					{
