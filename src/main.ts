@@ -16,6 +16,7 @@ import { register } from "swiper/element/bundle";
 import { AppComponent } from "./app/app.component";
 import { routes } from "./app/app.routes";
 import { environment } from "./environments/environment";
+import { OnboardingState } from "@feature/onboarding/state/onboarding.state";
 register();
 
 // Factory para el inicializador de autenticación
@@ -37,7 +38,7 @@ bootstrapApplication(AppComponent, {
 			multi: true,
 		},
 		importProvidersFrom(
-			NgxsModule.forRoot([HomeState, ScheduleState, RoutineState, UserState, AuthState], {
+			NgxsModule.forRoot([HomeState, ScheduleState, RoutineState, UserState, AuthState, OnboardingState,], {
 				developmentMode: !environment.production,
 				selectorOptions: {
 					suppressErrors: false,

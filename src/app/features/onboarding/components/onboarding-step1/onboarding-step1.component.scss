@@ -1,0 +1,18 @@
+ion-select,
+ion-select-option {
+    color: var(--ion-color-light, #ffffff);
+}
+
+ion-alert {
+    --background: #1e1e1e;
+    --color: #ffffff;
+}
+ion-modal.datepicker-modal {
+    --width: 90%;
+    --max-width: 400px;
+    --height: auto;
+    --border-radius: 16px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
