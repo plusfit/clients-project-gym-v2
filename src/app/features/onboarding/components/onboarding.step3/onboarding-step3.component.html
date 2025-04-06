@@ -6,6 +6,9 @@
         <ion-label class="section-title">
           <ion-icon name="calendar-outline"></ion-icon> Días por semana
         </ion-label>
+        <ion-text class="helper-text">
+          Seleccione la cantidad de días a la semana que desea entrenar. Se recomienda un mínimo de 3 días para resultados óptimos.
+        </ion-text>
         <ion-item lines="none">
           <ion-range
             formControlName="trainingDays"
@@ -26,10 +29,13 @@
         <ion-label class="section-title">
           <ion-icon name="trending-up-outline"></ion-icon> Objetivo principal
         </ion-label>
+        <ion-text class="helper-text">
+          Seleccione el objetivo principal que desea lograr con su entrenamiento. Esto nos ayudará a personalizar su plan.
+        </ion-text>
         <ion-item lines="none">
           <ion-select
             formControlName="goal"
-            interface="popover"
+            interface="action-sheet"
             placeholder="Seleccioná una opción"
           >
             <ion-select-option value="loseWeight">Perder peso</ion-select-option>
@@ -48,6 +54,9 @@
         <ion-label class="section-title">
           <ion-icon name="barbell-outline"></ion-icon> Tipo de entrenamiento
         </ion-label>
+        <ion-text class="helper-text">
+          Elija el tipo de entrenamiento que prefiere. Un entrenamiento mixto combina cardio y sala para resultados más completos.
+        </ion-text>
         <ion-segment formControlName="trainingType" mode="ios">
           <ion-segment-button value="cardio">Cardio</ion-segment-button>
           <ion-segment-button value="room">Sala</ion-segment-button>
@@ -62,10 +71,13 @@
         <ion-label class="section-title">
           <ion-icon name="bar-chart-outline"></ion-icon> ¿Con qué nivel te identificás?
         </ion-label>
+        <ion-text class="helper-text">
+          Seleccione su nivel de experiencia para que podamos adaptar la intensidad de los ejercicios a sus capacidades actuales.
+        </ion-text>
         <ion-item lines="none">
           <ion-select
             formControlName="trainingLevel"
-            interface="popover"
+            interface="action-sheet"
             placeholder="Seleccioná una opción"
           >
             <ion-select-option value="beginner">Principiante</ion-select-option>
