@@ -12,8 +12,9 @@
             ></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('fullName')">
-            El nombre es obligatorio.
+            El nombre completo es obligatorio.
           </ion-text>
+          <ion-text class="helper-text">Ingrese su nombre completo.</ion-text>
 
           <ion-item>
             <ion-icon name="home-outline" slot="start"></ion-icon>
@@ -25,6 +26,7 @@
           <ion-text color="danger" *ngIf="isInvalid('address')">
             La dirección es obligatoria.
           </ion-text>
+          <ion-text class="helper-text">Ingrese su dirección completa.</ion-text>
         </ion-list>
       </div>
 
@@ -39,8 +41,9 @@
             ></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('phone')">
-            El teléfono es obligatorio.
+            Ingrese un número de celular válido (09xxxxxxx).
           </ion-text>
+          <ion-text class="helper-text">Formato: 09xxxxxxx (9 dígitos empezando con 09).</ion-text>
 
           <ion-item>
             <ion-icon name="medkit-outline" slot="start"></ion-icon>
@@ -65,7 +68,7 @@
             </ion-text>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('dateOfBirth')">
-            La fecha de nacimiento es obligatoria.
+            Debe seleccionar su fecha de nacimiento.
           </ion-text>
 
           <ion-item>
@@ -78,9 +81,8 @@
             </ion-select>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('sex')">
-            El sexo es obligatorio.
+            Debe seleccionar una opción.
           </ion-text>
-
           <ion-item>
             <ion-icon name="card-outline" slot="start"></ion-icon>
             <ion-input
@@ -89,8 +91,9 @@
             ></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('ci')">
-            La cédula de identidad es obligatoria.
+            Ingrese una cédula válida (8 dígitos sin puntos ni guiones).
           </ion-text>
+          <ion-text class="helper-text">Ingrese su cédula (8 dígitos sin puntos ni guiones).</ion-text>
         </ion-list>
       </div>
     </form>

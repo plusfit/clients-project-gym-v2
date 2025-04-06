@@ -104,7 +104,7 @@ ion-label {
 ion-select {
   --placeholder-color: rgba(255, 255, 255, 0.5);
   --placeholder-opacity: 1;
-  --padding-start: 0;
+  --padding-start: 8px;
   --padding-end: 0;
   --padding-top: 10px;
   --padding-bottom: 10px;
@@ -132,6 +132,17 @@ ion-text[color="danger"] {
   opacity: 1;
   color: var(--ion-color-danger);
   font-weight: 500;
+}
+
+.helper-text {
+  display: block;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-top: -4px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  font-style: italic;
 }
 
 .date-value {
@@ -286,5 +297,14 @@ ion-modal.datepicker-modal {
   :host ::ng-deep ion-datetime {
     margin: 0 auto;
     width: 100%;
+  }
+
+  .helper-text {
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+  }
+
+  ion-text[color="danger"] {
+    font-size: 0.7rem;
   }
 }
