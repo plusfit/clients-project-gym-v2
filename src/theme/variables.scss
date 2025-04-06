@@ -84,6 +84,15 @@
 
   /* Colores de elementos de entrada */
   --ion-item-background: #1e1e1e;
+
+  /** Ajuste de contrastes **/
+  --ion-background-color-contrast: var(--ion-color-dark);
+  --ion-text-color-contrast: var(--ion-color-light);
+
+  /** loading **/
+  --ion-color-loading-background: rgba(16, 16, 37, 0.9);
+  --ion-color-loading-text: #ffffff;
+  --ion-color-loading-spinner: var(--ion-color-primary);
 }
 
 /* Estilos globales para la fuente */

@@ -295,3 +295,32 @@ ion-header ion-toolbar ion-title {
   --background: #3880ff;
   --color: #ffffff;
 }
+
+// Estilos personalizados para los loaders
+.loading-content {
+  --background: var(--ion-color-loading-background);
+  --spinner-color: var(--ion-color-loading-spinner);
+  --backdrop-opacity: 0.6;
+
+  .loading-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    padding: 24px;
+    min-width: 200px;
+  }
+
+  .loading-spinner {
+    margin-bottom: 12px;
+
+    ion-spinner {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .loading-text {
+    color: var(--ion-color-loading-text);
+    font-weight: 500;
+    font-size: 16px;
+  }
+}
