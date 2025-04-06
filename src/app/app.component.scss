@@ -4,6 +4,8 @@
 ion-modal.datepicker-sheet {
   --border-radius: 16px 16px 0 0;
   --height: auto;
+  --width: 100%;
+  --max-width: 460px;
   align-items: flex-end;
   justify-content: flex-end;
 }

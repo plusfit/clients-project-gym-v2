@@ -187,7 +187,7 @@ ion-footer {
 
 ion-modal.datepicker-modal {
   --width: 90%;
-  --max-width: 400px;
+  --max-width: 460px;
   --height: auto;
   --border-radius: 16px;
   align-items: center;
@@ -200,6 +200,8 @@ ion-modal.datepicker-modal {
   ion-datetime {
     --background: var(--ion-background-color);
     --ion-color-light: rgba(255, 255, 255, 0.08);
+    margin: 0 auto;
+    width: 100%;
 
     .calendar-day {
       font-weight: 400;
@@ -279,5 +281,10 @@ ion-modal.datepicker-modal {
 
   ion-modal.datepicker-modal {
     --max-width: 320px;
+  }
+
+  :host ::ng-deep ion-datetime {
+    margin: 0 auto;
+    width: 100%;
   }
 }
