@@ -40,7 +40,7 @@ ion-content {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--ion-color-primary);
-  margin: 0 0 16px 8px;
+  margin: 0 0 8px 8px;
   display: flex;
   align-items: center;
 
@@ -49,6 +49,16 @@ ion-content {
     margin-right: 8px;
     color: var(--ion-color-primary);
   }
+}
+
+.helper-text {
+  display: block;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  font-style: italic;
 }
 
 .training-section,
@@ -60,6 +70,7 @@ ion-content {
   padding: 16px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   border-left: 3px solid var(--ion-color-primary);
+  margin-bottom: 20px;
 }
 
 ion-item {
@@ -156,8 +167,8 @@ ion-segment-button:hover {
 ion-select {
   width: 100%;
   max-width: 100%;
-  --padding-start: 0;
-  --padding-end: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
   --padding-top: 10px;
   --padding-bottom: 10px;
   color: rgba(255, 255, 255, 0.9);
@@ -169,6 +180,9 @@ ion-select {
 ion-select::part(placeholder),
 ion-select::part(text) {
   color: rgba(255, 255, 255, 0.9);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: initial;
 }
 
 ion-select::part(icon) {
@@ -256,11 +270,17 @@ ion-footer {
 
   .section-title {
     font-size: 0.9rem;
-    margin: 0 0 12px 4px;
+    margin: 0 0 6px 4px;
 
     ion-icon {
       font-size: 1.1rem;
     }
+  }
+
+  .helper-text {
+    font-size: 0.7rem;
+    margin-left: 4px;
+    margin-bottom: 10px;
   }
 
   ion-item {
@@ -312,6 +332,7 @@ ion-footer {
   .type-section,
   .level-section {
     padding: 14px;
+    margin-bottom: 16px;
   }
 
   ion-footer ion-button {
