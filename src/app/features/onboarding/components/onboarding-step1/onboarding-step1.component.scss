@@ -1,9 +1,10 @@
 ion-content {
+  --background: var(--ion-background-color);
   --padding-top: 32px;
   --padding-bottom: 32px;
   --padding-start: 20px;
   --padding-end: 20px;
-  --background: var(--ion-background-color);
+  --overflow: auto;
 }
 
 .form-container {
@@ -13,6 +14,8 @@ ion-content {
   background: rgba(255, 255, 255, 0.03);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow-y: visible;
+  height: auto;
 }
 
 .step-title {
@@ -28,7 +31,19 @@ ion-content {
 form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  overflow: visible;
+}
+
+.personal-section,
+.contact-section,
+.id-section {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid var(--ion-color-primary);
+  overflow: visible;
 }
 
 ion-list {
@@ -49,6 +64,8 @@ ion-item {
   --highlight-color-focused: var(--ion-color-primary);
   --highlight-height: 2px;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
 }
 
 ion-item:hover {
@@ -58,6 +75,8 @@ ion-item:hover {
 
 ion-item:focus-within {
   --background: rgba(var(--ion-color-primary-rgb), 0.15);
+  z-index: 2;
+  transform: none;
 }
 
 ion-icon {
@@ -124,6 +143,7 @@ ion-footer {
   ion-toolbar {
     --padding-top: 8px;
     --padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    --padding-start: 16px;
     --padding-end: 16px;
     --background: transparent;
     --border-color: transparent;
@@ -137,6 +157,7 @@ ion-footer {
     --padding-end: 28px;
     --padding-top: 16px;
     --padding-bottom: 16px;
+    --color: white !important;
     font-weight: 600;
     text-transform: none;
     letter-spacing: 0;
@@ -152,9 +173,15 @@ ion-footer {
   }
 
   ion-button ion-icon {
+    color: white !important;
     font-size: 1.1rem;
     margin-left: 8px;
     margin-right: 0;
+  }
+
+  ion-button[slot="start"] ion-icon {
+    margin-left: 0;
+    margin-right: 8px;
   }
 }
 
@@ -195,5 +222,62 @@ ion-modal.datepicker-modal {
       color: var(--ion-color-primary);
       font-weight: 600;
     }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  ion-content {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+
+  .form-container {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+
+  .step-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .personal-section,
+  .contact-section,
+  .id-section {
+    padding: 12px;
+  }
+
+  ion-item {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --min-height: 50px;
+  }
+
+  ion-input {
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  ion-icon {
+    font-size: 1.1rem;
+    margin-right: 8px;
+  }
+
+  .date-value {
+    font-size: 0.9rem;
+  }
+
+  ion-footer ion-button {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 0.9rem;
+  }
+
+  ion-modal.datepicker-modal {
+    --max-width: 320px;
   }
 }

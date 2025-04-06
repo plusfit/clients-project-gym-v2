@@ -4,6 +4,7 @@ ion-content {
     --padding-bottom: 32px;
     --padding-start: 20px;
     --padding-end: 20px;
+
 }
 
 .form-container {
@@ -13,12 +14,13 @@ ion-content {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    max-height: 100%;
 }
 
 .step-title {
     font-size: 1.8rem;
     font-weight: 700;
-    color: var(--ion-color-secondary);
+    color: var(--ion-color-primary);
     margin-bottom: 24px;
     letter-spacing: -0.5px;
     text-align: center;
@@ -36,7 +38,7 @@ ion-content {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--ion-color-secondary);
+    color: var(--ion-color-primary);
     margin: 24px 0 16px 8px;
     display: flex;
     align-items: center;
@@ -44,36 +46,53 @@ ion-content {
     ion-icon {
         font-size: 1.2rem;
         margin-right: 8px;
-        color: var(--ion-color-secondary);
+        color: var(--ion-color-primary);
     }
 }
 
 ion-item {
-    --background: rgba(255, 255, 255, 0.07);
-    --border-radius: 12px;
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --inner-padding-end: 8px;
-    --min-height: 56px;
-    margin-bottom: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --background: rgba(255, 255, 255, 0.08);
+    --border-radius: 14px;
+    --padding-start: 18px;
+    --padding-end: 18px;
+    --inner-padding-end: 12px;
+    --min-height: 60px;
+    margin-bottom: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
     --border-color: transparent;
-    --highlight-color-focused: var(--ion-color-secondary);
+    --highlight-color-focused: var(--ion-color-primary);
     --highlight-height: 2px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: visible;
+    z-index: 1;
+}
+
+ion-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    border-radius: 14px;
+    z-index: -1;
 }
 
 ion-item:hover {
-    --background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
+    --background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 ion-item:focus-within {
-    --background: rgba(var(--ion-color-secondary-rgb), 0.15);
+    --background: rgba(var(--ion-color-primary-rgb), 0.2);
+    box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.25);
 }
 
 ion-icon {
-    color: var(--ion-color-secondary);
+    color: var(--ion-color-primary);
     font-size: 1.2rem;
     margin-right: 12px;
 }
@@ -88,27 +107,28 @@ ion-segment {
 
 ion-segment-button {
     font-size: 0.85rem;
-    --indicator-color: var(--ion-color-secondary);
+    --indicator-color: var(--ion-color-primary);
     --border-radius: 6px;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
-    --color: rgba(255, 255, 255, 0.7);
-    --color-checked: var(--ion-color-secondary-contrast);
-    --background-checked: var(--ion-color-secondary);
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --color: rgba(255, 255, 255, 0.8);
+    --color-checked: white;
+    --background-checked: var(--ion-color-primary);
     transition: all 0.3s ease;
+    font-weight: 500;
+    text-align: center;
 }
 
 ion-segment-button:hover {
-    --color: rgba(255, 255, 255, 0.9);
+    --color: white;
 }
 
 ion-select {
     width: 100%;
     max-width: 100%;
-    --padding-start: 0;
-    --padding-end: 0;
-    --padding-top: 10px;
-    --padding-bottom: 10px;
+    padding: 10px;
     color: rgba(255, 255, 255, 0.9);
     font-size: 1rem;
     --placeholder-color: rgba(255, 255, 255, 0.5);
@@ -121,7 +141,7 @@ ion-select::part(text) {
 }
 
 ion-select::part(icon) {
-    color: var(--ion-color-secondary);
+    color: var(--ion-color-primary);
     opacity: 1;
 }
 
@@ -145,7 +165,7 @@ ion-text[color="danger"] {
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    border-left: 3px solid var(--ion-color-secondary);
+    border-left: 3px solid var(--ion-color-primary);
 }
 
 .history-group {
@@ -157,7 +177,7 @@ ion-text[color="danger"] {
     padding: 16px;
     margin-top: 16px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    border-left: 3px solid var(--ion-color-secondary);
+    border-left: 3px solid var(--ion-color-primary);
 }
 
 .history-label {
@@ -176,8 +196,8 @@ ion-footer {
     }
 
     ion-button {
-        --background: var(--ion-color-secondary);
-        --background-hover: var(--ion-color-secondary-shade);
+        --background: var(--ion-color-primary);
+        --background-hover: var(--ion-color-primary-shade);
         --border-radius: 10px;
         --padding-start: 28px;
         --padding-end: 28px;
@@ -188,16 +208,18 @@ ion-footer {
         letter-spacing: 0;
         font-size: 1rem;
         margin-right: 8px;
-        box-shadow: 0 4px 12px rgba(var(--ion-color-secondary-rgb), 0.4);
+        box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
         transition: transform 0.2s ease;
+        --color: white;
     }
 
     ion-button:hover {
         transform: translateY(-2px);
-        --box-shadow: 0 6px 16px rgba(var(--ion-color-secondary-rgb), 0.5);
+        --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.5);
     }
 
     ion-button ion-icon {
+        color: white;
         font-size: 1.1rem;
         margin-left: 8px;
         margin-right: 0;
@@ -211,4 +233,137 @@ ion-footer {
 
 .antecedentes-label {
     margin-top: 32px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    ion-content {
+        --padding-start: 12px;
+        --padding-end: 12px;
+    }
+
+    .form-container {
+        padding: 16px 12px;
+        border-radius: 12px;
+    }
+
+    .step-title {
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+    }
+
+    .section-title {
+        font-size: 0.9rem;
+        margin: 16px 0 12px 4px;
+    }
+
+    ion-item {
+        --padding-start: 14px;
+        --padding-end: 14px;
+        --min-height: 54px;
+        margin-bottom: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    ion-item::before {
+        opacity: 0.7;
+    }
+
+    /* Mejorar visualización de segmentos en dispositivos pequeños */
+    ion-segment {
+        --background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    ion-segment-button {
+        font-size: 0.8rem;
+        --padding-top: 10px;
+        --padding-bottom: 10px;
+        --padding-start: 14px;
+        --padding-end: 14px;
+        min-width: 70px;
+        --border-radius: 20px;
+        --background: rgba(255, 255, 255, 0.08);
+        --background-checked: var(--ion-color-primary);
+        margin: 0 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Optimizaciones específicas para la sección de antecedentes */
+    .blood-pressure-section {
+        padding: 14px;
+    }
+
+    .history-group {
+        padding: 14px;
+        gap: 16px;
+        margin-top: 12px;
+    }
+
+    .history-group ion-item {
+        flex-direction: column;
+        align-items: flex-start;
+        --min-height: auto;
+        padding: 10px 12px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .history-group ion-item::before {
+        display: none;
+    }
+
+    .history-group ion-label {
+        margin-bottom: 12px;
+        font-size: 0.95rem;
+        margin-right: 0;
+        width: 100%;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+    }
+
+    .history-group ion-segment {
+        width: 100%;
+        margin-top: 0;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        gap: 16px;
+    }
+
+    .history-group ion-segment-button {
+        --color: rgba(255, 255, 255, 0.7);
+        --color-checked: white;
+        --background: rgba(255, 255, 255, 0.05);
+        --background-checked: var(--ion-color-primary);
+        min-width: 42%;
+        max-width: 45%;
+        height: 42px;
+        --border-radius: 10px;
+        margin: 0;
+        font-weight: 600;
+        --padding-start: 20px;
+        --padding-end: 20px;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    ion-footer ion-button {
+        --padding-start: 20px;
+        --padding-end: 20px;
+        --padding-top: 14px;
+        --padding-bottom: 14px;
+        font-size: 0.9rem;
+    }
+
+    ion-icon {
+        font-size: 1rem;
+        margin-right: 8px;
+    }
 }
