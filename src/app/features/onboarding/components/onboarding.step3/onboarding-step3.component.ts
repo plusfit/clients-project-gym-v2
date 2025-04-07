@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { IonNav, IonicModule, LoadingController, NavController } from "@ionic/angular";
+import { IonNav, IonicModule, LoadingController, NavController, ToastController } from "@ionic/angular";
 import { Store } from "@ngxs/store";
 import { addIcons } from "ionicons";
 import {
@@ -38,6 +38,7 @@ export class OnboardingStep3Component implements OnInit {
 		private onboardingService: OnboardingService,
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
+		private toastCtrl: ToastController,
 	) {
 		addIcons({
 			"calendar-outline": calendarOutline,
@@ -117,16 +118,16 @@ export class OnboardingStep3Component implements OnInit {
 				.pipe(
 					finalize(() => {
 						this.isSubmitting = false;
-						loading.dismiss();
 					}),
 				)
 				.subscribe({
 					next: () => {
-						// Redirigir al usuario a la página principal
-						this.navigateToHome();
+						// Intentar asignar un plan automáticamente
+						this.assignPlanToUser(loading);
 					},
 					error: (error) => {
 						console.error("Error en el paso 3 del onboarding:", error);
+						loading.dismiss();
 						// Si hay un error, igual redirigir al usuario
 						this.navigateToHome();
 					},
@@ -134,6 +135,61 @@ export class OnboardingStep3Component implements OnInit {
 		} else {
 			this.form.markAllAsTouched();
 		}
+	}
+
+	/**
+	 * Asigna un plan al usuario según sus preferencias
+	 */
+	private assignPlanToUser(loading: HTMLIonLoadingElement) {
+		// Actualizar mensaje de carga
+		loading.message = "Asignando plan de entrenamiento...";
+
+		this.onboardingService.assignPlan().subscribe({
+			next: async (response) => {
+				console.log("Plan asignado correctamente:", response);
+				loading.dismiss();
+
+				// Mostrar toast con confirmación
+				const toast = await this.toastCtrl.create({
+					message: `Plan "${response.plan.name}" asignado con éxito`,
+					duration: 3000,
+					position: "bottom",
+					cssClass: "custom-toast toast-success",
+					buttons: [
+						{
+							text: "OK",
+							role: "cancel",
+						},
+					],
+				});
+				await toast.present();
+
+				// Navegar a la página principal
+				this.navigateToHome();
+			},
+			error: async (error) => {
+				console.error("Error al asignar plan:", error);
+				loading.dismiss();
+
+				// Mostrar mensaje de error
+				const toast = await this.toastCtrl.create({
+					message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
+					duration: 3000,
+					position: "bottom",
+					cssClass: "custom-toast toast-warning",
+					buttons: [
+						{
+							text: "OK",
+							role: "cancel",
+						},
+					],
+				});
+				await toast.present();
+
+				// Redirigir a la página principal de todas formas
+				this.navigateToHome();
+			},
+		});
 	}
 
 	// Método para navegar a la página principal
