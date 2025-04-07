@@ -1,0 +1,28 @@
+<!-- Sección de Plan Asignado -->
+<ion-card *ngIf="hasAssignedPlan">
+  <ion-card-header>
+    <ion-card-title>Tu Plan de Entrenamiento</ion-card-title>
+    <ion-card-subtitle>{{ planName }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <p>Has sido asignado a un plan personalizado basado en tus preferencias.</p>
+    <ion-button expand="block" [routerLink]="['/my-plan']" routerDirection="forward">
+      Ver mi plan
+      <ion-icon slot="end" name="barbell-outline"></ion-icon>
+    </ion-button>
+  </ion-card-content>
+</ion-card>
+
+<!-- Mensaje para completar onboarding -->
+<ion-card *ngIf="!hasAssignedPlan">
+  <ion-card-header>
+    <ion-card-title>Completa tu Perfil</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>Para recibir un plan de entrenamiento personalizado, completa el proceso de onboarding.</p>
+    <ion-button expand="block" [routerLink]="['/onboarding']" routerDirection="forward">
+      Completar Onboarding
+      <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
+    </ion-button>
+  </ion-card-content>
+</ion-card>

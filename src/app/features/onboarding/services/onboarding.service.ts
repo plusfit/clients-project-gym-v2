@@ -2,7 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { LoadingController } from "@ionic/angular";
 import { environment } from "environments/environment";
-import { Observable } from "rxjs";
+import { Observable, catchError, tap, throwError } from "rxjs";
+import { Plan } from "../../plans/interfaces/plan.interface";
 import { Step1, Step2, Step3 } from "../interfaces/onboarding.interfaces";
 
 @Injectable({
@@ -65,6 +66,22 @@ export class OnboardingService {
 			data.trainingDays = Number(data.trainingDays);
 		}
 		return this.http.patch(`${this.apiUrl}/onboarding/${this.userId}/step/3`, data);
+	}
+
+	/**
+	 * Solicita al backend que asigne automáticamente un plan
+	 * basado en los datos de onboarding
+	 */
+	assignPlan(): Observable<{ client: any; plan: Plan }> {
+		return this.http.post<{ client: any; plan: Plan }>(`${this.apiUrl}/onboarding/${this.userId}/assign-plan`, {}).pipe(
+			tap((response) => {
+				console.log("Plan asignado automáticamente:", response);
+			}),
+			catchError((error) => {
+				console.error("Error al asignar plan:", error);
+				return throwError(() => error);
+			}),
+		);
 	}
 
 	/**
