@@ -199,14 +199,17 @@
   &::before {
     content: '';
     position: absolute;
-    top: -8px;
+    top: 50%;
     right: 4px;
     width: 80px;
     height: 80px;
     background-image: url('/assets/logos/logo.png');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 60px;
+    background-size: 55px;
+    transform: translateY(-50%);
+    z-index: 1;
+    opacity: 0.8;
   }
 
   &::after {
@@ -229,6 +232,40 @@
   }
 }
 
+.header-meta {
+  margin-bottom: 10px;
+}
+
+.category-label {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: .5rem;
+
+  ion-icon {
+    margin-right: 5px;
+    font-size: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fallback-icon {
+    margin-right: 5px;
+    font-size: 14px;
+    color: #ffffff;
+    display: none; /* Oculto por defecto, se mostrará si el icono falla */
+  }
+}
+
 .card-title {
   color: white;
   font-size: 1.4rem;
@@ -240,7 +277,9 @@
   font-family: 'APEXPRO', sans-serif;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  width: 86%;
+  margin-right: 70px;
 }
 
 .header-icon {
@@ -255,55 +294,39 @@
 }
 
 .description-container {
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.2);
-  margin-bottom: 16px;
-  border-radius: 8px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .description-title {
-  color: white;
   font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 12px 0;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: var(--ion-color-primary);
   display: flex;
   align-items: center;
-  gap: 8px;
-}
 
-.description-title ion-icon {
-  color: var(--ion-color-primary);
-  font-size: 1.3rem;
+  ion-icon {
+    margin-right: 8px;
+  }
 }
 
 .exercise-description-wrapper {
-  max-height: 250px;
-  overflow-y: auto;
-  padding-right: 8px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ion-color-primary) rgba(0, 0, 0, 0.1);
-}
-
-.exercise-description-wrapper::-webkit-scrollbar {
-  width: 6px;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-}
-
-.exercise-description-wrapper::-webkit-scrollbar-thumb {
-  background-color: var(--ion-color-primary);
-  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 12px;
 }
 
 .exercise-description {
-  color: #e0e0e0;
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
   margin: 0;
-  padding: 0 5px 0 12px;
-  border-left: 3px solid var(--ion-color-primary);
-  white-space: pre-line;
-  text-align: justify;
 }
 
 .details-section,

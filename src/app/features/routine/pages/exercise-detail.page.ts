@@ -1,90 +1,125 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { AsyncPipe, NgClass, NgIf, NgOptimizedImage, UpperCasePipe } from "@angular/common";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonContent,
-  IonHeader,
-  IonSpinner,
-  IonIcon,
-  IonTitle,
-  IonToolbar,
-  IonButtons,
-  IonBackButton,
-  IonButton,
-} from '@ionic/angular/standalone';
+	IonBackButton,
+	IonButton,
+	IonButtons,
+	IonCard,
+	IonCardContent,
+	IonCardHeader,
+	IonCardTitle,
+	IonContent,
+	IonHeader,
+	IonIcon,
+	IonSpinner,
+	IonTitle,
+	IonToolbar,
+} from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
 import {
-  AsyncPipe,
-  NgIf,
-  NgOptimizedImage,
-  UpperCasePipe,
-  NgClass,
-} from '@angular/common';
+	alertCircleOutline,
+	arrowForward,
+	barbellOutline,
+	bookmarkOutline,
+	documentTextOutline,
+	fitnessOutline,
+	informationCircleOutline,
+	layersOutline,
+	listOutline,
+	repeatOutline,
+	starOutline,
+	stopwatchOutline,
+	timeOutline,
+} from "ionicons/icons";
 
-import {
-  RoutineState,
-  LoadSelectedExercise,
-} from '@feature/routine/state/routine.state';
-import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { Exercise } from '../interfaces/routine.interface';
-import { PluralizePipe } from '@shared/pipes/pluralize.pipe';
+import { LoadSelectedExercise, RoutineState } from "@feature/routine/state/routine.state";
+import { Select, Store } from "@ngxs/store";
+import { PluralizePipe } from "@shared/pipes/pluralize.pipe";
+import { Observable, Subject, takeUntil } from "rxjs";
+import { Exercise } from "../interfaces/routine.interface";
 
-declare module '../interfaces/routine.interface' {
-  interface Exercise {
-    instructions?: string;
-    category?: string;
-  }
+declare module "../interfaces/routine.interface" {
+	interface Exercise {
+		instructions?: string;
+		category?: string;
+	}
 }
 
 @Component({
-  selector: 'app-exercise-detail',
-  standalone: true,
-  templateUrl: './exercise-detail.page.html',
-  styleUrls: ['./exercise-detail.page.scss'],
-  imports: [
-    NgIf,
-    IonHeader,
-    IonContent,
-    IonTitle,
-    IonToolbar,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonSpinner,
-    IonIcon,
-    IonButtons,
-    IonBackButton,
-    AsyncPipe,
-    NgOptimizedImage,
-    UpperCasePipe,
-    NgClass,
-    IonButton,
-    RouterLink,
-    PluralizePipe,
-  ],
+	selector: "app-exercise-detail",
+	standalone: true,
+	templateUrl: "./exercise-detail.page.html",
+	styleUrls: ["./exercise-detail.page.scss"],
+	imports: [
+		NgIf,
+		IonHeader,
+		IonContent,
+		IonTitle,
+		IonToolbar,
+		IonCard,
+		IonCardHeader,
+		IonCardTitle,
+		IonCardContent,
+		IonSpinner,
+		IonIcon,
+		IonButtons,
+		IonBackButton,
+		AsyncPipe,
+		NgOptimizedImage,
+		UpperCasePipe,
+		NgClass,
+		IonButton,
+		RouterLink,
+		PluralizePipe,
+	],
 })
-export class ExerciseDetailPage implements OnInit {
-  @Select(RoutineState.getSelectedExercise)
-  selectedExercise$!: Observable<Exercise | null>;
-  isLoading = false;
+export class ExerciseDetailPage implements OnInit, OnDestroy {
+	@Select(RoutineState.getSelectedExercise)
+	selectedExercise$!: Observable<Exercise | null>;
+	isLoading = false;
+	private destroy$ = new Subject<void>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store,
-  ) {}
+	constructor(
+		private route: ActivatedRoute,
+		private store: Store,
+	) {
+		// Registrar todos los iconos utilizados en el componente
+		addIcons({
+			starOutline,
+			documentTextOutline,
+			informationCircleOutline,
+			timeOutline,
+			repeatOutline,
+			layersOutline,
+			stopwatchOutline,
+			listOutline,
+			alertCircleOutline,
+			fitnessOutline,
+			arrowForward,
+		});
+	}
 
-  ngOnInit() {
-    const exerciseId = this.route.snapshot.paramMap.get('id');
-    if (exerciseId) {
-      this.isLoading = true;
-      this.store.dispatch(new LoadSelectedExercise(exerciseId)).subscribe({
-        next: () => (this.isLoading = false),
-        error: () => (this.isLoading = false),
-      });
-    }
-  }
+	ngOnInit() {
+		const exerciseId = this.route.snapshot.paramMap.get("id");
+		if (exerciseId) {
+			this.isLoading = true;
+			this.store
+				.dispatch(new LoadSelectedExercise(exerciseId))
+				.pipe(takeUntil(this.destroy$))
+				.subscribe({
+					next: () => {
+						this.isLoading = false;
+					},
+					error: () => {
+						this.isLoading = false;
+					},
+				});
+		}
+	}
+
+	ngOnDestroy() {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 }

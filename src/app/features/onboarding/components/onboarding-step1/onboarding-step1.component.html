@@ -1,0 +1,111 @@
+<ion-content>
+  <div class="form-container">
+    <h2 class="step-title">Información Personal</h2>
+    <form [formGroup]="userForm">
+      <div class="personal-section">
+        <ion-list>
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="fullName"
+              placeholder="Nombre completo"
+            ></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('fullName')">
+            El nombre completo es obligatorio.
+          </ion-text>
+          <ion-text class="helper-text">Ingrese su nombre completo.</ion-text>
+
+          <ion-item>
+            <ion-icon name="home-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="address"
+              placeholder="Dirección"
+            ></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('address')">
+            La dirección es obligatoria.
+          </ion-text>
+          <ion-text class="helper-text">Ingrese su dirección completa.</ion-text>
+        </ion-list>
+      </div>
+
+      <div class="contact-section">
+        <ion-list>
+          <ion-item>
+            <ion-icon name="call-outline" slot="start"></ion-icon>
+            <ion-input
+              type="tel"
+              formControlName="phone"
+              placeholder="Teléfono"
+            ></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('phone')">
+            Ingrese un número de celular válido (09xxxxxxx).
+          </ion-text>
+          <ion-text class="helper-text">Formato: 09xxxxxxx (9 dígitos empezando con 09).</ion-text>
+
+          <ion-item>
+            <ion-icon name="medkit-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="mutual"
+              placeholder="Sociedad médica"
+            ></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('mutual')">
+            La sociedad médica es obligatoria.
+          </ion-text>
+        </ion-list>
+      </div>
+
+      <div class="id-section">
+        <ion-list>
+          <ion-item button (click)="openBirthdateModal()" detail="true">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label>Fecha de nacimiento</ion-label>
+            <ion-text slot="end" class="date-value">
+              {{ userForm.get('dateOfBirth')?.value | date: 'dd/MM/yyyy' }}
+            </ion-text>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('dateOfBirth')">
+            Debe seleccionar su fecha de nacimiento.
+          </ion-text>
+
+          <ion-item>
+            <ion-icon name="people-outline" slot="start"></ion-icon>
+            <ion-label>Sexo</ion-label>
+            <ion-select formControlName="sex" interface="action-sheet">
+              <ion-select-option value="male">Masculino</ion-select-option>
+              <ion-select-option value="female">Femenino</ion-select-option>
+              <ion-select-option value="other">Otro</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('sex')">
+            Debe seleccionar una opción.
+          </ion-text>
+          <ion-item>
+            <ion-icon name="card-outline" slot="start"></ion-icon>
+            <ion-input
+              formControlName="ci"
+              placeholder="Cédula de identidad"
+            ></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('ci')">
+            Ingrese una cédula válida (8 dígitos sin puntos ni guiones).
+          </ion-text>
+          <ion-text class="helper-text">Ingrese su cédula (8 dígitos sin puntos ni guiones).</ion-text>
+        </ion-list>
+      </div>
+    </form>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextStep()">
+        Siguiente
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

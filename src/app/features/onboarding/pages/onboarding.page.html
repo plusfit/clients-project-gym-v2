@@ -1,0 +1,12 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Onboarding</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding onboarding-content">
+  <ion-nav
+    [root]="initialComponent"
+    [rootParams]="getInitialParams()"
+  ></ion-nav>
+</ion-content>

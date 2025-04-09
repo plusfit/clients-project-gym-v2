@@ -1,7 +1,7 @@
 {
-  "name": "client-project-gym-v2",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular-standalone"
+	"name": "client-project-gym-v2",
+	"integrations": {
+		"capacitor": {}
+	},
+	"type": "angular-standalone"
 }

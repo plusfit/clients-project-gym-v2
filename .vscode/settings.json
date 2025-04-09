@@ -1,29 +1,30 @@
 {
-  "typescript.preferences.autoImportFileExcludePatterns": [
-    "@ionic/angular/common",
-    "@ionic/angular"
-  ],
-  "cSpell.words": [
-    "algún",
-    "APEXPRO",
-    "Cargando",
-    "comunes",
-    "descanso",
-    "Desconocido",
-    "Descripción",
-    "detalles",
-    "ejercicio",
-    "específicas",
-    "Imagen",
-    "ngxs",
-    "Pendiente",
-    "Propiedades",
-    "Repeticiones",
-    "Resuelto",
-    "Revisado",
-    "solicitado",
-    "terminan",
-    "Tiempo",
-    "tipo"
-  ]
+	"typescript.preferences.autoImportFileExcludePatterns": ["@ionic/angular/common", "@ionic/angular"],
+	"cSpell.words": [
+		"algún",
+		"APEXPRO",
+		"Cargando",
+		"comunes",
+		"descanso",
+		"Desconocido",
+		"Descripción",
+		"detalles",
+		"ejercicio",
+		"específicas",
+		"Imagen",
+		"ngxs",
+		"Pendiente",
+		"Propiedades",
+		"Repeticiones",
+		"Resuelto",
+		"Revisado",
+		"solicitado",
+		"terminan",
+		"Tiempo",
+		"tipo"
+	],
+	"editor.codeActionsOnSave": {
+		"source.organizeImports.biome": "explicit",
+		"source.fixAll.biome": "explicit"
+	}
 }
