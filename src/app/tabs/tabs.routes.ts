@@ -43,6 +43,11 @@ export const routes: Routes = [
 				path: "onboarding",
 				loadComponent: () => import("../features/onboarding/pages/onboarding.page").then((m) => m.OnboardingPage),
 			},
+			{
+				path: "mi-plan",
+				loadComponent: () =>
+					import("../features/plans/pages/assigned-plan/assigned-plan.page").then((m) => m.AssignedPlanPage),
+			},
 		],
 	},
 	{

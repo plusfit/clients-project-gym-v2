@@ -72,8 +72,10 @@ export class AuthFacadeService {
 			routineId: "67c0a95cde6282d107e2786d",
 		};
 
-		// Establecer token en localStorage
+		// Guardar datos importantes en localStorage para mayor compatibilidad
 		localStorage.setItem("token", "mock-token");
+		localStorage.setItem("userId", mockUser._id);
+		console.log(`🧪 Usuario mock establecido con ID: ${mockUser._id}`);
 
 		// Este dispatch actualizará el estado
 		this.store.dispatch(new SetMockUser(mockUser));
