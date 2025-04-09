@@ -1,0 +1,345 @@
+ion-content {
+  --background: var(--ion-background-color);
+  --padding-top: 32px;
+  --padding-bottom: 32px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --overflow: auto;
+}
+
+.form-container {
+  padding: 24px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.step-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.step3-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ion-color-primary);
+  margin: 0 0 8px 8px;
+  display: flex;
+  align-items: center;
+
+  ion-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+    color: var(--ion-color-primary);
+  }
+}
+
+.helper-text {
+  display: block;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.training-section,
+.goal-section,
+.type-section,
+.level-section {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid var(--ion-color-primary);
+  margin-bottom: 20px;
+}
+
+ion-item {
+  --background: rgba(255, 255, 255, 0.08);
+  --border-radius: 14px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --inner-padding-end: 12px;
+  --min-height: 60px;
+  margin-bottom: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  --border-color: transparent;
+  --highlight-color-focused: var(--ion-color-primary);
+  --highlight-height: 2px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: visible;
+  z-index: 1;
+}
+
+ion-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+  border-radius: 14px;
+  z-index: -1;
+}
+
+ion-item:hover {
+  --background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+ion-item:focus-within {
+  --background: rgba(var(--ion-color-primary-rgb), 0.2);
+  box-shadow: 0 8px 20px rgba(var(--ion-color-primary-rgb), 0.25);
+}
+
+ion-range {
+  --bar-background: rgba(255, 255, 255, 0.1);
+  --bar-background-active: var(--ion-color-primary);
+  --knob-background: var(--ion-color-primary);
+  --pin-background: var(--ion-color-primary);
+  --pin-color: white;
+  padding: 8px 0;
+  --bar-height: 6px;
+  --knob-size: 24px;
+
+  &::part(pin) {
+    font-weight: 600;
+  }
+
+  &::part(tick) {
+    background: rgba(var(--ion-color-primary-rgb), 0.5);
+    width: 2px;
+    height: 12px;
+  }
+}
+
+ion-segment {
+  margin-top: 8px;
+  --background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 6px;
+}
+
+ion-segment-button {
+  font-size: 0.85rem;
+  --indicator-color: var(--ion-color-primary);
+  --border-radius: 6px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --color: rgba(255, 255, 255, 0.8);
+  --color-checked: white;
+  --background-checked: var(--ion-color-primary);
+  transition: all 0.3s ease;
+  font-weight: 500;
+  text-align: center;
+}
+
+ion-segment-button:hover {
+  --color: white;
+}
+
+ion-select {
+  width: 100%;
+  max-width: 100%;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --placeholder-opacity: 1;
+}
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  color: rgba(255, 255, 255, 0.9);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: initial;
+}
+
+ion-select::part(icon) {
+  color: var(--ion-color-primary);
+  opacity: 1;
+}
+
+ion-label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+ion-text[color="danger"] {
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-top: 6px;
+  margin-bottom: 4px;
+  opacity: 1;
+  color: var(--ion-color-danger);
+  font-weight: 500;
+}
+
+ion-footer {
+  ion-toolbar {
+    --padding-top: 8px;
+    --padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --background: transparent;
+    --border-color: transparent;
+  }
+
+  ion-button {
+    --background: var(--ion-color-primary);
+    --background-hover: var(--ion-color-primary-shade);
+    --border-radius: 10px;
+    --padding-start: 28px;
+    --padding-end: 28px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    margin-right: 8px;
+    box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+    transition: transform 0.2s ease;
+    --color: white;
+  }
+
+  ion-button:hover {
+    transform: translateY(-2px);
+    --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.5);
+  }
+
+  ion-button ion-icon {
+    color: white;
+    font-size: 1.1rem;
+    margin-left: 8px;
+    margin-right: 0;
+  }
+
+  ion-button[slot="start"] ion-icon {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  ion-content {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+
+  .form-container {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+
+  .step-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 0.9rem;
+    margin: 0 0 6px 4px;
+
+    ion-icon {
+      font-size: 1.1rem;
+    }
+  }
+
+  .helper-text {
+    font-size: 0.7rem;
+    margin-left: 4px;
+    margin-bottom: 10px;
+  }
+
+  ion-item {
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --min-height: 54px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  }
+
+  ion-item::before {
+    opacity: 0.7;
+  }
+
+  ion-range {
+    --knob-size: 22px;
+    padding: 8px 0;
+  }
+
+  /* Mejorar visualización de segmentos en dispositivos pequeños */
+  ion-segment {
+    --background: transparent;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  ion-segment-button {
+    font-size: 0.8rem;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    min-width: 70px;
+    --border-radius: 20px;
+    --background: rgba(255, 255, 255, 0.08);
+    --background-checked: var(--ion-color-primary);
+    margin: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+  }
+
+  .training-section,
+  .goal-section,
+  .type-section,
+  .level-section {
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+
+  ion-footer ion-button {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 0.9rem;
+  }
+}

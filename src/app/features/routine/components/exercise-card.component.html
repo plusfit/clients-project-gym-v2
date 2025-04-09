@@ -31,7 +31,7 @@
         <ion-icon name="layers-outline" class="detail-icon"></ion-icon>
         <span class="detail-text">{{ exercise.series || 0 }} series</span>
       </div>
-      <div class="exercise-details" *ngIf="!isCardio">
+      <div class="exercise-details" *ngIf="!isCardio && exercise.type !== 'room'">
         <ion-icon name="pause-outline" class="detail-icon"></ion-icon>
         <span class="detail-text">{{ exercise.rest || 0 }} min descanso</span>
       </div>

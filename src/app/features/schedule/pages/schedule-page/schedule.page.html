@@ -73,14 +73,4 @@
       ></app-unsubscribe-confirmation-modal>
     </ng-template>
   </ion-modal>
-
-  <!-- Alert para límite de inscripciones o errores -->
-  <ion-alert
-    [isOpen]="showAlert"
-    (ionAlertDidDismiss)="onAlertDismiss()"
-    header="Información"
-    message="{{ alertMessage }}"
-    buttons="OK"
-  >
-  </ion-alert>
 </ion-content>

@@ -1,0 +1,310 @@
+ion-content {
+  --background: var(--ion-background-color);
+  --padding-top: 32px;
+  --padding-bottom: 32px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --overflow: auto;
+}
+
+.form-container {
+  padding: 24px 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow-y: visible;
+  height: auto;
+}
+
+.step-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: visible;
+}
+
+.personal-section,
+.contact-section,
+.id-section {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid var(--ion-color-primary);
+  overflow: visible;
+}
+
+ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+ion-item {
+  --background: rgba(255, 255, 255, 0.07);
+  --border-radius: 12px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --inner-padding-end: 8px;
+  --min-height: 56px;
+  margin-bottom: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --border-color: transparent;
+  --highlight-color-focused: var(--ion-color-primary);
+  --highlight-height: 2px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: relative;
+  z-index: 1;
+}
+
+ion-item:hover {
+  --background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+ion-item:focus-within {
+  --background: rgba(var(--ion-color-primary-rgb), 0.15);
+  z-index: 2;
+  transform: none;
+}
+
+ion-icon {
+  color: var(--ion-color-primary);
+  font-size: 1.2rem;
+  margin-right: 12px;
+}
+
+ion-input {
+  --padding-start: 8px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  font-size: 1rem;
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --placeholder-opacity: 1;
+  --color: rgba(255, 255, 255, 0.9);
+}
+
+ion-label {
+  margin-right: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+ion-select {
+  --placeholder-color: rgba(255, 255, 255, 0.5);
+  --placeholder-opacity: 1;
+  --padding-start: 8px;
+  --padding-end: 0;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  width: 100%;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+}
+
+ion-select::part(placeholder),
+ion-select::part(text) {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+ion-select::part(icon) {
+  color: var(--ion-color-primary);
+  opacity: 1;
+}
+
+ion-text[color="danger"] {
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-top: -4px;
+  margin-bottom: 8px;
+  opacity: 1;
+  color: var(--ion-color-danger);
+  font-weight: 500;
+}
+
+.helper-text {
+  display: block;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  margin-top: -4px;
+  margin-bottom: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.date-value {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+ion-footer {
+  ion-toolbar {
+    --padding-top: 8px;
+    --padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --background: transparent;
+    --border-color: transparent;
+  }
+
+  ion-button {
+    --background: var(--ion-color-primary);
+    --background-hover: var(--ion-color-primary-shade);
+    --border-radius: 10px;
+    --padding-start: 28px;
+    --padding-end: 28px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    --color: white !important;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    margin-right: 8px;
+    box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+    transition: transform 0.2s ease;
+  }
+
+  ion-button:hover {
+    transform: translateY(-2px);
+    --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.5);
+  }
+
+  ion-button ion-icon {
+    color: white !important;
+    font-size: 1.1rem;
+    margin-left: 8px;
+    margin-right: 0;
+  }
+
+  ion-button[slot="start"] ion-icon {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+}
+
+ion-modal.datepicker-modal {
+  --width: 90%;
+  --max-width: 460px;
+  --height: auto;
+  --border-radius: 16px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+/* Calendar styling */
+:host ::ng-deep {
+  ion-datetime {
+    --background: var(--ion-background-color);
+    --ion-color-light: rgba(255, 255, 255, 0.08);
+    margin: 0 auto;
+    width: 100%;
+
+    .calendar-day {
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .calendar-day.calendar-day-active {
+      background: var(--ion-color-primary);
+      color: var(--ion-color-primary-contrast);
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.4);
+    }
+
+    .calendar-day:hover:not(.calendar-day-active) {
+      background: rgba(var(--ion-color-primary-rgb), 0.15);
+      color: var(--ion-color-primary-contrast);
+    }
+
+    .datetime-header {
+      color: var(--ion-color-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  ion-content {
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+
+  .form-container {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+
+  .step-title {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+  }
+
+  .personal-section,
+  .contact-section,
+  .id-section {
+    padding: 12px;
+  }
+
+  ion-item {
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --min-height: 50px;
+  }
+
+  ion-input {
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  ion-icon {
+    font-size: 1.1rem;
+    margin-right: 8px;
+  }
+
+  .date-value {
+    font-size: 0.9rem;
+  }
+
+  ion-footer ion-button {
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-size: 0.9rem;
+  }
+
+  ion-modal.datepicker-modal {
+    --max-width: 320px;
+  }
+
+  :host ::ng-deep ion-datetime {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .helper-text {
+    font-size: 0.7rem;
+    margin-bottom: 10px;
+  }
+
+  ion-text[color="danger"] {
+    font-size: 0.7rem;
+  }
+}

@@ -32,6 +32,7 @@
           <img
             alt="Imagen del ejercicio"
             [ngSrc]="
+              exercise.gifUrl ||
               exercise.imageUrl ||
               'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2xwdXc4aDJreTRiOG13d2pnNndmYW55cWFiYngzZ2MybXZ2YzI4MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YOxU0vp6dD91UC4/giphy.gif'
             "
@@ -48,9 +49,6 @@
             }}
           </div>
 
-          <div *ngIf="exercise.category" class="image-category-badge">
-            {{ exercise.category | uppercase }}
-          </div>
         </div>
         <ion-card-header class="card-header">
           <ion-card-title class="card-title">
@@ -64,12 +62,19 @@
             ></ion-icon>
             {{ exercise.name }}
           </ion-card-title>
+          <div class="header-meta" *ngIf="exercise.category">
+            <span class="category-label">
+              <ion-icon name="star-outline"></ion-icon>
+              <span class="fallback-icon">★</span>
+              {{ exercise.category | uppercase }}
+            </span>
+          </div>
         </ion-card-header>
         <ion-card-content class="card-content">
           <div class="description-container">
             <h3 class="description-title">
               <ion-icon name="document-text-outline"></ion-icon>
-              Descripción del Ejercicio
+              Descripción
             </h3>
             <div class="exercise-description-wrapper">
               <p class="exercise-description">{{ exercise.description }}</p>
@@ -85,19 +90,7 @@
               <span class="section-title">Detalles</span>
             </div>
 
-            <div class="detail-item" *ngIf="exercise.category">
-              <div class="detail-icon-container">
-                <ion-icon
-                  name="bookmark-outline"
-                  class="detail-icon"
-                ></ion-icon>
-              </div>
-              <div class="detail-content">
-                <p class="detail-text">{{ exercise.category }}</p>
-              </div>
-            </div>
-
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="exercise.type !== 'room'">
               <div class="detail-icon-container">
                 <ion-icon name="time-outline" class="detail-icon"></ion-icon>
               </div>
