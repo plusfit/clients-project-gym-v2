@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mi Plan de Entrenamiento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="plan; else noPlan">
+    <ion-card class="plan-card">
+      <div class="plan-header">
+        <ion-card-header>
+          <ion-card-title>{{ plan.name || 'Plan Personalizado' }}</ion-card-title>
+          <ion-card-subtitle>
+            <span class="level-badge">{{ getLevelText(plan.level) }}</span>
+            <span class="days-badge">{{ plan.daysPerWeek || 3 }} días/semana</span>
+          </ion-card-subtitle>
+        </ion-card-header>
+      </div>
+
+      <ion-card-content>
+        <div class="plan-description">
+          <p>{{ plan.description || 'Plan de entrenamiento personalizado según tus preferencias.' }}</p>
+        </div>
+
+        <div class="plan-details">
+          <div class="detail-item">
+            <ion-icon name="trophy-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Objetivo</h4>
+              <p>{{ plan.goal | goalTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <ion-icon name="barbell-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Frecuencia</h4>
+              <p>{{ plan.daysPerWeek || 3 }} días por semana</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="plan-message">
+          <p>Visita la sección de calendario para ver tu programa de entrenamiento.</p>
+        </div>
+
+        <ion-button *ngIf="!userHasEnrollments" expand="block" class="start-button" routerLink="/cliente/horarios">
+          <ion-icon slot="start" name="play-outline"></ion-icon>
+          Ver horarios disponibles
+        </ion-button>
+
+        <div *ngIf="userHasEnrollments" class="enrolled-message">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+          <p>Ya estás inscrito en horarios de entrenamiento.
+          Visita la sección de calendario para ver tus próximas clases.</p>
+          <ion-button expand="block" color="tertiary" class="calendar-button" routerLink="/cliente/horarios">
+            <ion-icon slot="start" name="calendar-outline"></ion-icon>
+            Ver mi calendario
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #noPlan>
+    <div class="no-plan-container">
+      <ion-card>
+        <ion-card-header>
+          <ion-icon name="fitness-outline" class="no-plan-icon"></ion-icon>
+          <ion-card-title>No hay plan asignado</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Aún no se te ha asignado un plan de entrenamiento.</p>
+          <p>Completa el proceso de onboarding para recibir tu plan personalizado.</p>
+
+          <ion-button expand="block" [routerLink]="['/onboarding']" class="onboarding-button">
+            <ion-icon slot="start" name="create-outline"></ion-icon>
+            Completar onboarding
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
+</ion-content>
