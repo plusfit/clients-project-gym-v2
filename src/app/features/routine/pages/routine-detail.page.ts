@@ -4,8 +4,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
 import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
 import { LoadRoutineById, LoadRoutines, RoutineState } from "@feature/routine/state/routine.state";
-import { IonContent, IonHeader, IonIcon, IonSpinner, IonTitle, IonToolbar } from "@ionic/angular/standalone";
+import { IonContent, IonIcon, IonSpinner } from "@ionic/angular/standalone";
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { addIcons } from "ionicons";
 import { barbellOutline, fitnessOutline } from "ionicons/icons";
 import { Subject } from "rxjs";
@@ -15,13 +16,7 @@ import { Routine, SubRoutine } from "../interfaces/routine.interface";
 @Component({
 	selector: "app-routine-detail-page",
 	template: `
-    <ion-header [translucent]="true">
-      <ion-toolbar>
-        <ion-title>
-          <span style="opacity: 0.9; font-family: 'APEXPRO'">RUTINAS</span>
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
+    <app-header title="RUTINAS" [showBackButton]="false"></app-header>
     <ion-content class="content">
       <div class="container">
         <div class="loading-container" *ngIf="isLoading">
@@ -264,7 +259,7 @@ import { Routine, SubRoutine } from "../interfaces/routine.interface";
     `,
 	],
 	standalone: true,
-	imports: [CommonModule, SubroutineCardComponent, IonHeader, IonToolbar, IonTitle, IonContent, IonIcon, IonSpinner],
+	imports: [CommonModule, SubroutineCardComponent, IonContent, IonIcon, IonSpinner, AppHeaderComponent],
 })
 export class RoutineDetailPage implements OnInit, OnDestroy {
 	routine?: Routine;
