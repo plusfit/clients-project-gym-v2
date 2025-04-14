@@ -28,21 +28,21 @@
   box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.5);
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     right: 0px;
     width: 80px;
     height: 80px;
     transform: translateY(-50%);
-    background-image: url('/assets/logos/logo.png');
+    background-image: url("/assets/logos/logo.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: 60px;
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -92,7 +92,7 @@
   color: white;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-family: 'APEXPRO', sans-serif;
+  font-family: "APEXPRO", sans-serif;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
