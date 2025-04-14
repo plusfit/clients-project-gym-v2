@@ -8,9 +8,13 @@ import { IonicModule, LoadingController } from "@ionic/angular";
 import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
+import { addIcons } from "ionicons";
+import { bodyOutline, calendarNumberOutline, createOutline, fitnessOutline, layersOutline, personOutline, playOutline, ribbonOutline, shapesOutline, trophyOutline } from "ionicons/icons";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { CategoryTranslatorPipe } from "../../../../shared/pipes/category-translator.pipe";
 import { GoalTranslatorPipe } from "../../../../shared/pipes/goal-translator.pipe";
+import { PlanTypeTranslatorPipe } from "../../../../shared/pipes/plan-type-translator.pipe";
 import { User } from "../../../auth/interfaces/user.interface";
 import { AuthState } from "../../../auth/state/auth.state";
 import { Plan as ProfilePlan } from "../../../profile/interfaces/plan.interface";
@@ -26,6 +30,8 @@ import { Plan } from "../../interfaces/plan.interface";
 		CommonModule,
 		RouterModule,
 		GoalTranslatorPipe,
+		CategoryTranslatorPipe,
+		PlanTypeTranslatorPipe,
 		IonContent,
 		IonCard,
 		IonCardContent,
@@ -69,6 +75,7 @@ export class AssignedPlanPage implements OnInit {
 				return this.convertProfilePlanToPlan(profilePlan);
 			})
 		);
+		addIcons({ ribbonOutline, calendarNumberOutline, layersOutline, shapesOutline, bodyOutline, personOutline, trophyOutline, playOutline, createOutline, fitnessOutline });
 	}
 
 	async ngOnInit() {
@@ -150,10 +157,15 @@ export class AssignedPlanPage implements OnInit {
 		return {
 			_id: profilePlan.id,
 			name: profilePlan.name,
-			description: "Plan de entrenamiento personalizado.",
-			level: profilePlan.experienceLevel as "beginner" | "intermediate" | "advanced",
-			daysPerWeek: profilePlan.days || 3,
+			type: profilePlan.type,
+			category: profilePlan.category,
 			goal: profilePlan.goal || "Mejorar condición física",
+			experienceLevel: profilePlan.experienceLevel as "beginner" | "intermediate" | "advanced",
+			minAge: profilePlan.minAge,
+			maxAge: profilePlan.maxAge,
+			includesCoach: profilePlan.includesCoach,
+			tags: profilePlan.tags,
+			days: profilePlan.days || 3,
 			createdAt: profilePlan.createdAt?.toString(),
 			updatedAt: profilePlan.updatedAt?.toString()
 		};

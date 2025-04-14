@@ -67,6 +67,14 @@ ion-card-subtitle {
   border-radius: 12px;
   font-weight: 500;
   color: var(--color-text-light);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.subtitle-icon {
+  color: white;
+  font-size: 1.1em;
 }
 
 .plan-description {
@@ -74,6 +82,23 @@ ion-card-subtitle {
   color: var(--color-text-medium);
   line-height: 1.6;
   font-size: 17px;
+}
+
+.plan-tags {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-badge {
+  background-color: rgba(var(--ion-color-secondary-rgb), 0.15);
+  color: var(--ion-color-secondary-contrast);
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(var(--ion-color-secondary-rgb), 0.3);
 }
 
 .plan-details {
@@ -224,65 +249,74 @@ ion-card-subtitle {
     padding-bottom: 4px;
   }
   ion-card-title {
-    font-size: 18px;
-    margin-bottom: 6px;
+    padding-top: 18px;
+    font-size: 19px;
+    margin-bottom: 7px;
   }
   ion-card-subtitle {
-    font-size: 12px;
-    gap: 6px;
+    font-size: 13px;
+    gap: 7px;
   }
   .level-badge,
   .days-badge {
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 13px;
+    border-radius: 9px;
   }
   .plan-description {
-    font-size: 14px;
-    margin: 6px 0 16px 0;
+    font-size: 15px;
+    margin: 8px 0 18px 0;
   }
   .plan-details {
-    padding: 12px;
-    gap: 12px;
-    font-size: 14px;
+    padding: 14px;
+    gap: 14px;
+    font-size: 15px;
   }
   .detail-content h4 {
-    font-size: 15px;
-    margin-bottom: 4px;
+    font-size: 16px;
+    margin-bottom: 5px;
   }
   .detail-content p {
-    font-size: 14px;
+    font-size: 15px;
   }
   .plan-message {
-    font-size: 13px;
-    padding: 10px 12px;
-    margin: 14px 0;
-    border-left-width: 3px;
+    font-size: 14px;
+    padding: 11px 14px;
+    margin: 16px 0;
   }
   .start-button {
-    font-size: 15px;
-    height: 40px;
-    margin-top: 14px;
+    font-size: 16px;
+    height: 44px;
+    margin-top: 16px;
   }
   .enrolled-message {
-    font-size: 14px;
-    padding: 12px;
-    margin: 14px 0 6px 0;
+    font-size: 15px;
+    padding: 14px;
+    margin: 16px 0 8px 0;
   }
   .calendar-button {
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 12px;
+    font-size: 15px;
   }
   .no-plan-container {
     padding: 16px 4px;
   }
   .no-plan-icon {
-    font-size: 40px;
-    margin-bottom: 10px;
+    font-size: 45px;
+    margin-bottom: 12px;
   }
   .onboarding-button {
-    font-size: 15px;
-    margin-top: 14px;
+    font-size: 16px;
+    margin-top: 16px;
+  }
+  .plan-tags {
+    margin-bottom: 14px;
+    gap: 6px;
+  }
+  .tag-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 10px;
   }
 }
 
@@ -297,34 +331,42 @@ ion-card-subtitle {
     gap: 6px;
   }
   .plan-message {
-    font-size: 12px;
-    padding: 6px 6px;
-    margin: 8px 0;
-    border-left-width: 2px;
+    font-size: 13px;
+    padding: 8px 8px;
+    margin: 10px 0;
   }
   .start-button {
-    font-size: 13px;
-    height: 34px;
-    margin-top: 8px;
+    font-size: 14px;
+    height: 38px;
+    margin-top: 10px;
   }
   .enrolled-message {
-    font-size: 12px;
-    padding: 8px;
-    margin: 8px 0 4px 0;
+    font-size: 13px;
+    padding: 10px;
+    margin: 10px 0 5px 0;
   }
   .calendar-button {
-    margin-top: 6px;
-    font-size: 12px;
+    margin-top: 8px;
+    font-size: 13px;
   }
   .no-plan-container {
     padding: 8px 2px;
   }
   .no-plan-icon {
-    font-size: 28px;
-    margin-bottom: 6px;
+    font-size: 32px;
+    margin-bottom: 8px;
   }
   .onboarding-button {
-    font-size: 13px;
-    margin-top: 8px;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .plan-tags {
+    margin-bottom: 10px;
+    gap: 4px;
+  }
+  .tag-badge {
+    font-size: 11px;
+    padding: 3px 6px;
+    border-radius: 8px;
   }
 }

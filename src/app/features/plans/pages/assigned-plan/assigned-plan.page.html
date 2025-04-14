@@ -9,20 +9,24 @@
             >{{ plan.name || 'Plan Personalizado' }}</ion-card-title
           >
           <ion-card-subtitle>
-            <span class="level-badge">{{ getLevelText(plan.level) }}</span>
+            <span class="level-badge"
+              ><ion-icon name="ribbon-outline" class="subtitle-icon"></ion-icon
+              >{{ getLevelText(plan.experienceLevel) }}</span
+            >
             <span class="days-badge"
-              >{{ plan.daysPerWeek || 3 }} días/semana</span
+              ><ion-icon
+                name="calendar-number-outline"
+                class="subtitle-icon"
+              ></ion-icon
+              >{{ plan.days || 3 }} días/semana</span
             >
           </ion-card-subtitle>
         </ion-card-header>
       </div>
 
       <ion-card-content>
-        <div class="plan-description">
-          <p>
-            {{ plan.description || 'Plan de entrenamiento personalizado según
-            tus preferencias.' }}
-          </p>
+        <div class="plan-tags" *ngIf="plan.tags && plan.tags.length > 0">
+          <span *ngFor="let tag of plan.tags" class="tag-badge">{{ tag }}</span>
         </div>
 
         <div class="plan-details">
@@ -35,10 +39,42 @@
           </div>
 
           <div class="detail-item">
-            <ion-icon name="barbell-outline"></ion-icon>
+            <ion-icon name="calendar-number-outline"></ion-icon>
             <div class="detail-content">
               <h4>Frecuencia</h4>
-              <p>{{ plan.daysPerWeek || 3 }} días por semana</p>
+              <p>{{ plan.days || 3 }} días por semana</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.type">
+            <ion-icon name="layers-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Tipo</h4>
+              <p>{{ plan.type | planTypeTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.category">
+            <ion-icon name="shapes-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Categoría</h4>
+              <p>{{ plan.category | categoryTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.minAge && plan.maxAge">
+            <ion-icon name="body-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Rango de Edad</h4>
+              <p>{{ plan.minAge }} - {{ plan.maxAge }} años</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.includesCoach">
+            <ion-icon name="person-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Incluye Entrenador</h4>
+              <p>{{ plan.includesCoach ? 'Sí' : 'No' }}</p>
             </div>
           </div>
         </div>
@@ -55,7 +91,6 @@
           class="start-button"
           routerLink="/cliente/horarios"
         >
-          <ion-icon slot="start" name="play-outline"></ion-icon>
           Ver horarios disponibles
         </ion-button>
       </ion-card-content>

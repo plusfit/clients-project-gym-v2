@@ -1,5 +1,6 @@
 import { NgIf } from "@angular/common";
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { Exercise } from "@feature/routine/interfaces/routine.interface";
 import { IonIcon, IonItem, IonLabel } from "@ionic/angular/standalone";
 
@@ -7,14 +8,9 @@ import { IonIcon, IonItem, IonLabel } from "@ionic/angular/standalone";
 	selector: "app-exercise-item",
 	templateUrl: "./exercise-item.component.html",
 	styleUrls: ["./exercise-item.component.scss"],
-	imports: [IonItem, IonIcon, IonLabel, NgIf],
+	imports: [IonItem, IonIcon, IonLabel, NgIf, RouterLink],
 	standalone: true,
 })
 export class ExerciseItemComponent {
 	@Input() exercise!: Exercise;
-	@Output() exerciseClick = new EventEmitter<Exercise>();
-
-	onExerciseClick(): void {
-		this.exerciseClick.emit(this.exercise);
-	}
 }
