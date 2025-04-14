@@ -9,43 +9,7 @@ import {
   User,
 } from '../interfaces/user.interface';
 import { AuthService } from '../services/auth.service';
-// import {
-//   GetCurrentUser,
-//   Login,
-//   Logout,
-//   RefreshSession,
-//   SetMockUser,
-// } from './auth.actions';
-
-// Actions
-
-export class Login {
-  static readonly type = '[Auth] Login';
-  constructor(public credentials: { email: string; password: string }) {}
-}
-
-export class Logout {
-  static readonly type = '[Auth] Logout';
-}
-
-export class GetCurrentUser {
-  static readonly type = '[Auth] Get Current User';
-}
-
-export class RefreshSession {
-  static readonly type = '[Auth] Refresh Session';
-}
-
-// Acción para establecer usuario directamente (para pruebas/mock)
-export class SetMockUser {
-  static readonly type = '[Auth] Set Mock User';
-  constructor(public user: User) {}
-}
-
-export class Register {
-  static readonly type = '[Auth] Register';
-  constructor(public credentials: RegisterCredentials) {}
-}
+import { GetCurrentUser, Login, Logout, RefreshSession, Register, SetMockUser } from './auth.actions';
 
 // Estado
 export interface AuthStateModel {
@@ -55,6 +19,7 @@ export interface AuthStateModel {
   error: string | null;
 }
 
+@Injectable()
 @State<AuthStateModel>({
   name: 'auth',
   defaults: {
@@ -64,7 +29,6 @@ export interface AuthStateModel {
     error: null,
   },
 })
-@Injectable()
 export class AuthState {
   constructor(private authService: AuthService) {
     // Intenta recuperar el token al inicializar el estado
@@ -195,7 +159,7 @@ export class AuthState {
     );
   }
 
-  @Action(SetMockUser)
+  @Action(SetMockUser, { cancelUncompleted: true })
   setMockUser(ctx: StateContext<AuthStateModel>, action: SetMockUser) {
     ctx.patchState({
       user: action.user,

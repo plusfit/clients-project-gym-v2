@@ -9,7 +9,7 @@ import {
   User,
   UserRole,
 } from '../interfaces/user.interface';
-//import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 
@@ -18,7 +18,7 @@ import { environment } from 'environments/environment';
 })
 export class AuthService {
   constructor(
-    // private _auth: Auth,
+    private _auth: Auth,
     private http: HttpClient,
   ) {}
 
@@ -109,6 +109,6 @@ export class AuthService {
   }
 
   registerFirebase(email: string, password: string): any {
-    //    return from(createUserWithEmailAndPassword(this._auth, email, password));
+    return from(createUserWithEmailAndPassword(this._auth, email, password));
   }
 }

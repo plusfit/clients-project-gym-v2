@@ -1,4 +1,4 @@
-import { RegisterCredentials, User } from '../interfaces/user.interface';
+import { RegisterCredentials, User } from "../interfaces/user.interface";
 
 export class Login {
   static readonly type = '[Auth] Login';
