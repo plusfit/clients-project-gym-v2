@@ -6,8 +6,6 @@ export interface Plan {
 	level: "beginner" | "intermediate" | "advanced";
 	daysPerWeek: number;
 	goal: string;
-	duration: number;
-	exercises?: PlanExercise[];
 	createdAt?: string;
 	updatedAt?: string;
 }
