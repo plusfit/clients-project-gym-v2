@@ -1,11 +1,4 @@
-<ion-header [translucent]="true" class="ion-no-border">
-  <ion-toolbar color="dark">
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/home" text=""></ion-back-button>
-    </ion-buttons>
-    <ion-title class="ion-text-center">Mi Plan</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Mi Plan" [showBackButton]="false"></app-header>
 
 <ion-content class="ion-padding">
   <div *ngIf="plan; else noPlan">
