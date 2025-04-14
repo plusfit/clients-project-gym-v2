@@ -32,12 +32,13 @@
 
         <!-- Lista de ejercicios -->
         <div class="exercises-container" *ngIf="!isLoading">
-          <ng-container *ngFor="let exercise of loadedExercises">
+          <div class="exercises-list">
             <app-exercise-item
+              *ngFor="let exercise of loadedExercises"
               [exercise]="exercise"
-              (exerciseClick)="onExerciseClick($event)"
-            ></app-exercise-item>
-          </ng-container>
+            >
+            </app-exercise-item>
+          </div>
 
           <!-- Mensaje si no hay ejercicios -->
           <div *ngIf="loadedExercises.length === 0" class="no-exercises">
