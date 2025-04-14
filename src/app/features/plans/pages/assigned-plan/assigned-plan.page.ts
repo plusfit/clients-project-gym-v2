@@ -5,10 +5,10 @@ import { RouterModule } from "@angular/router";
 import { RouterLink } from "@angular/router";
 import { UserService } from "@feature/profile/services/user.service";
 import { IonicModule, LoadingController } from "@ionic/angular";
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
-import { Observable, switchMap, tap } from "rxjs";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GoalTranslatorPipe } from "../../../../shared/pipes/goal-translator.pipe";
 import { User } from "../../../auth/interfaces/user.interface";
@@ -24,7 +24,6 @@ import { Plan } from "../../interfaces/plan.interface";
 	standalone: true,
 	imports: [
 		CommonModule,
-		IonicModule,
 		RouterModule,
 		GoalTranslatorPipe,
 		IonContent,
