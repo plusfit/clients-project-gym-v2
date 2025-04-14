@@ -136,8 +136,6 @@ export class AssignedPlanPage implements OnInit {
 		console.log(`Usuario ${this.userHasEnrollments ? "está" : "no está"} inscrito en horarios`);
 	}
 
-
-
 	/**
 	 * Obtiene el texto descriptivo del nivel de entrenamiento
 	 */
