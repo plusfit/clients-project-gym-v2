@@ -10,11 +10,8 @@ import {
 	IonCardHeader,
 	IonCardTitle,
 	IonContent,
-	IonHeader,
 	IonIcon,
 	IonSpinner,
-	IonTitle,
-	IonToolbar,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import {
@@ -35,6 +32,7 @@ import {
 
 import { LoadSelectedExercise, RoutineState } from "@feature/routine/state/routine.state";
 import { Select, Store } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { PluralizePipe } from "@shared/pipes/pluralize.pipe";
 import { Observable, Subject, takeUntil } from "rxjs";
 import { Exercise } from "../interfaces/routine.interface";
@@ -53,10 +51,7 @@ declare module "../interfaces/routine.interface" {
 	styleUrls: ["./exercise-detail.page.scss"],
 	imports: [
 		NgIf,
-		IonHeader,
 		IonContent,
-		IonTitle,
-		IonToolbar,
 		IonCard,
 		IonCardHeader,
 		IonCardTitle,
@@ -72,6 +67,7 @@ declare module "../interfaces/routine.interface" {
 		IonButton,
 		RouterLink,
 		PluralizePipe,
+		AppHeaderComponent,
 	],
 })
 export class ExerciseDetailPage implements OnInit, OnDestroy {

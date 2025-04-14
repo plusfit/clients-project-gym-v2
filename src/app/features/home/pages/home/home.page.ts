@@ -7,14 +7,12 @@ import {
 	IonButton,
 	IonCol,
 	IonContent,
-	IonHeader,
 	IonIcon,
 	IonRow,
 	IonSpinner,
-	IonTitle,
-	IonToolbar,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
 import { Observable, Subscription, interval } from "rxjs";
 import { RoutineCardComponent } from "../../components/routine-card/routine-card.component";
@@ -25,9 +23,6 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 	styleUrls: ["./home.page.scss"],
 	imports: [
 		IonContent,
-		IonHeader,
-		IonToolbar,
-		IonTitle,
 		IonButton,
 		IonIcon,
 		IonSpinner,
@@ -39,6 +34,7 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 		DayTranslatePipe,
 		NgIf,
 		RouterLink,
+		AppHeaderComponent,
 	],
 	standalone: true,
 })

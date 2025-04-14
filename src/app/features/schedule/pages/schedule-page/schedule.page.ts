@@ -14,14 +14,12 @@ import {
 	IonCol,
 	IonContent,
 	IonGrid,
-	IonHeader,
 	IonModal,
 	IonRow,
 	IonSpinner,
-	IonTitle,
-	IonToolbar,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { ToastService } from "@shared/services/toast.service";
 import { Observable, Subscription } from "rxjs";
 
@@ -42,14 +40,12 @@ interface DayEnrollment {
 		EnrollConfirmationModalComponent,
 		UnsubscribeConfirmationModalComponent,
 		IonModal,
-		IonTitle,
-		IonToolbar,
-		IonHeader,
 		IonContent,
 		IonGrid,
 		IonRow,
 		IonCol,
 		IonSpinner,
+		AppHeaderComponent,
 	],
 })
 export class SchedulePageComponent implements OnInit, OnDestroy {
