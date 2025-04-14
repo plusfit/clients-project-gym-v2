@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
 import { User, UserRole } from "../interfaces/user.interface";
-import { AuthState, GetCurrentUser, Login, Logout, RefreshSession, SetMockUser } from "../state/auth.state";
+import { GetCurrentUser, Login, Logout, RefreshSession, SetMockUser } from "../state/auth.actions";
+import {AuthState} from "../state/auth.state"
 
 @Injectable({
 	providedIn: "root",
