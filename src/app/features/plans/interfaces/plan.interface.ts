@@ -1,15 +1,32 @@
+import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
+
 export interface Plan {
-	_id?: string;
-	id?: string;
+	_id: string;
 	name: string;
-	description: string;
-	level: "beginner" | "intermediate" | "advanced";
-	daysPerWeek: number;
+	type: string;
+	category: string;
 	goal: string;
-	duration: number;
-	exercises?: PlanExercise[];
+	experienceLevel: "beginner" | "intermediate" | "advanced";
+	minAge?: number;
+	maxAge?: number;
+	includesCoach?: boolean;
+	tags?: string[];
+	defaultRoutine?: DefaultRoutine;
+	days: number;
 	createdAt?: string;
 	updatedAt?: string;
+	__v?: number; // Opcional, generalmente no necesario en frontend
+}
+
+export interface DefaultRoutine {
+	_id: string;
+	name: string;
+	description?: string;
+	isCustom?: boolean;
+	isGeneral?: boolean;
+	type?: string;
+	subRoutines: string[] | SubRoutine[]; // Puede ser array de IDs o de objetos
+	__v?: number;
 }
 
 export interface PlanExercise {

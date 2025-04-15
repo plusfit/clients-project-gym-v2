@@ -1,4 +1,5 @@
 import { NgForOf, NgIf, UpperCasePipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import {
 	ChangeDetectorRef,
 	Component,
@@ -10,6 +11,7 @@ import {
 	Output,
 	SimpleChanges,
 } from "@angular/core";
+import { RouterLink } from "@angular/router";
 import { Exercise, SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ExerciseService } from "@feature/routine/services/exercise.service";
 import {
@@ -25,6 +27,8 @@ import {
 	IonListHeader,
 	IonSpinner,
 } from "@ionic/angular/standalone";
+import { addIcons } from "ionicons";
+import { barbellOutline, bedOutline, calendarClearOutline, fitnessOutline, listOutline, trendingUpOutline } from "ionicons/icons";
 import { Subject, catchError, forkJoin, of, takeUntil } from "rxjs";
 import { ExerciseItemComponent } from "../exercise-item/exercise-item.component";
 
@@ -43,13 +47,14 @@ import { ExerciseItemComponent } from "../exercise-item/exercise-item.component"
 		IonCardContent,
 		NgIf,
 		IonSpinner,
+		RouterLink,
+		CommonModule,
 	],
 })
 export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 	@Input() routine!: SubRoutine | null;
 	@Input() isRestDay = false;
 	@Input() isEnrolled = false;
-	@Output() exerciseClicked = new EventEmitter<Exercise>();
 
 	loadedExercises: Exercise[] = [];
 	isLoading = true;
@@ -58,7 +63,9 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 	constructor(
 		private exerciseService: ExerciseService,
 		private cd: ChangeDetectorRef,
-	) {}
+	) {
+		addIcons({barbellOutline,fitnessOutline,calendarClearOutline,bedOutline,listOutline,trendingUpOutline});
+	}
 
 	ngOnInit(): void {
 		this.processExercises();
@@ -133,7 +140,8 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 		return exercises.length === 0 || (exercises.length > 0 && typeof exercises[0] !== "string");
 	}
 
-	onExerciseClick(exercise: Exercise): void {
-		this.exerciseClicked.emit(exercise);
+	trackById(index: number, item: Exercise): string {
+		return item._id;
 	}
 }
+
