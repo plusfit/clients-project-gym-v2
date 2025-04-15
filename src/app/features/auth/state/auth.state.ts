@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { ToastService } from '@shared/services/toast.service';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, exhaustMap, tap } from 'rxjs/operators';
 import {
@@ -30,7 +31,7 @@ export interface AuthStateModel {
   },
 })
 export class AuthState {
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private toastService: ToastService) {
     // Intenta recuperar el token al inicializar el estado
     const token = localStorage.getItem('token');
     if (token) {
@@ -179,13 +180,7 @@ export class AuthState {
       exhaustMap((firebaseResponse: FirebaseRegisterResponse) => {
         return this.authService.register(firebaseResponse.user.email).pipe(
           tap((res: RegisterResponse) => {
-            // ctx.patchState({
-            //   registerClient: {
-            //     _id: res.data._id,
-            //     identifier: res.data.identifier,
-            //     role: res.data.role,
-            //   },
-            // });
+            this.toastService.showSuccess('Usuario registrado correctamente');
           }),
         );
       }),
@@ -193,12 +188,11 @@ export class AuthState {
         ctx.patchState({ loading: false });
       }),
       catchError((err: any) => {
-        //TODO: NAHUE COMO LLAMO ACA AL SNACKBAR??
-        // ctx.patchState({ loading: false });
-        // this.snackBarService.showError(
-        //   'Error al crear Cliente',
-        //   this.getFriendlyErrorMessage(err),
-        // );
+        ctx.patchState({
+          loading: false,
+          error: err.message || 'Error al registrar usuario',
+        });
+        this.toastService.showError(ctx.getState().error || 'Error al registrar usuario');
         return throwError(() => err);
       }),
     );
