@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { Plan } from "@feature/profile/interfaces/plan.interface";
 import { LoadPlan } from "@feature/profile/state/user.actions";
@@ -14,14 +14,12 @@ import {
 	IonCol,
 	IonContent,
 	IonGrid,
-	IonHeader,
 	IonModal,
 	IonRow,
 	IonSpinner,
-	IonTitle,
-	IonToolbar,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { ToastService } from "@shared/services/toast.service";
 import { Observable, Subscription } from "rxjs";
 
@@ -42,17 +40,15 @@ interface DayEnrollment {
 		EnrollConfirmationModalComponent,
 		UnsubscribeConfirmationModalComponent,
 		IonModal,
-		IonTitle,
-		IonToolbar,
-		IonHeader,
 		IonContent,
 		IonGrid,
 		IonRow,
 		IonCol,
 		IonSpinner,
+		AppHeaderComponent,
 	],
 })
-export class SchedulePageComponent implements OnInit, OnDestroy {
+export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	@Select(UserState.getPlan) plan$!: Observable<Plan | null>;
 
 	schedules$: Observable<Schedule[]>;
@@ -71,6 +67,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 	showEnrollModal = false;
 	showUnsubscribeModal = false;
 	selectedSchedule: Schedule | null = null;
+
+	// Obtener referencias a los elementos de las tarjetas
+	@ViewChildren(ScheduleCardComponent, { read: ElementRef }) scheduleCardElements!: QueryList<ElementRef>;
 
 	private subscriptions = new Subscription();
 
@@ -123,9 +122,18 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		this.subscriptions.unsubscribe();
 	}
 
+	// Scroll to the first enrolled schedule after the view is initialized
+	ngAfterViewInit(): void {
+		const scrollSub = this.scheduleCardElements.changes.subscribe(() => {
+			setTimeout(() => this.scrollToFirstEnrolledSchedule(), 0);
+		});
+		this.subscriptions.add(scrollSub);
+
+		setTimeout(() => this.scrollToFirstEnrolledSchedule(), 0);
+	}
+
 	onDaySelected(day: string) {
 		this.selectedDay = day;
-		// En lugar de crear una nueva suscripción aquí, usamos el último valor de schedules
 		const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 		this.filterSchedules(schedules);
 	}
@@ -337,5 +345,27 @@ export class SchedulePageComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			this.selectedSchedule = null;
 		}, 100);
+	}
+
+	scrollToFirstEnrolledSchedule(): void {
+		if (!this.currentUserId || !this.schedulesForDay || this.schedulesForDay.length === 0 || this.scheduleCardElements.length === 0) {
+			return; // Salir si no hay datos necesarios o elementos renderizados
+		}
+
+		// Encontrar el índice del primer horario inscrito en la lista filtrada actual
+		const firstEnrolledIndex = this.schedulesForDay.findIndex(
+			schedule => schedule.clients?.includes(this.currentUserId)
+		);
+
+		if (firstEnrolledIndex !== -1) {
+			// Obtener la lista de elementos DOM
+			const cardElements = this.scheduleCardElements.toArray();
+			// Asegurarse de que el índice es válido
+			if (cardElements[firstEnrolledIndex]) {
+				const targetElement = cardElements[firstEnrolledIndex].nativeElement;
+				// Hacer scroll hacia el elemento
+				targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+			}
+		}
 	}
 }

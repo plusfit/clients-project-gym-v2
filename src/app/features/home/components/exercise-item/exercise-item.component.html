@@ -1,4 +1,8 @@
-<ion-item class="exercise-item" lines="none" (click)="onExerciseClick()">
+<ion-item
+  class="exercise-item"
+  lines="none"
+  [routerLink]="['/cliente', 'rutinas', 'ejercicio', exercise._id]"
+>
   <div class="exercise-icon-container">
     <ion-icon
       [name]="
