@@ -1,17 +1,18 @@
 import { CommonModule } from "@angular/common";
 import { NgIf } from "@angular/common";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { RouterLink } from "@angular/router";
 import { UserService } from "@feature/profile/services/user.service";
+import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { IonicModule, LoadingController } from "@ionic/angular";
 import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { addIcons } from "ionicons";
 import { bodyOutline, calendarNumberOutline, createOutline, fitnessOutline, layersOutline, personOutline, playOutline, ribbonOutline, shapesOutline, trophyOutline } from "ionicons/icons";
-import { Observable } from "rxjs";
-import { map } from "rxjs/operators";
+import { Observable, Subject, Subscription } from "rxjs";
+import { map, takeUntil } from "rxjs/operators";
 import { CategoryTranslatorPipe } from "../../../../shared/pipes/category-translator.pipe";
 import { GoalTranslatorPipe } from "../../../../shared/pipes/goal-translator.pipe";
 import { PlanTypeTranslatorPipe } from "../../../../shared/pipes/plan-type-translator.pipe";
@@ -48,18 +49,21 @@ import { Plan } from "../../interfaces/plan.interface";
 	styleUrls: ['./assigned-plan.page.scss']
 })
 
-export class AssignedPlanPage implements OnInit {
+export class AssignedPlanPage implements OnInit, OnDestroy {
 	plan$!: Observable<Plan | null>;
 	@Select(UserState.isLoading) loading$!: Observable<boolean>;
 
 	plan: Plan | null = null;
 	private userId: string;
 	userHasEnrollments = false;
+	private destroy$ = new Subject<void>();
+	private scheduleSub: Subscription | null = null;
 
 	constructor(
 		private loadingCtrl: LoadingController,
 		private store: Store,
-		private userService: UserService
+		private userService: UserService,
+		private scheduleFacade: ScheduleFacadeService
 	) {
 		const user = this.store.selectSnapshot(AuthState.getUser) as User | null;
 		if (user?._id) {
@@ -108,30 +112,30 @@ export class AssignedPlanPage implements OnInit {
 				this.plan = plan;
 			});
 
-			this.checkUserEnrollments();
+			this.scheduleFacade.loadSchedules();
+			this.subscribeToSchedules();
 		} catch (error) {
 		} finally {
 			loading.dismiss();
 		}
 	}
 
-	private checkUserEnrollments(): void {
-		const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+	}
 
-		if (!schedules || schedules.length === 0) {
-			setTimeout(() => {
-				const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
-				this.checkEnrollmentsFromSchedules(updatedSchedules);
-			}, 1000);
-
-			return;
-		}
-
-		this.checkEnrollmentsFromSchedules(schedules);
+	private subscribeToSchedules(): void {
+		this.store.select(ScheduleState.getSchedules).pipe(
+			takeUntil(this.destroy$)
+		).subscribe(schedules => {
+			this.checkEnrollmentsFromSchedules(schedules);
+		});
 	}
 
 	private checkEnrollmentsFromSchedules(schedules: Schedule[]): void {
-		if (!schedules || !Array.isArray(schedules)) {
+		if (!this.userId || this.userId === 'unknown_user' || !schedules || !Array.isArray(schedules)) {
+			this.userHasEnrollments = false;
 			return;
 		}
 
