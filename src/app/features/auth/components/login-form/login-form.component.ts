@@ -9,7 +9,7 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Login, Register } from "@feature/auth/state/auth.actions";
+import { Login } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
@@ -73,7 +73,7 @@ export class LoginFormComponent {
 				if (user?.onboardingCompleted) {
 					this.router.navigate(["/cliente/inicio"]);
 				} else {
-					this.router.navigate(["/onboarding"]);
+					this.router.navigate(["/cliente/onboarding"]);
 				}
 				this.toastService.showSuccess("Inicio correctamente");
 				this.form.reset();

@@ -15,6 +15,14 @@ export interface RegisterResponse {
 export interface FirebaseRegisterResponse {
 	user: any;
 }
+
+export interface FirebaseAuthResponse {
+	_tokenResponse: {
+		idToken: string;
+		refreshToken: string;
+		expiresIn: string;
+	};
+}
 export interface User {
 	_id: string;
 	role: UserRole;
