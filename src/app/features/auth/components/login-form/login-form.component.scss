@@ -1,0 +1,75 @@
+.register-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 16px;
+}
+
+.register-wrapper {
+    width: 100%;
+    max-width: 400px;
+}
+
+.register-card {
+
+    border-radius: 16px;
+    background-color: #1e1e1e;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.divider {
+    text-align: center;
+    margin: 16px 0;
+    color: var(--ion-color-medium);
+    font-size: 0.9rem;
+
+    span {
+        border-bottom: 1px solid var(--ion-color-medium);
+        padding: 0 8px;
+    }
+}
+
+.login-redirect {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 0.85rem;
+
+    a {
+        color: var(--ion-color-primary);
+        margin-left: 6px;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+
+.welcome-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.gym-logo {
+    width: 500px;
+    height: auto;
+}
+
+.welcome-text {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ion-color-light);
+}
+
+ion-list {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+ion-item {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-top: 0;
+    --inner-padding-bottom: 0;
+    margin: 0 0 !important;
+}
