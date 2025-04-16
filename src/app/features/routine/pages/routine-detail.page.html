@@ -1,0 +1,42 @@
+<app-header title="RUTINAS" [showBackButton]="false"></app-header>
+<ion-content class="content">
+  <div class="container">
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="loading-card">
+        <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+        <h3 class="loading-title">Cargando rutina</h3>
+        <p class="loading-text">
+          Por favor espera mientras cargamos la información...
+        </p>
+      </div>
+    </div>
+
+    <ng-container *ngIf="routine && !isLoading; else noRoutine">
+      <div class="header-container">
+        <div class="routine-title">
+          <ion-icon name="barbell-outline" class="header-icon"></ion-icon>
+          <h1>{{ routine.name }}</h1>
+        </div>
+        <p class="description">{{ routine.description }}</p>
+      </div>
+      <div class="subroutines">
+        <app-subroutine-card
+          *ngFor="let sub of subroutines; let i = index"
+          [subroutine]="sub"
+          [index]="i"
+        ></app-subroutine-card>
+      </div>
+    </ng-container>
+
+    <ng-template #noRoutine>
+      <div class="no-routine-message" *ngIf="!isLoading">
+        <ion-icon name="fitness-outline" class="empty-icon"></ion-icon>
+        <h2>No tienes rutina asignada</h2>
+        <p>
+          Por favor, comunícate con tu entrenador para que te asigne una rutina
+          personalizada.
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</ion-content>
