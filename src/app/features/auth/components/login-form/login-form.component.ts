@@ -69,10 +69,14 @@ export class LoginFormComponent {
 		if (this.form.valid) {
 			this.store.dispatch(new Login(this.form.value));
 			this.actions.pipe(ofActionSuccessful(Login), takeUntil(this._destroyed)).subscribe(() => {
+				const user = this.store.selectSnapshot((state) => state.auth.user);
+				if (user?.onboardingCompleted) {
+					this.router.navigate(["/cliente/inicio"]);
+				} else {
+					this.router.navigate(["/onboarding"]);
+				}
 				this.toastService.showSuccess("Inicio correctamente");
 				this.form.reset();
-				//TODO: Validar el onboarding para ver si lo mandamos o no al onboarding
-				//this.router.navigate(["/onboarding"]);
 			});
 		} else {
 			this.form.markAllAsTouched();
