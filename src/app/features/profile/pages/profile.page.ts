@@ -1,8 +1,9 @@
 import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { User } from "@feature/profile/interfaces/user.interface";
-import { IonContent, IonHeader, IonSpinner, IonTitle, IonToolbar } from "@ionic/angular/standalone";
+import { IonContent, IonSpinner } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
+import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { Observable, switchMap } from "rxjs";
 import { ProfileImageNameComponent } from "../components/profile-image-name-info/profile-image-name-info.component";
 import { ProfilePersonalInfoComponent } from "../components/profile-personal-info/profile-personal-info.component";
@@ -18,14 +19,12 @@ import { UserState } from "../state/user.state";
 	imports: [
 		IonContent,
 		AsyncPipe,
-		IonHeader,
-		IonToolbar,
-		IonTitle,
 		ProfileImageNameComponent,
 		ProfilePersonalInfoComponent,
 		ProfilePlanInfoComponent,
 		CommonModule,
 		IonSpinner,
+		AppHeaderComponent,
 	],
 	standalone: true,
 })
