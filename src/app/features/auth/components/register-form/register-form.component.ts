@@ -9,11 +9,15 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import { Register } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
+import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
+import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { mailOutline } from "ionicons/icons";
 import { lockClosedOutline } from "ionicons/icons";
 import { logInOutline } from "ionicons/icons";
+import { Subject, takeUntil } from "rxjs";
 
 @Component({
 	selector: "app-register-form",
@@ -24,16 +28,21 @@ import { logInOutline } from "ionicons/icons";
 })
 export class RegisterFormComponent {
 	form: FormGroup;
+	private _destroyed = new Subject<void>();
 
 	constructor(
 		private fb: FormBuilder,
 		private router: Router,
+		private store: Store,
+		private actions: Actions,
+		private toastService: ToastService,
 	) {
 		addIcons({
 			"mail-outline": mailOutline,
 			"lock-closed-outline": lockClosedOutline,
 			"log-in-outline": logInOutline,
 		});
+
 		this.form = this.fb.group(
 			{
 				email: ["", [Validators.required, Validators.email]],
@@ -76,6 +85,14 @@ export class RegisterFormComponent {
 	submit() {
 		if (this.form.valid) {
 			console.log("✅ Registro válido:");
+
+			this.store.dispatch(new Register(this.form.value));
+
+			this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
+				this.toastService.showSuccess("Cliente creado correctamente");
+				this.form.reset();
+				this.router.navigate(["/login"]);
+			});
 		} else {
 			console.log("❌ Registro inválido:");
 			this.form.markAllAsTouched();
