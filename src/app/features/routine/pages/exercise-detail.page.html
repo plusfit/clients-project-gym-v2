@@ -1,0 +1,177 @@
+<app-header title="Ejercicio" defaultHref="/cliente/rutinas"></app-header>
+
+<ion-content class="content">
+  <div class="container">
+    <div class="loading-container" *ngIf="isLoading">
+      <div class="loading-card">
+        <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+        <h3 class="loading-title">Cargando ejercicio</h3>
+        <p class="loading-text">
+          Por favor espera mientras cargamos la información...
+        </p>
+      </div>
+    </div>
+
+    <ng-container
+      *ngIf="
+        !isLoading && (selectedExercise$ | async) as exercise;
+        else noExercise
+      "
+    >
+      <ion-card class="exercise-card">
+        <div class="image-container">
+          <img
+            alt="Imagen del ejercicio"
+            [ngSrc]="
+              exercise.gifUrl ||
+              exercise.imageUrl ||
+              'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2xwdXc4aDJreTRiOG13d2pnNndmYW55cWFiYngzZ2MybXZ2YzI4MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YOxU0vp6dD91UC4/giphy.gif'
+            "
+            class="exercise-img"
+            width="800"
+            height="350"
+          />
+          <div class="image-overlay"></div>
+          <div
+            class="image-type-badge"
+            [ngClass]="{ cardio: exercise.type === 'cardio' }"
+          >
+            {{ exercise.type === 'room' ? 'SALA' : (exercise.type | uppercase)
+            }}
+          </div>
+        </div>
+        <ion-card-header class="card-header">
+          <ion-card-title class="card-title">
+            <ion-icon
+              [name]="
+                exercise.type === 'cardio'
+                  ? 'fitness-outline'
+                  : 'barbell-outline'
+              "
+              class="header-icon"
+            ></ion-icon>
+            {{ exercise.name }}
+          </ion-card-title>
+          <div class="header-meta" *ngIf="exercise.category">
+            <span class="category-label">
+              <ion-icon name="star-outline"></ion-icon>
+              <span class="fallback-icon">★</span>
+              {{ exercise.category | uppercase }}
+            </span>
+          </div>
+        </ion-card-header>
+        <ion-card-content class="card-content">
+          <div class="description-container">
+            <h3 class="description-title">
+              <ion-icon name="document-text-outline"></ion-icon>
+              Descripción
+            </h3>
+            <div class="exercise-description-wrapper">
+              <p class="exercise-description">{{ exercise.description }}</p>
+            </div>
+          </div>
+
+          <div class="details-section">
+            <div class="section-header">
+              <ion-icon
+                name="information-circle-outline"
+                class="section-icon"
+              ></ion-icon>
+              <span class="section-title">Detalles</span>
+            </div>
+
+            <div class="detail-item" *ngIf="exercise.type !== 'room'">
+              <div class="detail-icon-container">
+                <ion-icon name="time-outline" class="detail-icon"></ion-icon>
+              </div>
+              <div class="detail-content">
+                <p class="detail-text">
+                  {{ exercise.rest | pluralize: 'minuto' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="detail-item" *ngIf="exercise.reps">
+              <div class="detail-icon-container">
+                <ion-icon name="repeat-outline" class="detail-icon"></ion-icon>
+              </div>
+              <div class="detail-content">
+                <p class="detail-text">
+                  {{ exercise.reps | pluralize: 'repetición' : 'repeticiones' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="detail-item" *ngIf="exercise.series">
+              <div class="detail-icon-container">
+                <ion-icon name="layers-outline" class="detail-icon"></ion-icon>
+              </div>
+              <div class="detail-content">
+                <p class="detail-text">
+                  {{ exercise.series | pluralize: 'serie' }}
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="detail-item"
+              *ngIf="exercise.type === 'cardio' && exercise.minutes"
+            >
+              <div class="detail-icon-container">
+                <ion-icon
+                  name="stopwatch-outline"
+                  class="detail-icon"
+                ></ion-icon>
+              </div>
+              <div class="detail-content">
+                <p class="detail-text">
+                  {{ exercise.minutes | pluralize: 'minuto' }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="instructions-section" *ngIf="exercise.instructions">
+            <div class="section-header">
+              <ion-icon name="list-outline" class="section-icon"></ion-icon>
+              <span class="section-title">Instrucciones</span>
+            </div>
+            <div class="instructions-content">
+              <p class="instructions-text">{{ exercise.instructions }}</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #noExercise>
+      <ion-card class="not-found-card" *ngIf="!isLoading">
+        <ion-card-header class="not-found-header">
+          <ion-card-title class="not-found-title">
+            <ion-icon
+              name="alert-circle-outline"
+              class="not-found-icon"
+            ></ion-icon>
+            Ejercicio no encontrado
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="not-found-content">
+          <div class="empty-state">
+            <ion-icon name="fitness-outline" class="empty-icon"></ion-icon>
+            <p class="empty-text">
+              No se ha encontrado el ejercicio solicitado.
+            </p>
+            <ion-button
+              fill="outline"
+              size="small"
+              routerLink="/cliente/rutinas"
+            >
+              Ver rutinas
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-template>
+  </div>
+</ion-content>

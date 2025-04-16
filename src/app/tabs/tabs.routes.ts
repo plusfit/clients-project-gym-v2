@@ -3,39 +3,80 @@ import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: 'cliente',
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'inicio',
         loadComponent: () =>
-          import('../features/routine/tab1.page').then((m) => m.Tab1Page),
+          import('../features/home/pages/home/home.page').then(
+            (m) => m.HomePage,
+          ),
       },
       {
-        path: 'tab2',
+        path: 'horarios',
         loadComponent: () =>
-          import('../features/schedule/tab2.page').then((m) => m.Tab2Page),
+          import('@feature/schedule/pages/schedule-page/schedule.page').then(
+            (m) => m.SchedulePageComponent,
+          ),
       },
       {
-        path: 'tab3',
-        loadComponent: () =>
-          import('../features/feedback/tab3.page').then((m) => m.Tab3Page),
+        path: 'rutinas',
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('../features/routine/pages/routine-detail.page').then(
+                (m) => m.RoutineDetailPage,
+              ),
+          },
+          {
+            path: 'ejercicio/:id',
+            loadComponent: () =>
+              import('../features/routine/pages/exercise-detail.page').then(
+                (m) => m.ExerciseDetailPage,
+              ),
+          },
+        ],
       },
       {
-        path: 'tab4',
+        path: 'perfil',
         loadComponent: () =>
-          import('../features/profile/tab4.page').then((m) => m.Tab4Page),
+          import('@feature/profile/pages/profile.page').then(
+            (m) => m.ProfilePage,
+          ),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/cliente/inicio',
         pathMatch: 'full',
+      },
+      {
+        path: 'onboarding',
+        loadComponent: () =>
+          import('../features/onboarding/pages/onboarding.page').then(
+            (m) => m.OnboardingPage,
+          ),
+      },
+      {
+        path: 'mi-plan',
+        loadComponent: () =>
+          import(
+            '../features/plans/pages/assigned-plan/assigned-plan.page'
+          ).then((m) => m.AssignedPlanPage),
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/cliente/inicio',
     pathMatch: 'full',
+  },
+  {
+    path: 'registro',
+    loadComponent: () =>
+      import('../features/auth/pages/register-page/register.page').then(
+        (m) => m.RegisterPage,
+      ),
   },
 ];

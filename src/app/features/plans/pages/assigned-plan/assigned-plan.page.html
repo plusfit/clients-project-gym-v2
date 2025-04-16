@@ -1,0 +1,126 @@
+<app-header title="Mi Plan" [showBackButton]="false"></app-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="plan; else noPlan">
+    <ion-card class="plan-card">
+      <div class="plan-header">
+        <ion-card-header>
+          <ion-card-title
+            >{{ plan.name || 'Plan Personalizado' }}</ion-card-title
+          >
+          <ion-card-subtitle>
+            <span class="level-badge"
+              ><ion-icon name="ribbon-outline" class="subtitle-icon"></ion-icon
+              >{{ getLevelText(plan.experienceLevel) }}</span
+            >
+            <span class="days-badge"
+              ><ion-icon
+                name="calendar-number-outline"
+                class="subtitle-icon"
+              ></ion-icon
+              >{{ plan.days || 3 }} días/semana</span
+            >
+          </ion-card-subtitle>
+        </ion-card-header>
+      </div>
+
+      <ion-card-content>
+        <div class="plan-tags" *ngIf="plan.tags && plan.tags.length > 0">
+          <span *ngFor="let tag of plan.tags" class="tag-badge">{{ tag }}</span>
+        </div>
+
+        <div class="plan-details">
+          <div class="detail-item">
+            <ion-icon name="trophy-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Objetivo</h4>
+              <p>{{ plan.goal | goalTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item">
+            <ion-icon name="calendar-number-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Frecuencia</h4>
+              <p>{{ plan.days || 3 }} días por semana</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.type">
+            <ion-icon name="layers-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Tipo</h4>
+              <p>{{ plan.type | planTypeTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.category">
+            <ion-icon name="shapes-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Categoría</h4>
+              <p>{{ plan.category | categoryTranslator }}</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.minAge && plan.maxAge">
+            <ion-icon name="body-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Rango de Edad</h4>
+              <p>{{ plan.minAge }} - {{ plan.maxAge }} años</p>
+            </div>
+          </div>
+
+          <div class="detail-item" *ngIf="plan.includesCoach">
+            <ion-icon name="person-outline"></ion-icon>
+            <div class="detail-content">
+              <h4>Incluye Entrenador</h4>
+              <p>{{ plan.includesCoach ? 'Sí' : 'No' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="plan-message">
+          <p>
+            Visita la sección de horarios para ver tu programa de entrenamiento.
+          </p>
+        </div>
+
+        <ion-button
+          *ngIf="!userHasEnrollments"
+          expand="block"
+          class="start-button"
+          routerLink="/cliente/horarios"
+        >
+          Ver horarios disponibles
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #noPlan>
+    <div class="no-plan-container">
+      <ion-card>
+        <ion-card-header>
+          <ion-icon name="fitness-outline" class="no-plan-icon"></ion-icon>
+          <ion-card-title>No hay plan asignado</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Aún no se te ha asignado un plan de entrenamiento.</p>
+          <p>
+            Completa el proceso de onboarding para recibir tu plan
+            personalizado.
+          </p>
+
+          <ion-button
+            expand="block"
+            [routerLink]="['/onboarding']"
+            class="onboarding-button"
+          >
+            <ion-icon slot="start" name="create-outline"></ion-icon>
+            Completar onboarding
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
+</ion-content>

@@ -1,0 +1,65 @@
+<ion-card class="routine-card">
+  <ng-container *ngIf="routine; else noRoutine">
+    <ion-card-header class="routine-header">
+      <div class="routine-title-container">
+        <h2 class="routine-title">
+          {{ routine.name }}
+          <ion-icon name="barbell-outline" class="routine-icon"></ion-icon>
+        </h2>
+        <p class="routine-subtitle">{{ routine.description }}</p>
+      </div>
+    </ion-card-header>
+    <ion-card-content class="routine-content">
+      <div class="routine-description">
+        {{ routine.description }}
+      </div>
+      <div class="exercise-list">
+        <div class="exercise-list-header">
+          <h3 class="exercise-list-title">
+            <ion-icon
+              name="fitness-outline"
+              class="exercise-list-icon"
+            ></ion-icon>
+            Ejercicios ({{ routine.exercises.length }})
+          </h3>
+        </div>
+
+        <!-- Indicador de carga -->
+        <div *ngIf="isLoading" class="loading-container">
+          <ion-spinner name="circular"></ion-spinner>
+          <p>Cargando ejercicios...</p>
+        </div>
+
+        <!-- Lista de ejercicios -->
+        <div class="exercises-container" *ngIf="!isLoading">
+          <div class="exercises-list">
+            <app-exercise-item
+              *ngFor="let exercise of loadedExercises"
+              [exercise]="exercise"
+            >
+            </app-exercise-item>
+          </div>
+
+          <!-- Mensaje si no hay ejercicios -->
+          <div *ngIf="loadedExercises.length === 0" class="no-exercises">
+            <p>No hay ejercicios disponibles en esta rutina.</p>
+          </div>
+        </div>
+      </div>
+    </ion-card-content>
+  </ng-container>
+  <ng-template #noRoutine>
+    <ion-card-header class="no-routine-header">
+      <ion-card-title class="no-routine-title">
+        <ion-icon name="calendar-clear-outline" class="rest-icon"></ion-icon>
+        No hay rutina para hoy
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="no-routine-content">
+      <p class="rest-text">
+        <ion-icon name="bed-outline"></ion-icon>
+        ¡Descansa! No hay rutina programada para hoy.
+      </p>
+    </ion-card-content>
+  </ng-template>
+</ion-card>

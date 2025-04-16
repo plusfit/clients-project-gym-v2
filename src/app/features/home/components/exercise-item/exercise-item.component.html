@@ -1,0 +1,33 @@
+<ion-item
+  class="exercise-item"
+  lines="none"
+  [routerLink]="['/cliente', 'rutinas', 'ejercicio', exercise._id]"
+>
+  <div class="exercise-icon-container">
+    <ion-icon
+      [name]="
+        exercise.type === 'cardio' ? 'fitness-outline' : 'barbell-outline'
+      "
+      class="exercise-icon"
+    ></ion-icon>
+  </div>
+  <ion-label class="exercise-label">
+    <h4 class="exercise-name">
+      {{ exercise.name }}
+    </h4>
+    <div class="details-container">
+      <div class="exercise-details" *ngIf="exercise.type === 'cardio'">
+        <ion-icon name="time-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.minutes }} min</span>
+      </div>
+      <div class="exercise-details" *ngIf="exercise.type === 'room'">
+        <ion-icon name="repeat-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.series }} series</span>
+      </div>
+      <div class="exercise-details" *ngIf="exercise.reps">
+        <ion-icon name="infinite-outline" class="detail-icon"></ion-icon>
+        <span class="detail-text">{{ exercise.reps }} reps</span>
+      </div>
+    </div>
+  </ion-label>
+</ion-item>

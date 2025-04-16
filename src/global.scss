@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'swiper/css';
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -9,31 +14,313 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
-
- @import "tailwindcss";
 /* Core CSS required for Ionic components to work properly */
-@import "@ionic/angular/css/core.css";
+@import '@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "@ionic/angular/css/normalize.css";
-@import "@ionic/angular/css/structure.css";
-@import "@ionic/angular/css/typography.css";
-@import "@ionic/angular/css/display.css";
+@import '@ionic/angular/css/normalize.css';
+@import '@ionic/angular/css/structure.css';
+@import '@ionic/angular/css/typography.css';
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
+@import '@ionic/angular/css/padding.css';
+@import '@ionic/angular/css/float-elements.css';
+@import '@ionic/angular/css/text-alignment.css';
+@import '@ionic/angular/css/text-transformation.css';
+@import '@ionic/angular/css/flex-utils.css';
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+/* Estilos globales para la aplicación de gimnasio con tema oscuro */
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* Estilos de texto */
+p {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Estilos para tarjetas */
+ion-card {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+  margin: 12px !important;
+  background-color: var(--ion-card-background) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+ion-card-header {
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-primary-shade) 0%,
+    var(--ion-color-primary) 100%
+  );
+  padding: 16px !important;
+}
+
+ion-card-title {
+  font-family: 'APEXPRO', sans-serif !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+ion-card-subtitle {
+  font-size: 0.95rem !important;
+  opacity: 0.9 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+ion-card-content {
+  padding: 16px !important;
+  background-color: var(--ion-card-background) !important;
+}
+
+/* Estilos para listas */
+ion-list {
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+ion-item {
+  --background: rgba(30, 30, 30, 0.9) !important;
+  --border-color: rgba(255, 255, 255, 0.15);
+  margin-bottom: 8px;
+  border-radius: 8px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+/* Estilos para iconos */
+ion-icon {
+  color: var(--ion-color-primary);
+}
+
+/* Estilos para botones */
+ion-button {
+  --border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  height: 44px;
+}
+
+ion-button.button-solid {
+  --background: var(--ion-color-primary);
+  --background-hover: var(--ion-color-primary-shade);
+  --color: var(--ion-color-primary-contrast);
+  --box-shadow: 0 4px 8px rgba(229, 57, 53, 0.4);
+}
+
+/* Estilos para cabeceras */
+ion-header {
+  --background: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  ) !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+ion-toolbar {
+  --background: transparent !important;
+  --border-color: transparent;
+  padding: 0 16px 0 8px;
+}
+
+ion-title {
+  font-family: 'APEXPRO', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 40px;
+  margin-left: 0;
+}
+
+ion-tab-bar {
+  --background: #1a1a1a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  height: 60px;
+}
+
+ion-tab-button {
+  --color: rgba(255, 255, 255, 0.6);
+  --color-selected: var(--ion-color-primary);
+}
+
+ion-input,
+ion-textarea,
+ion-select {
+  --background: rgba(30, 30, 30, 0.9) !important;
+  --color: white !important;
+  --placeholder-color: rgba(255, 255, 255, 0.7) !important;
+  --placeholder-opacity: 1 !important;
+  --border-color: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  margin-bottom: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+ion-alert {
+  --background: var(--ion-color-dark) !important;
+  --backdrop-opacity: 0.8 !important;
+  --min-width: 300px !important;
+  --max-width: 90% !important;
+  --border-radius: 16px !important;
+  --box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  --header-color: white !important;
+  --message-color: rgba(255, 255, 255, 0.9) !important;
+  --button-color: var(--ion-color-primary) !important;
+  --button-background-color: transparent !important;
+  --button-background-color-hover: rgba(
+    var(--ion-color-primary-rgb),
+    0.1
+  ) !important;
+  --button-background-color-activated: rgba(
+    var(--ion-color-primary-rgb),
+    0.2
+  ) !important;
+  --button-background-color-selected: rgba(
+    var(--ion-color-primary-rgb),
+    0.15
+  ) !important;
+  --button-background-color-disabled: rgba(255, 255, 255, 0.1) !important;
+  --button-color-disabled: rgba(255, 255, 255, 0.4) !important;
+  --button-border-radius: 8px !important;
+  --button-font-weight: 600 !important;
+  --button-text-transform: uppercase !important;
+  --button-letter-spacing: 0.5px !important;
+}
+
+ion-header ion-toolbar {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background-image: url('/assets/logos/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.9;
+  }
+}
+
+ion-header[collapse='condense'] ion-toolbar::after {
+  display: none;
+}
+
+ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
+  display: none;
+}
+
+ion-header ion-toolbar ion-title {
+  padding-right: 40px;
+  padding-left: 12px;
+  margin-left: 0;
+  text-align: left;
+}
+
+@font-face {
+  font-family: 'APEXPRO';
+  src: url('/assets/fonts/APEXPRO.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Custom Toast Styles */
+.custom-toast {
+  --border-radius: 8px;
+  --box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  padding: 4px 8px;
+
+  &::part(message) {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  &::part(icon) {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  &::part(button) {
+    color: currentColor;
+    font-size: 20px;
+  }
+}
+
+/* Toast colors */
+.custom-toast.toast-success {
+  --background: #2dd36f;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-error {
+  --background: #eb445a;
+  --color: #ffffff;
+}
+
+.custom-toast.toast-warning {
+  --background: #ffc409;
+  --color: #000000;
+}
+
+.custom-toast.toast-info {
+  --background: #3880ff;
+  --color: #ffffff;
+}
+
+// Estilos personalizados para los loaders
+.loading-content {
+  --background: var(--ion-color-loading-background);
+  --spinner-color: var(--ion-color-loading-spinner);
+  --backdrop-opacity: 0.6;
+
+  .loading-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    padding: 24px;
+    min-width: 200px;
+  }
+
+  .loading-spinner {
+    margin-bottom: 12px;
+
+    ion-spinner {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .loading-text {
+    color: var(--ion-color-loading-text);
+    font-weight: 500;
+    font-size: 16px;
+  }
+}

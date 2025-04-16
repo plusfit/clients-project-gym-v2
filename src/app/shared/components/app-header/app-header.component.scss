@@ -1,0 +1,17 @@
+:host {
+  ion-toolbar {
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+
+    ion-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+    }
+
+    ion-back-button {
+      --color: white;
+      --icon-font-size: 22px;
+    }
+  }
+}

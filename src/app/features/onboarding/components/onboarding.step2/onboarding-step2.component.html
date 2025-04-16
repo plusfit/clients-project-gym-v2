@@ -1,0 +1,100 @@
+<ion-content>
+  <div class="form-container">
+    <h2 class="step-title">Información Médica</h2>
+    <form [formGroup]="form" class="step2-form">
+      <div class="blood-pressure-section">
+        <ion-label class="section-title"><ion-icon name="pulse-outline"></ion-icon> Presión Arterial</ion-label>
+        <ion-item lines="none">
+          <ion-select
+            formControlName="bloodPressure"
+            interface="action-sheet"
+            placeholder="Seleccioná una opción"
+          >
+            <ion-select-option value="high">Alta</ion-select-option>
+            <ion-select-option value="low">Baja</ion-select-option>
+            <ion-select-option value="normal">Normal</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-text color="danger" *ngIf="isInvalid('bloodPressure')">
+          Este campo es obligatorio
+        </ion-text>
+      </div>
+
+      <div formGroupName="history" class="history-group">
+        <ion-label class="section-title history-label">
+          <ion-icon name="fitness-outline"></ion-icon> ANTECEDENTES
+        </ion-label>
+        <ion-text class="helper-text antecedentes-helper">
+          Seleccione "Sí" si tiene algún antecedente médico en las siguientes categorías. Esta información es importante para adaptar su plan de entrenamiento a sus necesidades específicas.
+        </ion-text>
+
+        <div class="history-items">
+          <ion-item lines="none">
+            <ion-icon name="heart-outline" slot="start"></ion-icon>
+            <ion-label>Respiratorios</ion-label>
+            <ion-segment formControlName="respiratory">
+              <ion-segment-button value="true">Sí</ion-segment-button>
+              <ion-segment-button value="false">No</ion-segment-button>
+            </ion-segment>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('respiratory', 'history')">
+            Este campo es obligatorio
+          </ion-text>
+
+          <ion-item lines="none">
+            <ion-icon name="heart-outline" slot="start"></ion-icon>
+            <ion-label>Cardíacos</ion-label>
+            <ion-segment formControlName="cardiac">
+              <ion-segment-button value="true">Sí</ion-segment-button>
+              <ion-segment-button value="false">No</ion-segment-button>
+            </ion-segment>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('cardiac', 'history')">
+            Este campo es obligatorio
+          </ion-text>
+
+          <ion-item lines="none">
+            <ion-icon name="bandage-outline" slot="start"></ion-icon>
+            <ion-label>Quirúrgicos</ion-label>
+            <ion-segment formControlName="chirurgical">
+              <ion-segment-button value="true">Sí</ion-segment-button>
+              <ion-segment-button value="false">No</ion-segment-button>
+            </ion-segment>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('chirurgical', 'history')">
+            Este campo es obligatorio
+          </ion-text>
+
+          <ion-item lines="none">
+            <ion-icon name="fitness-outline" slot="start"></ion-icon>
+            <ion-label>Lesiones Patológicas</ion-label>
+            <ion-segment formControlName="injuries">
+              <ion-segment-button value="true">Sí</ion-segment-button>
+              <ion-segment-button value="false">No</ion-segment-button>
+            </ion-segment>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('injuries', 'history')">
+            Este campo es obligatorio
+          </ion-text>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="prevStep()">
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        Volver
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="nextStep()">
+        Siguiente
+        <ion-icon name="arrow-forward" slot="end"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
