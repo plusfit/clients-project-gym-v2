@@ -10,31 +10,31 @@
         <div class="form-fields">
           <ion-list>
             <ion-item>
-              <ion-label position="stacked">Email</ion-label>
-              <ion-input formControlName="email" type="email"></ion-input>
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
             </ion-item>
             <ion-text color="danger" *ngIf="isInvalid('email')">
               Ingresá un email válido.
             </ion-text>
 
             <ion-item>
-              <ion-label position="stacked">Repetir Email</ion-label>
-              <ion-input formControlName="repeatEmail" type="email"></ion-input>
+              <ion-icon name="mail-outline" slot="start"></ion-icon>
+              <ion-input formControlName="repeatEmail" type="email" placeholder="Repetir Email"></ion-input>
             </ion-item>
             <ion-text color="danger" *ngIf="form.hasError('emailsDontMatch')">
               Los emails no coinciden.
             </ion-text>
 
             <ion-item>
-              <ion-label position="stacked">Contraseña</ion-label>
-              <ion-input formControlName="password" type="password"></ion-input>
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
             </ion-item>
             <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
               Debe tener una mayúscula y un número o símbolo.
             </ion-text>
             <ion-item>
-              <ion-label position="stacked">Repetir Contraseña</ion-label>
-              <ion-input formControlName="repeatPassword" type="password"></ion-input>
+              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+              <ion-input formControlName="repeatPassword" type="password" placeholder="Repetir Contraseña"></ion-input>
             </ion-item>
             <ion-text color="danger" *ngIf="form.hasError('passwordsDontMatch')">
               Las contraseñas no coinciden.
@@ -42,11 +42,14 @@
           </ion-list>
         </div>
 
-        <ion-button expand="block" (click)="submit()">Registrarse</ion-button>
+        <ion-button expand="block" (click)="submit()" class="main-action-btn">
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Registrarse
+        </ion-button>
 
         <div class="divider"><span>O</span></div>
 
-        <ion-button expand="block" color="light" (click)="registerWithGoogle()">
+        <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn">
           <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
           Registrarse con Google
         </ion-button>

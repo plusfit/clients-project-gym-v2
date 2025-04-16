@@ -6,6 +6,7 @@ export interface Step1 {
 	dateOfBirth: string;
 	sex: string;
 	ci: string;
+	avatarUrl?: string;
 }
 export interface Step2 {
 	bloodPressure: string;

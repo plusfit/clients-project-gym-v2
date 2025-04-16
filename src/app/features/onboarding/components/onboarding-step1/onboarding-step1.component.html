@@ -1,15 +1,27 @@
 <ion-content>
   <div class="form-container">
+    <!-- Avatar Section -->
+    <div class="avatar-section ion-text-center ion-margin-bottom">
+      <div class="avatar-container">
+        <ion-avatar (click)="selectAvatarImage()" class="user-avatar">
+          <img [src]="avatarUrlPreview || 'assets/avatars/default-avatar.png'" alt="Avatar" class="avatar-image" />
+          <ion-icon name="camera" class="camera-icon"></ion-icon>
+        </ion-avatar>
+      </div>
+      <ion-text color="medium">
+        <p><ion-icon name="finger-print-outline" size="small"></ion-icon> Toca aquí para seleccionar o tomar una foto
+        </p>
+      </ion-text>
+    </div>
+    <!-- Fin Avatar Section -->
+
     <h2 class="step-title">Información Personal</h2>
     <form [formGroup]="userForm">
       <div class="personal-section">
         <ion-list>
           <ion-item>
             <ion-icon name="person-outline" slot="start"></ion-icon>
-            <ion-input
-              formControlName="fullName"
-              placeholder="Nombre completo"
-            ></ion-input>
+            <ion-input formControlName="fullName" placeholder="Nombre completo"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('fullName')">
             El nombre completo es obligatorio.
@@ -18,10 +30,7 @@
 
           <ion-item>
             <ion-icon name="home-outline" slot="start"></ion-icon>
-            <ion-input
-              formControlName="address"
-              placeholder="Dirección"
-            ></ion-input>
+            <ion-input formControlName="address" placeholder="Dirección"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('address')">
             La dirección es obligatoria.
@@ -34,11 +43,7 @@
         <ion-list>
           <ion-item>
             <ion-icon name="call-outline" slot="start"></ion-icon>
-            <ion-input
-              type="tel"
-              formControlName="phone"
-              placeholder="Teléfono"
-            ></ion-input>
+            <ion-input type="tel" formControlName="phone" placeholder="Teléfono"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('phone')">
             Ingrese un número de celular válido (09xxxxxxx).
@@ -47,10 +52,7 @@
 
           <ion-item>
             <ion-icon name="medkit-outline" slot="start"></ion-icon>
-            <ion-input
-              formControlName="mutual"
-              placeholder="Sociedad médica"
-            ></ion-input>
+            <ion-input formControlName="mutual" placeholder="Sociedad médica"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('mutual')">
             La sociedad médica es obligatoria.
@@ -85,10 +87,7 @@
           </ion-text>
           <ion-item>
             <ion-icon name="card-outline" slot="start"></ion-icon>
-            <ion-input
-              formControlName="ci"
-              placeholder="Cédula de identidad"
-            ></ion-input>
+            <ion-input formControlName="ci" placeholder="Cédula de identidad"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('ci')">
             Ingrese una cédula válida (8 dígitos sin puntos ni guiones).

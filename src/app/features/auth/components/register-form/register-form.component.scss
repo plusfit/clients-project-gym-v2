@@ -1,6 +1,6 @@
 :host {
     width: 100%;
-    max-width: 400px;
+    max-width: 600px;
     display: block;
 }
 
@@ -12,10 +12,13 @@
 
 .register-card {
     margin: 0 auto;
-    border-radius: 12px;
-    background-color: #232323;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 16px 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 ion-card-content {
@@ -24,20 +27,38 @@ ion-card-content {
 
 .divider {
     text-align: center;
-    margin: 12px 0;
+    margin: 24px 0;
     color: var(--ion-color-medium);
     font-size: 0.9rem;
 
     span {
-        border-bottom: 1px solid var(--ion-color-medium);
         padding: 0 8px;
+        position: relative;
+
+        &::before, &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 60px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        &::before {
+            right: 100%;
+        }
+
+        &::after {
+            left: 100%;
+        }
     }
 }
 
 .login-redirect {
     text-align: center;
-    margin-top: 12px;
-    font-size: 0.85rem;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
 
     a {
         color: var(--ion-color-primary);
@@ -45,6 +66,12 @@ ion-card-content {
         cursor: pointer;
         text-decoration: underline;
         font-weight: 500;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: var(--ion-color-primary-tint);
+            text-decoration: none;
+        }
     }
 }
 
@@ -53,23 +80,60 @@ ion-card-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-bottom: 16px;
 }
 
 .gym-logo {
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     width: 220px;
     max-width: 70%;
     height: auto;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.03);
+    }
 }
 
 .welcome-text {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: #e3f2fd;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
     margin-bottom: 12px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-fields {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    border-left: 3px solid var(--ion-color-primary);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--ion-color-primary);
+        margin-top: 0;
+        margin-bottom: 16px;
+        text-align: center;
+        letter-spacing: -0.3px;
+    }
 }
 
 ion-list {
@@ -79,95 +143,206 @@ ion-list {
 }
 
 ion-item {
-    --padding-start: 8px;
-    --inner-padding-end: 8px;
-    --inner-padding-top: 8px;
-    --inner-padding-bottom: 8px;
     --background: rgba(255, 255, 255, 0.07);
-    --border-width: 0;
-    --highlight-background: rgba(255, 255, 255, 0.12);
-    --color: #ffffff;
-    --border-radius: 6px;
-    margin: 0 0 8px !important;
-    padding: 0;
-    transition: background-color 0.2s ease;
+    --border-radius: 12px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    --inner-padding-end: 8px;
+    --min-height: 52px;
+    margin-bottom: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --border-color: transparent;
+    --highlight-color-focused: var(--ion-color-primary);
+    --highlight-height: 2px;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--ion-color-primary-shade), var(--ion-color-primary), var(--ion-color-primary-tint));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 }
 
-ion-item.ion-focused {
-    --background: rgba(255, 255, 255, 0.12);
+ion-item:hover {
+    --background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+}
+
+ion-item:focus-within {
+    --background: rgba(var(--ion-color-primary-rgb), 0.15);
+    z-index: 2;
+    transform: none;
+
+    &::after {
+        opacity: 1;
+    }
+}
+
+ion-item ion-icon {
+    color: var(--ion-color-primary);
+    font-size: 1.4rem;
+    margin-right: 12px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+ion-item:focus-within ion-icon {
+    color: var(--ion-color-primary);
+    transform: scale(1.1);
 }
 
 ion-label {
-    color: white !important;
+    color: rgba(255, 255, 255, 0.9) !important;
     font-weight: 500;
-    font-size: 0.8rem;
-    padding-left: 8px;
+    font-size: 0.9rem;
     margin-bottom: 4px !important;
 }
 
 ion-input {
-    --color: #ffffff !important;
-    --placeholder-color: white !important;
-    --placeholder-opacity: 1;
-    font-weight: 500;
-    letter-spacing: 0.3px;
     --padding-start: 4px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
     font-size: 1rem;
+    --placeholder-color: rgba(255, 255, 255, 0.5) !important;
+    --placeholder-opacity: 1;
+    --color: rgba(255, 255, 255, 0.9) !important;
 }
 
 ion-text[color="danger"] {
-    color: #ff867c !important;
     font-size: 0.75rem;
-    margin-top: -2px;
-    margin-bottom: 8px;
+    margin-left: 8px;
+    margin-top: 0px;
+    margin-bottom: 12px;
     display: block;
     opacity: 1;
+    color: var(--ion-color-danger) !important;
     font-weight: 500;
-    padding-left: 8px;
 }
 
 ion-button {
-    margin-top: 8px;
-    margin-bottom: 8px;
-    --border-radius: 6px;
+    --background: var(--ion-color-primary);
+    --background-hover: var(--ion-color-primary-shade);
+    --border-radius: 10px;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --color: white !important;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    margin: 8px 0;
+    box-shadow: 0 4px 12px rgba(var(--ion-color-primary-rgb), 0.4);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0));
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+    }
 }
 
-/* --- Responsive --- */
-@media (max-width: 600px) {
+ion-button:hover {
+    transform: translateY(-2px);
+    --box-shadow: 0 6px 16px rgba(var(--ion-color-primary-rgb), 0.5);
+
+    &::before {
+        transform: translateX(100%);
+    }
+}
+
+ion-button[color="light"] {
+    --background: rgba(255, 255, 255, 0.1);
+    --background-hover: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.main-action-btn {
+    ion-icon {
+        margin-right: 8px;
+        font-size: 1.2rem;
+    }
+}
+
+.social-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        transition: transform 0.2s ease;
+    }
+
+    &:hover img {
+        transform: scale(1.1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
     :host {
-        // padding: 8px;
+        max-width: 100%;
     }
-    .register-wrapper {
-        // max-width: 100%;
-    }
+
     .register-card {
-        border-radius: 8px;
+        padding: 16px 12px;
+        border-radius: 12px;
+    }
+
+    .welcome-text {
+        font-size: 1.5rem;
+    }
+
+    .form-fields {
         padding: 12px;
     }
-    .gym-logo {
-        margin-top: 0.5rem;
-        width: 140px;
-        margin-bottom: 4px;
+
+    ion-item {
+        --padding-start: 12px;
+        --padding-end: 12px;
+        --min-height: 50px;
     }
-    .welcome-text {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
-    ion-label {
-        font-size: 0.75rem;
-    }
+
     ion-input {
+        --padding-top: 10px;
+        --padding-bottom: 10px;
         font-size: 0.95rem;
     }
-    ion-text[color="danger"] {
-        margin-bottom: 6px;
+
+    ion-button {
+        --padding-start: 20px;
+        --padding-end: 20px;
+        --padding-top: 14px;
+        --padding-bottom: 14px;
+        font-size: 0.9rem;
     }
-    ion-button,
-    .divider,
-    .login-redirect {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+
     .login-redirect {
         font-size: 0.8rem;
     }
