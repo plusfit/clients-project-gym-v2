@@ -1,0 +1,25 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Project Structure Guide
+
+La aplicación está organizada de forma basada en características (feature-based):
+
+- [src/main.ts](mdc:src/main.ts): Punto de entrada que arranca Angular e Ionic.
+- [src/app/app.routes.ts](mdc:src/app/app.routes.ts): Configuración de rutas de la aplicación.
+- [src/app/app.module.ts](mdc:src/app/app.module.ts): Módulo raíz que importa módulos globales y proveedores.
+
+- [src/app/features/](mdc:src/app/features): Directorio de características:
+  - [src/app/features/auth/](mdc:src/app/features/auth): Flujo de autenticación (login/register).
+  - [src/app/features/onboarding/](mdc:src/app/features/onboarding): Proceso de onboarding en varios pasos.
+  - [src/app/features/home/](mdc:src/app/features/home): Páginas de inicio y dashboard.
+  - [src/app/features/schedule/](mdc:src/app/features/schedule): Gestión de horarios.
+  - [src/app/features/routine/](mdc:src/app/features/routine): Rutinas de entrenamiento.
+  - [src/app/features/profile/](mdc:src/app/features/profile): Perfil de usuario.
+
+- [src/app/shared/](mdc:src/app/shared): Componentes, directivas y servicios compartidos.
+- [src/app/core/](mdc:src/app/core): Servicios centrales y utilidades cargadas al iniciar.
+
+Utiliza esta guía para ubicar rápidamente módulos y componentes clave según su funcionalidad.
