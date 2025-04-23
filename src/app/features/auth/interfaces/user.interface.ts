@@ -68,3 +68,11 @@ export interface LoginCredentials {
 	email: string;
 	password: string;
 }
+
+export interface RefreshTokenPayload {
+	refreshToken?: string;
+}
+export interface RefreshToken {
+	refreshToken?: string;
+	accessToken?: string;
+}

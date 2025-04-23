@@ -14,12 +14,11 @@ import {
 	User,
 } from "../interfaces/user.interface";
 import { AuthService } from "../services/auth.service";
-import { GetCurrentUser, Login, Logout, RefreshSession, Register, SetMockUser } from "./auth.actions";
+import { GetCurrentUser, GetNewToken, Login, Logout, RefreshSession, Register, SetMockUser } from "./auth.actions";
 
 // Estado
 export interface AuthStateModel {
 	user: User | null;
-	token: string | null;
 	loading: boolean;
 	error: string | null;
 	auth: any;
@@ -30,7 +29,7 @@ export interface AuthStateModel {
 	name: "auth",
 	defaults: {
 		user: null,
-		token: null,
+
 		loading: false,
 		error: null,
 		auth: null,
@@ -40,15 +39,16 @@ export class AuthState {
 	constructor(
 		private authService: AuthService,
 		private toastService: ToastService,
-	) {
-		// Intenta recuperar el token al inicializar el estado
-		const token = localStorage.getItem("token");
-		if (token) {
-			// Token encontrado, actualizamos el estado
-			setTimeout(() => {
-				this.authService.getCurrentUser().subscribe();
-			}, 0);
-		}
+	) {}
+
+	@Selector()
+	static accessToken(state: AuthStateModel): string | undefined {
+		return state.auth?.accessToken;
+	}
+
+	@Selector()
+	static refreshToken(state: AuthStateModel): string | undefined {
+		return state.auth?.refreshToken;
 	}
 
 	@Selector()
@@ -70,34 +70,6 @@ export class AuthState {
 	static getError(state: AuthStateModel): string | null {
 		return state.error;
 	}
-
-	//		@Action(Login)
-	//		_login(ctx: StateContext<AuthStateModel>, action: Login) {
-	//			ctx.patchState({ loading: true, error: null });
-
-	//			return this.authService
-	//				.login({
-	//					email: action.credentials.email,
-	//					password: action.credentials.password,
-	//				})
-	//				.pipe(
-	//					tap((response) => {
-	//						ctx.patchState({
-	//							user: response.user,
-	//							token: response.token,
-	//							loading: false,
-	//							error: null,
-	//						});
-	//					}),
-	//					catchError((error) => {
-	//						ctx.patchState({
-	//							loading: false,
-	//							error: error.message || "Error de autenticación",
-	//						});
-	//						return of(error);
-	//					}),
-	//				);
-	//		}
 
 	@Action(Login, { cancelUncompleted: true })
 	login(ctx: StateContext<AuthStateModel>, action: Login): Observable<AuthResponse> {
@@ -143,7 +115,6 @@ export class AuthState {
 			tap(() => {
 				ctx.setState({
 					user: null,
-					token: null,
 					loading: false,
 					error: null,
 					auth: null,
@@ -183,29 +154,6 @@ export class AuthState {
 		);
 	}
 
-	@Action(RefreshSession)
-	refreshSession(ctx: StateContext<AuthStateModel>) {
-		ctx.patchState({ loading: true });
-
-		return this.authService.refreshSession().pipe(
-			tap((response) => {
-				ctx.patchState({
-					user: response.user,
-					token: response.token,
-					loading: false,
-					error: null,
-				});
-			}),
-			catchError((error) => {
-				ctx.patchState({
-					loading: false,
-					error: error.message || "Error al refrescar sesión",
-				});
-				return of(error);
-			}),
-		);
-	}
-
 	@Action(SetMockUser, { cancelUncompleted: true })
 	setMockUser(ctx: StateContext<AuthStateModel>, action: SetMockUser) {
 		ctx.patchState({
@@ -236,6 +184,27 @@ export class AuthState {
 					error: err.message || "Error al registrar usuario",
 				});
 				this.toastService.showError(ctx.getState().error || "Error al registrar usuario");
+				return throwError(() => err);
+			}),
+		);
+	}
+
+	@Action(GetNewToken, { cancelUncompleted: true })
+	getNewToken(ctx: StateContext<AuthStateModel>, action: GetNewToken): Observable<AuthResponse> {
+		const refreshToken = action.payload;
+		return this.authService.getNewToken(refreshToken).pipe(
+			tap((authResponse: any) => {
+				const { accessToken, refreshToken } = authResponse.data;
+				ctx.patchState({
+					auth: {
+						accessToken,
+						refreshToken,
+					},
+				});
+			}),
+			catchError((err: HttpErrorResponse) => {
+				this.toastService.showError("Sesion Expirada. Por favor inicie sesion nuevamente");
+				//ctx.dispatch(new Logout());
 				return throwError(() => err);
 			}),
 		);

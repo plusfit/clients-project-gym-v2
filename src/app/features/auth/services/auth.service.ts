@@ -7,6 +7,7 @@ import { delay, tap } from "rxjs/operators";
 import {
 	AuthResponse,
 	LoginCredentials,
+	RefreshTokenPayload,
 	RegisterCredentials,
 	RegisterResponse,
 	User,
@@ -113,5 +114,9 @@ export class AuthService {
 
 	registerFirebase(email: string, password: string): any {
 		return from(createUserWithEmailAndPassword(this._auth, email, password));
+	}
+
+	getNewToken(refreshToken: RefreshTokenPayload): Observable<AuthResponse> {
+		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refreshToken`, refreshToken);
 	}
 }
