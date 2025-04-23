@@ -73,3 +73,9 @@ Thumbs.db
 .firebase
 *-debug.log
 .runtimeconfig.json
+
+# Cursor
+.cursorrules
+/.cursor
+
+/.angular
