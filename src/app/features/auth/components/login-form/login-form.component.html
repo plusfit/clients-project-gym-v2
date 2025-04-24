@@ -5,48 +5,44 @@
       <p class="welcome-text">Bienvenido a esta gran familia</p>
     </div>
 
-    <ion-card class="register-card">
-      <ion-card-content>
-        <form [formGroup]="form">
-          <div class="form-fields">
-            <h2 class="section-title">Acceso a tu cuenta</h2>
-            <ion-list>
-              <ion-item>
-                <ion-icon name="mail-outline" slot="start"></ion-icon>
-                <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
-              </ion-item>
-              <ion-text color="danger" *ngIf="isInvalid('email')">
-                Ingresá un email válido.
-              </ion-text>
+    <form [formGroup]="form">
+      <div class="form-fields">
+        <h2 class="section-title">Acceso a tu cuenta</h2>
+        <ion-list>
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('email')">
+            Ingresá un email válido.
+          </ion-text>
 
-              <ion-item>
-                <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-                <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
-              </ion-item>
-              <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
-                Debe tener una mayúscula y un número o símbolo.
-              </ion-text>
-            </ion-list>
-          </div>
+          <ion-item>
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
+            Debe tener una mayúscula y un número o símbolo.
+          </ion-text>
+        </ion-list>
+      </div>
 
-          <ion-button expand="block" (click)="submit()" class="main-action-btn">
-            <ion-icon name="log-in-outline" slot="start"></ion-icon>
-            Ingresar
-          </ion-button>
+      <ion-button expand="block" (click)="submit()" class="main-action-btn">
+        <ion-icon name="log-in-outline" slot="start"></ion-icon>
+        Ingresar
+      </ion-button>
 
-          <div class="divider"><span>O</span></div>
+      <div class="divider"><span>O</span></div>
 
-          <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn">
-            <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
-            Ingresar con Google
-          </ion-button>
+      <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn">
+        <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
+        Ingresar con Google
+      </ion-button>
 
-          <div class="login-redirect">
-            <span>¿No sos usuario?</span>
-            <a (click)="goToRegister()">Registrarse</a>
-          </div>
-        </form>
-      </ion-card-content>
-    </ion-card>
+      <div class="login-redirect">
+        <span>¿No sos usuario?</span>
+        <a (click)="goToRegister()">Registrarse</a>
+      </div>
+    </form>
   </div>
 </ion-content>

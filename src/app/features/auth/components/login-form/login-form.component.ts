@@ -11,7 +11,7 @@ import {
 import { Router } from "@angular/router";
 import { Login } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
-import { IonButton, IonCard, IonCardContent, IonContent, IonIcon, IonInput, IonItem, IonList, IonText } from '@ionic/angular/standalone';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonText } from '@ionic/angular/standalone';
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
@@ -27,8 +27,6 @@ import { Subject, takeUntil } from "rxjs";
 		CommonModule,
 		ReactiveFormsModule,
 		IonContent,
-		IonCard,
-		IonCardContent,
 		IonList,
 		IonItem,
 		IonInput,
