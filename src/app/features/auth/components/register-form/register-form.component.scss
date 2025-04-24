@@ -89,10 +89,18 @@ ion-card-content {
     height: auto;
     margin-bottom: 16px;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-    transition: transform 0.3s ease;
+    animation: pulse 2s infinite;
+}
 
-    &:hover {
-        transform: scale(1.03);
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 

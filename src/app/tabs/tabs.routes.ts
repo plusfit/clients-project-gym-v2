@@ -1,5 +1,6 @@
 import { Routes } from "@angular/router";
 import { authGuard, onboardingCompletedGuard } from "@core/guards";
+import { NotFoundPage } from "@shared/pages/not-found/not-found.page";
 import { TabsPage } from "./tabs.page";
 
 export const routes: Routes = [
@@ -65,5 +66,13 @@ export const routes: Routes = [
 	{
 		path: "login",
 		loadComponent: () => import("../features/auth/pages/login-page/login.page").then((m) => m.LoginPage),
+	},
+	{
+		path: "404",
+		component: NotFoundPage,
+	},
+	{
+		path: "**",
+		redirectTo: "/404",
 	},
 ];
