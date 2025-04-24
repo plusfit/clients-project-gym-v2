@@ -27,14 +27,16 @@
         </ion-list>
       </div>
 
-      <ion-button expand="block" (click)="submit()" class="main-action-btn">
-        <ion-icon name="log-in-outline" slot="start"></ion-icon>
-        Ingresar
+      <ion-button expand="block" (click)="submit()" class="main-action-btn" [disabled]="isLoading">
+        <ion-icon *ngIf="!isLoading" name="log-in-outline" slot="start"></ion-icon>
+        <ion-spinner *ngIf="isLoading" name="dots" slot="start"></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Ingresar' }}
       </ion-button>
 
       <div class="divider"><span>O</span></div>
 
-      <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn">
+      <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
+        [disabled]="isLoading">
         <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
         Ingresar con Google
       </ion-button>

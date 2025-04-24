@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
 	AbstractControl,
 	FormBuilder,
@@ -11,12 +11,14 @@ import {
 import { Router } from "@angular/router";
 import { Login } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonText } from '@ionic/angular/standalone';
-import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
+import { ToastController } from '@ionic/angular';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonSpinner, IonText } from '@ionic/angular/standalone';
+import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { lockClosedOutline, logInOutline, mailOutline } from "ionicons/icons";
 import { Subject, takeUntil } from "rxjs";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
 	selector: "app-login-form",
@@ -32,11 +34,13 @@ import { Subject, takeUntil } from "rxjs";
 		IonInput,
 		IonText,
 		IonButton,
-		IonIcon
+		IonIcon,
+		IonSpinner
 	],
 })
 export class LoginFormComponent {
 	form: FormGroup;
+	isLoading = false;
 	private _destroyed = new Subject<void>();
 
 	constructor(
@@ -45,6 +49,8 @@ export class LoginFormComponent {
 		private store: Store,
 		private actions: Actions,
 		private toastService: ToastService,
+		private toastController: ToastController,
+		private authService: AuthService
 	) {
 		addIcons({
 			'mail-outline': mailOutline,
@@ -86,8 +92,12 @@ export class LoginFormComponent {
 
 	submit() {
 		if (this.form.valid) {
+			this.isLoading = true;
+
 			this.store.dispatch(new Login(this.form.value));
+
 			this.actions.pipe(ofActionSuccessful(Login), takeUntil(this._destroyed)).subscribe(() => {
+				this.isLoading = false;
 				const user = this.store.selectSnapshot((state) => state.auth.user);
 				if (user?.onboardingCompleted) {
 					this.router.navigate(["/cliente/inicio"]);
@@ -96,6 +106,10 @@ export class LoginFormComponent {
 				}
 				this.toastService.showSuccess("Inicio correctamente");
 				this.form.reset();
+			});
+
+			this.actions.pipe(ofActionErrored(Login), takeUntil(this._destroyed)).subscribe(() => {
+				this.isLoading = false;
 			});
 		} else {
 			this.form.markAllAsTouched();
@@ -112,6 +126,12 @@ export class LoginFormComponent {
 	}
 
 	registerWithGoogle() {
-		console.log("🔐 Registrarse con Google");
+		// this.isLoading = true;
+		// this.authService.signInWithGoogle().then(() => {
+		// 	this.isLoading = false;
+		// }).catch(error => {
+		// 	this.isLoading = false;
+		// 	console.error('Google sign in error:', error);
+		// });
 	}
 }
