@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "@angular/fire/auth";
+import { Auth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "@angular/fire/auth";
 import { environment } from "environments/environment";
 import { Observable, from, of, throwError } from "rxjs";
 import { delay, tap } from "rxjs/operators";
@@ -106,9 +106,12 @@ export class AuthService {
 		}).pipe(delay(300));
 	}
 
-	register(email: string): Observable<RegisterResponse> {
+	register(email: string, displayName?: string, photoURL?: string): Observable<RegisterResponse> {
 		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, {
 			email,
+			isGoogleAuth: true,
+			displayName,
+			photoURL
 		});
 	}
 
@@ -118,5 +121,18 @@ export class AuthService {
 
 	getNewToken(refreshToken: RefreshTokenPayload): Observable<AuthResponse> {
 		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refreshToken`, refreshToken);
+	}
+
+	signInWithGoogle(): any {
+		const provider = new GoogleAuthProvider();
+		return from(signInWithPopup(this._auth, provider));
+	}
+
+	googleAuth(idToken: string, name?: string, photoURL?: string): Observable<any> {
+		return this.http.post<any>(`${environment.apiUrl}/auth/google`, {
+			idToken,
+			name,
+			avatarUrl: photoURL
+		});
 	}
 }

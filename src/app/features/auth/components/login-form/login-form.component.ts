@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
 	AbstractControl,
 	FormBuilder,
@@ -9,7 +9,7 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Login } from "@feature/auth/state/auth.actions";
+import { GoogleLogin, Login } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
 import { ToastController } from '@ionic/angular';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonSpinner, IonText } from '@ionic/angular/standalone';
@@ -38,7 +38,7 @@ import { AuthService } from '../../services/auth.service';
 		IonSpinner
 	],
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnDestroy {
 	form: FormGroup;
 	isLoading = false;
 	private _destroyed = new Subject<void>();
@@ -100,7 +100,7 @@ export class LoginFormComponent {
 				this.isLoading = false;
 				const user = this.store.selectSnapshot((state) => state.auth.user);
 				if (user?.onboardingCompleted) {
-					this.router.navigate(["/cliente/inicio"]);
+					this.router.navigate(["/cliente/mi-plan"]);
 				} else {
 					this.router.navigate(["/onboarding"]);
 				}
@@ -126,12 +126,29 @@ export class LoginFormComponent {
 	}
 
 	registerWithGoogle() {
-		// this.isLoading = true;
-		// this.authService.signInWithGoogle().then(() => {
-		// 	this.isLoading = false;
-		// }).catch(error => {
-		// 	this.isLoading = false;
-		// 	console.error('Google sign in error:', error);
-		// });
+		this.isLoading = true;
+
+		this.store.dispatch(new GoogleLogin());
+
+		this.actions.pipe(ofActionSuccessful(GoogleLogin), takeUntil(this._destroyed)).subscribe(() => {
+			this.isLoading = false;
+			const user = this.store.selectSnapshot((state) => state.auth.user);
+			if (user) {
+				if (user.onboardingCompleted) {
+					this.router.navigate(["/cliente/mi-plan"]);
+				} else {
+					this.router.navigate(["/onboarding"]);
+				}
+			}
+		});
+
+		this.actions.pipe(ofActionErrored(GoogleLogin), takeUntil(this._destroyed)).subscribe(() => {
+			this.isLoading = false;
+		});
+	}
+
+	ngOnDestroy(): void {
+		this._destroyed.next();
+		this._destroyed.complete();
 	}
 }

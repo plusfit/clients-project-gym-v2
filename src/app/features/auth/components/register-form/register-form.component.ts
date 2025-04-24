@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import {
 	AbstractControl,
 	FormBuilder,
@@ -9,9 +9,10 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { Register } from "@feature/auth/state/auth.actions";
+import { GoogleLogin, GoogleRegister, Register } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
-import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
+import { IonSpinner } from "@ionic/angular/standalone";
+import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { mailOutline } from "ionicons/icons";
@@ -24,11 +25,12 @@ import { Subject, takeUntil } from "rxjs";
 	standalone: true,
 	templateUrl: "./register-form.component.html",
 	styleUrls: ["./register-form.component.scss"],
-	imports: [CommonModule, IonicModule, ReactiveFormsModule],
+	imports: [CommonModule, IonicModule, ReactiveFormsModule, IonSpinner],
 })
-export class RegisterFormComponent {
+export class RegisterFormComponent implements OnDestroy {
 	form: FormGroup;
 	private _destroyed = new Subject<void>();
+	isLoading = false;
 
 	constructor(
 		private fb: FormBuilder,
@@ -109,6 +111,29 @@ export class RegisterFormComponent {
 	}
 
 	registerWithGoogle() {
-		console.log("🔐 Registrarse con Google");
+		this.isLoading = true;
+		this.store.dispatch(new GoogleRegister());
+
+		this.actions.pipe(ofActionSuccessful(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
+			this.isLoading = false;
+			const user = this.store.selectSnapshot((state) => state.auth.user);
+			if (user) {
+				if (user.onboardingCompleted) {
+					this.router.navigate(["/cliente/mi-plan"]);
+				} else {
+					this.router.navigate(["/onboarding"]);
+				}
+			}
+		});
+
+		this.actions.pipe(ofActionErrored(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
+			this.isLoading = false;
+			// Error handling done in the state
+		});
+	}
+
+	ngOnDestroy(): void {
+		this._destroyed.next();
+		this._destroyed.complete();
 	}
 }

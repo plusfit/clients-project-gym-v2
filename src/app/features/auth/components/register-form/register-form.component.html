@@ -49,9 +49,12 @@
 
         <div class="divider"><span>O</span></div>
 
-        <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn">
-          <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
-          Registrarse con Google
+        <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
+          [disabled]="isLoading">
+          <ion-spinner *ngIf="isLoading" name="dots" slot="start"></ion-spinner>
+          <img *ngIf="!isLoading" src="assets/logos/google-logo.svg" alt="Google" width="20" height="20"
+            style="margin-right: 8px" />
+          {{ isLoading ? 'Procesando...' : 'Registrarse con Google' }}
         </ion-button>
 
         <div class="login-redirect">

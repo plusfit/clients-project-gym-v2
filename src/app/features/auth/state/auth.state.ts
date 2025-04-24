@@ -3,8 +3,8 @@ import { Injectable } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { jwtDecode } from "jwt-decode";
-import { Observable, of, throwError } from "rxjs";
-import { catchError, exhaustMap, tap } from "rxjs/operators";
+import { Observable, from, of, throwError } from "rxjs";
+import { catchError, exhaustMap, switchMap, tap } from "rxjs/operators";
 import {
 	AuthResponse,
 	FirebaseAuthResponse,
@@ -14,7 +14,7 @@ import {
 	User,
 } from "../interfaces/user.interface";
 import { AuthService } from "../services/auth.service";
-import { GetCurrentUser, GetNewToken, Login, Logout, RefreshSession, Register, SetMockUser } from "./auth.actions";
+import { GetCurrentUser, GetNewToken, GoogleLogin, GoogleRegister, Login, Logout, RefreshSession, Register, SetMockUser, SetOnboardingCompleted } from "./auth.actions";
 
 // Estado
 export interface AuthStateModel {
@@ -208,5 +208,136 @@ export class AuthState {
 				return throwError(() => err);
 			}),
 		);
+	}
+
+	@Action(GoogleLogin, { cancelUncompleted: true })
+	googleLogin(ctx: StateContext<AuthStateModel>): Observable<any> {
+		ctx.patchState({ loading: true });
+
+		return this.authService.signInWithGoogle().pipe(
+			switchMap((response: any) => {
+				console.log('Firebase User', response.user);
+				// Convertir Promise a Observable con casting a string
+				return from(response.user.getIdToken() as Promise<string>).pipe(
+					switchMap((idToken: string) => {
+						const displayName = response.user.displayName || '';
+						const photoURL = response.user.photoURL || '';
+
+						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
+							tap((authResponse: any) => {
+								console.log('Backend response:', authResponse);
+
+								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
+								if (!authResponse || !authResponse.data) {
+									throw new Error('Invalid response structure from server');
+								}
+
+								const { accessToken, refreshToken } = authResponse.data;
+
+								if (!accessToken || typeof accessToken !== 'string') {
+									throw new Error('Invalid access token received from server');
+								}
+
+								const decodedUser = jwtDecode<User>(accessToken);
+
+								ctx.patchState({
+									auth: {
+										accessToken,
+										refreshToken,
+									},
+									user: decodedUser,
+								});
+							})
+						);
+					})
+				);
+			}),
+			tap(() => {
+				ctx.patchState({ loading: false });
+				this.toastService.showSuccess("Inicio de sesión con Google exitoso");
+			}),
+			catchError((err: HttpErrorResponse) => {
+				console.error('Google login error:', err);
+				ctx.patchState({
+					loading: false,
+					error: err.message || "Error al ingresar con Google",
+				});
+				this.toastService.showError("Error al ingresar con Google");
+				return throwError(() => err);
+			}),
+		);
+	}
+
+	@Action(GoogleRegister, { cancelUncompleted: true })
+	googleRegister(ctx: StateContext<AuthStateModel>): Observable<any> {
+		ctx.patchState({ loading: true });
+
+		return this.authService.signInWithGoogle().pipe(
+			switchMap((response: any) => {
+				console.log('Firebase User', response.user);
+				// Convertir Promise a Observable con casting a string
+				return from(response.user.getIdToken() as Promise<string>).pipe(
+					switchMap((idToken: string) => {
+						const displayName = response.user.displayName || '';
+						const photoURL = response.user.photoURL || '';
+
+						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
+							tap((authResponse: any) => {
+								console.log('Backend response:', authResponse);
+
+								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
+								if (!authResponse || !authResponse.data) {
+									throw new Error('Invalid response structure from server');
+								}
+
+								const { accessToken, refreshToken } = authResponse.data;
+
+								if (!accessToken || typeof accessToken !== 'string') {
+									throw new Error('Invalid access token received from server');
+								}
+
+								const decodedUser = jwtDecode<User>(accessToken);
+
+								ctx.patchState({
+									auth: {
+										accessToken,
+										refreshToken,
+									},
+									user: decodedUser,
+								});
+							})
+						);
+					})
+				);
+			}),
+			tap(() => {
+				ctx.patchState({ loading: false });
+				this.toastService.showSuccess("Registro con Google exitoso");
+			}),
+			catchError((err: HttpErrorResponse) => {
+				console.error('Google register error:', err);
+				ctx.patchState({
+					loading: false,
+					error: err.message || "Error al registrarse con Google",
+				});
+				this.toastService.showError("Error al registrarse con Google");
+				return throwError(() => err);
+			}),
+		);
+	}
+
+	@Action(SetOnboardingCompleted)
+	setOnboardingCompleted(ctx: StateContext<AuthStateModel>) {
+		const state = ctx.getState();
+		const user = state.user;
+
+		if (user) {
+			ctx.patchState({
+				user: {
+					...user,
+					onboardingCompleted: true
+				}
+			});
+		}
 	}
 }

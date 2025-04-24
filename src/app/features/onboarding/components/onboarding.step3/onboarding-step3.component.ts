@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { IonNav, IonicModule, LoadingController, NavController, ToastController } from "@ionic/angular";
-import { Store } from "@ngxs/store";
+import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { addIcons } from "ionicons";
 import {
 	arrowBack,
@@ -12,8 +12,9 @@ import {
 	checkmarkOutline,
 	trendingUpOutline,
 } from "ionicons/icons";
-import { finalize, take } from "rxjs";
+import { finalize, take, takeUntil } from "rxjs";
 import { User } from "../../../auth/interfaces/user.interface";
+import { GetCurrentUser, SetOnboardingCompleted } from "../../../auth/state/auth.actions";
 import { AuthState } from "../../../auth/state/auth.state";
 import { OnboardingService } from "../../services/onboarding.service";
 import { SetStep3 } from "../../state/onboarding.actions";
@@ -33,10 +34,12 @@ export class OnboardingStep3Component implements OnInit {
 	form: FormGroup;
 	isSubmitting = false;
 	isLoading = false;
+	private destroyed = false;
 
 	constructor(
 		private fb: FormBuilder,
 		private store: Store,
+		private actions: Actions,
 		private onboardingService: OnboardingService,
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
@@ -194,7 +197,8 @@ export class OnboardingStep3Component implements OnInit {
 
 		this.onboardingService.assignPlan().subscribe({
 			next: async (response) => {
-				loading.dismiss();
+				// Actualizar mensaje de carga
+				loading.message = "Actualizando información de usuario...";
 
 				// Extraer la información del plan según la estructura de respuesta
 				let planName = "Personalizado";
@@ -216,44 +220,112 @@ export class OnboardingStep3Component implements OnInit {
 					planId = response.plan._id || response.plan.id;
 				}
 
-				// Mostrar toast con confirmación
-				const toast = await this.toastCtrl.create({
-					message: `Plan "${planName}" asignado con éxito`,
-					duration: 3000,
-					position: "bottom",
-					cssClass: "custom-toast toast-success",
-					buttons: [
-						{
-							text: "OK",
-							role: "cancel",
-						},
-					],
-				});
-				await toast.present();
+				// Primero marcamos el onboarding como completado en el estado local
+				this.store.dispatch(new SetOnboardingCompleted());
 
-				// Navegar a la página del plan
-				this.navigateToPlan();
+				// Luego actualizamos la información del usuario desde el backend
+				this.store.dispatch(new GetCurrentUser()).subscribe({
+					next: async () => {
+						// Ahora que tenemos la información actualizada, cerramos el loading
+						loading.dismiss();
+
+						// Mostrar toast con confirmación
+						const toast = await this.toastCtrl.create({
+							message: `Plan "${planName}" asignado con éxito`,
+							duration: 3000,
+							position: "bottom",
+							cssClass: "custom-toast toast-success",
+							buttons: [
+								{
+									text: "OK",
+									role: "cancel",
+								},
+							],
+						});
+						await toast.present();
+
+						// Navegar a la página del plan
+						this.navigateToPlan();
+					},
+					error: async (error) => {
+						// Si hay error al obtener la información actualizada, continuamos de todas formas
+						console.error("Error al actualizar información del usuario:", error);
+						loading.dismiss();
+
+						// Mostrar toast con confirmación
+						const toast = await this.toastCtrl.create({
+							message: `Plan "${planName}" asignado con éxito`,
+							duration: 3000,
+							position: "bottom",
+							cssClass: "custom-toast toast-success",
+							buttons: [
+								{
+									text: "OK",
+									role: "cancel",
+								},
+							],
+						});
+						await toast.present();
+
+						// Navegar a la página del plan de todas formas
+						this.navigateToPlan();
+					}
+				});
 			},
 			error: async (error) => {
-				loading.dismiss();
+				// Actualizar mensaje de carga
+				loading.message = "Actualizando información de usuario...";
 
-				// Mostrar mensaje de error
-				const toast = await this.toastCtrl.create({
-					message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
-					duration: 3000,
-					position: "bottom",
-					cssClass: "custom-toast toast-warning",
-					buttons: [
-						{
-							text: "OK",
-							role: "cancel",
-						},
-					],
+				// Primero marcamos el onboarding como completado en el estado local
+				this.store.dispatch(new SetOnboardingCompleted());
+
+				// Luego actualizamos la información del usuario desde el backend
+				this.store.dispatch(new GetCurrentUser()).subscribe({
+					next: async () => {
+						loading.dismiss();
+
+						// Mostrar mensaje de error por no poder asignar plan
+						const toast = await this.toastCtrl.create({
+							message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
+							duration: 3000,
+							position: "bottom",
+							cssClass: "custom-toast toast-warning",
+							buttons: [
+								{
+									text: "OK",
+									role: "cancel",
+								},
+							],
+						});
+						await toast.present();
+
+						// Navegar a la página principal de todas formas
+						this.navigateToPlan();
+					},
+					error: async (updateError) => {
+						// Si hay error al obtener la información actualizada, continuamos de todas formas
+						console.error("Error al actualizar información del usuario:", updateError);
+						loading.dismiss();
+
+						// Mostrar mensaje de error por no poder asignar plan
+						const toast = await this.toastCtrl.create({
+							message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
+							duration: 3000,
+							position: "bottom",
+							cssClass: "custom-toast toast-warning",
+							buttons: [
+								{
+									text: "OK",
+									role: "cancel",
+								},
+							],
+						});
+						await toast.present();
+
+						// Navegar a la página principal de todas formas
+						this.navigateToPlan();
+					}
 				});
-				await toast.present();
-
-				// Redirigir a la página principal de todas formas
-				this.navigateToPlan();
 			},
 		});
 	}

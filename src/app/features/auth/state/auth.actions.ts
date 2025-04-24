@@ -32,3 +32,15 @@ export class GetNewToken {
 	static readonly type = "[Auth] Get New Token";
 	constructor(public readonly payload: RefreshTokenPayload) {}
 }
+
+export class GoogleLogin {
+	static readonly type = "[Auth] Google Login";
+}
+
+export class GoogleRegister {
+	static readonly type = "[Auth] Google Register";
+}
+
+export class SetOnboardingCompleted {
+	static readonly type = "[Auth] Set Onboarding Completed";
+}
