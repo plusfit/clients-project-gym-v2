@@ -55,7 +55,6 @@ export const authorizeInterceptor: HttpInterceptorFn = (
 	const zone = inject(NgZone);
 	const store = inject(Store);
 	const utilsService = inject(UtilsService);
-	debugger;
 	const accessToken = store.selectSnapshot(AuthState.accessToken);
 	const refreshToken = store.selectSnapshot(AuthState.refreshToken);
 	if (!accessToken) {
