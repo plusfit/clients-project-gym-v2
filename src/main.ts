@@ -11,7 +11,6 @@ import { getStorage, provideStorage } from "@angular/fire/storage";
 import { authorizeInterceptor } from "@core/interceptors/authorize.interceptor";
 import { errorInterceptor } from "@core/interceptors/error.interceptor";
 import { tokenInterceptor } from "@core/interceptors/token.interceptor";
-import { AuthInitializerService } from "@feature/auth/services/auth-initializer.service";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { HomeState } from "@feature/home/state/home.state";
 import { OnboardingState } from "@feature/onboarding/state/onboarding.state";
@@ -27,26 +26,13 @@ import { routes } from "./app/app.routes";
 import { environment } from "./environments/environment";
 register();
 
-// Factory para el inicializador de autenticación
-export function initializeAuthFactory(authInitializer: AuthInitializerService) {
-	return () => authInitializer.init();
-}
-
 bootstrapApplication(AppComponent, {
 	providers: [
 		{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
 		provideIonicAngular(),
 		provideRouter(routes, withPreloading(PreloadAllModules)),
 		provideHttpClient(withFetch(), withInterceptors([tokenInterceptor, authorizeInterceptor, errorInterceptor])),
-
 		provideHttpClient(),
-		// Proveedor para inicializar la autenticación al arranque
-		{
-			provide: APP_INITIALIZER,
-			useFactory: initializeAuthFactory,
-			deps: [AuthInitializerService],
-			multi: true,
-		},
 		importProvidersFrom(
 			NgxsModule.forRoot([HomeState, ScheduleState, RoutineState, UserState, AuthState, OnboardingState], {
 				developmentMode: !environment.production,

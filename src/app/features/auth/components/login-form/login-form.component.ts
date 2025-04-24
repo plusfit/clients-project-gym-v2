@@ -73,7 +73,7 @@ export class LoginFormComponent {
 				if (user?.onboardingCompleted) {
 					this.router.navigate(["/cliente/inicio"]);
 				} else {
-					this.router.navigate(["/cliente/onboarding"]);
+					this.router.navigate(["/onboarding"]);
 				}
 				this.toastService.showSuccess("Inicio correctamente");
 				this.form.reset();

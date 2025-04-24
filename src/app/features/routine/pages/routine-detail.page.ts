@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
+import { User } from "@feature/auth/interfaces/user.interface";
+import { AuthState } from "@feature/auth/state/auth.state";
 import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
 import { LoadRoutineById, LoadRoutines, RoutineState } from "@feature/routine/state/routine.state";
 import { IonContent, IonIcon, IonSpinner } from "@ionic/angular/standalone";
@@ -31,7 +32,6 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 		private actions$: Actions,
 		private router: Router,
 		private route: ActivatedRoute,
-		private authFacade: AuthFacadeService,
 	) {
 		addIcons({barbellOutline,fitnessOutline});
 	}
@@ -47,7 +47,7 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 			this.isLoading = false;
 		});
 
-		this.authFacade.user$.subscribe((user) => {
+		this.store.select(AuthState.getUser).pipe(takeUntil(this.destroy$)).subscribe((user: User | null) => {
 			this.isLoading = true;
 			if (user?.routineId) {
 				this.store.dispatch(new LoadRoutineById(user.routineId)).subscribe({

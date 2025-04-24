@@ -14,7 +14,6 @@ import {
 } from "ionicons/icons";
 import { finalize, take } from "rxjs";
 import { User } from "../../../auth/interfaces/user.interface";
-import { AuthFacadeService } from "../../../auth/services/auth-facade.service";
 import { AuthState } from "../../../auth/state/auth.state";
 import { OnboardingService } from "../../services/onboarding.service";
 import { SetStep3 } from "../../state/onboarding.actions";
@@ -42,7 +41,6 @@ export class OnboardingStep3Component implements OnInit {
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private toastCtrl: ToastController,
-		private authFacadeService: AuthFacadeService,
 	) {
 		addIcons({
 			"calendar-outline": calendarOutline,
@@ -62,10 +60,6 @@ export class OnboardingStep3Component implements OnInit {
 	}
 
 	ngOnInit() {
-		// Inicializar un usuario ficticio en el estado de autenticación para pruebas
-		console.log("🧪 Inicializando usuario de prueba para desarrollo");
-		this.authFacadeService.setMockUserState();
-
 		// Verificar si hay datos del paso 3 en el store
 		this.store
 			.select(OnboardingState.getStep3)
@@ -117,7 +111,6 @@ export class OnboardingStep3Component implements OnInit {
 				await loading.present();
 
 				const step3Data = this.form.value;
-				console.log("📤 Guardando preferencias de entrenamiento");
 
 				// Usando el estado NGXS que ahora maneja las actualizaciones
 				this.store
@@ -133,7 +126,6 @@ export class OnboardingStep3Component implements OnInit {
 							this.assignPlanToUser(loading);
 						},
 						error: async (error) => {
-							console.error("⚠️ Error al guardar preferencias:", error);
 							loading.dismiss();
 
 							// Mostrar mensaje de error
@@ -155,7 +147,6 @@ export class OnboardingStep3Component implements OnInit {
 						},
 					});
 			} catch (error) {
-				console.error("Error fatal en el paso 3:", error);
 				this.isSubmitting = false;
 
 				// Mostrar mensaje de error crítico
@@ -198,27 +189,11 @@ export class OnboardingStep3Component implements OnInit {
 		// Obtener el usuario del AuthState
 		const user = this.store.selectSnapshot(AuthState.getUser) as User | null;
 
-		// Log de información crítica
-		console.log("🔐 ID del usuario actual:", user?._id || "No disponible");
-
-		// Verificar que tenemos un ID de usuario
-		if (!user?._id) {
-			console.error("❌ No se encontró un ID de usuario válido en AuthState");
-			console.log("Intentando con ID de localStorage...");
-			const localId = localStorage.getItem("userId");
-			if (localId) {
-				console.log(`✅ ID recuperado de localStorage: ${localId}`);
-			} else {
-				console.error("❌ No se encontró un ID ni en el estado ni en localStorage");
-			}
-		}
-
 		// Actualizar mensaje de carga
 		loading.message = "Asignando plan de entrenamiento...";
 
 		this.onboardingService.assignPlan().subscribe({
 			next: async (response) => {
-				console.log("✅ Plan asignado correctamente", response);
 				loading.dismiss();
 
 				// Extraer la información del plan según la estructura de respuesta
@@ -260,7 +235,6 @@ export class OnboardingStep3Component implements OnInit {
 				this.navigateToPlan();
 			},
 			error: async (error) => {
-				console.error("❌ Error al asignar plan:", error);
 				loading.dismiss();
 
 				// Mostrar mensaje de error
@@ -287,7 +261,6 @@ export class OnboardingStep3Component implements OnInit {
 	private navigateToPlan() {
 		// Navegar a la página del plan dentro de las pestañas cliente
 		this.navCtrl.navigateRoot("/cliente/mi-plan", { animationDirection: "forward" });
-		console.log("Navegando a /cliente/mi-plan");
 	}
 
 	prevStep() {

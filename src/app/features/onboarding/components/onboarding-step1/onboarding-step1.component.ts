@@ -12,6 +12,8 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Camera, CameraResultType, CameraSource } from "@capacitor/camera";
+import { User } from "@feature/auth/interfaces/user.interface";
+import { AuthState } from "@feature/auth/state/auth.state";
 import { ActionSheetController, ModalController } from "@ionic/angular";
 import { IonNav, IonicModule, LoadingController } from "@ionic/angular";
 import { Store } from "@ngxs/store";
@@ -34,9 +36,8 @@ import {
 	personOutline,
 } from "ionicons/icons";
 import { finalize, from, lastValueFrom, take } from "rxjs";
-import { AuthFacadeService } from "../../../auth/services/auth-facade.service";
 import { OnboardingService } from "../../services/onboarding.service";
-import { InitOnboarding, LoadOnboardingData, SetStep1 } from "../../state/onboarding.actions";
+import { LoadOnboardingData, SetStep1 } from "../../state/onboarding.actions";
 import { OnboardingState } from "../../state/onboarding.state";
 import { OnboardingStep2Component } from "../onboarding.step2/onboarding-step2.component";
 
@@ -114,8 +115,7 @@ export class OnboardingStep1Component implements OnInit {
 		private actionSheetCtrl: ActionSheetController,
 		private store: Store,
 		private onboardingService: OnboardingService,
-		private loadingCtrl: LoadingController,
-		private authFacade: AuthFacadeService,
+		private loadingCtrl: LoadingController
 	) {
 		addIcons({
 			"person-outline": personOutline,
@@ -211,7 +211,7 @@ export class OnboardingStep1Component implements OnInit {
 				this.cargarImagenTemporal();
 			} else {
 				console.warn("No se encontró userId en localStorage");
-				this.authFacade.user$.pipe(take(1)).subscribe((user) => {
+				this.store.select(AuthState.getUser).pipe(take(1)).subscribe((user: User | null) => {
 					if (user?._id) {
 						this.currentUserId = user._id;
 						this.cargarImagenTemporal();
