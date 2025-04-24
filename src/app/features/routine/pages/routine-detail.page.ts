@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { AuthFacadeService } from "@feature/auth/services/auth-facade.service";
 import { SubroutineCardComponent } from "@feature/routine/components/subroutine-card.component";
 import { LoadRoutineById, LoadRoutines, RoutineState } from "@feature/routine/state/routine.state";
 import { IonContent, IonIcon, IonSpinner } from "@ionic/angular/standalone";
@@ -14,8 +15,8 @@ import { Routine, SubRoutine } from "../interfaces/routine.interface";
 
 @Component({
 	selector: "app-routine-detail-page",
-	templateUrl: "./routine-detail.page.html",
-	styleUrls: ["./routine-detail.page.scss"],
+	templateUrl: './routine-detail.page.html',
+	styleUrls: ['./routine-detail.page.scss'],
 	standalone: true,
 	imports: [CommonModule, SubroutineCardComponent, IonContent, IonIcon, IonSpinner, AppHeaderComponent],
 })
@@ -30,8 +31,9 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 		private actions$: Actions,
 		private router: Router,
 		private route: ActivatedRoute,
+		private authFacade: AuthFacadeService,
 	) {
-		addIcons({ barbellOutline, fitnessOutline });
+		addIcons({barbellOutline,fitnessOutline});
 	}
 
 	ngOnInit() {
@@ -45,36 +47,35 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 			this.isLoading = false;
 		});
 
-		//TODO: CAMBIAR POR EL USUARIO NORMAL
-		// this.authFacade.user$.subscribe((user) => {
-		// 	this.isLoading = true;
-		// 	if (user?.routineId) {
-		// 		this.store.dispatch(new LoadRoutineById(user.routineId)).subscribe({
-		// 			error: () => {
-		// 				this.isLoading = false;
-		// 			},
-		// 		});
-		// 	} else {
-		// 		this.store.dispatch(new LoadRoutines()).subscribe({
-		// 			next: () => {
-		// 				const routines = this.store.selectSnapshot(RoutineState.getRoutines);
+		this.authFacade.user$.subscribe((user) => {
+			this.isLoading = true;
+			if (user?.routineId) {
+				this.store.dispatch(new LoadRoutineById(user.routineId)).subscribe({
+					error: () => {
+						this.isLoading = false;
+					},
+				});
+			} else {
+				this.store.dispatch(new LoadRoutines()).subscribe({
+					next: () => {
+						const routines = this.store.selectSnapshot(RoutineState.getRoutines);
 
-		// 				if (routines && routines.length > 0) {
-		// 					this.store.dispatch(new LoadRoutineById(routines[0]._id)).subscribe({
-		// 						error: () => {
-		// 							this.isLoading = false;
-		// 						},
-		// 					});
-		// 				} else {
-		// 					this.isLoading = false;
-		// 				}
-		// 			},
-		// 			error: () => {
-		// 				this.isLoading = false;
-		// 			},
-		// 		});
-		// 	}
-		// });
+						if (routines && routines.length > 0) {
+							this.store.dispatch(new LoadRoutineById(routines[0]._id)).subscribe({
+								error: () => {
+									this.isLoading = false;
+								},
+							});
+						} else {
+							this.isLoading = false;
+						}
+					},
+					error: () => {
+						this.isLoading = false;
+					},
+				});
+			}
+		});
 	}
 
 	ngOnDestroy() {

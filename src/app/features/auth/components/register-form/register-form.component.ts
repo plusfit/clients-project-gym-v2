@@ -13,6 +13,10 @@ import { Register } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
 import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
+import { addIcons } from "ionicons";
+import { mailOutline } from "ionicons/icons";
+import { lockClosedOutline } from "ionicons/icons";
+import { logInOutline } from "ionicons/icons";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
@@ -33,6 +37,12 @@ export class RegisterFormComponent {
 		private actions: Actions,
 		private toastService: ToastService,
 	) {
+		addIcons({
+			"mail-outline": mailOutline,
+			"lock-closed-outline": lockClosedOutline,
+			"log-in-outline": logInOutline,
+		});
+
 		this.form = this.fb.group(
 			{
 				email: ["", [Validators.required, Validators.email]],

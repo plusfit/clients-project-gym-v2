@@ -14,6 +14,7 @@ import {
 } from "ionicons/icons";
 import { finalize, take } from "rxjs";
 import { User } from "../../../auth/interfaces/user.interface";
+import { AuthFacadeService } from "../../../auth/services/auth-facade.service";
 import { AuthState } from "../../../auth/state/auth.state";
 import { OnboardingService } from "../../services/onboarding.service";
 import { SetStep3 } from "../../state/onboarding.actions";
@@ -41,6 +42,7 @@ export class OnboardingStep3Component implements OnInit {
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private toastCtrl: ToastController,
+		private authFacadeService: AuthFacadeService,
 	) {
 		addIcons({
 			"calendar-outline": calendarOutline,
@@ -62,8 +64,7 @@ export class OnboardingStep3Component implements OnInit {
 	ngOnInit() {
 		// Inicializar un usuario ficticio en el estado de autenticación para pruebas
 		console.log("🧪 Inicializando usuario de prueba para desarrollo");
-		//TODO: AJUSTAR
-		//this.authFacadeService.setMockUserState();
+		this.authFacadeService.setMockUserState();
 
 		// Verificar si hay datos del paso 3 en el store
 		this.store

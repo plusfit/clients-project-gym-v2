@@ -308,3 +308,104 @@ ion-modal.datepicker-modal {
     font-size: 0.7rem;
   }
 }
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--ion-color-primary-rgb), 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--ion-color-primary-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--ion-color-primary-rgb), 0);
+  }
+}
+
+.avatar-section {
+  margin-bottom: 24px;
+
+  .avatar-container {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+
+  .user-avatar {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    border: 3px solid var(--ion-color-primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    overflow: visible;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: pulse 2s infinite;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover, &:active {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(var(--ion-color-primary-rgb), 0.4);
+
+      &::after {
+        opacity: 1;
+      }
+
+      .camera-icon {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .camera-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      color: white;
+      z-index: 2;
+      opacity: 0.7;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  }
+
+  p {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 576px) {
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+
+    .camera-icon {
+      font-size: 1.2rem;
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
