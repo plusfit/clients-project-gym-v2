@@ -21,7 +21,6 @@ export class UserService {
 				return null;
 			}),
 			catchError((error) => {
-				console.error("Error fetching exercise:", error);
 				return of(null);
 			}),
 		);
@@ -36,7 +35,6 @@ export class UserService {
 				return null;
 			}),
 			catchError((error) => {
-				console.error("Error fetching plan:", error);
 				return of(null);
 			}),
 		);

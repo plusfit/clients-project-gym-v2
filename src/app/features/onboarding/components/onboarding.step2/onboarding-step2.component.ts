@@ -58,7 +58,6 @@ export class OnboardingStep2Component implements OnInit {
 			.select(OnboardingState.getStep2)
 			.pipe(take(1))
 			.subscribe(async (step2Data) => {
-				console.log("Datos Step2 recibidos:", step2Data);
 				if (step2Data) {
 					// Mostrar loader mientras procesamos
 					this.isLoading = true;
@@ -81,18 +80,15 @@ export class OnboardingStep2Component implements OnInit {
 							},
 						};
 
-						console.log("Valores para el formulario:", formValue);
 
 						// Poblar el formulario
 						this.form.patchValue(formValue);
-						console.log("Formulario después de patchValue:", this.form.value);
 
 						// Verificar si debemos avanzar al paso 3
 						this.store
 							.select(OnboardingState.getCurrentStep)
 							.pipe(take(1))
 							.subscribe((currentStep) => {
-								console.log("Current step:", currentStep);
 								if (currentStep > 2) {
 									// Si ya completó este paso, avanzar al siguiente
 									this.goToNextStep(currentStep, step2Data);
@@ -165,7 +161,6 @@ export class OnboardingStep2Component implements OnInit {
 								});
 							},
 							error: (error) => {
-								console.error("Error en el paso 2 del onboarding:", error);
 								// Si se produce un error, igual continuar con el flujo
 								this.nav.push(OnboardingStep3Component, {
 									nav: this.nav,

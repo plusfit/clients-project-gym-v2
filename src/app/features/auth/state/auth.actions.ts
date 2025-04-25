@@ -44,3 +44,8 @@ export class GoogleRegister {
 export class SetOnboardingCompleted {
 	static readonly type = "[Auth] Set Onboarding Completed";
 }
+
+export class UpdateUser {
+	static readonly type = "[Auth] Update User";
+	constructor(public user: User) {}
+}

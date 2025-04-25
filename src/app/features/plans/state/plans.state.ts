@@ -73,49 +73,40 @@ export class PlansState {
           if (response?.data?.planId) {
             // Si la respuesta tiene una estructura {success: true, data: {planId: '...'}}
             planId = response.data.planId;
-            console.log("📝 Plan ID extraído de response.data:", planId);
           } else if (response?.planId) {
             // Si la respuesta es directamente el objeto usuario
             planId = response.planId;
-            console.log("📝 Plan ID extraído directamente de la respuesta:", planId);
           }
 
           if (!planId) {
-            console.log("ℹ️ El usuario no tiene un plan asignado");
             ctx.dispatch(new SetUserPlan(null));
             ctx.dispatch(new SetLoading(false));
             return;
           }
 
           // Si tiene un plan asignado, obtener los detalles del plan
-          console.log("🔍 Obteniendo detalles del plan:", planId);
           this.http.get<any>(`${environment.apiUrl}/plans/${planId}`).subscribe(
             (planResponse) => {
               let planData = null;
               
               if (planResponse?.data) {
                 planData = this.normalizePlanData(planResponse.data);
-                console.log("✅ Plan cargado correctamente:", planData?.name);
               } else if (planResponse) {
                 // Si no hay estructura anidada, usar directamente la respuesta
                 planData = this.normalizePlanData(planResponse);
-                console.log("✅ Plan cargado sin estructura data:", planData?.name);
               } else {
-                console.log("ℹ️ No se pudo obtener información del plan");
               }
 
               ctx.dispatch(new SetUserPlan(planData));
               ctx.dispatch(new SetLoading(false));
             },
             (error) => {
-              console.error("❌ Error al cargar el plan:", error);
               ctx.dispatch(new SetError('Error al cargar el plan. Por favor, intenta nuevamente.'));
               ctx.dispatch(new SetLoading(false));
             }
           );
         },
         (error) => {
-          console.error("❌ Error al cargar información del cliente:", error);
           ctx.dispatch(new SetError('Error al cargar información del cliente. Por favor, intenta nuevamente.'));
           ctx.dispatch(new SetLoading(false));
         }

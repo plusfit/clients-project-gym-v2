@@ -93,7 +93,6 @@ export class OnboardingState {
 				}
 			}),
 			catchError((error) => {
-				console.error("Error al cargar datos de onboarding:", error);
 				ctx.patchState({ isLoading: false });
 
 				// Si el error es 404, significa que no hay datos para el usuario
@@ -134,7 +133,6 @@ export class OnboardingState {
 					ctx.patchState({ isInitialized: true });
 				}),
 				catchError((error) => {
-					console.error("Error al inicializar onboarding:", error);
 					// Si el error es porque ya existe (409 Conflict) marcamos como inicializado
 					if (error.status === 409 || error.status === 400) {
 						ctx.patchState({ isInitialized: true });
@@ -161,7 +159,6 @@ export class OnboardingState {
 							});
 						}),
 						catchError((error) => {
-							console.error("Error al actualizar paso 1:", error);
 							// Actualizar el estado local aunque falle el backend
 							ctx.patchState({
 								step1: action.step,
@@ -183,7 +180,6 @@ export class OnboardingState {
 				});
 			}),
 			catchError((error) => {
-				console.error("Error al actualizar paso 1:", error);
 				// Actualizar el estado local aunque falle el backend
 				ctx.patchState({
 					step1: action.step,
@@ -206,7 +202,6 @@ export class OnboardingState {
 				});
 			}),
 			catchError((error) => {
-				console.error("Error al actualizar paso 2:", error);
 				// Actualizar el estado local aunque falle el backend
 				ctx.patchState({
 					step2: action.step,
@@ -229,7 +224,6 @@ export class OnboardingState {
 				});
 			}),
 			catchError((error) => {
-				console.error("Error al actualizar paso 3:", error);
 				// Actualizar el estado local aunque falle el backend
 				ctx.patchState({
 					step3: action.step,

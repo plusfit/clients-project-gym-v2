@@ -124,19 +124,16 @@ export class RoutineState {
 
 	@Action(LoadUserRoutines)
 	loadUserRoutines(ctx: StateContext<RoutineStateModel>, action: LoadUserRoutines) {
-		console.log(`RoutineState: Cargando rutinas para usuario con ID: ${action.userId}`);
 		ctx.patchState({ loading: true, error: null });
 
 		return this.routineService.getUserRoutines(action.userId).pipe(
 			tap((routines) => {
-				console.log(`RoutineState: Se cargaron ${routines.length} rutinas para el usuario`);
 				ctx.patchState({
 					routines,
 					loading: false,
 				});
 			}),
 			catchError((error) => {
-				console.error("RoutineState: Error al cargar las rutinas del usuario", error);
 				ctx.patchState({
 					loading: false,
 					error: error.message || "Error al cargar las rutinas del usuario",

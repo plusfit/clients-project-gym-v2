@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Auth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "@angular/fire/auth";
 import { environment } from "environments/environment";
 import { Observable, from, of, throwError } from "rxjs";
-import { delay, tap } from "rxjs/operators";
+import { delay, map, tap } from "rxjs/operators";
 import {
 	AuthResponse,
 	LoginCredentials,
@@ -13,6 +13,7 @@ import {
 	User,
 	UserRole,
 } from "../interfaces/user.interface";
+import { JwtPayload, jwtDecode } from "jwt-decode";
 
 @Injectable({
 	providedIn: "root",
@@ -22,53 +23,6 @@ export class AuthService {
 		private _auth: Auth,
 		private http: HttpClient,
 	) {}
-
-	private mockUser: User = {
-		_id: "67c1e7f693b18ac69b4482d1",
-		role: UserRole.ADMIN,
-		email: "steelparadisegym@gmail.com",
-		userInfo: {
-			_id: "67c1e7f793b18ac69b4482d3",
-			name: "Federico",
-			password: "PlusFit1!",
-			identifier: "steelparadisegym@gmail.com",
-			dateBirthday: "2025-02-06T03:00:00.000Z",
-			sex: "Masculino",
-			phone: "1243252",
-			address: "ewgewgrew",
-			historyofPathologicalLesions: "false",
-			medicalSociety: "dfbrdrnt",
-			cardiacHistory: "false",
-			bloodPressure: "Normal",
-			frequencyOfPhysicalExercise: "Diario",
-			respiratoryHistory: "true",
-			surgicalHistory: "false",
-			CI: "2342356657",
-		},
-		planId: "67c0a9abde6282d107e2788d",
-		routineId: "67c0a95cde6282d107e2786d",
-		refreshToken:
-			"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2MxZTdmNjkzYjE4YWM2OWI0NDgyZDEiLCJyb2xlIjoiQWRtaW4iLCJlbWFpbCI6InN0ZWVscGFyYWRpc2VneW1AZ21haWwuY29tIiwiX192IjowLCJ1c2VySW5mbyI6eyJuYW1lIjoiRmVkZXJpY28iLCJwYXNzd29yZCI6IlBsdXNGaXQxISIsImlkZW50aWZpZXIiOiJzdGVlbHBhcmFkaXNlZ3ltQGdtYWlsLmNvbSIsImRhdGVCaXJ0aGRheSI6IjIwMjUtMDItMDYUMDM6MDA6MDAuMDAwWiIsInNleCI6Ik1hc2N1bGlubyIsInBob25lIjoiMTI0MzI1MiIsImFkZHJlc3MiOiJld2dld2dyZXciLCJoaXN0b3J5b2ZQYXRob2xvZ2ljYWxMZXNpb25zIjoiZmFsc2UiLCJtZWRpY2FsU29jaWV0eSI6ImRmYnJkcm50IiwiY2FyZGlhY0hpc3RvcnkiOiJmYWxzZSIsImJsb29kUHJlc3N1cmUiOiJOb3JtYWwiLCJmcmVxdWVuY3lPZlBoeXNpY2FsRXhlcmNpc2UiOiJEaWFyaW8iLCJyZXNwaXJhdG9yeUhpc3RvcnkiOiJ0cnVlIiwic3VyZ2ljYWxIaXN0b3J5IjoiZmFsc2UiLCJDSSI6IjIzNDIzNTY2NTciLCJfaWQiOiI2N2MxZTdmNzkzYjE4YWM2OWI0NDgyZDMifSwicGxhbklkIjoiNjdjMGE5YWJkZTYyODJkMTA3ZTI3ODhkIiwicm91dGluZUlkIjoiNjdjMGE5NWNkZTYyODJkMTA3ZTI3ODZkIiwiY3JlYXRlZEF0IjoxNzQxODA5NDM0MTcxLCJpYXQiOjE3NDE4MDk0MzQsImV4cCI6MTc0MjI0MTQzNH0.OaLGjYKE-cqmAcHtjhUPTQd_KLC6R-pu_q5LRXK22mU",
-	};
-
-	private mockToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.mockToken";
-
-	_login(credentials: LoginCredentials): Observable<AuthResponse> {
-		// Simulamos la verificación de credenciales
-		if (credentials.email === this.mockUser.email && credentials.password === this.mockUser.userInfo.password) {
-			return of({
-				user: this.mockUser,
-				token: this.mockToken,
-			}).pipe(
-				delay(300), // Reducimos el delay para que sea más rápido
-				tap((response) => {
-					// Guardar el token
-					localStorage.setItem("token", response.token);
-				}),
-			);
-		}
-		return throwError(() => new Error("Credenciales inválidas")).pipe(delay(300));
-	}
 
 	loginFirebase(authCredentials: LoginCredentials): any {
 		const { email, password } = authCredentials;
@@ -82,14 +36,24 @@ export class AuthService {
 	}
 
 	getCurrentUser(): Observable<User> {
-		// Simulamos obtener el usuario de una sesión existente
-		return of(this.mockUser).pipe(delay(300));
-	}
-
-	// Método sincrónico para obtener el usuario actual
-	// Útil para servicios que necesitan acceder al ID del usuario inmediatamente
-	getCurrentUserSync(): User {
-		return this.mockUser;
+		// Try to get userId from JWT in localStorage
+		let userId: string | null = null;
+		const token = localStorage.getItem("token");
+		if (token) {
+			try {
+				const decoded: any = jwtDecode(token);
+				userId = decoded?._id || decoded?.id || null;
+			} catch {}
+		}
+		if (!userId) {
+			userId = localStorage.getItem("userId");
+		}
+		if (!userId) {
+			return throwError(() => new Error("No user id found"));
+		}
+		return this.http.get<any>(`${environment.apiUrl}/clients/${userId}`).pipe(
+			map(response => response.data as User)
+		);
 	}
 
 	logout(): Observable<boolean> {
@@ -99,17 +63,13 @@ export class AuthService {
 	}
 
 	refreshSession(): Observable<AuthResponse> {
-		// Simulamos renovación de token
-		return of({
-			user: this.mockUser,
-			token: `${this.mockToken}.refreshed`,
-		}).pipe(delay(300));
+		// Implement with real backend call or throw error if not implemented
+		return throwError(() => new Error('refreshSession not implemented'));
 	}
 
 	register(email: string, displayName?: string, photoURL?: string): Observable<RegisterResponse> {
 		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, {
 			email,
-			isGoogleAuth: true,
 			displayName,
 			photoURL
 		});
@@ -134,5 +94,12 @@ export class AuthService {
 			name,
 			avatarUrl: photoURL
 		});
+	}
+
+	updateOnboardingCompleted(userId: string): Observable<User> {
+		return this.http.patch<any>(`${environment.apiUrl}/clients/${userId}`, { onboardingCompleted: true })
+			.pipe(
+				map(response => response.data)
+			);
 	}
 }

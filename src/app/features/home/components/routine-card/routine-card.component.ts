@@ -121,7 +121,6 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 						this.cd.markForCheck();
 					},
 					error: () => {
-						console.error("Error loading exercises");
 						this.loadedExercises = [];
 						this.isLoading = false;
 						this.cd.markForCheck();

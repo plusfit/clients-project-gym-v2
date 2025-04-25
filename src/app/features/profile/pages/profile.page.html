@@ -7,27 +7,18 @@
 } @else { @if (user$ | async; as user) { @if (plan$ | async; as plan) {
 <ion-content [fullscreen]="true">
   <div class="profile-container">
-    <app-profile-image-name-info
-      [name]="user.userInfo.name"
-      [age]="29"
+    <app-profile-image-name-info [name]="user.userInfo.name" [age]="29"
       [imageUrl]="'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
-      [planGoal]="plan.goal"
-    >
+      [planGoal]="plan.goal">
     </app-profile-image-name-info>
 
-    <app-profile-personal-info
-      [email]="user.email"
-      [phone]="user.userInfo.phone"
-      [medicalSociety]="user.userInfo.medicalSociety"
-    >
+    <app-profile-personal-info [email]="user.email" [phone]="user.userInfo.phone"
+      [medicalSociety]="user.userInfo.medicalSociety">
     </app-profile-personal-info>
 
-    <app-profile-plan-info
-      [planName]="plan.name"
-      [planDays]="plan.days"
-      [planLevel]="plan.experienceLevel"
-    >
+    <app-profile-plan-info [planName]="plan.name" [planDays]="plan.days" [planLevel]="plan.experienceLevel">
     </app-profile-plan-info>
   </div>
+  <ion-button expand="full" color="danger" (click)="logout()">Cerrar sesión</ion-button>
 </ion-content>
 } } }

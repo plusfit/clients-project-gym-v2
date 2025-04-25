@@ -40,7 +40,6 @@ export class OnboardingService {
 
 		// Error crítico: sin ID de usuario válido
 		const errorMsg = "No se encontró un usuario con ID válido en AuthState";
-		console.error(`🚨 ${errorMsg}`);
 		// En entorno de producción podríamos querer lanzar una excepción
 		// throw new Error(errorMsg);
 
@@ -52,13 +51,11 @@ export class OnboardingService {
 		}
 
 		// Fallback absoluto solo para desarrollo
-		console.error("❌ CRÍTICO: Imposible obtener un ID de usuario válido");
 		return `development_user_${Date.now()}`;
 	}
 
 	// Crear un nuevo registro de onboarding completo
 	createOnboarding(data: any): Observable<any> {
-		console.log("Creando onboarding con datos:", data);
 		return this.http.post(`${this.apiUrl}/onboarding`, data);
 	}
 
@@ -69,13 +66,11 @@ export class OnboardingService {
 
 	// Actualizar paso 1 - Información personal
 	updateStep1(data: Step1): Observable<any> {
-		console.log("Actualizando paso 1 con datos:", data);
 		return this.http.patch(`${this.apiUrl}/onboarding/${this.userId}/step/1`, data);
 	}
 
 	// Actualizar paso 2 - Información de salud
 	updateStep2(data: Step2): Observable<any> {
-		console.log("Actualizando paso 2 con datos:", data);
 		// Verificar que los campos de history sean strings y no booleans
 		const history = data.history;
 		if (history) {
@@ -83,7 +78,6 @@ export class OnboardingService {
 			const fields = ["respiratory", "cardiac", "chirurgical", "injuries"] as const;
 			for (const field of fields) {
 				if (typeof history[field] !== "string") {
-					console.error(`El campo history.${field} debería ser un string, no ${typeof history[field]}`);
 				}
 			}
 		}
@@ -92,10 +86,8 @@ export class OnboardingService {
 
 	// Actualizar paso 3 - Preferencias de entrenamiento
 	updateStep3(data: Step3): Observable<any> {
-		console.log("Actualizando paso 3 con datos:", data);
 		// Verificar que trainingDays sea un número
 		if (typeof data.trainingDays !== "number") {
-			console.error(`trainingDays debería ser un número, no ${typeof data.trainingDays}`);
 			// Intentar convertir a número si es posible
 			data.trainingDays = Number(data.trainingDays);
 		}
@@ -108,7 +100,6 @@ export class OnboardingService {
 	 */
 	assignPlan(retryCount = 0): Observable<any> {
 		const maxRetries = 2;
-		console.log("📝 Asignando plan para usuario:", this.userId);
 
 		// Verificar que tengamos todos los datos necesarios antes de llamar al endpoint
 		const step3Data = this.store.selectSnapshot(OnboardingState.getStep3);
@@ -119,7 +110,6 @@ export class OnboardingService {
 		// Enviar un objeto vacío como payload, ya que el userId está en la URL
 		return this.http.post<any>(`${this.apiUrl}/onboarding/${this.userId}/assign-plan`, {}).pipe(
 			tap((response) => {
-				console.log("Respuesta de asignación de plan:", response);
 
 				// Extraer información del plan basado en diferentes estructuras de respuesta posibles
 				let planId = null;
@@ -129,22 +119,18 @@ export class OnboardingService {
 				if (response?.data?.plan) {
 					planId = response.data.plan._id || response.data.plan.id;
 					planName = response.data.plan.name || "Personalizado";
-					console.log(`✅ Plan "${planName}" asignado correctamente (ID: ${planId})`);
 				}
 				// Caso 2: El backend devuelve un objeto usuario con planId
 				else if (response?.data?.planId) {
 					planId = response.data.planId;
-					console.log(`✅ Plan asignado correctamente con ID: ${planId}`);
 				}
 				// Caso 3: La respuesta es directamente el objeto plan
 				else if (response?.plan) {
 					planId = response.plan._id || response.plan.id;
 					planName = response.plan.name || "Personalizado";
-					console.log(`✅ Plan "${planName}" asignado correctamente (ID: ${planId})`);
 				}
 				// Caso 4: La respuesta es otro formato
 				else {
-					console.log("✅ Plan asignado, pero con formato de respuesta desconocido");
 				}
 
 				// Guardar planId en localStorage para mayor compatibilidad
@@ -154,17 +140,14 @@ export class OnboardingService {
 			}),
 			catchError((error) => {
 				const errorMsg = error.error?.message || error.message || "Error desconocido";
-				console.error(`❌ Error al asignar plan (intento ${retryCount + 1}/${maxRetries + 1}):`, errorMsg);
 
 				// Si hay error de conexión o 5xx, intentar de nuevo
 				if ((error.status >= 500 || error.status === 0) && retryCount < maxRetries) {
-					console.log(`🔄 Reintentando asignación de plan... (${retryCount + 1}/${maxRetries})`);
 					return this.assignPlan(retryCount + 1);
 				}
 
 				// Si hay error 404, intentar crear un plan predeterminado
 				if (error.status === 404) {
-					console.log("🛠️ No se encontró el usuario, intentando crear un plan predeterminado");
 					return this.createDefaultPlan();
 				}
 
@@ -177,7 +160,6 @@ export class OnboardingService {
 	 * Crea un plan predeterminado si la asignación automática falla
 	 */
 	private createDefaultPlan(): Observable<any> {
-		console.log("📋 Creando plan predeterminado para:", this.userId);
 		const defaultPlan = {
 			name: "Plan de Inicio",
 			description: "Plan básico generado automáticamente",

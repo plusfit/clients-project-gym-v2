@@ -86,7 +86,6 @@ export class RegisterFormComponent implements OnDestroy {
 
 	submit() {
 		if (this.form.valid) {
-			console.log("✅ Registro válido:");
 
 			this.store.dispatch(new Register(this.form.value));
 
@@ -96,7 +95,6 @@ export class RegisterFormComponent implements OnDestroy {
 				this.router.navigate(["/login"]);
 			});
 		} else {
-			console.log("❌ Registro inválido:");
 			this.form.markAllAsTouched();
 		}
 	}

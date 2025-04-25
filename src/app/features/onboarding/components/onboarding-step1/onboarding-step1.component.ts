@@ -155,9 +155,7 @@ export class OnboardingStep1Component implements OnInit {
 
 		try {
 			await Camera.checkPermissions();
-			console.log("Permisos de cámara verificados");
 		} catch (error) {
-			console.error("Error al verificar permisos de cámara:", error);
 		}
 
 		this.obtenerUserID();
@@ -176,19 +174,16 @@ export class OnboardingStep1Component implements OnInit {
 						.select(OnboardingState.getStep1)
 						.pipe(take(1))
 						.subscribe((step1Data) => {
-							console.log("Datos Step1 recibidos:", step1Data);
 							if (step1Data) {
 								this.userForm.patchValue(step1Data);
 								if (step1Data.avatarUrl) {
 									this.avatarUrlPreview = step1Data.avatarUrl;
 								}
-								console.log("Formulario después de patchValue:", this.userForm.value);
 
 								this.store
 									.select(OnboardingState.getCurrentStep)
 									.pipe(take(1))
 									.subscribe((currentStep) => {
-										console.log("Current step:", currentStep);
 										if (currentStep > 1) {
 											this.goToNextStep(currentStep, step1Data);
 										}
@@ -197,7 +192,6 @@ export class OnboardingStep1Component implements OnInit {
 						});
 				},
 				error: (error) => {
-					console.error("Error al cargar datos de onboarding:", error);
 				},
 			});
 	}
@@ -207,7 +201,6 @@ export class OnboardingStep1Component implements OnInit {
 			const userId = localStorage.getItem("userId");
 			if (userId) {
 				this.currentUserId = userId;
-				console.log("User ID obtenido:", this.currentUserId);
 				this.cargarImagenTemporal();
 			} else {
 				console.warn("No se encontró userId en localStorage");
@@ -274,7 +267,6 @@ export class OnboardingStep1Component implements OnInit {
 
 		try {
 			const permissionStatus = await Camera.checkPermissions();
-			console.log("Estado de permisos:", permissionStatus);
 
 			if (permissionStatus.camera !== "granted" && source === CameraSource.Camera) {
 				await Camera.requestPermissions();
@@ -345,7 +337,6 @@ export class OnboardingStep1Component implements OnInit {
 						localStorage.setItem(`avatar_url_${this.currentUserId}`, finalAvatarUrl);
 					}
 				} catch (error) {
-					console.error("Error al subir imagen:", error);
 					const prevData = this.store.selectSnapshot(OnboardingState.getStep1);
 					finalAvatarUrl = prevData?.avatarUrl || null;
 
@@ -354,7 +345,6 @@ export class OnboardingStep1Component implements OnInit {
 			}
 
 			step1Data.avatarUrl = finalAvatarUrl;
-			console.log("Datos finales a enviar al backend:", step1Data);
 
 			this.store
 				.dispatch(new SetStep1(step1Data))
@@ -369,7 +359,6 @@ export class OnboardingStep1Component implements OnInit {
 						this.nav.push(OnboardingStep2Component, { step1Data, nav: this.nav });
 					},
 					error: (error) => {
-						console.error("Error en el paso 1 del onboarding:", error);
 						this.nav.push(OnboardingStep2Component, { step1Data, nav: this.nav });
 					},
 				});
