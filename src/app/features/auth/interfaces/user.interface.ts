@@ -46,7 +46,7 @@ export interface User {
 	planId?: string;
 	routineId?: string;
 	refreshToken?: string;
-	onboardingCompleted?: boolean;
+	isOnboardingCompleted?: boolean;
 }
 
 export enum UserRole {
@@ -72,6 +72,7 @@ export interface UserInfo {
 	respiratoryHistory: string;
 	surgicalHistory: string;
 	CI: string;
+	avatarUrl?: string;
 }
 
 export interface AuthResponse {

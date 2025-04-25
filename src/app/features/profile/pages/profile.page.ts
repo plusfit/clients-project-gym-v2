@@ -1,7 +1,9 @@
 import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Router } from '@angular/router';
+import { UserRole } from '@feature/auth/interfaces/user.interface';
 import { Logout, UpdateUser } from '@feature/auth/state/auth.actions';
+import { AuthState } from '@feature/auth/state/auth.state';
 import { User } from "@feature/profile/interfaces/user.interface";
 import { IonButton, IonContent, IonSpinner } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
@@ -13,8 +15,6 @@ import { ProfilePlanInfoComponent } from "../components/profile-plan-info/profil
 import { Plan } from "../interfaces/plan.interface";
 import { LoadPlan, LoadUser } from "../state/user.actions";
 import { UserState } from "../state/user.state";
-import { AuthState } from '@feature/auth/state/auth.state';
-import { UserRole } from '@feature/auth/interfaces/user.interface';
 
 @Component({
 	selector: "app-profile",
@@ -45,12 +45,13 @@ export class ProfilePage implements OnInit {
 
 	ngOnInit(): void {
 		const authUser = this.store.selectSnapshot(AuthState.getUser);
-    debugger;
 		this.id = authUser?._id || null;
 		if (this.id) {
 			this.store.dispatch(new LoadUser(this.id));
 			this.user$.pipe().subscribe((user) => {
 				if (user) {
+					const savedAvatar = localStorage.getItem(`avatar_url_${this.id}`);
+
 					const userInfo = {
 						_id: (user.userInfo as any)._id || '',
 						...user.userInfo,
@@ -58,7 +59,9 @@ export class ProfilePage implements OnInit {
 						cardiacHistory: String(user.userInfo.cardiacHistory),
 						respiratoryHistory: String(user.userInfo.respiratoryHistory),
 						surgicalHistory: String(user.userInfo.surgicalHistory),
+						avatarUrl: savedAvatar || user.userInfo.avatarUrl
 					};
+
 					const mappedUser = {
 						...user,
 						role: (user.role as keyof typeof UserRole) in UserRole ? UserRole[user.role as keyof typeof UserRole] : UserRole.USER,

@@ -58,7 +58,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	selectedDay = "Lunes";
 	schedulesForDay: Schedule[] = [];
 	currentUserId = "";
-	userPlan = { days: 2 }; // Valor por defecto hasta que se cargue el plan
+	userPlan = { days: 2 }; // Valor por defecto (3 en vez de 2)
 	enrolledDaysCount = 0;
 	totalEnrollments = 0; // Nuevo contador para el total de inscripciones
 	enrollmentsByDay: DayEnrollment[] = [];
@@ -101,10 +101,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 		this.subscriptions.add(userSub);
 
-		// Get plan info
+		// Get plan info with highest priority
 		const planSub = this.plan$.subscribe((plan) => {
 			if (plan?.days) {
 				this.userPlan = { days: plan.days };
+				// Recalcular los slots disponibles cuando el plan cambia
+				const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+				if (schedules) {
+					this.calculateEnrollments(schedules);
+				}
 			}
 		});
 		this.subscriptions.add(planSub);

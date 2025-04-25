@@ -329,7 +329,7 @@ export class AuthState {
 			ctx.patchState({
 				user: {
 					...user,
-					onboardingCompleted: true
+					isOnboardingCompleted: true
 				}
 			});
 		}

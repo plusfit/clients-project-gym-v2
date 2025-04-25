@@ -7,8 +7,8 @@
 } @else { @if (user$ | async; as user) { @if (plan$ | async; as plan) {
 <ion-content [fullscreen]="true">
   <div class="profile-container">
-    <app-profile-image-name-info [name]="user.userInfo.name" [age]="29"
-      [imageUrl]="'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
+    <app-profile-image-name-info [name]="user.userInfo.name" [age]="age || 0"
+      [imageUrl]="user.userInfo.avatarUrl || 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
       [planGoal]="plan.goal">
     </app-profile-image-name-info>
 

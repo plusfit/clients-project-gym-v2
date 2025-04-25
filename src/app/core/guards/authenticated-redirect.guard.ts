@@ -13,7 +13,7 @@ export const authenticatedRedirectGuard = () => {
     map(user => {
       if (user) {
         // User is authenticated, check onboarding status
-        if (user.onboardingCompleted) {
+        if (user.isOnboardingCompleted) {
           router.navigate(['/cliente/inicio']);
         } else {
           router.navigate(['/onboarding']);
