@@ -6,6 +6,8 @@ import { ScheduleService } from "@feature/schedule/services/schedule.service";
 import { Schedule } from "@feature/schedule/state/schedule.state";
 import { Observable, forkJoin, of } from "rxjs";
 import { catchError, map, switchMap } from "rxjs/operators";
+import { Store } from '@ngxs/store';
+import { AuthState } from '@feature/auth/state/auth.state';
 
 @Injectable({
 	providedIn: "root",
@@ -25,10 +27,11 @@ export class HomeService {
 		private routineService: RoutineService,
 		private authService: AuthService,
 		private scheduleService: ScheduleService,
+		private store: Store
 	) {}
 
 	getUserRoutine(): Observable<Routine | null> {
-		const currentUser = this.authService.getCurrentUserSync();
+		const currentUser = this.store.selectSnapshot(AuthState.getUser);
 		if (currentUser?.routineId) {
 			return this.routineService.getRoutineById(currentUser.routineId);
 		}
@@ -38,8 +41,8 @@ export class HomeService {
 	getUserSchedules(): Observable<Schedule[]> {
 		return this.scheduleService.getSchedules().pipe(
 			map((schedules) => {
-				const currentUser = this.authService.getCurrentUserSync();
-				return schedules.filter((schedule) => schedule.clients?.includes(currentUser._id));
+				const currentUser = this.store.selectSnapshot(AuthState.getUser);
+				return currentUser ? schedules.filter((schedule) => schedule.clients?.includes(currentUser._id)) : [];
 			}),
 			catchError((error) => {
 				return of([]);
@@ -94,3 +97,4 @@ export class HomeService {
 		);
 	}
 }
+

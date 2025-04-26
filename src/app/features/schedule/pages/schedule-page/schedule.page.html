@@ -4,15 +4,15 @@
   <ion-grid class="main-grid">
     <ion-row>
       <ion-col size="12" class="selector-col">
-        <app-day-selector
-          [enrollmentsByDay]="enrollmentsByDay"
-          (daySelected)="onDaySelected($event)"
-        ></app-day-selector>
+        <app-day-selector [enrollmentsByDay]="enrollmentsByDay"
+          (daySelected)="onDaySelected($event)"></app-day-selector>
       </ion-col>
     </ion-row>
     <ion-row class="schedule-row">
       <ion-col size="12" class="schedule-col">
-        <h2 class="schedule-title">Horarios Disponibles</h2>
+        <h2 class="schedule-title">Horarios Disponibles <span class="available-slots"
+            [ngClass]="{'zero-slots': availableSlots === 0}">({{availableSlots}} horario{{availableSlots !== 1 ? 's' :
+            ''}} restante{{availableSlots !== 1 ? 's' : ''}})</span></h2>
 
         <!-- Loading spinner -->
         <div *ngIf="loading" class="loading-container">
@@ -23,12 +23,8 @@
         <!-- Schedule cards - This is the scrollable container -->
         <div *ngIf="!loading" class="schedule-list">
           <div class="schedule-cards-wrapper">
-            <app-schedule-card
-              *ngFor="let schedule of schedulesForDay"
-              [schedule]="schedule"
-              [currentUserId]="currentUserId"
-              (scheduleClicked)="onScheduleClicked($event)"
-            ></app-schedule-card>
+            <app-schedule-card *ngFor="let schedule of schedulesForDay" [schedule]="schedule"
+              [currentUserId]="currentUserId" (scheduleClicked)="onScheduleClicked($event)"></app-schedule-card>
 
             <!-- Empty state -->
             <div *ngIf="schedulesForDay.length === 0" class="empty-state">
@@ -41,32 +37,19 @@
   </ion-grid>
 
   <!-- Modal de inscripción -->
-  <ion-modal
-    [isOpen]="showEnrollModal"
-    (ionModalDidDismiss)="onEnrollModalDismiss()"
-  >
+  <ion-modal [isOpen]="showEnrollModal" (ionModalDidDismiss)="onEnrollModalDismiss()">
     <ng-template>
-      <app-enroll-confirmation-modal
-        [schedule]="selectedSchedule"
-        [isLoading]="loading"
-        (confirm)="onEnrollConfirmed()"
-        (cancel)="onEnrollModalDismiss()"
-      ></app-enroll-confirmation-modal>
+      <app-enroll-confirmation-modal [schedule]="selectedSchedule" [isLoading]="loading" (confirm)="onEnrollConfirmed()"
+        (cancel)="onEnrollModalDismiss()"></app-enroll-confirmation-modal>
     </ng-template>
   </ion-modal>
 
   <!-- Modal de desinscripción -->
-  <ion-modal
-    [isOpen]="showUnsubscribeModal"
-    (ionModalDidDismiss)="onUnsubscribeModalDismiss()"
-  >
+  <ion-modal [isOpen]="showUnsubscribeModal" (ionModalDidDismiss)="onUnsubscribeModalDismiss()">
     <ng-template>
-      <app-unsubscribe-confirmation-modal
-        [schedule]="selectedSchedule"
-        [isLoading]="loading"
+      <app-unsubscribe-confirmation-modal [schedule]="selectedSchedule" [isLoading]="loading"
         (confirm)="onUnsubscribeConfirmed()"
-        (cancel)="onUnsubscribeModalDismiss()"
-      ></app-unsubscribe-confirmation-modal>
+        (cancel)="onUnsubscribeModalDismiss()"></app-unsubscribe-confirmation-modal>
     </ng-template>
   </ion-modal>
 </ion-content>

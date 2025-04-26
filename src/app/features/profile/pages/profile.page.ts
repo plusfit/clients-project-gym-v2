@@ -1,7 +1,11 @@
 import { AsyncPipe, CommonModule, NgIf } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
+import { UserRole } from '@feature/auth/interfaces/user.interface';
+import { Logout, UpdateUser } from '@feature/auth/state/auth.actions';
+import { AuthState } from '@feature/auth/state/auth.state';
 import { User } from "@feature/profile/interfaces/user.interface";
-import { IonContent, IonSpinner } from "@ionic/angular/standalone";
+import { IonButton, IonContent, IonSpinner } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { Observable, switchMap } from "rxjs";
@@ -24,6 +28,7 @@ import { UserState } from "../state/user.state";
 		ProfilePlanInfoComponent,
 		CommonModule,
 		IonSpinner,
+		IonButton,
 		AppHeaderComponent,
 	],
 	standalone: true,
@@ -36,17 +41,40 @@ export class ProfilePage implements OnInit {
 	age: number | null = null;
 	id: string | null = null;
 
-	constructor(private store: Store) {}
+	constructor(private store: Store, private router: Router) {}
 
 	ngOnInit(): void {
-		this.id = "67c1e9620dd078c1a869dbc2";
-		this.store.dispatch(new LoadUser(this.id));
+		const authUser = this.store.selectSnapshot(AuthState.getUser);
+		this.id = authUser?._id || null;
+		if (this.id) {
+			this.store.dispatch(new LoadUser(this.id));
+			this.user$.pipe().subscribe((user) => {
+				if (user) {
+					const savedAvatar = localStorage.getItem(`avatar_url_${this.id}`);
 
+					const userInfo = {
+						_id: (user.userInfo as any)._id || '',
+						...user.userInfo,
+						historyofPathologicalLesions: String(user.userInfo.historyofPathologicalLesions),
+						cardiacHistory: String(user.userInfo.cardiacHistory),
+						respiratoryHistory: String(user.userInfo.respiratoryHistory),
+						surgicalHistory: String(user.userInfo.surgicalHistory),
+						avatarUrl: savedAvatar || user.userInfo.avatarUrl
+					};
+
+					const mappedUser = {
+						...user,
+						role: (user.role as keyof typeof UserRole) in UserRole ? UserRole[user.role as keyof typeof UserRole] : UserRole.USER,
+						userInfo
+					};
+					this.store.dispatch(new UpdateUser(mappedUser));
+				}
+			});
+		}
 		this.user$.subscribe((user) => {
 			if (user?.userInfo?.dateBirthday) {
 				this.age = this.calculateAge(new Date(user.userInfo.dateBirthday));
 			}
-
 			if (user?.planId) {
 				this.store.dispatch(new LoadPlan(user.planId));
 			}
@@ -73,5 +101,11 @@ export class ProfilePage implements OnInit {
 			day: "numeric",
 		};
 		return date.toLocaleDateString("es-ES", options);
+	}
+
+	logout(): void {
+		this.store.dispatch(new Logout()).subscribe(() => {
+			this.router.navigate(['/login']);
+		});
 	}
 }

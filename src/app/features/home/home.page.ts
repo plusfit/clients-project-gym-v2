@@ -56,7 +56,6 @@ export class HomePage implements OnInit {
 				this.hasAssignedPlan = false;
 			}
 		} catch (error) {
-			console.error("Error al verificar plan asignado:", error);
 			this.hasAssignedPlan = false;
 		} finally {
 			loading.dismiss();

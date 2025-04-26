@@ -13,12 +13,13 @@ import {
 	trendingUpOutline,
 } from "ionicons/icons";
 import { finalize, take, takeUntil } from "rxjs";
-import { User } from "../../../auth/interfaces/user.interface";
-import { GetCurrentUser, SetOnboardingCompleted } from "../../../auth/state/auth.actions";
-import { AuthState } from "../../../auth/state/auth.state";
+import { SetOnboardingCompleted, UpdateUser } from "../../../auth/state/auth.actions";
 import { OnboardingService } from "../../services/onboarding.service";
 import { SetStep3 } from "../../state/onboarding.actions";
 import { OnboardingState } from "../../state/onboarding.state";
+import { AuthState } from '../../../auth/state/auth.state';
+import { UserRole } from '../../../auth/interfaces/user.interface';
+import { UserService } from '../../../profile/services/user.service';
 
 @Component({
 	selector: "app-onboarding-step3",
@@ -44,6 +45,7 @@ export class OnboardingStep3Component implements OnInit {
 		private loadingController: LoadingController,
 		private navCtrl: NavController,
 		private toastCtrl: ToastController,
+		private userService: UserService,
 	) {
 		addIcons({
 			"calendar-outline": calendarOutline,
@@ -189,145 +191,68 @@ export class OnboardingStep3Component implements OnInit {
 	 * Asigna un plan al usuario según sus preferencias
 	 */
 	private assignPlanToUser(loading: HTMLIonLoadingElement) {
-		// Obtener el usuario del AuthState
-		const user = this.store.selectSnapshot(AuthState.getUser) as User | null;
-
-		// Actualizar mensaje de carga
 		loading.message = "Asignando plan de entrenamiento...";
-
 		this.onboardingService.assignPlan().subscribe({
 			next: async (response) => {
-				// Actualizar mensaje de carga
-				loading.message = "Actualizando información de usuario...";
-
-				// Extraer la información del plan según la estructura de respuesta
+				loading.dismiss();
+				this.store.dispatch(new SetOnboardingCompleted());
 				let planName = "Personalizado";
-				let planId = null;
-
-				// Caso 1: Respuesta con plan en data.plan
 				if (response?.data?.plan) {
-					planName = response.data.plan.name || "Personalizado";
-					planId = response.data.plan._id || response.data.plan.id;
-				}
-				// Caso 2: Respuesta con planId en data
-				else if (response?.data?.planId) {
-					planId = response.data.planId;
+					planName = response.data.plan.name || planName;
+				} else if (response?.data?.planId) {
 					planName = "Plan Asignado";
+				} else if (response?.plan) {
+					planName = response.plan.name || planName;
 				}
-				// Caso 3: Respuesta directa con plan
-				else if (response?.plan) {
-					planName = response.plan.name || "Personalizado";
-					planId = response.plan._id || response.plan.id;
-				}
-
-				// Primero marcamos el onboarding como completado en el estado local
-				this.store.dispatch(new SetOnboardingCompleted());
-
-				// Luego actualizamos la información del usuario desde el backend
-				this.store.dispatch(new GetCurrentUser()).subscribe({
-					next: async () => {
-						// Ahora que tenemos la información actualizada, cerramos el loading
-						loading.dismiss();
-
-						// Mostrar toast con confirmación
-						const toast = await this.toastCtrl.create({
-							message: `Plan "${planName}" asignado con éxito`,
-							duration: 3000,
-							position: "bottom",
-							cssClass: "custom-toast toast-success",
-							buttons: [
-								{
-									text: "OK",
-									role: "cancel",
-								},
-							],
-						});
-						await toast.present();
-
-						// Navegar a la página del plan
-						this.navigateToPlan();
-					},
-					error: async (error) => {
-						// Si hay error al obtener la información actualizada, continuamos de todas formas
-						console.error("Error al actualizar información del usuario:", error);
-						loading.dismiss();
-
-						// Mostrar toast con confirmación
-						const toast = await this.toastCtrl.create({
-							message: `Plan "${planName}" asignado con éxito`,
-							duration: 3000,
-							position: "bottom",
-							cssClass: "custom-toast toast-success",
-							buttons: [
-								{
-									text: "OK",
-									role: "cancel",
-								},
-							],
-						});
-						await toast.present();
-
-						// Navegar a la página del plan de todas formas
-						this.navigateToPlan();
-					}
+				await this.updateUserStateFromBackend();
+				const toast = await this.toastCtrl.create({
+					message: `Plan "${planName}" asignado con éxito`,
+					duration: 3000,
+					position: "bottom",
+					cssClass: "custom-toast toast-success",
+					buttons: [{ text: "OK", role: "cancel" }],
 				});
+				await toast.present();
+				this.navigateToPlan();
 			},
-			error: async (error) => {
-				// Actualizar mensaje de carga
-				loading.message = "Actualizando información de usuario...";
-
-				// Primero marcamos el onboarding como completado en el estado local
+			error: async () => {
+				loading.dismiss();
 				this.store.dispatch(new SetOnboardingCompleted());
-
-				// Luego actualizamos la información del usuario desde el backend
-				this.store.dispatch(new GetCurrentUser()).subscribe({
-					next: async () => {
-						loading.dismiss();
-
-						// Mostrar mensaje de error por no poder asignar plan
-						const toast = await this.toastCtrl.create({
-							message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
-							duration: 3000,
-							position: "bottom",
-							cssClass: "custom-toast toast-warning",
-							buttons: [
-								{
-									text: "OK",
-									role: "cancel",
-								},
-							],
-						});
-						await toast.present();
-
-						// Navegar a la página principal de todas formas
-						this.navigateToPlan();
-					},
-					error: async (updateError) => {
-						// Si hay error al obtener la información actualizada, continuamos de todas formas
-						console.error("Error al actualizar información del usuario:", updateError);
-						loading.dismiss();
-
-						// Mostrar mensaje de error por no poder asignar plan
-						const toast = await this.toastCtrl.create({
-							message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
-							duration: 3000,
-							position: "bottom",
-							cssClass: "custom-toast toast-warning",
-							buttons: [
-								{
-									text: "OK",
-									role: "cancel",
-								},
-							],
-						});
-						await toast.present();
-
-						// Navegar a la página principal de todas formas
-						this.navigateToPlan();
-					}
+				await this.updateUserStateFromBackend();
+				const toast = await this.toastCtrl.create({
+					message: "No se pudo asignar un plan. Se asignará uno predeterminado.",
+					duration: 3000,
+					position: "bottom",
+					cssClass: "custom-toast toast-warning",
+					buttons: [{ text: "OK", role: "cancel" }],
 				});
+				await toast.present();
+				this.navigateToPlan();
 			},
 		});
+	}
+
+	private async updateUserStateFromBackend() {
+		const authUser = this.store.selectSnapshot(AuthState.getUser);
+		const userId = authUser?._id;
+		if (!userId) return;
+		const user = await this.userService.getUser(userId).toPromise();
+		if (user) {
+			const userInfo = {
+				_id: (user.userInfo as any)._id || '',
+				...user.userInfo,
+				historyofPathologicalLesions: String(user.userInfo.historyofPathologicalLesions),
+				cardiacHistory: String(user.userInfo.cardiacHistory),
+				respiratoryHistory: String(user.userInfo.respiratoryHistory),
+				surgicalHistory: String(user.userInfo.surgicalHistory),
+			};
+			const mappedUser = {
+				...user,
+				role: (user.role as keyof typeof UserRole) in UserRole ? UserRole[user.role as keyof typeof UserRole] : UserRole.USER,
+				userInfo
+			};
+			this.store.dispatch(new UpdateUser(mappedUser));
+		}
 	}
 
 	private navigateToPlan() {

@@ -48,7 +48,6 @@ export class RoutineFacadeService {
 	}
 
 	loadUserRoutines(userId: string): void {
-		console.log(`RoutineFacade: Cargando rutinas para usuario con ID: ${userId}`);
 		this.store.dispatch(new LoadUserRoutines(userId));
 	}
 

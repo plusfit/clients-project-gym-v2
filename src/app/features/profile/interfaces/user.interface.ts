@@ -15,6 +15,7 @@ export interface UserInfo {
 	surgicalHistory: boolean;
 	CI: string;
 	createdAt: string;
+	avatarUrl?: string;
 }
 
 export interface User {

@@ -18,14 +18,11 @@ const handleUnauthorizedError = (
 	zone: NgZone,
 	router: Router,
 ): void => {
-	console.log("ENTRE AL AUTHORIZE");
 
 	if (err.status === 401 || err.status === 0) {
 		//TODO: status 0 cuando es un 401, ver porque
-		console.log("ENTRO EN EL 401 O EN EL 0");
 
 		if (isAccessTokenExpired && !isRefreshTokenExpired) {
-			console.log("Token expired, refreshing token...");
 
 			store.dispatch(
 				new GetNewToken({

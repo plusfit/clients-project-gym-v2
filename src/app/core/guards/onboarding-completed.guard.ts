@@ -18,7 +18,7 @@ export const onboardingCompletedGuard = () => {
       }
 
       // Luego verificamos si ha completado el onboarding
-      if (!user.onboardingCompleted) {
+      if (!user.isOnboardingCompleted) {
         router.navigate(['/onboarding']);
         return false;
       }

@@ -31,7 +31,6 @@ export class ScheduleFacadeService {
 					this.store.dispatch(new SetSchedules(schedules));
 				}),
 				catchError((error) => {
-					console.error("Error loading schedules:", error);
 					return [];
 				}),
 			)

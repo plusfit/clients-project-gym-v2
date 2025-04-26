@@ -58,7 +58,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	selectedDay = "Lunes";
 	schedulesForDay: Schedule[] = [];
 	currentUserId = "";
-	userPlan = { days: 2 }; // Valor por defecto hasta que se cargue el plan
+	userPlan = { days: 2 }; // Valor por defecto (3 en vez de 2)
 	enrolledDaysCount = 0;
 	totalEnrollments = 0; // Nuevo contador para el total de inscripciones
 	enrollmentsByDay: DayEnrollment[] = [];
@@ -70,6 +70,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	// Obtener referencias a los elementos de las tarjetas
 	@ViewChildren(ScheduleCardComponent, { read: ElementRef }) scheduleCardElements!: QueryList<ElementRef>;
+
+	// Propiedad calculada para mostrar horarios disponibles
+	availableSlots = 0;
 
 	private subscriptions = new Subscription();
 
@@ -90,7 +93,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		const userSub = this.store.select(AuthState.getUser).subscribe((user) => {
 			if (user) {
 				this.currentUserId = user._id;
-				console.log("Usuario actual ID:", this.currentUserId);
 
 				if (user.planId) {
 					this.store.dispatch(new LoadPlan(user.planId));
@@ -99,11 +101,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		});
 		this.subscriptions.add(userSub);
 
-		// Get plan info
+		// Get plan info with highest priority
 		const planSub = this.plan$.subscribe((plan) => {
 			if (plan?.days) {
 				this.userPlan = { days: plan.days };
-				console.log("Plan del usuario cargado. Máximo horarios:", this.userPlan.days);
+				// Recalcular los slots disponibles cuando el plan cambia
+				const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+				if (schedules) {
+					this.calculateEnrollments(schedules);
+				}
 			}
 		});
 		this.subscriptions.add(planSub);
@@ -169,7 +175,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.enrolledDaysCount = enrolledDays.size;
 		this.totalEnrollments = totalCount;
 
-		console.log(`Usuario inscrito en ${this.totalEnrollments} horarios. Máximo permitido: ${this.userPlan.days}`);
+		// Calcular horarios disponibles
+		const maxEnrollments = this.userPlan?.days || 0;
+		this.availableSlots = Math.max(0, maxEnrollments - totalCount);
 	}
 
 	calculateEnrollmentsByDay(schedules: Schedule[]) {
@@ -213,7 +221,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		const plan = this.store.selectSnapshot(UserState.getPlan);
 		const maxEnrollments = plan?.days || this.userPlan.days;
 
-		console.log(`Validación de horarios: Inscritos=${currentEnrollments}, Máximo=${maxEnrollments}`);
 
 		// Si ya está en el límite, no puede inscribirse en un nuevo horario
 		return currentEnrollments < maxEnrollments;

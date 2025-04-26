@@ -25,6 +25,7 @@ import {
 	Register,
 	SetMockUser,
 	SetOnboardingCompleted,
+	UpdateUser,
 } from "./auth.actions";
 
 // Estado
@@ -227,7 +228,6 @@ export class AuthState {
 
 		return this.authService.signInWithGoogle().pipe(
 			switchMap((response: any) => {
-				console.log("Firebase User", response.user);
 				// Convertir Promise a Observable con casting a string
 				return from(response.user.getIdToken() as Promise<string>).pipe(
 					switchMap((idToken: string) => {
@@ -236,8 +236,6 @@ export class AuthState {
 
 						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
 							tap((authResponse: any) => {
-								console.log("Backend response:", authResponse);
-
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
 									throw new Error("Invalid response structure from server");
@@ -268,7 +266,6 @@ export class AuthState {
 				this.toastService.showSuccess("Inicio de sesión con Google exitoso");
 			}),
 			catchError((err: HttpErrorResponse) => {
-				console.error("Google login error:", err);
 				ctx.patchState({
 					loading: false,
 					error: err.message || "Error al ingresar con Google",
@@ -285,7 +282,6 @@ export class AuthState {
 
 		return this.authService.signInWithGoogle().pipe(
 			switchMap((response: any) => {
-				console.log("Firebase User", response.user);
 				// Convertir Promise a Observable con casting a string
 				return from(response.user.getIdToken() as Promise<string>).pipe(
 					switchMap((idToken: string) => {
@@ -294,8 +290,6 @@ export class AuthState {
 
 						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
 							tap((authResponse: any) => {
-								console.log("Backend response:", authResponse);
-
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
 									throw new Error("Invalid response structure from server");
@@ -326,7 +320,6 @@ export class AuthState {
 				this.toastService.showSuccess("Registro con Google exitoso");
 			}),
 			catchError((err: HttpErrorResponse) => {
-				console.error("Google register error:", err);
 				ctx.patchState({
 					loading: false,
 					error: err.message || "Error al registrarse con Google",
@@ -346,9 +339,14 @@ export class AuthState {
 			ctx.patchState({
 				user: {
 					...user,
-					onboardingCompleted: true,
+					isOnboardingCompleted: true,
 				},
 			});
 		}
+	}
+
+	@Action(UpdateUser)
+	updateUser(ctx: StateContext<AuthStateModel>, action: UpdateUser) {
+		ctx.patchState({ user: action.user });
 	}
 }
