@@ -14,7 +14,18 @@ import {
 	User,
 } from "../interfaces/user.interface";
 import { AuthService } from "../services/auth.service";
-import { GetCurrentUser, GetNewToken, GoogleLogin, GoogleRegister, Login, Logout, RefreshSession, Register, SetMockUser, SetOnboardingCompleted } from "./auth.actions";
+import {
+	GetCurrentUser,
+	GetNewToken,
+	GoogleLogin,
+	GoogleRegister,
+	Login,
+	Logout,
+	RefreshSession,
+	Register,
+	SetMockUser,
+	SetOnboardingCompleted,
+} from "./auth.actions";
 
 // Estado
 export interface AuthStateModel {
@@ -216,26 +227,26 @@ export class AuthState {
 
 		return this.authService.signInWithGoogle().pipe(
 			switchMap((response: any) => {
-				console.log('Firebase User', response.user);
+				console.log("Firebase User", response.user);
 				// Convertir Promise a Observable con casting a string
 				return from(response.user.getIdToken() as Promise<string>).pipe(
 					switchMap((idToken: string) => {
-						const displayName = response.user.displayName || '';
-						const photoURL = response.user.photoURL || '';
+						const displayName = response.user.displayName || "";
+						const photoURL = response.user.photoURL || "";
 
 						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
 							tap((authResponse: any) => {
-								console.log('Backend response:', authResponse);
+								console.log("Backend response:", authResponse);
 
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
-									throw new Error('Invalid response structure from server');
+									throw new Error("Invalid response structure from server");
 								}
 
 								const { accessToken, refreshToken } = authResponse.data;
 
-								if (!accessToken || typeof accessToken !== 'string') {
-									throw new Error('Invalid access token received from server');
+								if (!accessToken || typeof accessToken !== "string") {
+									throw new Error("Invalid access token received from server");
 								}
 
 								const decodedUser = jwtDecode<User>(accessToken);
@@ -247,9 +258,9 @@ export class AuthState {
 									},
 									user: decodedUser,
 								});
-							})
+							}),
 						);
-					})
+					}),
 				);
 			}),
 			tap(() => {
@@ -257,7 +268,7 @@ export class AuthState {
 				this.toastService.showSuccess("Inicio de sesión con Google exitoso");
 			}),
 			catchError((err: HttpErrorResponse) => {
-				console.error('Google login error:', err);
+				console.error("Google login error:", err);
 				ctx.patchState({
 					loading: false,
 					error: err.message || "Error al ingresar con Google",
@@ -274,26 +285,26 @@ export class AuthState {
 
 		return this.authService.signInWithGoogle().pipe(
 			switchMap((response: any) => {
-				console.log('Firebase User', response.user);
+				console.log("Firebase User", response.user);
 				// Convertir Promise a Observable con casting a string
 				return from(response.user.getIdToken() as Promise<string>).pipe(
 					switchMap((idToken: string) => {
-						const displayName = response.user.displayName || '';
-						const photoURL = response.user.photoURL || '';
+						const displayName = response.user.displayName || "";
+						const photoURL = response.user.photoURL || "";
 
 						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
 							tap((authResponse: any) => {
-								console.log('Backend response:', authResponse);
+								console.log("Backend response:", authResponse);
 
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
-									throw new Error('Invalid response structure from server');
+									throw new Error("Invalid response structure from server");
 								}
 
 								const { accessToken, refreshToken } = authResponse.data;
 
-								if (!accessToken || typeof accessToken !== 'string') {
-									throw new Error('Invalid access token received from server');
+								if (!accessToken || typeof accessToken !== "string") {
+									throw new Error("Invalid access token received from server");
 								}
 
 								const decodedUser = jwtDecode<User>(accessToken);
@@ -305,9 +316,9 @@ export class AuthState {
 									},
 									user: decodedUser,
 								});
-							})
+							}),
 						);
-					})
+					}),
 				);
 			}),
 			tap(() => {
@@ -315,7 +326,7 @@ export class AuthState {
 				this.toastService.showSuccess("Registro con Google exitoso");
 			}),
 			catchError((err: HttpErrorResponse) => {
-				console.error('Google register error:', err);
+				console.error("Google register error:", err);
 				ctx.patchState({
 					loading: false,
 					error: err.message || "Error al registrarse con Google",
@@ -335,8 +346,8 @@ export class AuthState {
 			ctx.patchState({
 				user: {
 					...user,
-					onboardingCompleted: true
-				}
+					onboardingCompleted: true,
+				},
 			});
 		}
 	}
