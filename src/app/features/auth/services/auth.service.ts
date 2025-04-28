@@ -1,19 +1,24 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Auth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup } from "@angular/fire/auth";
+import {
+	Auth,
+	GoogleAuthProvider,
+	createUserWithEmailAndPassword,
+	sendPasswordResetEmail,
+	signInWithEmailAndPassword,
+	signInWithPopup,
+} from "@angular/fire/auth";
 import { environment } from "environments/environment";
+import { jwtDecode } from "jwt-decode";
 import { Observable, from, of, throwError } from "rxjs";
-import { delay, map, tap } from "rxjs/operators";
+import { delay, map } from "rxjs/operators";
 import {
 	AuthResponse,
 	LoginCredentials,
 	RefreshTokenPayload,
-	RegisterCredentials,
 	RegisterResponse,
 	User,
-	UserRole,
 } from "../interfaces/user.interface";
-import { JwtPayload, jwtDecode } from "jwt-decode";
 
 @Injectable({
 	providedIn: "root",
@@ -51,9 +56,7 @@ export class AuthService {
 		if (!userId) {
 			return throwError(() => new Error("No user id found"));
 		}
-		return this.http.get<any>(`${environment.apiUrl}/clients/${userId}`).pipe(
-			map(response => response.data as User)
-		);
+		return this.http.get<any>(`${environment.apiUrl}/clients/${userId}`).pipe(map((response) => response.data as User));
 	}
 
 	logout(): Observable<boolean> {
@@ -64,14 +67,14 @@ export class AuthService {
 
 	refreshSession(): Observable<AuthResponse> {
 		// Implement with real backend call or throw error if not implemented
-		return throwError(() => new Error('refreshSession not implemented'));
+		return throwError(() => new Error("refreshSession not implemented"));
 	}
 
 	register(email: string, displayName?: string, photoURL?: string): Observable<RegisterResponse> {
 		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, {
 			email,
 			displayName,
-			photoURL
+			photoURL,
 		});
 	}
 
@@ -92,14 +95,17 @@ export class AuthService {
 		return this.http.post<any>(`${environment.apiUrl}/auth/google`, {
 			idToken,
 			name,
-			avatarUrl: photoURL
+			avatarUrl: photoURL,
 		});
 	}
 
 	updateOnboardingCompleted(userId: string): Observable<User> {
-		return this.http.patch<any>(`${environment.apiUrl}/clients/${userId}`, { onboardingCompleted: true })
-			.pipe(
-				map(response => response.data)
-			);
+		return this.http
+			.patch<any>(`${environment.apiUrl}/clients/${userId}`, { onboardingCompleted: true })
+			.pipe(map((response) => response.data));
+	}
+
+	forgotPassword(email: string): Observable<any> {
+		return from(sendPasswordResetEmail(this._auth, email));
 	}
 }

@@ -15,6 +15,7 @@ import {
 } from "../interfaces/user.interface";
 import { AuthService } from "../services/auth.service";
 import {
+	ForgotPassword,
 	GetCurrentUser,
 	GetNewToken,
 	GoogleLogin,
@@ -348,5 +349,27 @@ export class AuthState {
 	@Action(UpdateUser)
 	updateUser(ctx: StateContext<AuthStateModel>, action: UpdateUser) {
 		ctx.patchState({ user: action.user });
+	}
+
+	@Action(ForgotPassword)
+	forgotPassword(ctx: StateContext<AuthStateModel>, action: ForgotPassword): Observable<any> {
+		ctx.patchState({ loading: true });
+
+		return this.authService.forgotPassword(action.email).pipe(
+			tap(() => {
+				ctx.patchState({ loading: false });
+				this.toastService.showSuccess("Se ha enviado un correo de recuperación de contraseña");
+			}),
+			catchError((error) => {
+				ctx.patchState({
+					loading: false,
+					error: error.message || "Error al enviar correo de recuperación",
+				});
+				this.toastService.showError(
+					"No se pudo enviar el correo de recuperación. Verifica que la dirección sea correcta",
+				);
+				return throwError(() => error);
+			}),
+		);
 	}
 }

@@ -9,16 +9,25 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
-import { GoogleLogin, Login } from "@feature/auth/state/auth.actions";
-import { IonicModule } from "@ionic/angular";
-import { ToastController } from '@ionic/angular';
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonSpinner, IonText } from '@ionic/angular/standalone';
+import { ForgotPassword, GoogleLogin, Login } from "@feature/auth/state/auth.actions";
+import { AlertController, IonicModule } from "@ionic/angular";
+import { ToastController } from "@ionic/angular";
+import {
+	IonButton,
+	IonContent,
+	IonIcon,
+	IonInput,
+	IonItem,
+	IonList,
+	IonSpinner,
+	IonText,
+} from "@ionic/angular/standalone";
 import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { lockClosedOutline, logInOutline, mailOutline } from "ionicons/icons";
 import { Subject, takeUntil } from "rxjs";
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from "../../services/auth.service";
 
 @Component({
 	selector: "app-login-form",
@@ -35,7 +44,7 @@ import { AuthService } from '../../services/auth.service';
 		IonText,
 		IonButton,
 		IonIcon,
-		IonSpinner
+		IonSpinner,
 	],
 })
 export class LoginFormComponent implements OnDestroy {
@@ -50,12 +59,13 @@ export class LoginFormComponent implements OnDestroy {
 		private actions: Actions,
 		private toastService: ToastService,
 		private toastController: ToastController,
-		private authService: AuthService
+		private authService: AuthService,
+		private alertController: AlertController,
 	) {
 		addIcons({
-			'mail-outline': mailOutline,
-			'lock-closed-outline': lockClosedOutline,
-			'log-in-outline': logInOutline
+			"mail-outline": mailOutline,
+			"lock-closed-outline": lockClosedOutline,
+			"log-in-outline": logInOutline,
 		});
 
 		this.form = this.fb.group({
@@ -145,6 +155,50 @@ export class LoginFormComponent implements OnDestroy {
 		this.actions.pipe(ofActionErrored(GoogleLogin), takeUntil(this._destroyed)).subscribe(() => {
 			this.isLoading = false;
 		});
+	}
+
+	async forgotPassword() {
+		const alert = await this.alertController.create({
+			header: "Recuperar contraseña",
+			message: "Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+			inputs: [
+				{
+					name: "email",
+					type: "email",
+					placeholder: "Email",
+					value: this.form.get("email")?.value || "",
+				},
+			],
+			buttons: [
+				{
+					text: "Cancelar",
+					role: "cancel",
+				},
+				{
+					text: "Enviar",
+					handler: (data) => {
+						if (!data.email || !data.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+							this.toastService.showError("Por favor, ingresa un email válido");
+							return false;
+						}
+
+						this.isLoading = true;
+						this.store.dispatch(new ForgotPassword(data.email));
+
+						this.actions.pipe(ofActionSuccessful(ForgotPassword), takeUntil(this._destroyed)).subscribe(() => {
+							this.isLoading = false;
+						});
+
+						this.actions.pipe(ofActionErrored(ForgotPassword), takeUntil(this._destroyed)).subscribe(() => {
+							this.isLoading = false;
+						});
+						return true;
+					},
+				},
+			],
+		});
+
+		await alert.present();
 	}
 
 	ngOnDestroy(): void {
