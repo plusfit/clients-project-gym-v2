@@ -10,9 +10,9 @@
     </ion-row>
     <ion-row class="schedule-row">
       <ion-col size="12" class="schedule-col">
-        <h2 class="schedule-title">Horarios Disponibles <span class="available-slots"
-            [ngClass]="{'zero-slots': availableSlots === 0}">({{availableSlots}} horario{{availableSlots !== 1 ? 's' :
-            ''}} restante{{availableSlots !== 1 ? 's' : ''}})</span></h2>
+        <h2 class="schedule-title">Horarios Disponibles <br><span class="available-slots">({{availableSlots}}
+            restante{{availableSlots !== 1 ? 's' :
+            ''}})</span></h2>
 
         <!-- Loading spinner -->
         <div *ngIf="loading" class="loading-container">
