@@ -24,6 +24,10 @@
           <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
             Debe tener una mayúscula y un número o símbolo.
           </ion-text>
+          
+          <div class="forgot-password">
+            <a (click)="forgotPassword()">¿Olvidaste tu contraseña?</a>
+          </div>
         </ion-list>
       </div>
 
