@@ -2,23 +2,18 @@ import { AsyncPipe, NgClass, NgIf, NgOptimizedImage, UpperCasePipe } from "@angu
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import {
-	IonBackButton,
 	IonButton,
-	IonButtons,
 	IonCard,
 	IonCardContent,
 	IonCardHeader,
 	IonCardTitle,
 	IonContent,
 	IonIcon,
-	IonSpinner,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import {
 	alertCircleOutline,
 	arrowForward,
-	barbellOutline,
-	bookmarkOutline,
 	documentTextOutline,
 	fitnessOutline,
 	informationCircleOutline,
@@ -56,10 +51,7 @@ declare module "../interfaces/routine.interface" {
 		IonCardHeader,
 		IonCardTitle,
 		IonCardContent,
-		IonSpinner,
 		IonIcon,
-		IonButtons,
-		IonBackButton,
 		AsyncPipe,
 		NgOptimizedImage,
 		UpperCasePipe,
@@ -80,7 +72,6 @@ export class ExerciseDetailPage implements OnInit, OnDestroy {
 		private route: ActivatedRoute,
 		private store: Store,
 	) {
-		// Registrar todos los iconos utilizados en el componente
 		addIcons({
 			starOutline,
 			documentTextOutline,
