@@ -1,30 +1,22 @@
-import { NgForOf, NgIf, UpperCasePipe } from "@angular/common";
+import { NgForOf, NgIf } from "@angular/common";
 import { CommonModule } from "@angular/common";
 import {
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	Input,
 	OnChanges,
 	OnDestroy,
 	OnInit,
-	Output,
 	SimpleChanges,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
 import { Exercise, SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ExerciseService } from "@feature/routine/services/exercise.service";
 import {
 	IonCard,
 	IonCardContent,
 	IonCardHeader,
-	IonCardSubtitle,
 	IonCardTitle,
 	IonIcon,
-	IonItem,
-	IonLabel,
-	IonList,
-	IonListHeader,
 	IonSpinner,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
@@ -47,7 +39,6 @@ import { ExerciseItemComponent } from "../exercise-item/exercise-item.component"
 		IonCardContent,
 		NgIf,
 		IonSpinner,
-		RouterLink,
 		CommonModule,
 	],
 })
@@ -130,13 +121,6 @@ export class RoutineCardComponent implements OnInit, OnChanges, OnDestroy {
 			this.loadedExercises = [];
 			this.isLoading = false;
 		}
-	}
-
-	/**
-	 * Función de utilidad para verificar si los ejercicios son objetos o strings
-	 */
-	private areExerciseObjects(exercises: Exercise[] | string[]): exercises is Exercise[] {
-		return exercises.length === 0 || (exercises.length > 0 && typeof exercises[0] !== "string");
 	}
 
 	trackById(index: number, item: Exercise): string {
