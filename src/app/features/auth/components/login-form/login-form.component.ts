@@ -25,7 +25,7 @@ import {
 import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
-import { lockClosedOutline, logInOutline, mailOutline } from "ionicons/icons";
+import { eyeOffOutline, eyeOutline, lockClosedOutline, logInOutline, mailOutline } from "ionicons/icons";
 import { Subject, takeUntil } from "rxjs";
 import { AuthService } from "../../services/auth.service";
 
@@ -50,6 +50,7 @@ import { AuthService } from "../../services/auth.service";
 export class LoginFormComponent implements OnDestroy {
 	form: FormGroup;
 	isLoading = false;
+	showPassword = false;
 	private _destroyed = new Subject<void>();
 
 	constructor(
@@ -66,12 +67,18 @@ export class LoginFormComponent implements OnDestroy {
 			"mail-outline": mailOutline,
 			"lock-closed-outline": lockClosedOutline,
 			"log-in-outline": logInOutline,
+			"eye-outline": eyeOutline,
+			"eye-off-outline": eyeOffOutline,
 		});
 
 		this.form = this.fb.group({
 			email: ["", [Validators.required, Validators.email]],
 			password: ["", [Validators.required, this.passwordValidator]],
 		});
+	}
+
+	togglePasswordVisibility() {
+		this.showPassword = !this.showPassword;
 	}
 
 	emailsMatchValidator(group: AbstractControl): ValidationErrors | null {

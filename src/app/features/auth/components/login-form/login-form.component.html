@@ -19,7 +19,13 @@
 
           <ion-item>
             <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-            <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
+            <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña"></ion-input>
+            <ion-icon 
+              [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" 
+              slot="end" 
+              class="password-toggle-icon" 
+              (click)="togglePasswordVisibility()">
+            </ion-icon>
           </ion-item>
           <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
             Debe tener una mayúscula y un número o símbolo.

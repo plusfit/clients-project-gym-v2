@@ -18,6 +18,7 @@ import { addIcons } from "ionicons";
 import { mailOutline } from "ionicons/icons";
 import { lockClosedOutline } from "ionicons/icons";
 import { logInOutline } from "ionicons/icons";
+import { eyeOffOutline, eyeOutline } from "ionicons/icons";
 import { Subject, takeUntil } from "rxjs";
 
 @Component({
@@ -31,6 +32,8 @@ export class RegisterFormComponent implements OnDestroy {
 	form: FormGroup;
 	private _destroyed = new Subject<void>();
 	isLoading = false;
+	showPassword = false;
+	showRepeatPassword = false;
 
 	constructor(
 		private fb: FormBuilder,
@@ -43,6 +46,8 @@ export class RegisterFormComponent implements OnDestroy {
 			"mail-outline": mailOutline,
 			"lock-closed-outline": lockClosedOutline,
 			"log-in-outline": logInOutline,
+			"eye-outline": eyeOutline,
+			"eye-off-outline": eyeOffOutline,
 		});
 
 		this.form = this.fb.group(
@@ -84,9 +89,16 @@ export class RegisterFormComponent implements OnDestroy {
 		return pass === repeat ? null : { passwordsDontMatch: true };
 	}
 
+	togglePasswordVisibility() {
+		this.showPassword = !this.showPassword;
+	}
+
+	toggleRepeatPasswordVisibility() {
+		this.showRepeatPassword = !this.showRepeatPassword;
+	}
+
 	submit() {
 		if (this.form.valid) {
-
 			this.store.dispatch(new Register(this.form.value));
 
 			this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
