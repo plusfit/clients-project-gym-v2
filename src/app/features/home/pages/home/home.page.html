@@ -20,15 +20,12 @@
     </div>
 
     <!-- Motivación del día -->
-    <div
-      class="motivation-banner"
-      *ngIf="motivationalMessage$ | async as message"
-    >
+    <div class="motivation-banner" *ngIf="motivationalMessage$ | async as message">
       <p class="ion-text-center">"{{ message }}"</p>
     </div>
 
     <!-- Estadísticas  TODO: Ver que mostrar. -->
-    <div class="stats-container">
+    <!-- <div class="stats-container">
       <div class="stat-card">
         <ion-icon name="fitness-outline" class="stat-icon"></ion-icon>
         <h3 class="stat-value">12</h3>
@@ -39,7 +36,7 @@
         <h3 class="stat-value">4.5K</h3>
         <p class="stat-label">Calorías</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- Sección de rutina actual -->
     <ng-container *ngIf="(loading$ | async) === true">
@@ -78,18 +75,12 @@
           <h3>Tu rutina para hoy</h3>
         </div>
 
-        <app-routine-card
-          [routine]="routine"
-          (exerciseClicked)="onExerciseClicked($event)"
-        ></app-routine-card>
+        <app-routine-card [routine]="routine" (exerciseClicked)="onExerciseClicked($event)"></app-routine-card>
       </div>
     </ng-container>
 
     <ng-template #noRoutineForToday>
-      <div
-        class="content-card no-routine-card"
-        *ngIf="(loading$ | async) === false && !(error$ | async)"
-      >
+      <div class="content-card no-routine-card" *ngIf="(loading$ | async) === false && !(error$ | async)">
         <div class="section-title ion-padding-start ion-padding-top">
           <ion-icon name="calendar-outline" color="medium"></ion-icon>
           <h3>Sin rutina para hoy</h3>
@@ -98,12 +89,7 @@
         <div class="empty-state">
           <ion-icon name="fitness-outline" color="medium"></ion-icon>
           <p>No tienes una rutina programada para {{ today | dayTranslate }}</p>
-          <ion-button
-            fill="outline"
-            size="small"
-            routerLink="/cliente/horarios"
-            (click)="goToSchedules()"
-          >
+          <ion-button fill="outline" size="small" routerLink="/cliente/horarios" (click)="goToSchedules()">
             Ver horarios disponibles
             <ion-icon slot="end" name="arrow-forward"></ion-icon>
           </ion-button>
@@ -112,7 +98,7 @@
     </ng-template>
 
     <!-- Próximas clases -->
-    <div class="content-card">
+    <!-- <div class="content-card">
       <div class="section-title ion-padding-start ion-padding-top">
         <ion-icon name="calendar-outline" color="primary"></ion-icon>
         <h3>Clases de hoy</h3>
@@ -166,6 +152,6 @@
           <ion-icon slot="end" name="arrow-forward-outline"></ion-icon>
         </ion-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </ion-content>

@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
 import { Injectable } from "@angular/core";
 import { inject } from "@angular/core";
 import { Storage, getDownloadURL, getStorage, ref, uploadBytes } from "@angular/fire/storage";
@@ -108,6 +108,7 @@ export class OnboardingStep1Component implements OnInit {
 
 	private storageService = inject(FirebaseStorageService);
 	private toastService = inject(ToastService);
+	private cdr = inject(ChangeDetectorRef);
 
 	constructor(
 		private fb: FormBuilder,
@@ -223,6 +224,7 @@ export class OnboardingStep1Component implements OnInit {
 			const tempAvatar = localStorage.getItem(`temp_avatar_${this.currentUserId}`);
 			if (tempAvatar) {
 				this.avatarUrlPreview = tempAvatar;
+				this.cdr.detectChanges();
 			}
 		}
 	}
@@ -260,6 +262,7 @@ export class OnboardingStep1Component implements OnInit {
 		const loading = await this.loadingCtrl.create({
 			message: source === CameraSource.Camera ? "Abriendo cámara..." : "Abriendo galería...",
 			spinner: "circles",
+			cssClass: "loading-content",
 			duration: 5000,
 		});
 
@@ -295,6 +298,7 @@ export class OnboardingStep1Component implements OnInit {
 
 				this.avatarUrlPreview = image.dataUrl;
 				this.avatarFileToUpload = image.dataUrl;
+				this.cdr.detectChanges();
 
 				this.toastService.showSuccess("Imagen seleccionada correctamente");
 
@@ -323,6 +327,7 @@ export class OnboardingStep1Component implements OnInit {
 			const loading = await this.loadingCtrl.create({
 				message: "Guardando información...",
 				spinner: "circles",
+				cssClass: "loading-content",
 			});
 			await loading.present();
 
@@ -331,7 +336,9 @@ export class OnboardingStep1Component implements OnInit {
 
 			if (this.avatarFileToUpload && this.currentUserId) {
 				try {
+					loading.message = "Subiendo imagen...";
 					finalAvatarUrl = await this.storageService.uploadAvatar(this.currentUserId, this.avatarFileToUpload);
+					loading.message = "Guardando información...";
 
 					if (finalAvatarUrl) {
 						localStorage.setItem(`avatar_url_${this.currentUserId}`, finalAvatarUrl);

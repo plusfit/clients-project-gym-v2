@@ -9,6 +9,7 @@ import {
 	IonCardTitle,
 	IonContent,
 	IonIcon,
+	IonSpinner,
 } from "@ionic/angular/standalone";
 import { addIcons } from "ionicons";
 import {
@@ -51,6 +52,7 @@ declare module "../interfaces/routine.interface" {
 		IonCardHeader,
 		IonCardTitle,
 		IonCardContent,
+		IonSpinner,
 		IonIcon,
 		AsyncPipe,
 		NgOptimizedImage,
@@ -72,6 +74,7 @@ export class ExerciseDetailPage implements OnInit, OnDestroy {
 		private route: ActivatedRoute,
 		private store: Store,
 	) {
+		// Registrar todos los iconos utilizados en el componente
 		addIcons({
 			starOutline,
 			documentTextOutline,
