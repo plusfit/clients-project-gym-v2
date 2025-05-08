@@ -43,10 +43,35 @@
             <ion-select-option value="improveCardio">Mejorar cardio</ion-select-option>
             <ion-select-option value="increaseFlexibility">Mejorar flexibilidad</ion-select-option>
             <ion-select-option value="generalFitness">Mejorar estado físico general</ion-select-option>
+            <ion-select-option value="injuryRecovery">Recuperación de lesiones</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-text color="danger" *ngIf="isInvalid('goal')">
           Este campo es obligatorio
+        </ion-text>
+      </div>
+
+      <!-- Campo de tipo de lesión que aparece solo cuando el objetivo es "Recuperación de lesiones" -->
+      <div class="injury-section" *ngIf="form.get('goal')?.value === 'injuryRecovery'">
+        <ion-label class="section-title">
+          <ion-icon name="bandage-outline"></ion-icon> Tipo de lesión
+        </ion-label>
+        <ion-text class="helper-text">
+          Indique qué tipo de lesión necesita recuperar para que podamos personalizar su plan de rehabilitación.
+        </ion-text>
+        <ion-item lines="none">
+          <ion-select
+            formControlName="injuryType"
+            interface="action-sheet"
+            placeholder="Seleccioná una opción"
+          >
+            <ion-select-option *ngFor="let injury of injuryTypes" [value]="injury.value">
+              {{ injury.label }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-text color="danger" *ngIf="isInvalid('injuryType')">
+          Este campo es obligatorio cuando el objetivo es recuperación de lesiones
         </ion-text>
       </div>
 

@@ -6,20 +6,34 @@ import { Actions, Store, ofActionSuccessful } from "@ngxs/store";
 import { addIcons } from "ionicons";
 import {
 	arrowBack,
+	bandageOutline,
 	barChartOutline,
 	barbellOutline,
 	calendarOutline,
 	checkmarkOutline,
+	fitnessOutline,
 	trendingUpOutline,
 } from "ionicons/icons";
 import { finalize, take, takeUntil } from "rxjs";
+import { UserRole } from '../../../auth/interfaces/user.interface';
 import { SetOnboardingCompleted, UpdateUser } from "../../../auth/state/auth.actions";
+import { AuthState } from '../../../auth/state/auth.state';
+import { UserService } from '../../../profile/services/user.service';
 import { OnboardingService } from "../../services/onboarding.service";
 import { SetStep3 } from "../../state/onboarding.actions";
 import { OnboardingState } from "../../state/onboarding.state";
-import { AuthState } from '../../../auth/state/auth.state';
-import { UserRole } from '../../../auth/interfaces/user.interface';
-import { UserService } from '../../../profile/services/user.service';
+
+export enum InjuryType {
+	SHOULDER = "shoulder",
+	KNEE = "knee",
+	BACK = "back",
+	ANKLE = "ankle",
+	HIP = "hip",
+	ELBOW = "elbow",
+	WRIST = "wrist",
+	NECK = "neck",
+	OTHER = "other",
+}
 
 @Component({
 	selector: "app-onboarding-step3",
@@ -36,6 +50,18 @@ export class OnboardingStep3Component implements OnInit {
 	isSubmitting = false;
 	isLoading = false;
 	private destroyed = false;
+
+	injuryTypes = [
+		{ value: InjuryType.SHOULDER, label: 'Hombro' },
+		{ value: InjuryType.KNEE, label: 'Rodilla' },
+		{ value: InjuryType.BACK, label: 'Espalda' },
+		{ value: InjuryType.ANKLE, label: 'Tobillo' },
+		{ value: InjuryType.HIP, label: 'Cadera' },
+		{ value: InjuryType.ELBOW, label: 'Codo' },
+		{ value: InjuryType.WRIST, label: 'Muñeca' },
+		{ value: InjuryType.NECK, label: 'Cuello' },
+		{ value: InjuryType.OTHER, label: 'Otra' },
+	];
 
 	constructor(
 		private fb: FormBuilder,
@@ -54,13 +80,28 @@ export class OnboardingStep3Component implements OnInit {
 			"bar-chart-outline": barChartOutline,
 			"arrow-back": arrowBack,
 			"checkmark-outline": checkmarkOutline,
+			"fitness-outline": fitnessOutline,
+			"bandage-outline": bandageOutline,
 		});
 
 		this.form = this.fb.group({
 			trainingDays: [3, Validators.required],
 			goal: ["", Validators.required],
+			injuryType: [""],
 			trainingType: ["", Validators.required],
 			trainingLevel: ["", Validators.required],
+		});
+
+		// Agregar validador condicional para el tipo de lesión
+		this.form.get('goal')?.valueChanges.subscribe(goal => {
+			const injuryTypeControl = this.form.get('injuryType');
+			if (goal === 'injuryRecovery') {
+				injuryTypeControl?.setValidators([Validators.required]);
+			} else {
+				injuryTypeControl?.clearValidators();
+				injuryTypeControl?.setValue('');
+			}
+			injuryTypeControl?.updateValueAndValidity();
 		});
 	}
 
