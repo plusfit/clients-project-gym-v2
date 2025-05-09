@@ -1,79 +1,79 @@
-<div class="register-wrapper">
-  <div class="welcome-header">
-    <img src="assets/logos/logo-white.png" alt="Logo del gimnasio" class="gym-logo" />
-    <p class="welcome-text">Bienvenido a esta gran familia</p>
+<ion-content class="ion-padding register-content" [fullscreen]="true">
+  <div class="register-wrapper">
+    <div class="welcome-header">
+      <img src="assets/logos/logo-white.png" alt="Logo del gimnasio" class="gym-logo" />
+      <p class="welcome-text">Bienvenido a esta gran familia</p>
+    </div>
+
+    <form [formGroup]="form">
+      <div class="form-fields">
+        <h2 class="section-title">Crear tu cuenta</h2>
+        <ion-list>
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('email')">
+            Ingresá un email válido.
+          </ion-text>
+
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-input formControlName="repeatEmail" type="email" placeholder="Repetir Email"></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="form.hasError('emailsDontMatch')">
+            Los emails no coinciden.
+          </ion-text>
+
+          <ion-item>
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña"></ion-input>
+            <ion-icon
+              [name]="showPassword ? 'eye-outline' : 'eye-off-outline'"
+              slot="end"
+              class="password-toggle-icon"
+              (click)="togglePasswordVisibility()">
+            </ion-icon>
+          </ion-item>
+          <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
+            Debe tener una mayúscula y un número o símbolo.
+          </ion-text>
+          <ion-item>
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input formControlName="repeatPassword" [type]="showRepeatPassword ? 'text' : 'password'" placeholder="Repetir Contraseña"></ion-input>
+            <ion-icon
+              [name]="showRepeatPassword ? 'eye-outline' : 'eye-off-outline'"
+              slot="end"
+              class="password-toggle-icon"
+              (click)="toggleRepeatPasswordVisibility()">
+            </ion-icon>
+          </ion-item>
+          <ion-text color="danger" *ngIf="form.hasError('passwordsDontMatch')">
+            Las contraseñas no coinciden.
+          </ion-text>
+        </ion-list>
+      </div>
+
+      <ion-button expand="block" (click)="submit()" class="main-action-btn" [disabled]="isLoading">
+        <ion-icon *ngIf="!isLoading" name="log-in-outline" slot="start"></ion-icon>
+        <ion-spinner *ngIf="isLoading" name="dots" slot="start"></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Registrarse' }}
+      </ion-button>
+
+      <div class="divider"><span>O</span></div>
+
+      <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
+        [disabled]="isLoading">
+        <img *ngIf="!isLoading" src="assets/logos/google-logo.svg" alt="Google" width="20" height="20"
+          style="margin-right: 8px" />
+        <ion-spinner *ngIf="isLoading" name="dots" slot="start"></ion-spinner>
+        {{ isLoading ? 'Procesando...' : 'Registrarse con Google' }}
+      </ion-button>
+
+      <div class="login-redirect">
+        <span>¿Ya sos usuario?</span>
+        <a (click)="goToLogin()">Inicia sesión</a>
+      </div>
+    </form>
   </div>
-
-  <ion-card class="register-card">
-    <ion-card-content>
-      <form [formGroup]="form">
-        <div class="form-fields">
-          <ion-list>
-            <ion-item>
-              <ion-icon name="mail-outline" slot="start"></ion-icon>
-              <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
-            </ion-item>
-            <ion-text color="danger" *ngIf="isInvalid('email')">
-              Ingresá un email válido.
-            </ion-text>
-
-            <ion-item>
-              <ion-icon name="mail-outline" slot="start"></ion-icon>
-              <ion-input formControlName="repeatEmail" type="email" placeholder="Repetir Email"></ion-input>
-            </ion-item>
-            <ion-text color="danger" *ngIf="form.hasError('emailsDontMatch')">
-              Los emails no coinciden.
-            </ion-text>
-
-            <ion-item>
-              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-              <ion-input formControlName="password" [type]="showPassword ? 'text' : 'password'" placeholder="Contraseña"></ion-input>
-              <ion-icon 
-                [name]="showPassword ? 'eye-outline' : 'eye-off-outline'" 
-                slot="end" 
-                class="password-toggle-icon" 
-                (click)="togglePasswordVisibility()">
-              </ion-icon>
-            </ion-item>
-            <ion-text color="danger" *ngIf="form.get('password')?.hasError('passwordWeak')">
-              Debe tener una mayúscula y un número o símbolo.
-            </ion-text>
-            <ion-item>
-              <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-              <ion-input formControlName="repeatPassword" [type]="showRepeatPassword ? 'text' : 'password'" placeholder="Repetir Contraseña"></ion-input>
-              <ion-icon 
-                [name]="showRepeatPassword ? 'eye-outline' : 'eye-off-outline'" 
-                slot="end" 
-                class="password-toggle-icon" 
-                (click)="toggleRepeatPasswordVisibility()">
-              </ion-icon>
-            </ion-item>
-            <ion-text color="danger" *ngIf="form.hasError('passwordsDontMatch')">
-              Las contraseñas no coinciden.
-            </ion-text>
-          </ion-list>
-        </div>
-
-        <ion-button expand="block" (click)="submit()" class="main-action-btn">
-          <ion-icon name="log-in-outline" slot="start"></ion-icon>
-          Registrarse
-        </ion-button>
-
-        <div class="divider"><span>O</span></div>
-
-        <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
-          [disabled]="isLoading">
-          <ion-spinner *ngIf="isLoading" name="dots" slot="start"></ion-spinner>
-          <img *ngIf="!isLoading" src="assets/logos/google-logo.svg" alt="Google" width="20" height="20"
-            style="margin-right: 8px" />
-          {{ isLoading ? 'Procesando...' : 'Registrarse con Google' }}
-        </ion-button>
-
-        <div class="login-redirect">
-          <span>¿Ya sos usuario?</span>
-          <a (click)="goToLogin()">Inicia sesión</a>
-        </div>
-      </form>
-    </ion-card-content>
-  </ion-card>
-</div>
+</ion-content>

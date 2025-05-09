@@ -1,3 +1,12 @@
+.register-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 16px;
+    --background: var(--ion-background-color);
+}
+
 :host {
     width: 100%;
     max-width: 600px;
@@ -8,10 +17,10 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .register-card {
-    margin: 0 auto;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.03);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
@@ -30,6 +39,7 @@ ion-card-content {
     margin: 24px 0;
     color: var(--ion-color-medium);
     font-size: 0.9rem;
+    width: 100%;
 
     span {
         padding: 0 8px;
@@ -60,6 +70,7 @@ ion-card-content {
     margin-top: 20px;
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.7);
+    width: 100%;
 
     a {
         color: var(--ion-color-primary);
@@ -81,6 +92,8 @@ ion-card-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    margin-bottom: 32px;
+    width: 100%;
 }
 
 .gym-logo {
@@ -118,13 +131,17 @@ ion-card-content {
 
 .form-fields {
     background: rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     border-left: 3px solid var(--ion-color-primary);
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 
     &::before {
         content: '';
@@ -137,11 +154,11 @@ ion-card-content {
     }
 
     .section-title {
-        font-size: 1.4rem;
+        font-size: 1.6rem;
         font-weight: 600;
         color: var(--ion-color-primary);
         margin-top: 0;
-        margin-bottom: 16px;
+        margin-bottom: 24px;
         text-align: center;
         letter-spacing: -0.3px;
     }
@@ -156,11 +173,11 @@ ion-list {
 ion-item {
     --background: rgba(255, 255, 255, 0.07);
     --border-radius: 12px;
-    --padding-start: 12px;
-    --padding-end: 12px;
+    --padding-start: 16px;
+    --padding-end: 16px;
     --inner-padding-end: 8px;
-    --min-height: 52px;
-    margin-bottom: 8px !important;
+    --min-height: 56px;
+    margin-bottom: 12px !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     --border-color: transparent;
     --highlight-color-focused: var(--ion-color-primary);
@@ -201,14 +218,9 @@ ion-item:focus-within {
 
 ion-item ion-icon {
     color: var(--ion-color-primary);
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-right: 12px;
-    transition: transform 0.2s ease, color 0.2s ease;
-}
-
-ion-item:focus-within ion-icon {
-    color: var(--ion-color-primary);
-    transform: scale(1.1);
+    opacity: 0.9;
 }
 
 ion-label {
@@ -219,19 +231,19 @@ ion-label {
 }
 
 ion-input {
-    --padding-start: 4px;
-    --padding-top: 8px;
-    --padding-bottom: 8px;
-    font-size: 1rem;
+    --padding-start: 8px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    font-size: 1.1rem;
     --placeholder-color: rgba(255, 255, 255, 0.5) !important;
     --placeholder-opacity: 1;
     --color: rgba(255, 255, 255, 0.9) !important;
 }
 
 ion-text[color="danger"] {
-    font-size: 0.75rem;
-    margin-left: 8px;
-    margin-top: 0px;
+    font-size: 0.8rem;
+    margin-left: 16px;
+    margin-top: 4px;
     margin-bottom: 12px;
     display: block;
     opacity: 1;
@@ -245,8 +257,8 @@ ion-button {
     --border-radius: 10px;
     --padding-start: 20px;
     --padding-end: 20px;
-    --padding-top: 12px;
-    --padding-bottom: 12px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
     --color: white !important;
     font-weight: 600;
     text-transform: none;
@@ -257,6 +269,7 @@ ion-button {
     transition: transform 0.2s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
+    width: 100%;
 
     &::before {
         content: '';
@@ -315,11 +328,22 @@ ion-button[color="light"] {
     }
 }
 
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .password-toggle-icon {
     cursor: pointer;
     font-size: 1.3rem;
     padding: 8px;
     color: var(--ion-color-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 
     &:hover {
         color: var(--ion-color-primary);
@@ -332,29 +356,31 @@ ion-button[color="light"] {
         max-width: 100%;
     }
 
-    .register-card {
-        padding: 16px 12px;
-        border-radius: 12px;
-    }
-
     .welcome-text {
         font-size: 1.5rem;
     }
 
     .form-fields {
-        padding: 12px;
+        padding: 20px;
+        border-radius: 12px;
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+        }
     }
 
     ion-item {
         --padding-start: 12px;
         --padding-end: 12px;
         --min-height: 50px;
+        margin-bottom: 8px !important;
     }
 
     ion-input {
-        --padding-top: 10px;
-        --padding-bottom: 10px;
-        font-size: 0.95rem;
+        --padding-top: 12px;
+        --padding-bottom: 12px;
+        font-size: 1rem;
     }
 
     ion-button {
