@@ -6,6 +6,7 @@ export interface Plan {
 	type: string;
 	category: string;
 	goal: string;
+	injuryType?: string;
 	experienceLevel: "beginner" | "intermediate" | "advanced";
 	minAge?: number;
 	maxAge?: number;

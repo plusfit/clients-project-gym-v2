@@ -15,7 +15,9 @@ export class GoalTranslatorPipe implements PipeTransform {
       'improveFlexibility': 'Mejora de flexibilidad',
       'generalFitness': 'Fitness general',
       'rehabilitation': 'Rehabilitación',
-      'sportSpecific': 'Entrenamiento deportivo específico'
+      'sportSpecific': 'Entrenamiento deportivo específico',
+      'injuryRecovery': 'Recuperación de lesiones',
+      'improveCardio': 'Mejora cardiovascular'
     };
 
     return translations[goal] || goal || 'Mejora general de la condición física';

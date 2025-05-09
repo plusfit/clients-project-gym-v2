@@ -35,6 +35,9 @@
             <div class="detail-content">
               <h4>Objetivo</h4>
               <p>{{ plan.goal | goalTranslator }}</p>
+              <p *ngIf="plan.goal === 'injuryRecovery' && plan.injuryType">
+                <span class="injury-type">Tipo de lesión: {{ plan.injuryType | injuryTypeTranslator }}</span>
+              </p>
             </div>
           </div>
 

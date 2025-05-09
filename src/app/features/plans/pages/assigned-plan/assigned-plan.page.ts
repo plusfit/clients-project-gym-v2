@@ -15,6 +15,7 @@ import { Observable, Subject, Subscription } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
 import { CategoryTranslatorPipe } from "../../../../shared/pipes/category-translator.pipe";
 import { GoalTranslatorPipe } from "../../../../shared/pipes/goal-translator.pipe";
+import { InjuryTypeTranslatorPipe } from "../../../../shared/pipes/injury-type-translator.pipe";
 import { PlanTypeTranslatorPipe } from "../../../../shared/pipes/plan-type-translator.pipe";
 import { User } from "../../../auth/interfaces/user.interface";
 import { AuthState } from "../../../auth/state/auth.state";
@@ -33,6 +34,7 @@ import { Plan } from "../../interfaces/plan.interface";
 		GoalTranslatorPipe,
 		CategoryTranslatorPipe,
 		PlanTypeTranslatorPipe,
+		InjuryTypeTranslatorPipe,
 		IonContent,
 		IonCard,
 		IonCardContent,
@@ -164,6 +166,7 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 			type: profilePlan.type,
 			category: profilePlan.category,
 			goal: profilePlan.goal || "Mejorar condición física",
+			injuryType: profilePlan.injuryType,
 			experienceLevel: profilePlan.experienceLevel as "beginner" | "intermediate" | "advanced",
 			minAge: profilePlan.minAge,
 			maxAge: profilePlan.maxAge,

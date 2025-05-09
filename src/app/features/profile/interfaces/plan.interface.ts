@@ -4,6 +4,7 @@ export interface Plan {
 	type: "room" | string;
 	category: "muscleGain" | string;
 	goal: "buildMuscle" | string;
+	injuryType?: string;
 	experienceLevel: "beginner" | "intermediate" | "advanced" | string;
 	minAge: number;
 	maxAge: number;
