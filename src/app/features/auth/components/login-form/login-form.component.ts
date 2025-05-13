@@ -59,8 +59,6 @@ export class LoginFormComponent implements OnDestroy {
 		private store: Store,
 		private actions: Actions,
 		private toastService: ToastService,
-		private toastController: ToastController,
-		private authService: AuthService,
 		private alertController: AlertController,
 	) {
 		addIcons({

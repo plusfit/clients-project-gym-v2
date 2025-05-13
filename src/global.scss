@@ -34,6 +34,15 @@
 
 /* Estilos globales para la aplicación de gimnasio con tema oscuro */
 
+/* Ajuste para iOS con barra de búsqueda inferior */
+:root {
+  --ion-safe-area-bottom: env(safe-area-inset-bottom);
+}
+
+ion-content {
+  --padding-bottom: var(--ion-safe-area-bottom, 0);
+}
+
 /* Estilos de texto */
 p {
   padding-top: 0.3rem;

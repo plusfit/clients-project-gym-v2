@@ -5,6 +5,7 @@
     height: 100vh;
     padding: 16px;
     --background: var(--ion-background-color);
+    --padding-bottom: env(safe-area-inset-bottom, 30px);
 }
 
 .register-wrapper {
@@ -361,6 +362,7 @@ form {
 @media (max-width: 480px) {
     .register-wrapper {
         max-width: 100%;
+        padding-bottom: env(safe-area-inset-bottom, 60px);
     }
 
     .welcome-text {
