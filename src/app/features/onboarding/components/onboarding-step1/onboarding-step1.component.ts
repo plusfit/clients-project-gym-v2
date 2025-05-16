@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import {
@@ -21,10 +28,26 @@ import {
   CameraSource,
   PermissionStatus,
 } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 import { User } from '@feature/auth/interfaces/user.interface';
 import { AuthState } from '@feature/auth/state/auth.state';
 import { ActionSheetController, ModalController } from '@ionic/angular';
-import { IonNav, IonicModule, LoadingController } from '@ionic/angular';
+import { IonNav, LoadingController, Platform } from '@ionic/angular';
+import {
+  IonAvatar,
+  IonButton,
+  IonButtons,
+  IonFooter,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonList,
+  IonSelect,
+  IonSelectOption,
+  IonText,
+  IonToolbar,
+} from '@ionic/angular/standalone';
+import { IonContent, IonLabel } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
 import { ToastService } from '@shared/services/toast.service';
@@ -102,16 +125,37 @@ export class FirebaseStorageService {
 @Component({
   selector: 'app-step1',
   standalone: true,
-  imports: [CommonModule, IonicModule, ReactiveFormsModule],
+  imports: [
+    IonButtons,
+    IonAvatar,
+    CommonModule,
+    ReactiveFormsModule,
+    IonList,
+    IonItem,
+    IonInput,
+    IonText,
+    IonButton,
+    IonIcon,
+    IonLabel,
+    IonSelect,
+    IonSelectOption,
+    IonFooter,
+    IonToolbar,
+    IonButtons,
+    IonContent,
+  ],
   templateUrl: './onboarding-step1.component.html',
   styleUrls: ['./onboarding-step1.component.scss'],
 })
 export class OnboardingStep1Component implements OnInit {
   @Input() nav!: IonNav;
+  @ViewChild('fileInput') fileInput!: ElementRef;
+
   userForm: FormGroup;
   isSubmitting = false;
   isLoading = false;
   hasPermissions = false;
+  isNative = false;
 
   avatarUrlPreview: string | null = null;
   private avatarFileToUpload: string | null = null;
@@ -120,6 +164,7 @@ export class OnboardingStep1Component implements OnInit {
   private storageService = inject(FirebaseStorageService);
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
+  private platform = inject(Platform);
 
   constructor(
     private fb: FormBuilder,
@@ -165,13 +210,18 @@ export class OnboardingStep1Component implements OnInit {
     });
     await loading.present();
 
+    // Check if running on native device or browser
+    this.isNative = Capacitor.isNativePlatform();
+
     try {
-      const permissionStatus = await Camera.checkPermissions();
-      this.hasPermissions = this.checkCameraPermissions(permissionStatus);
-      if (!this.hasPermissions) {
-        this.toastService.showWarning(
-          'Se necesitan permisos de cámara para la foto de perfil',
-        );
+      if (this.isNative) {
+        const permissionStatus = await Camera.checkPermissions();
+        this.hasPermissions = this.checkCameraPermissions(permissionStatus);
+        if (!this.hasPermissions) {
+          this.toastService.showWarning(
+            'Se necesitan permisos de cámara para la foto de perfil',
+          );
+        }
       }
     } catch (error) {
       console.error('Error checking camera permissions:', error);
@@ -264,36 +314,108 @@ export class OnboardingStep1Component implements OnInit {
   }
 
   async selectAvatarImage() {
-    if (!this.hasPermissions) {
-      await this.requestCameraPermissions();
+    if (this.isNative) {
+      if (!this.hasPermissions) {
+        await this.requestCameraPermissions();
+      }
+
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: 'Seleccionar imagen de perfil',
+        buttons: [
+          {
+            text: 'Tomar foto',
+            icon: 'camera',
+            handler: () => {
+              this.captureImage(CameraSource.Camera);
+            },
+          },
+          {
+            text: 'Seleccionar de galería',
+            icon: 'image',
+            handler: () => {
+              this.captureImage(CameraSource.Photos);
+            },
+          },
+          {
+            text: 'Cancelar',
+            icon: 'close',
+            role: 'cancel',
+          },
+        ],
+      });
+
+      await actionSheet.present();
+    } else {
+      // Browser fallback - use file input for gallery
+      this.selectImageWithFileInput();
+    }
+  }
+
+  selectImageWithFileInput() {
+    // First try to use the ViewChild reference if available
+    if (this.fileInput?.nativeElement) {
+      this.fileInput.nativeElement.click();
+      return;
     }
 
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Seleccionar imagen de perfil',
-      buttons: [
-        {
-          text: 'Tomar foto',
-          icon: 'camera',
-          handler: () => {
-            this.captureImage(CameraSource.Camera);
-          },
-        },
-        {
-          text: 'Seleccionar de galería',
-          icon: 'image',
-          handler: () => {
-            this.captureImage(CameraSource.Photos);
-          },
-        },
-        {
-          text: 'Cancelar',
-          icon: 'close',
-          role: 'cancel',
-        },
-      ],
-    });
+    // Fallback method - dynamically create input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.style.display = 'none';
 
-    await actionSheet.present();
+    input.onchange = (event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        this.handleFileBrowserSelection(target.files[0]);
+      }
+      // Remove the element after use to prevent memory leaks
+      document.body.removeChild(input);
+    };
+
+    // Add to body and trigger click
+    document.body.appendChild(input);
+
+    // Use setTimeout to ensure the element is added to the DOM before clicking
+    setTimeout(() => {
+      input.click();
+    }, 0);
+  }
+
+  handleFileInputChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      this.handleFileBrowserSelection(target.files[0]);
+    }
+  }
+
+  handleFileBrowserSelection(file: File) {
+    if (!file.type.match('image.*')) {
+      this.toastService.showWarning(
+        'El archivo seleccionado no es una imagen válida',
+      );
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const dataUrl = e.target.result;
+      this.avatarUrlPreview = dataUrl;
+      this.avatarFileToUpload = dataUrl;
+      this.cdr.detectChanges();
+
+      this.toastService.showSuccess('Imagen seleccionada correctamente');
+
+      if (this.currentUserId) {
+        localStorage.setItem(`temp_avatar_${this.currentUserId}`, dataUrl);
+      }
+    };
+
+    reader.onerror = () => {
+      this.toastService.showError('Error al leer el archivo seleccionado');
+    };
+
+    reader.readAsDataURL(file);
   }
 
   async requestCameraPermissions() {
