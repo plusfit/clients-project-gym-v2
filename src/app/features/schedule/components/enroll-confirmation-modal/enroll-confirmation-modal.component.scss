@@ -72,13 +72,7 @@
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
   --color: white;
   overflow-y: auto;
-  @media (max-width: 576px) {
-    max-height: calc(100dvh - 13.5rem);
-  }
-
-  @media (min-width: 577px) and (max-width: 768px) {
-    max-height: calc(100dvh - 12rem);
-  }
+  max-height: calc(100dvh - 38%);
 }
 
 .content-container {
@@ -86,7 +80,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100dvh;
   width: 100%;
 }
 
