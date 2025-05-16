@@ -31,23 +31,27 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { User } from '@feature/auth/interfaces/user.interface';
 import { AuthState } from '@feature/auth/state/auth.state';
-import { ActionSheetController, ModalController } from '@ionic/angular';
 import { IonNav, LoadingController, Platform } from '@ionic/angular';
+import {
+  ActionSheetController,
+  ModalController,
+} from '@ionic/angular/standalone';
 import {
   IonAvatar,
   IonButton,
   IonButtons,
+  IonContent,
   IonFooter,
   IonIcon,
   IonInput,
   IonItem,
+  IonLabel,
   IonList,
   IonSelect,
   IonSelectOption,
   IonText,
   IonToolbar,
 } from '@ionic/angular/standalone';
-import { IonContent, IonLabel } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
 import { ToastService } from '@shared/services/toast.service';
