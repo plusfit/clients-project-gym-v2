@@ -33,7 +33,6 @@ import {
   pulseOutline,
 } from 'ionicons/icons';
 import { finalize, take } from 'rxjs';
-import { OnboardingService } from '../../services/onboarding.service';
 import { SetStep2 } from '../../state/onboarding.actions';
 import { OnboardingState } from '../../state/onboarding.state';
 import { OnboardingStep3Component } from '../onboarding.step3/onboarding-step3.component';
@@ -72,7 +71,6 @@ export class OnboardingStep2Component implements OnInit {
   constructor(
     private fb: FormBuilder,
     private store: Store,
-    private onboardingService: OnboardingService,
     private loadingCtrl: LoadingController,
   ) {
     addIcons({
