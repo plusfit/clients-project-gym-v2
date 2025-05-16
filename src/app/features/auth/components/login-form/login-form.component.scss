@@ -1,4 +1,4 @@
-.register-content {
+.login-content {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,10 +10,18 @@
 
 .register-wrapper {
   width: 100%;
-  max-width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 16px;
 }
 
 .divider {
