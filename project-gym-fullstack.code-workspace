@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "path": ".",
+    },
+    {
+      "path": "../backend-project-gym",
+    },
+  ],
+  "settings": {
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+  },
+}
