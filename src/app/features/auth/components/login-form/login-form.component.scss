@@ -16,20 +16,6 @@
   align-items: center;
 }
 
-.register-card {
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  padding: 16px 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-ion-card-content {
-  padding: 0 !important;
-}
-
 .divider {
   text-align: center;
   margin: 24px 0;
@@ -64,7 +50,8 @@ ion-card-content {
 .login-redirect {
   text-align: center;
   margin-top: 20px;
-  font-size: 0.9rem;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
   width: 100%;
 
@@ -415,9 +402,5 @@ form {
     --padding-top: 14px;
     --padding-bottom: 14px;
     font-size: 0.9rem;
-  }
-
-  .login-redirect {
-    font-size: 0.8rem;
   }
 }
