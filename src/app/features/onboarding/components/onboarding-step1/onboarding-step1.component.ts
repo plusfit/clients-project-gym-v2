@@ -31,7 +31,6 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { User } from '@feature/auth/interfaces/user.interface';
 import { AuthState } from '@feature/auth/state/auth.state';
-import { IonNav, LoadingController, Platform } from '@ionic/angular';
 import {
   ActionSheetController,
   IonAvatar,
@@ -44,11 +43,14 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonNav,
   IonSelect,
   IonSelectOption,
   IonText,
   IonToolbar,
+  LoadingController,
   ModalController,
+  Platform,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
@@ -77,8 +79,6 @@ import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.c
   providedIn: 'root',
 })
 export class FirebaseStorageService {
-  private storage = inject(Storage);
-
   async uploadAvatar(userId: string, base64Image: string): Promise<string> {
     try {
       const format = base64Image.split(';')[0].split('/')[1];
@@ -128,6 +128,7 @@ export class FirebaseStorageService {
   standalone: true,
   providers: [ActionSheetController],
   imports: [
+    IonNav,
     IonButtons,
     IonAvatar,
     CommonModule,
