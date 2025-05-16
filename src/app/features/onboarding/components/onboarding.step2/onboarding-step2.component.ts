@@ -15,6 +15,7 @@ import {
   IonItem,
   IonLabel,
   IonNav,
+  IonSegment,
   IonSegmentButton,
   IonSelect,
   IonSelectOption,
@@ -57,6 +58,7 @@ import { OnboardingStep3Component } from '../onboarding.step3/onboarding-step3.c
     IonToolbar,
     IonButtons,
     IonContent,
+    IonSegment,
     IonSegmentButton,
   ],
 })
@@ -85,10 +87,10 @@ export class OnboardingStep2Component implements OnInit {
     this.form = this.fb.group({
       bloodPressure: ['', Validators.required],
       history: this.fb.group({
-        respiratory: ['', Validators.required],
-        cardiac: ['', Validators.required],
-        chirurgical: ['', Validators.required],
-        injuries: ['', Validators.required],
+        respiratory: ['false', Validators.required],
+        cardiac: ['false', Validators.required],
+        chirurgical: ['false', Validators.required],
+        injuries: ['false', Validators.required],
       }),
     });
   }
@@ -131,6 +133,8 @@ export class OnboardingStep2Component implements OnInit {
 
             // Poblar el formulario
             this.form.patchValue(formValue);
+            this.form.markAsPristine();
+            this.form.updateValueAndValidity();
 
             // Verificar si debemos avanzar al paso 3
             this.store
