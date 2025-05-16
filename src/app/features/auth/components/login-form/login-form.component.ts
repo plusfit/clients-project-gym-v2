@@ -14,9 +14,8 @@ import {
   GoogleLogin,
   Login,
 } from '@feature/auth/state/auth.actions';
-import { AlertController, IonicModule } from '@ionic/angular';
-import { ToastController } from '@ionic/angular';
 import {
+  AlertController,
   IonButton,
   IonIcon,
   IonInput,
