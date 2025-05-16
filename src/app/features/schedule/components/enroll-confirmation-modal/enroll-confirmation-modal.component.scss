@@ -73,11 +73,11 @@
   --color: white;
   overflow-y: auto;
   @media (max-width: 576px) {
-    max-height: calc(100vh - 13.5rem);
+    max-height: calc(100dvh - 13.5rem);
   }
 
   @media (min-width: 577px) and (max-width: 768px) {
-    max-height: calc(100vh - 12rem);
+    max-height: calc(100dvh - 12rem);
   }
 }
 
@@ -94,7 +94,7 @@
 .info-card {
   background: rgba(30, 30, 30, 0.7);
   border-radius: 16px;
-  padding: 24px;
+  padding: 12px;
   width: 100dvb;
   max-width: 480px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -104,7 +104,7 @@
 }
 
 .info-row {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
 }
@@ -117,7 +117,7 @@
   height: 42px;
   border-radius: 50%;
   background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-  margin-right: 10px;
+  margin-right: 5px;
   border: 1px solid rgba(var(--ion-color-primary-rgb), 0.3);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -170,7 +170,7 @@
   font-size: 1.6rem;
   font-weight: 700;
   color: white;
-  margin: 10px 0 20px;
+  margin: 5px 0 10px;
   font-family: "APEXPRO", sans-serif;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -182,9 +182,9 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(var(--ion-color-primary-rgb), 0.15);
-  padding: 10px 16px;
+  padding: 5px 8px;
   border-radius: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   width: 100%;
   border-left: 3px solid var(--ion-color-primary);
 
@@ -207,7 +207,7 @@
   color: var(--ion-color-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 8px;
+  margin-top: 4px;
   display: block;
 }
 
@@ -220,8 +220,8 @@
 .confirmation-box {
   background: rgba(var(--ion-color-primary-rgb), 0.15);
   border-radius: 12px;
-  padding: 20px;
-  margin-top: 10px;
+  padding: 10px;
+  margin-top: 5px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   border-left: 3px solid var(--ion-color-primary);
   width: 100%;
@@ -254,7 +254,7 @@
 
 .button-container {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   width: 100%;
 }
 
@@ -300,11 +300,11 @@
 /* Estilos responsivos */
 @media (max-width: 576px) {
   .info-card {
-    padding: 16px;
+    padding: 8px;
   }
 
   .confirmation-box {
-    padding: 16px;
+    padding: 8px;
   }
 
   .button-container {
