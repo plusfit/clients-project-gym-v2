@@ -3,7 +3,7 @@
     <ion-title>Inscripción</ion-title>
   </ion-toolbar>
 </ion-header>
-<div class="modal-content">
+<ion-content class="modal-content" [fullscreen]="true">
   <div class="content-container">
     <div class="info-card">
       <ion-grid>
@@ -60,8 +60,7 @@
                 <span class="highlight">
                   {{ schedule?.startTime }}:00 - {{ schedule?.endTime }}:00
                 </span>
-                del día <span class="highlight">{{ schedule?.day }}</span
-                >?
+                del día <span class="highlight">{{ schedule?.day }}</span>?
               </p>
             </div>
           </ion-col>
@@ -69,42 +68,17 @@
       </ion-grid>
     </div>
   </div>
-</div>
+</ion-content>
 <ion-footer class="modal-footer">
   <ion-toolbar>
     <div class="button-container">
-      <ion-button
-        expand="block"
-        class="confirm-button"
-        (click)="confirm.emit()"
-        [disabled]="isLoading"
-      >
-        <ion-icon
-          *ngIf="!isLoading"
-          name="checkmark-outline"
-          slot="start"
-          class="confirm-icon"
-        ></ion-icon>
-        <ion-spinner
-          *ngIf="isLoading"
-          name="crescent"
-          slot="start"
-          class="loading-spinner"
-        ></ion-spinner>
+      <ion-button expand="block" class="confirm-button" (click)="confirm.emit()" [disabled]="isLoading">
+        <ion-icon *ngIf="!isLoading" name="checkmark-outline" slot="start" class="confirm-icon"></ion-icon>
+        <ion-spinner *ngIf="isLoading" name="crescent" slot="start" class="loading-spinner"></ion-spinner>
         {{ isLoading ? 'Procesando...' : 'Confirmar Inscripción' }}
       </ion-button>
-      <ion-button
-        expand="block"
-        fill="outline"
-        class="cancel-button"
-        (click)="cancel.emit()"
-        [disabled]="isLoading"
-      >
-        <ion-icon
-          name="chevron-back-outline"
-          slot="start"
-          class="cancel-icon"
-        ></ion-icon>
+      <ion-button expand="block" fill="outline" class="cancel-button" (click)="cancel.emit()" [disabled]="isLoading">
+        <ion-icon name="chevron-back-outline" slot="start" class="cancel-icon"></ion-icon>
         Cancelar
       </ion-button>
     </div>

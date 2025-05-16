@@ -1,8 +1,8 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  font-family: 'Inter', sans-serif;
+  height: 100dvh;
+  font-family: "Inter", sans-serif;
   --background: var(--ion-color-dark);
 }
 
@@ -19,7 +19,7 @@
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -55,7 +55,7 @@
 .modal-header ion-title {
   text-align: center;
   color: white;
-  font-family: 'APEXPRO', sans-serif;
+  font-family: "APEXPRO", sans-serif;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 1;
@@ -86,7 +86,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100%;
+  min-height: 100dvh;
   width: 100%;
 }
 
@@ -95,7 +95,7 @@
   background: rgba(30, 30, 30, 0.7);
   border-radius: 16px;
   padding: 24px;
-  width: 100%;
+  width: 100dvb;
   max-width: 480px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border: 2px solid rgba(var(--ion-color-primary-rgb), 0.3);
@@ -124,7 +124,7 @@
   overflow: hidden;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -50%;
     left: -50%;
@@ -171,7 +171,7 @@
   font-weight: 700;
   color: white;
   margin: 10px 0 20px;
-  font-family: 'APEXPRO', sans-serif;
+  font-family: "APEXPRO", sans-serif;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   text-transform: uppercase;
@@ -264,7 +264,7 @@
   font-weight: 600;
   margin: 0;
   height: 44px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   font-size: 0.9rem;
