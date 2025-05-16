@@ -56,10 +56,10 @@ import { OnboardingStep3Component } from '../onboarding.step3/onboarding-step3.c
     IonSelectOption,
     IonFooter,
     IonToolbar,
-    IonButtons,
     IonContent,
     IonSegment,
     IonSegmentButton,
+    OnboardingStep3Component,
   ],
 })
 export class OnboardingStep2Component implements OnInit {

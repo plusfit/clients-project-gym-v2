@@ -144,6 +144,7 @@ export class FirebaseStorageService {
     IonToolbar,
     IonButtons,
     IonContent,
+    OnboardingStep2Component,
   ],
   templateUrl: './onboarding-step1.component.html',
   styleUrls: ['./onboarding-step1.component.scss'],
