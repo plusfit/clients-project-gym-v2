@@ -10,7 +10,6 @@ import {
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
 import {
-  Storage,
   getDownloadURL,
   getStorage,
   ref,
@@ -128,7 +127,6 @@ export class FirebaseStorageService {
   standalone: true,
   providers: [ActionSheetController],
   imports: [
-    IonNav,
     IonButtons,
     IonAvatar,
     CommonModule,

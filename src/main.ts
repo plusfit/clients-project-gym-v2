@@ -29,7 +29,6 @@ import { OnboardingState } from '@feature/onboarding/state/onboarding.state';
 import { UserState } from '@feature/profile/state/user.state';
 import { RoutineState } from '@feature/routine/state/routine.state';
 import { ScheduleState } from '@feature/schedule/state/schedule.state';
-import { defineCustomElements } from '@ionic/core/loader';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import {
   LOCAL_STORAGE_ENGINE,
