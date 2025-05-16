@@ -9,5 +9,6 @@
   ],
   "settings": {
     "typescript.enablePromptUseWorkspaceTsdk": true,
+    "angular.enable-strict-mode-prompt": false,
   },
 }
