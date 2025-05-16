@@ -34,9 +34,6 @@ import { AuthState } from '@feature/auth/state/auth.state';
 import { IonNav, LoadingController, Platform } from '@ionic/angular';
 import {
   ActionSheetController,
-  ModalController,
-} from '@ionic/angular/standalone';
-import {
   IonAvatar,
   IonButton,
   IonButtons,
@@ -51,6 +48,7 @@ import {
   IonSelectOption,
   IonText,
   IonToolbar,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
@@ -71,7 +69,6 @@ import {
   personOutline,
 } from 'ionicons/icons';
 import { finalize, take } from 'rxjs';
-import { OnboardingService } from '../../services/onboarding.service';
 import { LoadOnboardingData, SetStep1 } from '../../state/onboarding.actions';
 import { OnboardingState } from '../../state/onboarding.state';
 import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.component';
@@ -129,6 +126,7 @@ export class FirebaseStorageService {
 @Component({
   selector: 'app-step1',
   standalone: true,
+  providers: [ActionSheetController],
   imports: [
     IonButtons,
     IonAvatar,
@@ -175,7 +173,6 @@ export class OnboardingStep1Component implements OnInit {
     private modalCtrl: ModalController,
     private actionSheetCtrl: ActionSheetController,
     private store: Store,
-    private onboardingService: OnboardingService,
     private loadingCtrl: LoadingController,
   ) {
     addIcons({

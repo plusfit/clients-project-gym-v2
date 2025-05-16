@@ -1,15 +1,19 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from "@angular/core";
-import { ModalController } from "@ionic/angular";
-import { IonicModule } from "@ionic/angular";
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import {
+  IonContent,
+  IonDatetime,
+  ModalController,
+} from '@ionic/angular/standalone';
 
 @Component({
-	standalone: true,
-	templateUrl: "./ion-datetime-modal-component.html",
-	selector: "ion-datetime-modal",
-	imports: [IonicModule],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	styles: [
-		`
+  standalone: true,
+  templateUrl: './ion-datetime-modal-component.html',
+  selector: 'ion-datetime-modal',
+  providers: [ModalController],
+  imports: [IonContent, IonDatetime],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  styles: [
+    `
       .sheet-content {
         display: flex;
         justify-content: center;
@@ -47,17 +51,17 @@ import { IonicModule } from "@ionic/angular";
         margin: 0 auto;
       }
     `,
-	],
+  ],
 })
 export class IonDatetimeModalComponent {
-	@Input() value: string | null = null;
-	@Input() max: string | null = null;
-	min = "1950-01-01";
+  @Input() value: string | null = null;
+  @Input() max: string | null = null;
+  min = '1950-01-01';
 
-	constructor(private modalCtrl: ModalController) {}
+  constructor(private modalCtrl: ModalController) {}
 
-	handleChange(event: any) {
-		const selected = event.detail.value;
-		this.modalCtrl.dismiss(selected);
-	}
+  handleChange(event: any) {
+    const selected = event.detail.value;
+    this.modalCtrl.dismiss(selected);
+  }
 }
