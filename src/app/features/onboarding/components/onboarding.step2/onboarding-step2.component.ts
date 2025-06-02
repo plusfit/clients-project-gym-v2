@@ -181,23 +181,17 @@ export class OnboardingStep2Component implements OnInit {
             history: {
               // Convertir los valores de segment (true/false como strings) a descripciones significativas
               respiratory:
-                formValue.history.respiratory === 'true'
-                  ? 'Tiene antecedentes respiratorios'
-                  : 'Sin antecedentes respiratorios',
+                formValue.history.respiratory,
               cardiac:
-                formValue.history.cardiac === 'true'
-                  ? 'Tiene antecedentes cardíacos'
-                  : 'Sin antecedentes cardíacos',
+                formValue.history.cardiac,
               chirurgical:
-                formValue.history.chirurgical === 'true'
-                  ? 'Tiene antecedentes quirúrgicos'
-                  : 'Sin antecedentes quirúrgicos',
+                formValue.history.chirurgical,
               injuries:
-                formValue.history.injuries === 'true'
-                  ? 'Tiene lesiones patológicas'
-                  : 'Sin lesiones patológicas',
+                formValue.history.injuries,
             },
           };
+          console.log('Paso 2 - Datos a enviar:', step2Data);
+          
 
           // Usando el estado NGXS que ahora maneja las actualizaciones
           this.store

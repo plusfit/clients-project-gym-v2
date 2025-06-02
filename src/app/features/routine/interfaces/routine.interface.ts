@@ -13,6 +13,7 @@ export interface Exercise {
 	videoUrl?: string;
 	category?: string;
 	gifUrl?: string;
+	mediaType?: "image" | "video" | "gif"; // Nuevo campo para identificar el tipo de media
 	__v?: number;
 }
 

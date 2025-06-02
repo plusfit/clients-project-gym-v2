@@ -20,17 +20,39 @@
     >
       <ion-card class="exercise-card">
         <div class="image-container">
-          <img
-            alt="Imagen del ejercicio"
-            [ngSrc]="
-              exercise.gifUrl ||
-              exercise.imageUrl ||
-              'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2xwdXc4aDJreTRiOG13d2pnNndmYW55cWFiYngzZ2MybXZ2YzI4MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YOxU0vp6dD91UC4/giphy.gif'
-            "
-            class="exercise-img"
-            width="800"
-            height="350"
-          />
+          <ng-container *ngIf="exercise.gifUrl || exercise.imageUrl; let mediaUrl">
+            <div *ngIf="isVideo(mediaUrl, exercise); else imageTemplate" class="video-container">
+              <video 
+                [src]="mediaUrl"
+                class="exercise-video"
+                #exerciseVideo
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                (loadeddata)="onVideoLoaded($event)"
+                (error)="onVideoError($event)">
+                Tu navegador no soporta videos HTML5.
+              </video>
+              
+              <!-- Botón de play si autoplay falla -->
+              <div *ngIf="showPlayButton" class="video-play-overlay" (click)="playVideo(exerciseVideo)">
+                <ion-icon name="play-circle" class="play-icon"></ion-icon>
+              </div>
+            </div>
+            
+            <ng-template #imageTemplate>
+              <img
+                alt="Imagen del ejercicio"
+                [ngSrc]="mediaUrl || 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExb2xwdXc4aDJreTRiOG13d2pnNndmYW55cWFiYngzZ2MybXZ2YzI4MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YOxU0vp6dD91UC4/giphy.gif'"
+                class="exercise-img"
+                width="800"
+                height="350"
+              />
+            </ng-template>
+          </ng-container>
+          
           <div class="image-overlay"></div>
           <div
             class="image-type-badge"

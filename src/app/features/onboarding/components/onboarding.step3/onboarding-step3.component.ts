@@ -201,7 +201,8 @@ export class OnboardingStep3Component implements OnInit {
         await loading.present();
 
         const step3Data = this.form.value;
-
+        console.log('Paso 3 - Preferencias de entrenamiento:', step3Data);
+        
         // Usando el estado NGXS que ahora maneja las actualizaciones
         this.store
           .dispatch(new SetStep3(step3Data))
