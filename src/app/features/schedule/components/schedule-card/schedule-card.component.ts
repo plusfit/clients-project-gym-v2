@@ -39,7 +39,7 @@ export class ScheduleCardComponent {
 	}
 
 	/**
-	 * Determina si el usuario actual está inscrito en este horario
+	 * Determina si el usuario actual está inscripto en este horario
 	 */
 	get isEnrolled(): boolean {
 		return this.schedule.clients?.includes(this.currentUserId);
@@ -47,7 +47,7 @@ export class ScheduleCardComponent {
 
 	/**
 	 * Manejador de click en el horario
-	 * Solo permite hacer clic si no está lleno o si el usuario ya está inscrito
+	 * Solo permite hacer clic si no está lleno o si el usuario ya está inscripto
 	 */
 	handleClick(): void {
 		if (!this.isFull || this.isEnrolled) {

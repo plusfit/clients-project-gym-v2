@@ -50,7 +50,7 @@ export class ScheduleState {
 	@Selector()
 	static getUserTotalEnrollments(state: ScheduleStateModel) {
 		return (userId: string) => {
-			// Contar en cuántos horarios en total está inscrito el usuario
+			// Contar en cuántos horarios en total está inscripto el usuario
 			return state.schedules.filter((schedule) => schedule.clients?.includes(userId)).length;
 		};
 	}
