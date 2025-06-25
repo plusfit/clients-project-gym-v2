@@ -190,7 +190,6 @@ export class OnboardingStep2Component implements OnInit {
                 formValue.history.injuries,
             },
           };
-          console.log('Paso 2 - Datos a enviar:', step2Data);
           
 
           // Usando el estado NGXS que ahora maneja las actualizaciones

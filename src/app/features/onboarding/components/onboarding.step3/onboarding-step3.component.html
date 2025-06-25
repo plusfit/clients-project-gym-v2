@@ -25,56 +25,6 @@
         </ion-item>
       </div>
 
-      <div class="goal-section">
-        <ion-label class="section-title">
-          <ion-icon name="trending-up-outline"></ion-icon> Objetivo principal
-        </ion-label>
-        <ion-text class="helper-text">
-          Seleccione el objetivo principal que desea lograr con su entrenamiento. Esto nos ayudará a personalizar su plan.
-        </ion-text>
-        <ion-item lines="none">
-          <ion-select
-            formControlName="goal"
-            interface="action-sheet"
-            placeholder="Seleccioná una opción"
-          >
-            <ion-select-option value="loseWeight">Perder peso</ion-select-option>
-            <ion-select-option value="buildMuscle">Ganar masa muscular</ion-select-option>
-            <ion-select-option value="improveCardio">Mejorar cardio</ion-select-option>
-            <ion-select-option value="increaseFlexibility">Mejorar flexibilidad</ion-select-option>
-            <ion-select-option value="generalFitness">Mejorar estado físico general</ion-select-option>
-            <ion-select-option value="injuryRecovery">Recuperación de lesiones</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-text color="danger" *ngIf="isInvalid('goal')">
-          Este campo es obligatorio
-        </ion-text>
-      </div>
-
-      <!-- Campo de tipo de lesión que aparece solo cuando el objetivo es "Recuperación de lesiones" -->
-      <div class="injury-section" *ngIf="form.get('goal')?.value === 'injuryRecovery'">
-        <ion-label class="section-title">
-          <ion-icon name="bandage-outline"></ion-icon> Tipo de lesión
-        </ion-label>
-        <ion-text class="helper-text">
-          Indique qué tipo de lesión necesita recuperar para que podamos personalizar su plan de rehabilitación.
-        </ion-text>
-        <ion-item lines="none">
-          <ion-select
-            formControlName="injuryType"
-            interface="action-sheet"
-            placeholder="Seleccioná una opción"
-          >
-            <ion-select-option *ngFor="let injury of injuryTypes" [value]="injury.value">
-              {{ injury.label }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-text color="danger" *ngIf="isInvalid('injuryType')">
-          Este campo es obligatorio cuando el objetivo es recuperación de lesiones
-        </ion-text>
-      </div>
-
       <div class="type-section">
         <ion-label class="section-title">
           <ion-icon name="barbell-outline"></ion-icon> Tipo de entrenamiento
@@ -83,35 +33,10 @@
           Elija el tipo de entrenamiento que prefiere. Un entrenamiento mixto combina cardio y sala para resultados más completos.
         </ion-text>
         <ion-segment formControlName="trainingType" mode="ios">
-          <ion-segment-button value="cardio">Cardio</ion-segment-button>
           <ion-segment-button value="room">Sala</ion-segment-button>
           <ion-segment-button value="mixed">Mixto</ion-segment-button>
         </ion-segment>
         <ion-text color="danger" *ngIf="isInvalid('trainingType')">
-          Este campo es obligatorio
-        </ion-text>
-      </div>
-
-      <div class="level-section">
-        <ion-label class="section-title">
-          <ion-icon name="bar-chart-outline"></ion-icon> ¿Con qué nivel te identificás?
-        </ion-label>
-        <ion-text class="helper-text">
-          Seleccione su nivel de experiencia para que podamos adaptar la intensidad de los ejercicios a sus capacidades actuales.
-        </ion-text>
-        <ion-item lines="none">
-          <ion-select
-            formControlName="trainingLevel"
-            interface="action-sheet"
-            placeholder="Seleccioná una opción"
-          >
-            <ion-select-option value="beginner">Principiante</ion-select-option>
-            <ion-select-option value="intermediate">Intermedio</ion-select-option>
-            <ion-select-option value="advanced">Avanzado</ion-select-option>
-            <ion-select-option value="never">Nunca entrené</ion-select-option>
-          </ion-select>
-        </ion-item>
-        <ion-text color="danger" *ngIf="isInvalid('trainingLevel')">
           Este campo es obligatorio
         </ion-text>
       </div>

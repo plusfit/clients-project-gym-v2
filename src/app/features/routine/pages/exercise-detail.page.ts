@@ -145,8 +145,6 @@ export class ExerciseDetailPage implements OnInit, OnDestroy {
 			if (playPromise !== undefined) {
 				playPromise
 					.then(() => {
-						// Video se reproduce correctamente
-						console.log('Video iniciado correctamente');
 						this.showPlayButton = false;
 					})
 					.catch((error) => {
