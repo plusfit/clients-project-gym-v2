@@ -203,7 +203,6 @@ export class OnboardingStep1Component implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('ngOnInit');
     this.isLoading = true;
     const loading = await this.loadingCtrl.create({
       message: 'Cargando información...',

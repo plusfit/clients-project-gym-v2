@@ -130,23 +130,10 @@ export class OnboardingStep3Component implements OnInit {
 
     this.form = this.fb.group({
       trainingDays: [3, Validators.required],
-      goal: ['', Validators.required],
       injuryType: [''],
       trainingType: ['', Validators.required],
-      trainingLevel: ['', Validators.required],
     });
 
-    // Agregar validador condicional para el tipo de lesión
-    this.form.get('goal')?.valueChanges.subscribe((goal) => {
-      const injuryTypeControl = this.form.get('injuryType');
-      if (goal === 'injuryRecovery') {
-        injuryTypeControl?.setValidators([Validators.required]);
-      } else {
-        injuryTypeControl?.clearValidators();
-        injuryTypeControl?.setValue('');
-      }
-      injuryTypeControl?.updateValueAndValidity();
-    });
   }
 
   ngOnInit() {
@@ -201,7 +188,6 @@ export class OnboardingStep3Component implements OnInit {
         await loading.present();
 
         const step3Data = this.form.value;
-        console.log('Paso 3 - Preferencias de entrenamiento:', step3Data);
         
         // Usando el estado NGXS que ahora maneja las actualizaciones
         this.store
