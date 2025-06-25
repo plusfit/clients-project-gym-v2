@@ -1,7 +1,11 @@
-<div class="register-wrapper register-content">
-  <div class="welcome-header">
+<div class="register-wrapper register-content">  <div class="welcome-header">
     <img src="assets/logos/logo-white.png" alt="Logo del gimnasio" class="gym-logo" />
     <p class="welcome-text">Bienvenido a esta gran familia</p>
+  </div>
+
+  <div class="auth-toggle">
+    <span>¿No sos usuario?</span>
+    <a (click)="goToRegister()" class="register-link">Registrarse</a>
   </div>
 
   <form [formGroup]="form">
@@ -40,17 +44,10 @@
       {{ isLoading ? 'Procesando...' : 'Ingresar' }}
     </ion-button>
 
-    <div class="divider"><span>O</span></div>
-
-    <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
+    <div class="divider"><span>O</span></div>    <ion-button expand="block" color="light" (click)="registerWithGoogle()" class="social-login-btn"
       [disabled]="isLoading">
       <img src="assets/logos/google-logo.svg" alt="Google" width="20" height="20" style="margin-right: 8px" />
       Ingresar con Google
     </ion-button>
-
-    <div class="login-redirect">
-      <span>¿No sos usuario?</span>
-      <a (click)="goToRegister()">Registrarse</a>
-    </div>
   </form>
 </div>

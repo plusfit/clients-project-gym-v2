@@ -23,7 +23,7 @@ import { SubRoutine } from "../interfaces/routine.interface";
 export class SubroutineCardComponent {
 	@Input() subroutine!: SubRoutine;
 	@Input() index!: number;
-	@Input() isEnrolled = false; // Determina si el usuario está inscrito en este horario
+	@Input() isEnrolled = false; // Determina si el usuario está inscripto en este horario
 	@Output() unsubscribe = new EventEmitter<SubRoutine>();
 
 	get exerciseObjects() {
