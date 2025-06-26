@@ -63,11 +63,9 @@ ion-card {
 }
 
 ion-card-header {
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-primary-shade) 0%,
-    var(--ion-color-primary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--ion-color-primary-shade) 0%,
+      var(--ion-color-primary) 100%);
   padding: 16px !important;
 }
 
@@ -132,11 +130,9 @@ ion-button.button-solid {
 /* Estilos para cabeceras */
 ion-header {
   --background: transparent;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.4) 100%
-  ) !important;
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.4) 100%) !important;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -200,18 +196,12 @@ ion-alert {
   --message-color: rgba(255, 255, 255, 0.9) !important;
   --button-color: var(--ion-color-primary) !important;
   --button-background-color: transparent !important;
-  --button-background-color-hover: rgba(
-    var(--ion-color-primary-rgb),
-    0.1
-  ) !important;
-  --button-background-color-activated: rgba(
-    var(--ion-color-primary-rgb),
-    0.2
-  ) !important;
-  --button-background-color-selected: rgba(
-    var(--ion-color-primary-rgb),
-    0.15
-  ) !important;
+  --button-background-color-hover: rgba(var(--ion-color-primary-rgb),
+      0.1) !important;
+  --button-background-color-activated: rgba(var(--ion-color-primary-rgb),
+      0.2) !important;
+  --button-background-color-selected: rgba(var(--ion-color-primary-rgb),
+      0.15) !important;
   --button-background-color-disabled: rgba(255, 255, 255, 0.1) !important;
   --button-color-disabled: rgba(255, 255, 255, 0.4) !important;
   --button-border-radius: 8px !important;
@@ -243,7 +233,7 @@ ion-header[collapse='condense'] ion-toolbar::after {
   display: none;
 }
 
-ion-header ion-toolbar ion-buttons[slot='end'] ~ *::after {
+ion-header ion-toolbar ion-buttons[slot='end']~*::after {
   display: none;
 }
 
@@ -335,3 +325,20 @@ ion-header ion-toolbar ion-title {
     font-size: 16px;
   }
 }
+
+/* reCAPTCHA Badge Customization */
+/* Ocultar el badge flotante de reCAPTCHA */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Alternativa: Mover el badge fuera de la vista */
+/* 
+.grecaptcha-badge {
+  position: fixed !important;
+  bottom: -100px !important;
+  right: -100px !important;
+}
+*/

@@ -1,6 +1,7 @@
 export interface RegisterCredentials {
 	email: string;
 	password: string;
+	recaptchaToken?: string;
 }
 
 export interface RegisterResponse {
@@ -22,21 +23,21 @@ export interface FirebaseAuthResponse {
 		refreshToken: string;
 		expiresIn: string;
 	};
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 export interface RegisterResponse {
-  success: boolean;
-  data: {
-    _id: string;
-    identifier: string;
-    role: string;
-  };
+	success: boolean;
+	data: {
+		_id: string;
+		identifier: string;
+		role: string;
+	};
 }
 
 export interface FirebaseRegisterResponse {
-  user: any;
+	user: any;
 }
 export interface User {
 	_id: string;

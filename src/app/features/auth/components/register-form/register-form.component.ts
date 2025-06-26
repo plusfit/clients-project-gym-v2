@@ -9,10 +9,12 @@ import {
 	Validators,
 } from "@angular/forms";
 import { Router } from "@angular/router";
+import { RecaptchaService } from "@core/services/recaptcha.service";
 import { GoogleLogin, GoogleRegister, Register } from "@feature/auth/state/auth.actions";
 import { IonicModule } from "@ionic/angular";
 import { IonSpinner } from "@ionic/angular/standalone";
 import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
+import { RecaptchaBadgeComponent } from "@shared/components/recaptcha-badge/recaptcha-badge.component";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { mailOutline } from "ionicons/icons";
@@ -26,7 +28,7 @@ import { Subject, takeUntil } from "rxjs";
 	standalone: true,
 	templateUrl: "./register-form.component.html",
 	styleUrls: ["./register-form.component.scss"],
-	imports: [CommonModule, IonicModule, ReactiveFormsModule, IonSpinner],
+	imports: [CommonModule, IonicModule, ReactiveFormsModule, IonSpinner, RecaptchaBadgeComponent],
 })
 export class RegisterFormComponent implements OnDestroy {
 	form: FormGroup;
@@ -41,6 +43,7 @@ export class RegisterFormComponent implements OnDestroy {
 		private store: Store,
 		private actions: Actions,
 		private toastService: ToastService,
+		private recaptchaService: RecaptchaService,
 	) {
 		addIcons({
 			"mail-outline": mailOutline,
@@ -97,15 +100,37 @@ export class RegisterFormComponent implements OnDestroy {
 		this.showRepeatPassword = !this.showRepeatPassword;
 	}
 
-	submit() {
+	async submit() {
 		if (this.form.valid) {
-			this.store.dispatch(new Register(this.form.value));
+			this.isLoading = true;
 
-			this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
-				this.toastService.showSuccess("Cliente creado correctamente");
-				this.form.reset();
-				this.router.navigate(["/login"]);
-			});
+			try {
+				// Ejecutar reCAPTCHA antes del registro
+				const recaptchaToken = await this.recaptchaService.executeRecaptcha("register");
+
+				// Agregar el token al payload
+				const registerData = {
+					...this.form.value,
+					recaptchaToken,
+				};
+
+				this.store.dispatch(new Register(registerData));
+
+				this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
+					this.isLoading = false;
+					this.toastService.showSuccess("Cliente creado correctamente");
+					this.form.reset();
+					this.router.navigate(["/login"]);
+				});
+
+				this.actions.pipe(ofActionErrored(Register), takeUntil(this._destroyed)).subscribe(() => {
+					this.isLoading = false;
+				});
+			} catch (error) {
+				this.isLoading = false;
+				this.toastService.showError("Error de verificación. Por favor, intenta nuevamente.");
+				console.error("reCAPTCHA error:", error);
+			}
 		} else {
 			this.form.markAllAsTouched();
 		}
@@ -120,26 +145,36 @@ export class RegisterFormComponent implements OnDestroy {
 		this.router.navigate(["/login"]);
 	}
 
-	registerWithGoogle() {
+	async registerWithGoogle() {
 		this.isLoading = true;
-		this.store.dispatch(new GoogleRegister());
 
-		this.actions.pipe(ofActionSuccessful(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
-			this.isLoading = false;
-			const user = this.store.selectSnapshot((state) => state.auth.user);
-			if (user) {
-				if (user.onboardingCompleted) {
-					this.router.navigate(["/cliente/mi-plan"]);
-				} else {
-					this.router.navigate(["/onboarding"]);
+		try {
+			// Ejecutar reCAPTCHA antes del registro con Google
+			const recaptchaToken = await this.recaptchaService.executeRecaptcha("google_register");
+
+			this.store.dispatch(new GoogleRegister(recaptchaToken));
+
+			this.actions.pipe(ofActionSuccessful(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
+				this.isLoading = false;
+				const user = this.store.selectSnapshot((state) => state.auth.user);
+				if (user) {
+					if (user.onboardingCompleted) {
+						this.router.navigate(["/cliente/mi-plan"]);
+					} else {
+						this.router.navigate(["/onboarding"]);
+					}
 				}
-			}
-		});
+			});
 
-		this.actions.pipe(ofActionErrored(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
+			this.actions.pipe(ofActionErrored(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
+				this.isLoading = false;
+				// Error handling done in the state
+			});
+		} catch (error) {
 			this.isLoading = false;
-			// Error handling done in the state
-		});
+			this.toastService.showError("Error de verificación. Por favor, intenta nuevamente.");
+			console.error("reCAPTCHA error:", error);
+		}
 	}
 
 	ngOnDestroy(): void {
