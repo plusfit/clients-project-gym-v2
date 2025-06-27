@@ -15,7 +15,11 @@ const environment = `export const environment = {
     authDomain: '${process.env.FIREBASE_AUTH_DOMAIN || ""}',
     messagingSenderId: '${process.env.FIREBASE_MESSAGING_SENDER_ID || ""}',
     measurementId: '${process.env.FIREBASE_MEASUREMENT_ID || ""}'
-  }
+  },
+  recaptcha: {
+		siteKey: '${process.env.RECAPTCHA_SITE_KEY || ""}',
+	},
+  
 };
 `;
 
@@ -31,7 +35,10 @@ const environmentProd = `export const environment = {
     authDomain: '${process.env.FIREBASE_AUTH_DOMAIN || ""}',
     messagingSenderId: '${process.env.FIREBASE_MESSAGING_SENDER_ID || ""}',
     measurementId: '${process.env.FIREBASE_MEASUREMENT_ID || ""}'
-  }
+  },
+  recaptcha: {
+		siteKey: '${process.env.RECAPTCHA_SITE_KEY || ""}',
+	},
 };
 `;
 

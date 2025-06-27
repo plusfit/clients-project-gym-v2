@@ -34,10 +34,12 @@ export class AuthService {
 		return from(signInWithEmailAndPassword(this._auth, email, password));
 	}
 
-	login(token: string): Observable<AuthResponse> {
-		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, {
-			token,
-		});
+	login(token: string, recaptchaToken?: string): Observable<AuthResponse> {
+		const payload: { token: string; recaptchaToken?: string } = { token };
+		if (recaptchaToken) {
+			payload.recaptchaToken = recaptchaToken;
+		}
+		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload);
 	}
 
 	getCurrentUser(): Observable<User> {
@@ -70,12 +72,18 @@ export class AuthService {
 		return throwError(() => new Error("refreshSession not implemented"));
 	}
 
-	register(email: string, displayName?: string, photoURL?: string): Observable<RegisterResponse> {
-		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, {
-			email,
-			displayName,
-			photoURL,
-		});
+	register(
+		email: string,
+		displayName?: string,
+		photoURL?: string,
+		recaptchaToken?: string,
+	): Observable<RegisterResponse> {
+		const payload: { email: string; displayName?: string; photoURL?: string; recaptchaToken?: string } = { email };
+		if (displayName) payload.displayName = displayName;
+		if (photoURL) payload.photoURL = photoURL;
+		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
+
+		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
 	}
 
 	registerFirebase(email: string, password: string): any {
@@ -91,12 +99,13 @@ export class AuthService {
 		return from(signInWithPopup(this._auth, provider));
 	}
 
-	googleAuth(idToken: string, name?: string, photoURL?: string): Observable<any> {
-		return this.http.post<any>(`${environment.apiUrl}/auth/google`, {
-			idToken,
-			name,
-			avatarUrl: photoURL,
-		});
+	googleAuth(idToken: string, name?: string, photoURL?: string, recaptchaToken?: string): Observable<AuthResponse> {
+		const payload: { idToken: string; name?: string; avatarUrl?: string; recaptchaToken?: string } = { idToken };
+		if (name) payload.name = name;
+		if (photoURL) payload.avatarUrl = photoURL;
+		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
+
+		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/google`, payload);
 	}
 
 	updateOnboardingCompleted(userId: string): Observable<User> {

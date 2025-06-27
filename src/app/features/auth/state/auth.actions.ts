@@ -2,7 +2,7 @@ import { RefreshTokenPayload, RegisterCredentials, User } from "../interfaces/us
 
 export class Login {
 	static readonly type = "[Auth] Login";
-	constructor(public credentials: { email: string; password: string }) {}
+	constructor(public credentials: { email: string; password: string; recaptchaToken?: string }) {}
 }
 
 export class Logout {
@@ -35,10 +35,12 @@ export class GetNewToken {
 
 export class GoogleLogin {
 	static readonly type = "[Auth] Google Login";
+	constructor(public recaptchaToken?: string) {}
 }
 
 export class GoogleRegister {
 	static readonly type = "[Auth] Google Register";
+	constructor(public recaptchaToken?: string) {}
 }
 
 export class SetOnboardingCompleted {
