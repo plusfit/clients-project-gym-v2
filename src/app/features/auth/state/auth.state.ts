@@ -90,7 +90,7 @@ export class AuthState {
 
 		return this.authService.loginFirebase(action.credentials).pipe(
 			exhaustMap((response: FirebaseAuthResponse) => {
-				return this.authService.login(response._tokenResponse.idToken).pipe(
+				return this.authService.login(response._tokenResponse.idToken, action.credentials.recaptchaToken).pipe(
 					tap((authResponse: any) => {
 						const { accessToken, refreshToken } = authResponse.data;
 
@@ -179,10 +179,10 @@ export class AuthState {
 	@Action(Register, { cancelUncompleted: true })
 	register(ctx: StateContext<AuthStateModel>, action: Register): Observable<RegisterResponse> {
 		ctx.patchState({ loading: true });
-		const { email, password } = action.credentials;
+		const { email, password, recaptchaToken } = action.credentials;
 		return this.authService.registerFirebase(email, password).pipe(
 			exhaustMap((firebaseResponse: FirebaseRegisterResponse) => {
-				return this.authService.register(firebaseResponse.user.email).pipe(
+				return this.authService.register(firebaseResponse.user.email, undefined, undefined, recaptchaToken).pipe(
 					tap((res: RegisterResponse) => {
 						this.toastService.showSuccess("Usuario registrado correctamente");
 					}),
@@ -224,7 +224,7 @@ export class AuthState {
 	}
 
 	@Action(GoogleLogin, { cancelUncompleted: true })
-	googleLogin(ctx: StateContext<AuthStateModel>): Observable<any> {
+	googleLogin(ctx: StateContext<AuthStateModel>, action: GoogleLogin): Observable<any> {
 		ctx.patchState({ loading: true });
 
 		return this.authService.signInWithGoogle().pipe(
@@ -235,7 +235,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
@@ -278,7 +278,7 @@ export class AuthState {
 	}
 
 	@Action(GoogleRegister, { cancelUncompleted: true })
-	googleRegister(ctx: StateContext<AuthStateModel>): Observable<any> {
+	googleRegister(ctx: StateContext<AuthStateModel>, action: GoogleRegister): Observable<any> {
 		ctx.patchState({ loading: true });
 
 		return this.authService.signInWithGoogle().pipe(
@@ -289,7 +289,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
