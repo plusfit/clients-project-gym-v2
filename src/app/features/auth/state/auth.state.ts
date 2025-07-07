@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { ErrorHandlerService } from "@core/services/error-handler.service";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { jwtDecode } from "jwt-decode";
@@ -52,6 +53,7 @@ export class AuthState {
 	constructor(
 		private authService: AuthService,
 		private toastService: ToastService,
+		private errorHandler: ErrorHandlerService,
 	) {}
 
 	@Selector()
@@ -110,11 +112,12 @@ export class AuthState {
 				ctx.patchState({ loading: false });
 			}),
 			catchError((err: HttpErrorResponse) => {
+				const errorMessage = this.errorHandler.handleError(err, false);
 				ctx.patchState({
 					loading: false,
-					error: err.message || "Error al ingresar",
+					error: errorMessage,
 				});
-				this.toastService.showError("Login Erróneo");
+				this.toastService.showError("Credenciales incorrectas");
 				return throwError(() => err);
 			}),
 		);
@@ -191,12 +194,13 @@ export class AuthState {
 			tap(() => {
 				ctx.patchState({ loading: false });
 			}),
-			catchError((err: any) => {
+			catchError((err: unknown) => {
+				const errorMessage = this.errorHandler.handleError(err, false);
 				ctx.patchState({
 					loading: false,
-					error: err.message || "Error al registrar usuario",
+					error: errorMessage,
 				});
-				this.toastService.showError(ctx.getState().error || "Error al registrar usuario");
+				this.toastService.showError(errorMessage);
 				return throwError(() => err);
 			}),
 		);

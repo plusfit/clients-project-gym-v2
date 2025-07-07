@@ -213,6 +213,26 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		return currentEnrollments < maxEnrollments;
 	}
 
+	checkDayEnrollmentLimit(newSchedule: Schedule): boolean {
+		// Si el usuario ya está inscripto en este horario específico, no hay problema
+		if (newSchedule.clients?.includes(this.currentUserId)) {
+			return true;
+		}
+
+		// Obtenemos todos los horarios actuales
+		const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+
+		// Verificamos si ya está inscrito en algún horario del mismo día
+		const isAlreadyEnrolledInDay = allSchedules.some(
+			(schedule) => 
+				schedule.day === newSchedule.day && 
+				schedule.clients?.includes(this.currentUserId)
+		);
+
+		// Si ya está inscrito en el mismo día, no puede inscribirse en otro horario del mismo día
+		return !isAlreadyEnrolledInDay;
+	}
+
 	onScheduleClicked(schedule: Schedule) {
 		this.selectedSchedule = schedule;
 
@@ -220,6 +240,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Si el usuario ya está inscripto, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {
+			// Verificamos si el usuario ya está inscrito en el mismo día
+			if (!this.checkDayEnrollmentLimit(schedule)) {
+				this.toastService.showWarning(
+					`Ya estás inscripto en otro horario el día ${schedule.day}. Solo puedes estar inscripto en un horario por día.`,
+				);
+				return;
+			}
+
 			// Verificamos si el usuario puede inscribirse en más horarios
 			if (!this.checkMaxEnrollmentsLimit(schedule)) {
 				// Obtenemos el máximo de horarios del plan

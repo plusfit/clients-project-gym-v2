@@ -57,7 +57,6 @@ bootstrapApplication(AppComponent, {
         errorInterceptor,
       ]),
     ),
-    provideHttpClient(),
     importProvidersFrom(
       NgxsModule.forRoot(
         [
