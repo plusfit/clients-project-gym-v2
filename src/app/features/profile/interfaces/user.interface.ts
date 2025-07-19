@@ -10,7 +10,6 @@ export interface UserInfo {
 	medicalSociety: string;
 	cardiacHistory: boolean;
 	bloodPressure: string;
-	frequencyOfPhysicalExercise: string;
 	respiratoryHistory: boolean;
 	surgicalHistory: boolean;
 	CI: string;

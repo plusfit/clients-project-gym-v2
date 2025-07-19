@@ -69,7 +69,6 @@ export interface UserInfo {
 	medicalSociety: string;
 	cardiacHistory: string;
 	bloodPressure: string;
-	frequencyOfPhysicalExercise: string;
 	respiratoryHistory: string;
 	surgicalHistory: string;
 	CI: string;
