@@ -20,25 +20,27 @@ const handleUnauthorizedError = (
 ): void => {
 
 	if (err.status === 401 || err.status === 0) {
-		//TODO: status 0 cuando es un 401, ver porque
-
+		console.log('Error 401 detectado. Procesando logout automático...');
 		if (isAccessTokenExpired && !isRefreshTokenExpired) {
-
+			console.log('Intentando renovar token...');
 			store.dispatch(
 				new GetNewToken({
 					refreshToken: store.selectSnapshot(AuthState.refreshToken),
 				}),
 			);
-
-			//actions.pipe(ofActionSuccessful(GetNewToken)).subscribe(() => {
-			// window.location.reload(); //hago el reload para que el usuario no tenga que hacerlo y pase "mas desapercibido"
-			//});
-		} else if (!isAccessTokenExpired && !isRefreshTokenExpired) {
-			store.dispatch(new Logout());
-			zone.run(() => router.navigate(["login"]));
 		} else {
+			console.log('Cerrando sesión automáticamente...');
 			utilsService.cleanStorage();
-			zone.run(() => router.navigate(["login"]));
+			store.dispatch(new Logout()).subscribe({
+				complete: () => {
+					console.log('Logout completado, navegando a login...');
+					zone.run(() => router.navigate(['/login'], { replaceUrl: true }));
+				},
+				error: (error) => {
+					console.error('Error en logout, navegando a login de todas formas:', error);
+					zone.run(() => router.navigate(['/login'], { replaceUrl: true }));
+				}
+			});
 		}
 	}
 };
