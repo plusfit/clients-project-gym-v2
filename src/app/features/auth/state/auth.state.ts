@@ -218,6 +218,7 @@ export class AuthState {
 						refreshToken,
 					},
 				});
+				window.location.reload()
 			}),
 			catchError((err: HttpErrorResponse) => {
 				this.toastService.showError("Sesion Expirada. Por favor inicie sesion nuevamente");
