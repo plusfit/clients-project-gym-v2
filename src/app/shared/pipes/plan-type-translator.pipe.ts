@@ -15,6 +15,8 @@ export class PlanTypeTranslatorPipe implements PipeTransform {
         return 'Cardio';
       case 'room':
         return 'Sala';
+      case 'mixed':
+        return 'Mixto';
       default:
         return value.charAt(0).toUpperCase() + value.slice(1);
     }
