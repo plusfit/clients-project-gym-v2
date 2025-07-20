@@ -73,10 +73,12 @@
   --color: white;
   overflow-y: auto;
   max-height: calc(100dvh - 38%);
+  --padding-bottom: max(20px, env(safe-area-inset-bottom, 16px));
 }
 
 .content-container {
   padding: 20px;
+  padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 16px) + 4px));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,11 +239,13 @@
 .modal-footer {
   background-color: rgba(18, 18, 18, 0.9);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
 
   ion-toolbar {
     --background: transparent;
     --border-color: transparent;
     padding: 10px 16px;
+    padding-bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 10px));
   }
 }
 
@@ -307,6 +311,14 @@
   .confirm-button,
   .cancel-button {
     width: 100%;
+  }
+  
+  .modal-footer {
+    padding-bottom: max(8px, calc(env(safe-area-inset-bottom, 0px) + 8px));
+    
+    ion-toolbar {
+      padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 16px));
+    }
   }
 }
 

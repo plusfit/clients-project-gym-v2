@@ -113,7 +113,7 @@ ion-title {
   overflow-y: auto;
   height: 100%;
   padding-right: 8px; /* Padding for the scrollbar */
-  padding-bottom: 32px; /* Increased padding to prevent the last item from being cut off */
+  padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 16px) + 16px)); /* Increased padding to prevent the last item from being cut off */
 
   /* Estilos para el scrollbar */
   &::-webkit-scrollbar {
@@ -204,7 +204,7 @@ ion-modal {
   .schedule-cards-wrapper {
     gap: 4px;
     padding-right: 2px;
-    padding-bottom: 16px;
+    padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
   }
   .loading-container,
   .empty-state {
@@ -231,7 +231,7 @@ ion-modal {
   }
   .schedule-cards-wrapper {
     gap: 2px;
-    padding-bottom: 8px;
+    padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 16px) + 0px));
   }
   .loading-container,
   .empty-state {

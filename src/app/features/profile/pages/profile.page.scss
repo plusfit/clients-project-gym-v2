@@ -45,11 +45,12 @@ ion-header {
 /* CONTENT */
 ion-content {
   --background: linear-gradient(180deg, var(--ion-color-dark) 0%, #1a1a1a 100%);
-  --padding-bottom: 50px;
+  --padding-bottom: max(50px, env(safe-area-inset-bottom, 20px));
 }
 
 .profile-container {
   padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -238,4 +239,45 @@ ion-card-content {
 ion-spinner {
   width: 50px;
   height: 50px;
+}
+
+.logout-button-container {
+  padding: 16px;
+  padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 16px) + 0px));
+  margin-top: auto;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  ion-content {
+    --padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 20px) + 40px));
+  }
+  
+  .profile-container {
+    padding: 12px;
+    padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
+    gap: 16px;
+  }
+  
+  .logout-button-container {
+    padding: 12px;
+    padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 16px) + 4px));
+  }
+}
+
+@media (max-width: 480px) {
+  ion-content {
+    --padding-bottom: max(70px, calc(env(safe-area-inset-bottom, 20px) + 50px));
+  }
+  
+  .profile-container {
+    padding: 8px;
+    padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 16px) + 16px));
+    gap: 12px;
+  }
+  
+  .logout-button-container {
+    padding: 8px;
+    padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
+  }
 }
