@@ -158,7 +158,7 @@ export class RegisterFormComponent implements OnDestroy {
 				this.isLoading = false;
 				const user = this.store.selectSnapshot((state) => state.auth.user);
 				if (user) {
-					if (user.onboardingCompleted) {
+					if (user.isOnboardingCompleted) {
 						this.router.navigate(["/cliente/mi-plan"]);
 					} else {
 						this.router.navigate(["/onboarding"]);

@@ -124,7 +124,7 @@ export class LoginFormComponent implements OnDestroy {
 				this.actions.pipe(ofActionSuccessful(Login), takeUntil(this._destroyed)).subscribe(() => {
 					this.isLoading = false;
 					const user = this.store.selectSnapshot((state) => state.auth.user);
-					if (user?.onboardingCompleted) {
+					if (user?.isOnboardingCompleted) {
 						this.router.navigate(["/cliente/mi-plan"]);
 					} else {
 						this.router.navigate(["/onboarding"]);
@@ -168,7 +168,7 @@ export class LoginFormComponent implements OnDestroy {
 				this.isLoading = false;
 				const user = this.store.selectSnapshot((state) => state.auth.user);
 				if (user) {
-					if (user.onboardingCompleted) {
+					if (user.isOnboardingCompleted) {
 						this.router.navigate(["/cliente/mi-plan"]);
 					} else {
 						this.router.navigate(["/onboarding"]);

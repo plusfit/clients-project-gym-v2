@@ -110,7 +110,7 @@ export class AuthService {
 
 	updateOnboardingCompleted(userId: string): Observable<User> {
 		return this.http
-			.patch<any>(`${environment.apiUrl}/clients/${userId}`, { onboardingCompleted: true })
+			.patch<any>(`${environment.apiUrl}/clients/${userId}`, { isOnboardingCompleted: true })
 			.pipe(map((response) => response.data));
 	}
 
