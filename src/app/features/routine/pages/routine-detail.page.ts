@@ -48,8 +48,14 @@ export class RoutineDetailPage implements OnInit, OnDestroy {
 		});
 
 		this.store.select(AuthState.getUser).pipe(takeUntil(this.destroy$)).subscribe((user: User | null) => {
+			// Si no hay usuario (logout), no intentamos cargar rutinas
+			if (!user) {
+				this.isLoading = false;
+				return;
+			}
+
 			this.isLoading = true;
-			if (user?.routineId) {
+			if (user.routineId) {
 				this.store.dispatch(new LoadRoutineById(user.routineId)).subscribe({
 					error: () => {
 						this.isLoading = false;

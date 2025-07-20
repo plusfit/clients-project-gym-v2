@@ -1,11 +1,11 @@
 <app-header title="Perfil" [showBackButton]="false"></app-header>
 
-@if (loading$ | async) {
-<div class="spinner-container">
-  <ion-spinner></ion-spinner>
-</div>
-} @else { @if (user$ | async; as user) { @if (plan$ | async; as plan) {
 <ion-content [fullscreen]="true">
+  @if (loading$ | async) {
+  <div class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
+  } @else { @if (user$ | async; as user) { @if (plan$ | async; as plan) {
   <div class="profile-container">
     <app-profile-image-name-info [name]="user.userInfo.name" [age]="age || 0"
       [imageUrl]="user.userInfo.avatarUrl || 'https://img.freepik.com/free-vector/businessman-character-avatar-isolated_24877-60111.jpg'"
@@ -19,6 +19,16 @@
     <app-profile-plan-info [planName]="plan.name" [planDays]="plan.days" [planLevel]="plan.experienceLevel">
     </app-profile-plan-info>
   </div>
+  } @else {
+  <div class="no-plan-message">
+    <p>No tienes un plan asignado</p>
+  </div>
+  } } @else {
+  <div class="no-user-message">
+    <p>No se pudo cargar la información del usuario</p>
+  </div>
+  } }
+  
+  <!-- Botón de cerrar sesión siempre disponible -->
   <ion-button expand="full" color="danger" (click)="logout()">Cerrar sesión</ion-button>
 </ion-content>
-} } }

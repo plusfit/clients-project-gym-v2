@@ -8,7 +8,7 @@ import { User } from "@feature/profile/interfaces/user.interface";
 import { IonButton, IonContent, IonSpinner } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
-import { Observable, switchMap } from "rxjs";
+import { Observable, switchMap, tap } from "rxjs";
 import { ProfileImageNameComponent } from "../components/profile-image-name-info/profile-image-name-info.component";
 import { ProfilePersonalInfoComponent } from "../components/profile-personal-info/profile-personal-info.component";
 import { ProfilePlanInfoComponent } from "../components/profile-plan-info/profile-plan-info.component";
@@ -104,8 +104,10 @@ export class ProfilePage implements OnInit {
 	}
 
 	logout(): void {
-		this.store.dispatch(new Logout()).subscribe(() => {
-			this.router.navigate(['/login']);
-		});
+		this.store.dispatch(new Logout()).pipe(
+			tap(() => {
+				this.router.navigate(['/login']);
+			})
+		).subscribe();
 	}
 }

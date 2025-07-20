@@ -79,11 +79,15 @@
   gap: 12px;
   position: relative;
   z-index: 1;
+  width: 100%;
+  padding-right: 80px; /* Espacio para el logo de fondo */
 }
 
 .header-icon {
   font-size: 1.6rem;
   color: white;
+  flex-shrink: 0; /* Evita que el icono se comprima */
+  min-width: 1.6rem; /* Asegura un ancho mínimo */
 }
 
 .card-title {
@@ -94,6 +98,10 @@
   letter-spacing: 1px;
   font-family: "APEXPRO", sans-serif;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  flex: 1; /* Permite que el título use el espacio disponible */
+  word-wrap: break-word; /* Permite que el texto se ajuste */
+  overflow-wrap: break-word; /* Soporte adicional para navegadores */
+  line-height: 1.2; /* Mejora la legibilidad en múltiples líneas */
 }
 
 .card-content {
