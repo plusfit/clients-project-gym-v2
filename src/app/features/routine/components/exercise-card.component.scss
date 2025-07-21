@@ -24,12 +24,6 @@ ion-label {
     opacity: 0.8;
   }
 
-  &:hover {
-    --background: rgba(35, 35, 35, 0.8) !important;
-    transform: translateX(3px);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  }
-
   &:active {
     --background: rgba(var(--ion-color-primary-rgb), 0.15) !important;
     transform: scale(0.98);
