@@ -3,10 +3,9 @@
     <ion-card-header class="routine-header">
       <div class="routine-title-container">
         <h2 class="routine-title">
-          {{ routine.name }}
           <ion-icon name="barbell-outline" class="routine-icon"></ion-icon>
+          {{ routine.name }}
         </h2>
-        <p class="routine-subtitle">{{ routine.description }}</p>
       </div>
     </ion-card-header>
     <ion-card-content class="routine-content">
@@ -16,10 +15,7 @@
       <div class="exercise-list">
         <div class="exercise-list-header">
           <h3 class="exercise-list-title">
-            <ion-icon
-              name="fitness-outline"
-              class="exercise-list-icon"
-            ></ion-icon>
+            <ion-icon name="fitness-outline" class="exercise-list-icon"></ion-icon>
             Ejercicios ({{ routine.exercises.length }})
           </h3>
         </div>
@@ -33,10 +29,7 @@
         <!-- Lista de ejercicios -->
         <div class="exercises-container" *ngIf="!isLoading">
           <div class="exercises-list">
-            <app-exercise-item
-              *ngFor="let exercise of loadedExercises"
-              [exercise]="exercise"
-            >
+            <app-exercise-item *ngFor="let exercise of loadedExercises" [exercise]="exercise">
             </app-exercise-item>
           </div>
 
