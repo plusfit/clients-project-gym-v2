@@ -1,13 +1,13 @@
 import { Injectable } from "@angular/core";
 import { AuthService } from "@feature/auth/services/auth.service";
+import { AuthState } from '@feature/auth/state/auth.state';
 import { Routine, SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { RoutineService } from "@feature/routine/services/routine.service";
 import { ScheduleService } from "@feature/schedule/services/schedule.service";
-import { Schedule } from "@feature/schedule/state/schedule.state";
-import { Observable, forkJoin, of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { Schedule, ScheduleState } from "@feature/schedule/state/schedule.state";
 import { Store } from '@ngxs/store';
-import { AuthState } from '@feature/auth/state/auth.state';
+import { Observable, combineLatest, of } from "rxjs";
+import { catchError, map, switchMap, take } from "rxjs/operators";
 
 @Injectable({
 	providedIn: "root",
@@ -39,7 +39,7 @@ export class HomeService {
 	}
 
 	getUserSchedules(): Observable<Schedule[]> {
-		return this.scheduleService.getSchedules().pipe(
+		return this.store.select(ScheduleState.getSchedules).pipe(
 			map((schedules) => {
 				const currentUser = this.store.selectSnapshot(AuthState.getUser);
 				return currentUser ? schedules.filter((schedule) => schedule.clients?.includes(currentUser._id)) : [];
@@ -66,10 +66,11 @@ export class HomeService {
 		const dayNames = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 		const todayName = dayNames[currentDayOfWeek];
 
-		return forkJoin({
+		return combineLatest({
 			routine: this.getUserRoutine(),
 			schedules: this.getUserSchedules(),
 		}).pipe(
+			take(1), // Tomar solo el primer valor para que se complete
 			map(({ routine, schedules }) => {
 				if (!routine || !schedules.length) {
 					return null;
@@ -81,10 +82,10 @@ export class HomeService {
 					return dayA - dayB;
 				});
 
-				const todaySchedule = schedules.find((s) => s.day === todayName);
+				const todaySchedule = schedules.find((s: Schedule) => s.day === todayName);
 
 				if (todaySchedule) {
-					const userDayIndex = sortedSchedules.findIndex((s) => s.day === todayName);
+					const userDayIndex = sortedSchedules.findIndex((s: Schedule) => s.day === todayName);
 
 					const subRoutineIndex = userDayIndex % routine.subRoutines.length;
 					return routine.subRoutines[subRoutineIndex];
