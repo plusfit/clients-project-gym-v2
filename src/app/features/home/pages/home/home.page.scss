@@ -308,12 +308,6 @@ ion-content {
   margin-bottom: 12px;
   border-radius: 10px;
   border-left: 3px solid var(--ion-color-primary);
-  transition: transform 0.2s ease-in-out;
-
-  &:active {
-    transform: translateX(5px);
-    background: rgba(var(--ion-color-primary-rgb), 0.1);
-  }
 
   .class-time {
     display: flex;
