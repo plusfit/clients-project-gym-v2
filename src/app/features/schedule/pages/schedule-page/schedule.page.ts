@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { Plan } from "@feature/profile/interfaces/plan.interface";
-import { LoadPlan } from "@feature/profile/state/user.actions";
+import { LoadPlanByUser } from "@feature/profile/state/user.actions";
 import { UserState } from "@feature/profile/state/user.state";
 import { DaySelectorComponent } from "@feature/schedule/components/day-selector/day-selector.component";
 import { EnrollConfirmationModalComponent } from "@feature/schedule/components/enroll-confirmation-modal/enroll-confirmation-modal.component";
@@ -46,13 +46,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	schedules$: Observable<Schedule[]>;
 	loading = true;
-	error: string | null = null;
 
 	selectedDay = "Lunes";
 	schedulesForDay: Schedule[] = [];
 	currentUserId = "";
 	userPlan = { days: 2 };
-	enrolledDaysCount = 0;
 	totalEnrollments = 0;
 	enrollmentsByDay: DayEnrollment[] = [];
 
@@ -75,19 +73,20 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.schedules$ = this.scheduleFacade.schedules$;
 	}
 
-	ngOnInit(): void {
-		// Load schedules from backend
+	ionViewWillEnter(): void {
 		this.loading = true;
 		this.scheduleFacade.loadSchedules();
+		const user = this.store.selectSnapshot(AuthState.getUser);
+		if (user) {
+			this.store.dispatch(new LoadPlanByUser(user._id));
+		}
+	}
 
+	ngOnInit(): void {
 		// Get current user ID and load plan
 		const userSub = this.store.select(AuthState.getUser).subscribe((user) => {
 			if (user) {
 				this.currentUserId = user._id;
-
-				if (user.planId) {
-					this.store.dispatch(new LoadPlan(user.planId));
-				}
 			}
 		});
 		this.subscriptions.add(userSub);
@@ -143,9 +142,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	calculateEnrollments(schedules: Schedule[]) {
-		// Contar los días distintos (para mantener compatibilidad)
-		const enrolledDays = new Set<string>();
-
 		// Contar total de horarios en los que está inscripto
 		let totalCount = 0;
 
@@ -153,14 +149,12 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (this.currentUserId) {
 			for (const schedule of schedules) {
 				if (schedule.clients?.includes(this.currentUserId)) {
-					enrolledDays.add(schedule.day);
 					totalCount++;
 				}
 			}
 		}
 
 		// Actualizar contadores
-		this.enrolledDaysCount = enrolledDays.size;
 		this.totalEnrollments = totalCount;
 
 		// Calcular horarios disponibles
@@ -295,8 +289,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al inscribirse: ${error.message}`;
-
 						// Show error toast
 						this.toastService.showError(`No se pudo completar la inscripción: ${error.message || "Error desconocido"}`);
 
@@ -333,8 +325,6 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al desinscribirse: ${error.message}`;
-
 						// Show error toast
 						this.toastService.showError(
 							`No se pudo completar la desinscripción: ${error.message || "Error desconocido"}`,
