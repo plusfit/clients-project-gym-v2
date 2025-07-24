@@ -6,7 +6,7 @@ import { of } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { Plan } from "../interfaces/plan.interface";
 import { UserService } from "../services/user.service";
-import { LoadPlan, LoadUser } from "./user.actions";
+import { LoadPlan, LoadPlanByUser, LoadUser } from "./user.actions";
 
 export interface UserStateModel {
 	user: User | null;
@@ -70,6 +70,22 @@ export class UserState {
 		ctx.patchState({ loadingPlan: true, error: null });
 
 		return this.userService.getPlanById(action.planId).pipe(
+			tap((plan) => ctx.patchState({ plan, loadingPlan: false })),
+			catchError((error) => {
+				ctx.patchState({
+					loadingPlan: false,
+					error: error.message || "Error al cargar el plan",
+				});
+				return of(null);
+			}),
+		);
+	}
+
+	@Action(LoadPlanByUser, { cancelUncompleted: true })
+	getPlanByUser(ctx: StateContext<UserStateModel>, action: LoadPlanByUser) {
+		ctx.patchState({ loadingPlan: true, error: null });
+
+		return this.userService.getPlanByUserId(action.userId).pipe(
 			tap((plan) => ctx.patchState({ plan, loadingPlan: false })),
 			catchError((error) => {
 				ctx.patchState({

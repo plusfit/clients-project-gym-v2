@@ -39,4 +39,18 @@ export class UserService {
 			}),
 		);
 	}
+
+	getPlanByUserId(userId: string): Observable<Plan | null> {
+		return this.http.get<any>(`${environment.apiUrl}/plans/user/${userId}`).pipe(
+			map((response) => {
+				if (response.success) {
+					return response.data;
+				}
+				return null;
+			}),
+			catchError((error) => {
+				return of(null);
+			}),
+		);
+	}
 }

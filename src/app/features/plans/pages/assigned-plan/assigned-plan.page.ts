@@ -15,8 +15,6 @@ import {
   IonCardTitle,
   IonContent,
   IonIcon,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { AppHeaderComponent } from '@shared/components/app-header/app-header.component';
@@ -75,7 +73,7 @@ import { Plan } from '../../interfaces/plan.interface';
   templateUrl: './assigned-plan.page.html',
   styleUrls: ['./assigned-plan.page.scss'],
 })
-export class AssignedPlanPage implements OnInit, OnDestroy {
+export class AssignedPlanPage implements OnDestroy {
   plan$!: Observable<Plan | null>;
   @Select(UserState.isLoading) loading$!: Observable<boolean>;
 
@@ -119,7 +117,7 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
     });
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     const loading = await this.loadingCtrl.create({
       message: 'Cargando tu plan...',
       spinner: 'circles',
