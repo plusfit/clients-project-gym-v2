@@ -7,6 +7,12 @@ interface DayEnrollment {
 	count: number;
 }
 
+interface DayStatus {
+	day: string;
+	disabled: boolean;
+	hasSchedules: boolean;
+}
+
 @Component({
 	selector: "app-day-selector",
 	templateUrl: "./day-selector.component.html",
@@ -16,6 +22,7 @@ interface DayEnrollment {
 })
 export class DaySelectorComponent {
 	@Input() enrollmentsByDay: DayEnrollment[] = [];
+	@Input() dayStatuses: DayStatus[] = [];
 	@Output() daySelected = new EventEmitter<string>();
 
 	days: string[] = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
@@ -23,12 +30,24 @@ export class DaySelectorComponent {
 	selectedDay = "Lunes";
 
 	selectDay(day: string) {
-		this.selectedDay = day;
-		this.daySelected.emit(day);
+		// Solo permitir seleccionar días que tienen horarios habilitados
+		if (this.isDayEnabled(day)) {
+			this.selectedDay = day;
+			this.daySelected.emit(day);
+		}
 	}
 
 	getEnrollmentCount(day: string): number {
 		const enrollment = this.enrollmentsByDay.find((e) => e.day === day);
 		return enrollment ? enrollment.count : 0;
+	}
+
+	isDayEnabled(day: string): boolean {
+		const dayStatus = this.dayStatuses.find((status) => status.day === day);
+		return dayStatus ? !dayStatus.disabled && dayStatus.hasSchedules : true;
+	}
+
+	isDayDisabled(day: string): boolean {
+		return !this.isDayEnabled(day);
 	}
 }

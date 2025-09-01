@@ -30,6 +30,9 @@
 }
 button {
   flex: 0 0 auto;
+  position: relative;
+  min-width: 100px;
+  max-width: 130px;
   padding: 10px 20px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 8px;
@@ -78,6 +81,37 @@ button.selected {
   --padding-start: 6px;
   --padding-end: 6px;
   --background: var(--ion-color-secondary);
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para días deshabilitados */
+button.disabled {
+  background: rgba(120, 120, 120, 0.3);
+  color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(120, 120, 120, 0.5);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button.disabled:hover {
+  background: rgba(120, 120, 120, 0.3);
+  border-color: rgba(120, 120, 120, 0.5);
+  transform: none;
+  box-shadow: none;
+}
+
+.disabled-badge {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  --padding-top: 2px;
+  --padding-bottom: 2px;
+  --padding-start: 4px;
+  --padding-end: 4px;
+  --background: var(--ion-color-danger);
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

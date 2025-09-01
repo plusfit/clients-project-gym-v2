@@ -12,6 +12,7 @@ export interface Schedule {
 	maxCount: number;
 	clients: string[];
 	day: string;
+	disabled?: boolean; // Campo para controlar si el horario está deshabilitado
 }
 
 /**
@@ -46,10 +47,22 @@ export class ScheduleCardComponent {
 	}
 
 	/**
+	 * Determina si el horario está deshabilitado
+	 */
+	get isDisabled(): boolean {
+		return this.schedule.disabled === true;
+	}
+
+	/**
 	 * Manejador de click en el horario
-	 * Solo permite hacer clic si no está lleno o si el usuario ya está inscripto
+	 * Solo permite hacer clic si no está lleno o si el usuario ya está inscripto, y el horario está habilitado
 	 */
 	handleClick(): void {
+
+		if (this.isDisabled) {
+			return;
+		}
+		
 		if (!this.isFull || this.isEnrolled) {
 			this.scheduleClicked.emit(this.schedule);
 		}

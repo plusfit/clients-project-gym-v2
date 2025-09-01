@@ -175,6 +175,78 @@ ion-modal {
   color: var(--ion-color-medium);
 }
 
+.disabled-day-icon {
+  font-size: 3rem;
+  color: var(--ion-color-warning);
+  margin-bottom: 1rem;
+}
+
+.disabled-day-subtitle {
+  font-size: 0.9rem;
+  color: var(--ion-color-medium);
+  margin-top: 0.5rem;
+}
+
+.disabled-day-banner {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(var(--ion-color-warning-rgb), 0.15), rgba(var(--ion-color-warning-rgb), 0.25));
+  border: 1px solid rgba(var(--ion-color-warning-rgb), 0.4);
+  border-radius: 12px;
+  padding: 16px;
+  margin: 16px 0;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(var(--ion-color-warning-rgb), 0.2);
+  animation: slideInFromTop 0.4s ease-out;
+
+  .warning-icon {
+    font-size: 2.5rem;
+    color: var(--ion-color-warning);
+    margin-right: 16px;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+  }
+
+  .warning-content {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 8px 0;
+      color: var(--ion-color-warning);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0;
+      color: var(--ion-text-color);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      opacity: 0.8;
+    }
+  }
+}
+
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
 .available-slots {
   font-size: 0.85em;
   color: var(--ion-color-primary);
@@ -205,6 +277,26 @@ ion-modal {
     gap: 4px;
     padding-right: 2px;
     padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
+  }
+
+  .disabled-day-banner {
+    margin: 12px 0;
+    padding: 12px;
+
+    .warning-icon {
+      font-size: 2rem;
+      margin-right: 12px;
+    }
+
+    .warning-content {
+      h3 {
+        font-size: 1.1rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
   }
   .loading-container,
   .empty-state {

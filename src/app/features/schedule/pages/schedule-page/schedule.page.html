@@ -4,7 +4,7 @@
   <ion-grid class="main-grid">
     <ion-row>
       <ion-col size="12" class="selector-col">
-        <app-day-selector [enrollmentsByDay]="enrollmentsByDay"
+        <app-day-selector [enrollmentsByDay]="enrollmentsByDay" [dayStatuses]="dayStatuses"
           (daySelected)="onDaySelected($event)"></app-day-selector>
       </ion-col>
     </ion-row>
@@ -13,6 +13,15 @@
         <h2 class="schedule-title">Horarios Disponibles <br><span class="available-slots">({{availableSlots}}
             restante{{availableSlots !== 1 ? 's' :
             ''}})</span></h2>
+
+        <!-- Aviso de día deshabilitado -->
+        <div *ngIf="isDayCompletelyDisabled() && !loading" class="disabled-day-banner">
+          <ion-icon name="warning-outline" class="warning-icon"></ion-icon>
+          <div class="warning-content">
+            <h3>{{ selectedDay }} no está disponible</h3>
+            <p>{{ getDisabledDayReason() }} Por favor, selecciona otro día.</p>
+          </div>
+        </div>
 
         <!-- Loading spinner -->
         <div *ngIf="loading" class="loading-container">
@@ -28,7 +37,14 @@
 
             <!-- Empty state -->
             <div *ngIf="schedulesForDay.length === 0" class="empty-state">
-              <p>No hay horarios disponibles para este día.</p>
+              <ng-container *ngIf="isDayCompletelyDisabled(); else noSchedulesTemplate">
+                <ion-icon name="ban-outline" class="disabled-day-icon"></ion-icon>
+                <p>Este día no está disponible para agendamiento.</p>
+                <p class="disabled-day-subtitle">Por favor, selecciona otro día.</p>
+              </ng-container>
+              <ng-template #noSchedulesTemplate>
+                <p>No hay horarios disponibles para este día.</p>
+              </ng-template>
             </div>
           </div>
         </div>

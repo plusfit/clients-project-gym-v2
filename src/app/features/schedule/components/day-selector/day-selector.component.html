@@ -2,11 +2,16 @@
   <button
     *ngFor="let day of days"
     [class.selected]="day === selectedDay"
+    [class.disabled]="isDayDisabled(day)"
+    [disabled]="isDayDisabled(day)"
     (click)="selectDay(day)"
   >
     <span class="label">{{ day }}</span>
     <ion-badge *ngIf="getEnrollmentCount(day) > 0" class="enrollment-badge">
       {{ getEnrollmentCount(day) }}
+    </ion-badge>
+    <ion-badge *ngIf="isDayDisabled(day)" class="disabled-badge" color="danger">
+      Deshabilitado
     </ion-badge>
   </button>
 </div>
