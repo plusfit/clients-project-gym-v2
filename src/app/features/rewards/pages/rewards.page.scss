@@ -1,0 +1,232 @@
+.rewards-content {
+  --background: var(--ion-color-light-tint);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  gap: 16px;
+
+  ion-spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  padding: 32px;
+  text-align: center;
+  gap: 16px;
+
+  ion-icon {
+    font-size: 64px;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+.points-header {
+  padding: 16px;
+  background: linear-gradient(135deg, var(--ion-color-primary) 0%, var(--ion-color-primary-shade) 100%);
+  margin-bottom: 16px;
+}
+
+.points-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.points-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  ion-icon {
+    font-size: 32px;
+  }
+}
+
+.points-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .points-label {
+    font-size: 14px;
+    color: var(--ion-color-medium);
+    font-weight: 500;
+  }
+
+  .points-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ion-color-dark);
+  }
+}
+
+.filters-section {
+  padding: 0 16px 16px;
+}
+
+.search-container {
+  margin-bottom: 12px;
+
+  ion-searchbar {
+    --background: var(--ion-color-light);
+    --border-radius: 12px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.filter-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  ion-chip {
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.rewards-container {
+  padding: 0 8px 80px; // Extra padding for FAB
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  text-align: center;
+  gap: 16px;
+
+  ion-icon {
+    font-size: 80px;
+    opacity: 0.5;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 8px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 4px;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+// FAB styling
+ion-fab-button {
+  --background: var(--ion-color-primary);
+  --color: var(--ion-color-primary-contrast);
+  --box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    --background: var(--ion-color-primary-shade);
+  }
+}
+
+// Context7 integration styles
+.context7-container {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  
+  @media (max-width: 768px) {
+    right: 12px;
+    bottom: 70px;
+  }
+}
+
+// Animation classes
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
