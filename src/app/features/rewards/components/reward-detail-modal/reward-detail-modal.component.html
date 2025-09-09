@@ -1,0 +1,159 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalles del Premio</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="reward-detail-content">
+  <div class="reward-header">
+    <!-- Reward Image -->
+    <div class="image-container" *ngIf="hasImage">
+      <ion-img 
+        [src]="reward.imageUrl" 
+        [alt]="reward.name"
+        (ionError)="onImageError($event)"
+        class="reward-image">
+      </ion-img>
+    </div>
+    
+    <!-- Default Icon if no image -->
+    <div class="icon-container" *ngIf="!hasImage">
+      <ion-icon name="gift-outline" class="reward-icon"></ion-icon>
+    </div>
+
+    <!-- Status Badge -->
+    <div class="status-badge" [class]="status">
+      <ion-icon [name]="statusInfo.icon"></ion-icon>
+      <span>{{ statusInfo.text }}</span>
+    </div>
+  </div>
+
+  <div class="reward-content">
+    <!-- Reward Title -->
+    <h1 class="reward-title">{{ reward.name }}</h1>
+    
+    <!-- Reward Description -->
+    <ion-text class="reward-description" *ngIf="reward.description">
+      <p>{{ reward.description }}</p>
+    </ion-text>
+
+    <!-- Points Section -->
+    <div class="points-section">
+      <div class="points-required">
+        <ion-icon name="star-outline" class="points-icon"></ion-icon>
+        <div class="points-info">
+          <span class="points-label">Puntos requeridos</span>
+          <span class="points-value">{{ reward.pointsRequired }}</span>
+        </div>
+      </div>
+
+      <div class="user-points">
+        <div class="points-comparison">
+          <span class="user-points-text">Tus puntos: {{ userPoints }}</span>
+          <span class="points-difference" *ngIf="status === 'locked'" [style.color]="'var(--ion-color-danger)'">
+            Faltan: {{ pointsNeeded }}
+          </span>
+          <span class="points-difference" *ngIf="status === 'available'" [style.color]="'var(--ion-color-success)'">
+            ¡Tienes suficientes puntos!
+          </span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" *ngIf="status !== 'exchanged'">
+          <ion-text class="progress-label">
+            <small>Progreso hacia este premio</small>
+          </ion-text>
+          <div class="progress-bar-container">
+            <div 
+              class="progress-bar" 
+              [style.width.%]="progressPercentage"
+              [class.complete]="status === 'available'">
+            </div>
+          </div>
+          <div class="progress-text">
+            <span>{{ progressPercentage | number:'1.0-1' }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exchange Stats -->
+    <div class="exchange-stats" *ngIf="reward.totalExchanges > 0">
+      <ion-text color="medium">
+        <div class="stats-item">
+          <ion-icon name="trophy-outline"></ion-icon>
+          <span>Canjeado {{ reward.totalExchanges }} veces</span>
+        </div>
+      </ion-text>
+    </div>
+
+    <!-- Exchange Information -->
+    <div class="exchange-info" [ngSwitch]="status">
+      <!-- Available -->
+      <div *ngSwitchCase="'available'" class="info-card available">
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        <div class="info-text">
+          <h3>¡Listo para canjear!</h3>
+          <p>Tienes suficientes puntos para obtener este premio.</p>
+        </div>
+      </div>
+
+      <!-- Exchanged -->
+      <div *ngSwitchCase="'exchanged'" class="info-card exchanged">
+        <ion-icon name="trophy-outline"></ion-icon>
+        <div class="info-text">
+          <h3>Premio canjeado</h3>
+          <p>Ya has obtenido este premio anteriormente.</p>
+        </div>
+      </div>
+
+      <!-- Locked -->
+      <div *ngSwitchCase="'locked'" class="info-card locked">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <div class="info-text">
+          <h3>Sigue entrenando</h3>
+          <p>Necesitas {{ pointsNeeded }} puntos más para desbloquear este premio.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="action-section">
+      <ion-button 
+        expand="block"
+        size="large"
+        [disabled]="status !== 'available'"
+        [color]="status === 'available' ? 'success' : 'medium'"
+        (click)="onExchange()"
+        class="action-button">
+        
+        <ion-icon 
+          [name]="status === 'available' ? 'gift-outline' : statusInfo.icon" 
+          slot="start">
+        </ion-icon>
+        
+        <span *ngIf="status === 'available'">Canjear Premio</span>
+        <span *ngIf="status === 'exchanged'">Ya Canjeado</span>
+        <span *ngIf="status === 'locked'">Puntos Insuficientes</span>
+      </ion-button>
+    </div>
+
+    <!-- Close Button -->
+    <div class="close-section">
+      <ion-button 
+        expand="block"
+        fill="clear"
+        size="large"
+        (click)="dismiss()"
+        class="close-button">
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        <span>Cerrar</span>
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

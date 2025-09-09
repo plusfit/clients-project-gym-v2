@@ -1,0 +1,76 @@
+<div class="timeline-container" *ngIf="rewardStates.length > 0; else emptyState">
+  <!-- User Points Display -->
+  <div class="points-header">
+    <div class="points-info">
+      <ion-icon name="star-outline" color="warning"></ion-icon>
+      <div class="points-text">
+        <span class="points-label">Tus puntos</span>
+        <span class="points-value">{{ userPoints }} / {{ maxPoints }}</span>
+      </div>
+    </div>
+    <div class="progress-text">
+      <span>{{ progressPercentage | number:'1.0-1' }}% completado</span>
+    </div>
+  </div>
+
+  <!-- Timeline Progress Bar -->
+  <div class="timeline-track">
+    <!-- Background Progress Bar -->
+    <div class="progress-bar-container">
+      <div 
+        class="main-progress-bar"
+        [style.height.%]="progressPercentage">
+      </div>
+    </div>
+    
+    <!-- Rewards Positioned on Timeline -->
+    <div class="rewards-track">
+      <div 
+        *ngFor="let rewardState of rewardStates; trackBy: trackByRewardId"
+        class="reward-checkpoint"
+        [class.available]="rewardState.status === 'available'"
+        [class.exchanged]="rewardState.status === 'exchanged'"
+        [class.locked]="rewardState.status === 'locked'"
+        [style.top.%]="rewardState.position"
+        (click)="onRewardClick(rewardState, $event)">
+        
+        <!-- Reward Badge -->
+        <div class="reward-badge">
+          <div class="reward-icon-container">
+            <ion-icon 
+              [name]="getRewardIcon(rewardState.status)"
+              class="reward-icon">
+            </ion-icon>
+          </div>
+          
+          <!-- Reward Image (if available) -->
+          <div class="reward-image" *ngIf="rewardState.reward.imageUrl">
+            <img 
+              [src]="rewardState.reward.imageUrl" 
+              [alt]="rewardState.reward.name"
+              (error)="onImageError($event)">
+          </div>
+        </div>
+       <!-- Checkpoint Line -->
+        <div class="checkpoint-line"></div>
+      </div>
+    </div>
+
+    <!-- Points Scale -->
+    <div class="points-scale">
+      <div class="scale-item scale-start">0 pts</div>
+      <div class="scale-item scale-end">{{ maxPoints }} pts</div>
+    </div>
+  </div>
+</div>
+
+<!-- Empty State -->
+<ng-template #emptyState>
+  <div class="empty-timeline">
+    <ion-icon name="gift-outline" color="medium"></ion-icon>
+    <ion-text color="medium">
+      <h3>No hay premios disponibles</h3>
+      <p>Vuelve más tarde para ver nuevos premios</p>
+    </ion-text>
+  </div>
+</ng-template>

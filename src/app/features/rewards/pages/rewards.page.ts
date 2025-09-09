@@ -4,15 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
     IonButton,
-    IonChip,
     IonContent,
-    IonFab,
-    IonFabButton,
     IonIcon,
-    IonLabel,
-    IonSearchbar,
     IonSpinner,
-    IonText
+    IonText,
+    ModalController
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { AppHeaderComponent } from '@shared/components/app-header/app-header.component';
@@ -31,8 +27,11 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { User } from '../../auth/interfaces/user.interface';
 import { AuthState } from '../../auth/state/auth.state';
-import { RewardCardComponent } from '../components/reward-card/reward-card.component';
+import { RewardDetailData, RewardDetailModalComponent } from '../components/reward-detail-modal/reward-detail-modal.component';
+import { RewardsTimelineComponent } from '../components/rewards-timeline/rewards-timeline.component';
+import { Exchange } from '../interfaces/exchange.interface';
 import { Reward } from '../interfaces/reward.interface';
+import { RewardsService } from '../services/rewards.service';
 import { ExchangeReward, LoadRewards } from '../state/rewards.actions';
 import { RewardsState } from '../state/rewards.state';
 
@@ -43,17 +42,12 @@ import { RewardsState } from '../state/rewards.state';
     CommonModule,
     FormsModule,
     AppHeaderComponent,
-    RewardCardComponent,
+    RewardsTimelineComponent,
     IonContent,
     IonSpinner,
     IonText,
     IonIcon,
-    IonButton,
-    IonSearchbar,
-    IonChip,
-    IonLabel,
-    IonFab,
-    IonFabButton
+    IonButton
   ],
   templateUrl: './rewards.page.html',
   styleUrls: ['./rewards.page.scss']
@@ -66,12 +60,16 @@ export class RewardsPage implements OnInit, OnDestroy {
 
   rewards: Reward[] = [];
   filteredRewards: Reward[] = [];
+  exchanges: Exchange[] = [];
   isLoading = false;
   error: string | null = null;
   userPoints = 0;
   exchangingRewardId: string | null = null;
   
-  // Filters
+  // View mode
+  viewMode: 'timeline' | 'grid' = 'timeline';
+  
+  // Filters (for grid view)
   searchTerm = '';
   showOnlyAvailable = false;
   showOnlyAffordable = false;
@@ -81,7 +79,9 @@ export class RewardsPage implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private rewardsService: RewardsService,
+    private modalController: ModalController
   ) {
     addIcons({
       star,
@@ -121,18 +121,35 @@ export class RewardsPage implements OnInit, OnDestroy {
       this.error = error;
     });
 
-    // Subscribe to user data to get points
+    // Subscribe to user data to get points and load exchanges
     this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       if (user) {
-        // Assuming user has a points field, adjust according to your User interface
-        this.userPoints = (user as User & { points?: number }).points || 0;
+        // Get user points from availablePoints field
+        this.userPoints = (user as User & { availablePoints?: number }).availablePoints || 0;
         this.applyFilters();
+        
+        // Load user exchanges
+        this.loadUserExchanges(user._id);
       }
     });
   }
 
   loadRewards() {
     this.store.dispatch(new LoadRewards());
+  }
+
+  private loadUserExchanges(userId: string) {
+    this.rewardsService.getClientExchanges(userId).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (exchanges) => {
+        this.exchanges = Array.isArray(exchanges) ? exchanges : [];
+      },
+      error: (error) => {
+        console.error('Error loading user exchanges:', error);
+        this.exchanges = []; // Fallback to empty array on error
+      }
+    });
   }
 
   onSearchChange() {
@@ -240,6 +257,54 @@ export class RewardsPage implements OnInit, OnDestroy {
       );
       resolve(confirmed);
     });
+  }
+
+  async onTimelineRewardClick(reward: Reward) {
+    const user = this.store.selectSnapshot(AuthState.getUser);
+    if (!user) return;
+
+    // Determine reward status - with defensive guard
+    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange => 
+      exchange.rewardId === reward._id && exchange.status === 'completed'
+    );
+    
+    let status: 'available' | 'exchanged' | 'locked';
+    if (isExchanged) {
+      status = 'exchanged';
+    } else if (this.userPoints >= reward.pointsRequired) {
+      status = 'available';
+    } else {
+      status = 'locked';
+    }
+
+    // Open modal with reward details
+    const modal = await this.modalController.create({
+      component: RewardDetailModalComponent,
+      componentProps: {
+        data: {
+          reward,
+          userPoints: this.userPoints,
+          status
+        } as RewardDetailData
+      },
+      cssClass: 'reward-detail-modal',
+      backdropDismiss: true,
+      showBackdrop: true,
+      mode: 'md',
+      presentingElement: undefined // Ensures modal is at root level
+    });
+
+    await modal.present();
+
+    // Handle modal result
+    const { data } = await modal.onWillDismiss();
+    if (data?.action === 'exchange' && data?.reward) {
+      await this.onExchangeReward(data.reward);
+    }
+  }
+
+  toggleViewMode() {
+    this.viewMode = this.viewMode === 'timeline' ? 'grid' : 'timeline';
   }
 
   trackByRewardId(index: number, reward: Reward): string {

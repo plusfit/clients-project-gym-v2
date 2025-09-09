@@ -21,87 +21,31 @@
     </ion-button>
   </div>
 
-  <!-- User Points Display -->
-  <div class="points-header" *ngIf="!isLoading && !error">
-    <div class="points-card">
-      <div class="points-content">
-        <ion-icon name="star" color="warning"></ion-icon>
-        <div class="points-info">
-          <span class="points-label">Tus puntos</span>
-          <span class="points-value">{{ userPoints }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Search and Filters -->
-  <div class="filters-section" *ngIf="!isLoading && !error && rewards.length > 0">
-    <div class="search-container">
-      <ion-searchbar
-        [(ngModel)]="searchTerm"
-        (ionInput)="onSearchChange()"
-        placeholder="Buscar premios..."
-        debounce="500"
-        show-clear-button="focus">
-      </ion-searchbar>
-    </div>
-    
-    <div class="filter-chips">
-      <ion-chip 
-        [color]="showOnlyAvailable ? 'primary' : 'medium'"
-        (click)="toggleAvailableFilter()">
-        <ion-icon name="checkmark-circle-outline" *ngIf="showOnlyAvailable"></ion-icon>
-        <ion-label>Solo disponibles</ion-label>
-      </ion-chip>
-      
-      <ion-chip 
-        [color]="showOnlyAffordable ? 'success' : 'medium'"
-        (click)="toggleAffordableFilter()">
-        <ion-icon name="star-outline" *ngIf="showOnlyAffordable"></ion-icon>
-        <ion-label>Puedo canjear</ion-label>
-      </ion-chip>
-    </div>
-  </div>
-
-  <!-- Rewards Grid -->
-  <div class="rewards-container" *ngIf="!isLoading && !error">
-    <!-- No rewards message -->
-    <div class="empty-state" *ngIf="filteredRewards.length === 0 && rewards.length === 0">
-      <ion-icon name="gift-outline" color="medium"></ion-icon>
-      <ion-text color="medium">
-        <h3>No hay premios disponibles</h3>
-        <p>Vuelve más tarde para ver nuevos premios</p>
-      </ion-text>
-    </div>
-
-    <!-- No filtered results message -->
-    <div class="empty-state" *ngIf="filteredRewards.length === 0 && rewards.length > 0">
-      <ion-icon name="search-outline" color="medium"></ion-icon>
-      <ion-text color="medium">
-        <h3>No se encontraron premios</h3>
-        <p>Intenta con otros filtros de búsqueda</p>
-      </ion-text>
-      <ion-button fill="outline" color="primary" (click)="clearFilters()">
-        Limpiar filtros
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !error">
+    <!-- View Toggle (Optional for future use) -->
+    <!-- <div class="view-toggle">
+      <ion-button 
+        fill="clear" 
+        [color]="viewMode === 'timeline' ? 'primary' : 'medium'"
+        (click)="toggleViewMode()">
+        Timeline
       </ion-button>
-    </div>
+      <ion-button 
+        fill="clear" 
+        [color]="viewMode === 'grid' ? 'primary' : 'medium'"
+        (click)="toggleViewMode()">
+        Grid
+      </ion-button>
+    </div> -->
 
-    <!-- Rewards Grid -->
-    <div class="rewards-grid" *ngIf="filteredRewards.length > 0">
-      <app-reward-card
-        *ngFor="let reward of filteredRewards; trackBy: trackByRewardId"
-        [reward]="reward"
-        [userPoints]="userPoints"
-        [isExchanging]="exchangingRewardId === reward._id"
-        (exchange)="onExchangeReward($event)">
-      </app-reward-card>
-    </div>
+    <!-- Timeline View -->
+    <app-rewards-timeline
+      [rewards]="rewards"
+      [userPoints]="userPoints"
+      [exchanges]="exchanges"
+      (rewardClick)="onTimelineRewardClick($event)">
+    </app-rewards-timeline>
   </div>
 
-  <!-- Refresh Button -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!isLoading">
-    <ion-fab-button color="primary" (click)="loadRewards()">
-      <ion-icon name="refresh-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

@@ -4,6 +4,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Modal z-index fixes for rewards modal */
+ion-modal.reward-detail-modal {
+  z-index: 20000 !important;
+  
+  ion-backdrop {
+    z-index: 19999 !important;
+  }
+  
+  .modal-wrapper {
+    z-index: 20001 !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
+
 
 /*
  * App Global CSS

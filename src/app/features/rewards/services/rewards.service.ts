@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { Exchange } from '../interfaces/exchange.interface';
 import { Reward, RewardResponse } from '../interfaces/reward.interface';
 
 @Injectable({
@@ -88,10 +89,28 @@ export class RewardsService {
   }
 
   /**
+   * Obtiene los exchanges/canjes de un cliente específico
+   */
+  getClientExchanges(clientId: string): Observable<Exchange[]> {
+    return this.http.get<{ success: boolean; data: Exchange[] }>(`${this.apiUrl}/rewards/exchanges/client/${clientId}`).pipe(
+      map((response) => {
+        if (response.success && Array.isArray(response.data)) {
+          return response.data;
+        }
+        return [];
+      }),
+      catchError((error) => {
+        console.error('Error al obtener exchanges del cliente:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
    * Intercambia puntos por un reward
    */
-  exchangeReward(rewardId: string, clientId: string): Observable<{ success: boolean; message: string; data?: any }> {
-    return this.http.post<{ success: boolean; message: string; data?: any }>(`${this.apiUrl}/rewards/exchange`, {
+  exchangeReward(rewardId: string, clientId: string): Observable<{ success: boolean; message: string; data?: unknown }> {
+    return this.http.post<{ success: boolean; message: string; data?: unknown }>(`${this.apiUrl}/rewards/exchange`, {
       rewardId,
       clientId
     }).pipe(
