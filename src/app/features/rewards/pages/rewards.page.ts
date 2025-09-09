@@ -225,10 +225,21 @@ export class RewardsPage implements OnInit, OnDestroy {
       return;
     }
 
-    this.exchangingRewardId = reward._id;
+    console.log('reward', reward);
+
+    // Validate reward ID before proceeding
+    if (!reward.id || reward.id.trim() === '') {
+      await this.toastService.showToast(
+        'Error: ID del premio no válido',
+        'error'
+      );
+      return;
+    }
+
+    this.exchangingRewardId = reward.id;
 
     try {
-      await this.store.dispatch(new ExchangeReward(reward._id, user._id)).toPromise();
+      await this.store.dispatch(new ExchangeReward(reward.id, user._id)).toPromise();
       
       await this.toastService.showToast(
         `¡Premio "${reward.name}" canjeado exitosamente!`,
@@ -264,8 +275,8 @@ export class RewardsPage implements OnInit, OnDestroy {
     if (!user) return;
 
     // Determine reward status - with defensive guard
-    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange => 
-      exchange.rewardId === reward._id && exchange.status === 'completed'
+    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange =>
+      exchange.rewardId === reward.id && exchange.status === 'completed'
     );
     
     let status: 'available' | 'exchanged' | 'locked';
@@ -308,6 +319,6 @@ export class RewardsPage implements OnInit, OnDestroy {
   }
 
   trackByRewardId(index: number, reward: Reward): string {
-    return reward._id;
+    return reward.id;
   }
 }

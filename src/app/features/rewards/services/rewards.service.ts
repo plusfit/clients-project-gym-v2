@@ -18,7 +18,7 @@ export class RewardsService {
    * Obtiene todos los rewards disponibles
    */
   getAllRewards(): Observable<Reward[]> {
-    return this.http.get<RewardResponse>(`${this.apiUrl}/rewards`).pipe(
+    return this.http.get<RewardResponse>(`${this.apiUrl}/rewards/catalog`).pipe(
       map((response) => {
         if (response.success && response.data.success) {
           return response.data.data;
@@ -110,10 +110,21 @@ export class RewardsService {
    * Intercambia puntos por un reward
    */
   exchangeReward(rewardId: string, clientId: string): Observable<{ success: boolean; message: string; data?: unknown }> {
-    return this.http.post<{ success: boolean; message: string; data?: unknown }>(`${this.apiUrl}/rewards/exchange`, {
-      rewardId,
-      clientId
-    }).pipe(
+    // Validate input parameters
+    if (!rewardId || rewardId.trim() === '') {
+      throw new Error('El ID del premio es requerido');
+    }
+
+    if (!clientId || clientId.trim() === '') {
+      throw new Error('El ID del cliente es requerido');
+    }
+
+    const payload = {
+      rewardId: rewardId.trim(),
+      clientId: clientId.trim()
+    };
+
+    return this.http.post<{ success: boolean; message: string; data?: unknown }>(`${this.apiUrl}/rewards/exchange`, payload).pipe(
       catchError((error) => {
         console.error('Error al intercambiar reward:', error);
         throw error;

@@ -101,8 +101,8 @@ export class RewardsTimelineComponent implements OnChanges {
 
   private getRewardStatus(reward: Reward): 'available' | 'exchanged' | 'locked' {
     // Verificar si ya fue canjeado - con guard defensivo
-    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange => 
-      exchange.rewardId === reward._id && exchange.status === 'completed'
+    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange =>
+      exchange.rewardId === reward.id && exchange.status === 'completed'
     );
     
     if (isExchanged) {
@@ -154,6 +154,6 @@ export class RewardsTimelineComponent implements OnChanges {
   }
 
   trackByRewardId(index: number, rewardState: RewardState): string {
-    return rewardState.reward._id;
+    return rewardState.reward.id;
   }
 }

@@ -4,7 +4,7 @@
  */
 export interface Reward {
   /** Unique identifier */
-    _id: string;
+    id: string;
 
   /** Reward name (required, max 100 characters) */
   name: string;

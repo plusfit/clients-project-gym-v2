@@ -5,16 +5,16 @@ import { catchError, tap } from 'rxjs/operators';
 import { Reward, RewardResponse } from '../interfaces/reward.interface';
 import { RewardsService } from '../services/rewards.service';
 import {
-    ClearRewards,
-    ClearSelectedReward,
-    ExchangeReward,
-    LoadRewardById,
-    LoadRewards,
-    LoadRewardsWithFilters,
-    SetError,
-    SetLoading,
-    SetRewards,
-    SetSelectedReward
+  ClearRewards,
+  ClearSelectedReward,
+  ExchangeReward,
+  LoadRewardById,
+  LoadRewards,
+  LoadRewardsWithFilters,
+  SetError,
+  SetLoading,
+  SetRewards,
+  SetSelectedReward
 } from './rewards.actions';
 
 export interface RewardsStateModel {
@@ -152,7 +152,7 @@ export class RewardsState {
   @Action(ExchangeReward)
   exchangeReward(ctx: StateContext<RewardsStateModel>, action: ExchangeReward) {
     ctx.patchState({ loading: true, error: null });
-    
+
     return this.rewardsService.exchangeReward(action.rewardId, action.clientId).pipe(
       tap((result) => {
         ctx.patchState({

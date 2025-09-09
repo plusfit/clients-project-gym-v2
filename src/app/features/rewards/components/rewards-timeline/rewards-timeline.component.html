@@ -26,7 +26,7 @@
     <!-- Rewards Positioned on Timeline -->
     <div class="rewards-track">
       <div 
-        *ngFor="let rewardState of rewardStates; trackBy: trackByRewardId"
+        *ngFor="let rewardState of rewardStates; let i = index; trackBy: trackByRewardId"
         class="reward-checkpoint"
         [class.available]="rewardState.status === 'available'"
         [class.exchanged]="rewardState.status === 'exchanged'"
@@ -51,7 +51,17 @@
               (error)="onImageError($event)">
           </div>
         </div>
-       <!-- Checkpoint Line -->
+
+        <!-- Reward Name Label -->
+        <div class="reward-name-label" 
+             [class]="rewardState.status"
+             [class.left-side]="i % 2 === 0"
+             [class.right-side]="i % 2 !== 0">
+          <span class="reward-name">{{ rewardState.reward.name }}</span>
+          <span class="reward-points">{{ rewardState.reward.pointsRequired }} pts</span>
+        </div>
+
+        <!-- Checkpoint Line -->
         <div class="checkpoint-line"></div>
       </div>
     </div>
