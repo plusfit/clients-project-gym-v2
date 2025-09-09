@@ -155,10 +155,25 @@ export class RewardsState {
 
     return this.rewardsService.exchangeReward(action.rewardId, action.clientId).pipe(
       tap((result) => {
-        ctx.patchState({
-          loading: false
-        });
-        // Optionally update reward exchange count or user points here
+        if (result.success) {
+          // Update the reward's totalExchanges count locally
+          const state = ctx.getState();
+          const updatedRewards = state.rewards.map(reward => 
+            reward.id === action.rewardId 
+              ? { ...reward, totalExchanges: reward.totalExchanges + 1 }
+              : reward
+          );
+          
+          ctx.patchState({
+            rewards: updatedRewards,
+            loading: false
+          });
+        } else {
+          ctx.patchState({
+            loading: false,
+            error: result.message || 'Error al intercambiar el reward'
+          });
+        }
       }),
       catchError((error) => {
         ctx.patchState({

@@ -26,6 +26,7 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { User } from '../../auth/interfaces/user.interface';
+import { GetCurrentUser } from '../../auth/state/auth.actions';
 import { AuthState } from '../../auth/state/auth.state';
 import { RewardDetailData, RewardDetailModalComponent } from '../components/reward-detail-modal/reward-detail-modal.component';
 import { RewardsTimelineComponent } from '../components/rewards-timeline/rewards-timeline.component';
@@ -246,8 +247,11 @@ export class RewardsPage implements OnInit, OnDestroy {
         'success'
       );
 
-      // Reload rewards and user data to reflect changes
+      // Reload rewards, user data and exchanges to reflect changes
       this.loadRewards();
+      this.loadUserExchanges(user._id);
+      // Refresh user data to update available points
+      this.store.dispatch(new GetCurrentUser());
       
     } catch (error: unknown) {
       await this.toastService.showToast(
