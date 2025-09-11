@@ -101,6 +101,30 @@ button.disabled:hover {
   box-shadow: none;
 }
 
+/* Estilos para días con limitaciones pero clicables */
+button.disabled-visual {
+  background: rgba(255, 165, 0, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 165, 0, 0.4);
+  position: relative;
+}
+
+button.disabled-visual:hover {
+  background: rgba(255, 165, 0, 0.25);
+  border-color: rgba(255, 165, 0, 0.6);
+}
+
+button.disabled-visual.selected {
+  background: linear-gradient(
+    135deg,
+    var(--ion-color-warning-shade) 0%,
+    var(--ion-color-warning) 100%
+  );
+  color: var(--ion-color-warning-contrast);
+  border: none;
+  box-shadow: 0 4px 10px rgba(var(--ion-color-warning-rgb), 0.3);
+}
+
 .disabled-badge {
   position: absolute;
   bottom: -8px;
@@ -111,7 +135,7 @@ button.disabled:hover {
   --padding-bottom: 2px;
   --padding-start: 4px;
   --padding-end: 4px;
-  --background: var(--ion-color-danger);
+  --background: var(--ion-color-warning);
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

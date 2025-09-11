@@ -237,8 +237,8 @@ ion-card-content {
 
 /* Estilos para horarios deshabilitados */
 ion-card.schedule-disabled {
-  opacity: 0.5;
-  pointer-events: none;
+  opacity: 0.8;
+  /* Permitir interacción */
   background: rgba(80, 80, 80, 0.3);
   border: 1px dashed rgba(255, 165, 0, 0.5);
   position: relative;
@@ -280,7 +280,7 @@ ion-card.schedule-disabled {
 
 .disabled-message {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   background-color: rgba(var(--ion-color-warning-rgb), 0.15);
   padding: 8px 12px;
   border-radius: 8px;
@@ -291,4 +291,25 @@ ion-card.schedule-disabled {
   color: var(--ion-color-warning);
   font-size: 1.3rem;
   margin-right: 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.disabled-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.disabled-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.disabled-reason {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-style: italic;
 }

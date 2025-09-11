@@ -1,7 +1,6 @@
 <ion-card
-  [class.disabled]="(isFull && !isEnrolled) || isDisabled"
+  [class.disabled]="(isFull && !isEnrolled)"
   [class.enrolled]="isEnrolled"
-  [class.schedule-disabled]="isDisabled"
   (click)="handleClick()"
 >
   <ion-card-header>
@@ -34,13 +33,6 @@
         >
           COMPLETO
         </ion-badge>
-        <ion-badge
-          *ngIf="isDisabled"
-          color="warning"
-          class="disabled-badge"
-        >
-          NO DISPONIBLE
-        </ion-badge>
       </div>
       <div class="progress-bar">
         <div
@@ -65,10 +57,6 @@
     <div *ngIf="isFull && !isEnrolled && !isDisabled" class="full-message">
       <ion-icon name="alert-circle-outline" class="full-icon"></ion-icon>
       <span>No hay cupos disponibles</span>
-    </div>
-    <div *ngIf="isDisabled" class="disabled-message">
-      <ion-icon name="ban-outline" class="disabled-icon"></ion-icon>
-      <span>Este horario no está disponible</span>
     </div>
   </ion-card-content>
 </ion-card>

@@ -1,9 +1,10 @@
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, NgFor, NgIf } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { HomeState, LoadRoutineForToday } from "@feature/home/state/home.state";
 import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
+import { Schedule } from "@feature/schedule/state/schedule.state";
 import { ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
 	IonButton,
@@ -17,7 +18,7 @@ import {
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
-import { Observable, Subscription, interval } from "rxjs";
+import { Observable, Subscription, interval, map } from "rxjs";
 import { distinctUntilChanged, skip, take } from "rxjs/operators";
 import { RoutineCardComponent } from "../../components/routine-card/routine-card.component";
 
@@ -37,6 +38,7 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 		AsyncPipe,
 		DayTranslatePipe,
 		NgIf,
+		NgFor,
 		RouterLink,
 		AppHeaderComponent,
 	],
@@ -53,12 +55,42 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	@Select(HomeState.getError) error$!: Observable<string | null>;
 	@Select(HomeState.getMotivationalMessage)
 	motivationalMessage$!: Observable<string>;
+	@Select(ScheduleState.getSchedules) schedules$!: Observable<Schedule[]>;
 
 	constructor(
 		private store: Store,
 		private router: Router,
 		private scheduleFacade: ScheduleFacadeService,
 	) {}
+
+	/**
+	 * Obtiene la información de días deshabilitados para mostrar en el banner
+	 */
+	getDisabledDaysInfo(): Observable<{day: string, reason: string}[]> {
+		return this.schedules$.pipe(
+			map(schedules => {
+				if (!schedules) return [];
+				
+				const disabledDaysMap = new Map<string, string>();
+				
+				for (const schedule of schedules) {
+					if (schedule.disabled && schedule.disabledReason) {
+						const dayName = schedule.day; // Usar directamente el nombre del día que ya viene como string
+						// Solo agregar si el día no está ya en el mapa
+						if (!disabledDaysMap.has(dayName)) {
+							disabledDaysMap.set(dayName, schedule.disabledReason);
+						}
+					}
+				}
+				
+				// Convertir el mapa a array
+				return Array.from(disabledDaysMap.entries()).map(([day, reason]) => ({
+					day,
+					reason
+				}));
+			})
+		);
+	}
 
 	ngOnInit(): void {
 		// Reloj en tiempo real con actualización cada segundo

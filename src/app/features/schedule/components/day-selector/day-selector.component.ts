@@ -30,11 +30,9 @@ export class DaySelectorComponent {
 	selectedDay = "Lunes";
 
 	selectDay(day: string) {
-		// Solo permitir seleccionar días que tienen horarios habilitados
-		if (this.isDayEnabled(day)) {
-			this.selectedDay = day;
-			this.daySelected.emit(day);
-		}
+		// Permitir seleccionar CUALQUIER día, incluso deshabilitados
+		this.selectedDay = day;
+		this.daySelected.emit(day);
 	}
 
 	getEnrollmentCount(day: string): number {
@@ -43,11 +41,13 @@ export class DaySelectorComponent {
 	}
 
 	isDayEnabled(day: string): boolean {
-		const dayStatus = this.dayStatuses.find((status) => status.day === day);
-		return dayStatus ? !dayStatus.disabled && dayStatus.hasSchedules : true;
+		// Ahora todos los días son seleccionables
+		return true;
 	}
 
 	isDayDisabled(day: string): boolean {
-		return !this.isDayEnabled(day);
+		// Solo para efectos visuales - indica si tiene limitaciones
+		const dayStatus = this.dayStatuses.find((status) => status.day === day);
+		return dayStatus ? dayStatus.disabled : false;
 	}
 }

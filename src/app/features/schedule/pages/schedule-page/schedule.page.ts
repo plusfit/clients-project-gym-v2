@@ -63,6 +63,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	totalEnrollments = 0;
 	enrollmentsByDay: DayEnrollment[] = [];
 	dayStatuses: DayStatus[] = [];
+	disabledDaysInfo: Array<{day: string, reasons: string[]}> = []; // Información de días deshabilitados para el home
 
 	showEnrollModal = false;
 	showUnsubscribeModal = false;
@@ -117,6 +118,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.calculateEnrollments(schedules);
 			this.calculateEnrollmentsByDay(schedules);
 			this.calculateDayStatuses(schedules);
+			this.disabledDaysInfo = this.getDisabledDaysInfo(); // Actualizar información de días deshabilitados
 		});
 		this.subscriptions.add(schedulesSub);
 	}
@@ -139,13 +141,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 		this.filterSchedules(schedules);
 
-		// Verificar si el día seleccionado está deshabilitado y mostrar aviso
-		const dayStatus = this.dayStatuses.find(status => status.day === day);
-		if (dayStatus && (dayStatus.disabled || !dayStatus.hasSchedules)) {
-			this.toastService.showWarning(
-				`El día ${day} no está disponible para agendamiento en este momento.`,
-			);
-		}
+		// Ya no mostramos warning por días deshabilitados, permitimos acceso completo
+		// El usuario verá la información visual en la interfaz
 	}
 
 	filterSchedules(schedules: Schedule[]) {
@@ -217,12 +214,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			const daySchedules = schedules.filter(schedule => schedule.day === day);
 			const hasSchedules = daySchedules.length > 0;
 			
-			// Un día está habilitado si:
-			// 1. Tiene horarios Y
-			// 2. Al menos un horario NO está deshabilitado (disabled !== true)
-			const enabledSchedules = daySchedules.filter(schedule => schedule.disabled !== true);
-			const isEnabled = hasSchedules && enabledSchedules.length > 0;
-			const isDayDisabled = !isEnabled; // Si no está habilitado, entonces está deshabilitado
+			// Un día está DESHABILITADO solo si:
+			// 1. Tiene horarios Y todos están explícitamente deshabilitados (disabled === true)
+			// Los días sin horarios NO se consideran deshabilitados, solo no tienen horarios
+			let isDayDisabled = false;
+			if (hasSchedules) {
+				const enabledSchedules = daySchedules.filter(schedule => schedule.disabled !== true);
+				isDayDisabled = enabledSchedules.length === 0; // Solo si TODOS están disabled = true
+			}
 			
 			return {
 				day,
@@ -231,25 +230,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			};
 		});
 
-		// Si el día seleccionado está deshabilitado, cambiar a un día habilitado
-		const selectedDayStatus = this.dayStatuses.find(status => status.day === this.selectedDay);
-		if (selectedDayStatus && (selectedDayStatus.disabled || !selectedDayStatus.hasSchedules)) {
-			const firstEnabledDay = this.dayStatuses.find(status => !status.disabled && status.hasSchedules);
-			if (firstEnabledDay) {
-				this.selectedDay = firstEnabledDay.day;
-				this.filterSchedules(schedules);
-				
-				// Mostrar notificación informativa del cambio automático
-				this.toastService.showInfo(
-					`Se cambió automáticamente a ${firstEnabledDay.day} porque el día anterior no está disponible.`,
-				);
-			}
-		}
+		// Ya NO cambiamos automáticamente el día seleccionado
+		// Los usuarios pueden ver días deshabilitados y acceder a ellos
 	}
 
 	isDayCompletelyDisabled(): boolean {
 		const dayStatus = this.dayStatuses.find(status => status.day === this.selectedDay);
-		return dayStatus ? (dayStatus.disabled || !dayStatus.hasSchedules) : false;
+		// Solo retorna true si el día está explícitamente deshabilitado
+		// NO bloquea días sin horarios, solo días con horarios deshabilitados
+		return dayStatus ? dayStatus.disabled : false;
 	}
 
 	getDisabledDayReason(): string {
@@ -263,10 +252,60 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 		if (dayStatus.disabled) {
-			return 'Todos los horarios de este día están deshabilitados.';
+			// Obtener todas las razones de los horarios deshabilitados del día
+			const daySchedules = this.schedulesForDay.filter(schedule => schedule.disabled === true);
+			const reasons = daySchedules
+				.map(schedule => schedule.disabledReason)
+				.filter(reason => reason) // Filtrar razones vacías
+				.filter((reason, index, array) => array.indexOf(reason) === index); // Eliminar duplicados
+			
+			if (reasons.length > 0) {
+				return reasons.length === 1 
+					? `Razón: ${reasons[0]}`
+					: `Razones: ${reasons.join(', ')}`;
+			}
+			
+			return 'Todos los horarios de este día están deshabilitados sin razón específica.';
 		}
 		
 		return 'Este día está disponible.';
+	}
+
+	/**
+	 * Obtiene todos los días deshabilitados con sus razones para mostrar en el home
+	 */
+	getDisabledDaysInfo(): Array<{day: string, reasons: string[]}> {
+		const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+		const disabledDaysInfo: Array<{day: string, reasons: string[]}> = [];
+		
+		const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+		
+		for (const day of days) {
+			const daySchedules = allSchedules.filter(schedule => schedule.day === day);
+			const disabledSchedules = daySchedules.filter(schedule => schedule.disabled === true);
+			
+			if (disabledSchedules.length > 0) {
+				const reasons = disabledSchedules
+					.map(schedule => schedule.disabledReason)
+					.filter((reason): reason is string => reason !== undefined && reason.trim() !== '')
+					.filter((reason, index, arr) => arr.indexOf(reason) === index); // Eliminar duplicados
+				
+				if (reasons.length > 0) {
+					disabledDaysInfo.push({
+						day,
+						reasons
+					});
+				} else {
+					// Si hay horarios deshabilitados pero sin razón
+					disabledDaysInfo.push({
+						day,
+						reasons: ['Sin razón especificada']
+					});
+				}
+			}
+		}
+		
+		return disabledDaysInfo;
 	}
 
 	checkMaxEnrollmentsLimit(newSchedule: Schedule): boolean {
@@ -312,21 +351,24 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	onScheduleClicked(schedule: Schedule) {
 		this.selectedSchedule = schedule;
 
-		// Verificar si el horario está deshabilitado (disabled === true explícitamente)
+		// Si el horario está deshabilitado, mostrar información pero permitir agendar/desagendar
 		if (schedule.disabled === true) {
-			this.toastService.showWarning(
-				"Este horario no está disponible en este momento. Por favor, selecciona otro horario.",
+			const reason = schedule.disabledReason || 'Sin razón especificada';
+			
+			// Si el usuario ya está inscrito, permitir desinscripción con aviso
+			if (schedule.clients?.includes(this.currentUserId)) {
+				this.toastService.showInfo(
+					`ℹ️ Este horario tiene limitaciones (${reason}). Puedes desanotarte si lo deseas.`,
+				);
+				this.showUnsubscribeModal = true;
+				return;
+			}
+			
+			// Si no está inscrito, permitir inscripción con aviso
+			this.toastService.showInfo(
+				`ℹ️ Este horario tiene limitaciones (${reason}). Aún puedes anotarte, pero considera las limitaciones.`,
 			);
-			return;
-		}
-
-		// Verificar si el día completo está deshabilitado
-		const dayStatus = this.dayStatuses.find(status => status.day === schedule.day);
-		if (dayStatus && (dayStatus.disabled || !dayStatus.hasSchedules)) {
-			this.toastService.showWarning(
-				`El día ${schedule.day} no está disponible para agendamiento. Por favor, selecciona otro día.`,
-			);
-			return;
+			// Continuar con la lógica normal de inscripción
 		}
 
 		if (schedule.clients?.includes(this.currentUserId)) {
