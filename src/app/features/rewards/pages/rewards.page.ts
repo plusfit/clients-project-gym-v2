@@ -139,16 +139,15 @@ export class RewardsPage implements OnInit, OnDestroy {
     this.store.dispatch(new LoadRewards());
   }
 
-  private loadUserExchanges(userId: string) {
+  private loadUserExchanges(userId: string) {    
     this.rewardsService.getClientExchanges(userId).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (exchanges) => {
         this.exchanges = Array.isArray(exchanges) ? exchanges : [];
       },
-      error: (error) => {
-        console.error('Error loading user exchanges:', error);
-        this.exchanges = []; // Fallback to empty array on error
+      error: () => {
+        this.exchanges = [];
       }
     });
   }
@@ -226,8 +225,6 @@ export class RewardsPage implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('reward', reward);
-
     // Validate reward ID before proceeding
     if (!reward.id || reward.id.trim() === '') {
       await this.toastService.showToast(
@@ -277,11 +274,16 @@ export class RewardsPage implements OnInit, OnDestroy {
   async onTimelineRewardClick(reward: Reward) {
     const user = this.store.selectSnapshot(AuthState.getUser);
     if (!user) return;
-
-    // Determine reward status - with defensive guard
-    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange =>
-      exchange.rewardId === reward.id && exchange.status === 'completed'
-    );
+  
+    let isExchanged = false;
+    if (Array.isArray(this.exchanges)) {
+      const completedExchanges = this.exchanges.filter(exchange => exchange.status === 'completed');
+      
+      isExchanged = completedExchanges.some(exchange => {
+        const matches = exchange.rewardId === reward.id;
+        return matches;
+      });
+    }
     
     let status: 'available' | 'exchanged' | 'locked';
     if (isExchanged) {

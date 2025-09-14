@@ -100,20 +100,25 @@ export class RewardsTimelineComponent implements OnChanges {
   }
 
   private getRewardStatus(reward: Reward): 'available' | 'exchanged' | 'locked' {
-    // Verificar si ya fue canjeado - con guard defensivo
-    const isExchanged = Array.isArray(this.exchanges) && this.exchanges.some(exchange =>
-      exchange.rewardId === reward.id && exchange.status === 'completed'
-    );
-    
-    if (isExchanged) {
-      return 'exchanged';
+    if (Array.isArray(this.exchanges)) {
+      const completedExchanges = this.exchanges.filter(exchange => exchange.status === 'completed');
+      
+      const isExchanged = completedExchanges.some(exchange => {
+        const matches = exchange.rewardId === reward.id;
+        return matches;
+      });
+            
+      if (isExchanged) {
+        return 'exchanged';
+      }
+    } else {
+      console.warn('⚠️ Exchanges is not an array:', this.exchanges);
     }
     
     // Verificar si tiene puntos suficientes
     if (this.userPoints >= reward.pointsRequired) {
-      return 'available';
-    }
-    
+        return 'available';
+    }    
     return 'locked';
   }
 
