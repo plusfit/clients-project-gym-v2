@@ -1,7 +1,13 @@
 import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
+import { User } from "@feature/auth/interfaces/user.interface";
+import { GetCurrentUser } from "@feature/auth/state/auth.actions";
+import { AuthState } from "@feature/auth/state/auth.state";
 import { HomeState, LoadRoutineForToday } from "@feature/home/state/home.state";
+import { Exchange } from "@feature/rewards/interfaces/exchange.interface";
+import { Reward } from "@feature/rewards/interfaces/reward.interface";
+import { RewardsService } from "@feature/rewards/services/rewards.service";
 import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { ScheduleState } from "@feature/schedule/state/schedule.state";
@@ -17,8 +23,8 @@ import {
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
-import { Observable, Subscription, interval } from "rxjs";
-import { distinctUntilChanged, skip, take } from "rxjs/operators";
+import { Observable, Subject, Subscription, combineLatest, interval } from "rxjs";
+import { distinctUntilChanged, map, skip, take, takeUntil } from "rxjs/operators";
 import { RoutineCardComponent } from "../../components/routine-card/routine-card.component";
 
 @Component({
@@ -47,17 +53,24 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	currentTime: Date = new Date();
 	private clockSubscription!: Subscription;
 	private schedulesSubscription!: Subscription;
+	private destroy$ = new Subject<void>();
+
+	// Rewards data
+	availableRewardsCount = 0;
+	userPoints = 0;
 
 	@Select(HomeState.getRoutine) routine$!: Observable<SubRoutine | null>;
 	@Select(HomeState.isLoading) loading$!: Observable<boolean>;
 	@Select(HomeState.getError) error$!: Observable<string | null>;
 	@Select(HomeState.getMotivationalMessage)
 	motivationalMessage$!: Observable<string>;
+	@Select(AuthState.getUser) user$!: Observable<User | null>;
 
 	constructor(
 		private store: Store,
 		private router: Router,
 		private scheduleFacade: ScheduleFacadeService,
+		private rewardsService: RewardsService,
 	) {}
 
 	ngOnInit(): void {
@@ -68,6 +81,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 
 		// Cargar schedules si no están disponibles y luego cargar la rutina
 		this.loadInitialData();
+
+		// Setup rewards subscription
+		this.setupRewardsSubscription();
 
 		// Escuchar cambios en el estado de schedules y recargar la rutina
 		this.schedulesSubscription = this.store.select(ScheduleState.getSchedules).pipe(
@@ -108,6 +124,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	}
 
 	ngOnDestroy(): void {
+		this.destroy$.next();
+		this.destroy$.complete();
+
 		if (this.clockSubscription) {
 			this.clockSubscription.unsubscribe();
 		}
@@ -119,6 +138,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	ionViewWillEnter(): void {
 		// Recargar datos cuando el usuario regrese a esta página
 		this.loadInitialData();
+
+		// Recargar premios disponibles cada vez que se entre a la página
+		this.refreshRewardsData();
 	}
 
 	onExerciseClicked(exercise: any) {
@@ -134,5 +156,74 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	 */
 	goToSchedules() {
 		this.router.navigate(["/cliente/horarios"]);
+	}
+
+	/**
+	 * Setup rewards subscription to calculate available rewards
+	 */
+	private setupRewardsSubscription(): void {
+		// Combinar user, rewards y exchanges para calcular premios disponibles
+		this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+			if (user) {
+				// Obtener puntos del usuario
+				this.userPoints = (user as User & { availablePoints?: number }).availablePoints || 0;
+
+				// Cargar rewards y calcular disponibles
+				this.calculateAvailableRewards(user._id);
+			} else {
+				this.userPoints = 0;
+				this.availableRewardsCount = 0;
+			}
+		});
+	}
+
+	/**
+	 * Calcula los premios disponibles para el usuario
+	 */
+	private calculateAvailableRewards(userId: string): void {
+		// Obtener rewards y exchanges en paralelo
+		combineLatest([
+			this.rewardsService.getAllRewards(),
+			this.rewardsService.getClientExchanges(userId)
+		]).pipe(
+			takeUntil(this.destroy$),
+			map(([rewards, exchanges]) => {
+				const completedExchanges = exchanges.filter(exchange => exchange.status === 'completed');
+
+				// Filtrar rewards disponibles: enabled, suficientes puntos, y no canjeados
+				const availableRewards = rewards.filter(reward => {
+					const isEnabled = reward.enabled;
+					const hasEnoughPoints = this.userPoints >= reward.pointsRequired;
+					const isNotExchanged = !completedExchanges.some(exchange => exchange.rewardId === reward.id);
+
+					return isEnabled && hasEnoughPoints && isNotExchanged;
+				});
+
+				return availableRewards.length;
+			})
+		).subscribe(count => {
+			this.availableRewardsCount = count;
+		});
+	}
+
+	/**
+	 * Navega a la página de rewards
+	 */
+	goToRewards(): void {
+		this.router.navigate(["/cliente/premios"]);
+	}
+
+	/**
+	 * Actualiza los datos de premios al entrar a la página
+	 */
+	private refreshRewardsData(): void {
+		const user = this.store.selectSnapshot(AuthState.getUser);
+		if (user) {
+			// Actualizar puntos del usuario
+			this.store.dispatch(new GetCurrentUser());
+
+			// Recalcular premios disponibles con datos frescos
+			this.calculateAvailableRewards(user._id);
+		}
 	}
 }

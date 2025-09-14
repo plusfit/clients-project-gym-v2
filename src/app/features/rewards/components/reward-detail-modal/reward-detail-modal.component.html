@@ -58,7 +58,7 @@
           <span class="points-difference" *ngIf="status === 'locked'" [style.color]="'var(--ion-color-danger)'">
             Faltan: {{ pointsNeeded }}
           </span>
-          <span class="points-difference" *ngIf="status === 'available'" [style.color]="'var(--ion-color-success)'">
+          <span class="points-difference" *ngIf="status === 'available'" [style.color]="'var(--ion-color-primary)'">
             ¡Tienes suficientes puntos!
           </span>
         </div>
@@ -128,7 +128,7 @@
         expand="block"
         size="large"
         [disabled]="status !== 'available'"
-        [color]="status === 'available' ? 'success' : 'medium'"
+        [color]="status === 'available' ? 'primary' : 'medium'"
         (click)="onExchange()"
         class="action-button">
         

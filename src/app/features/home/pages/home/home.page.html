@@ -19,6 +19,22 @@
       </div>
     </div>
 
+    <!-- Box de premios disponibles -->
+    <div class="rewards-notification-box" *ngIf="availableRewardsCount > 0" (click)="goToRewards()">
+      <div class="rewards-content">
+        <div class="rewards-icon">
+          <ion-icon name="gift-outline" color="white"></ion-icon>
+        </div>
+        <div class="rewards-text">
+          <h3>¡Tenes <span class="rewards-count">{{ availableRewardsCount }}</span> premio{{ availableRewardsCount === 1 ? '' : 's' }} disponible{{ availableRewardsCount === 1 ? '' : 's' }} para canjear!</h3>
+          <p>Toca aquí para ver tus premios</p>
+        </div>
+        <div class="rewards-arrow">
+          <ion-icon name="chevron-forward-outline" color="light"></ion-icon>
+        </div>
+      </div>
+    </div>
+
     <!-- Motivación del día -->
     <div class="motivation-banner" *ngIf="motivationalMessage$ | async as message">
       <p class="ion-text-center">"{{ message }}"</p>

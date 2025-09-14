@@ -83,7 +83,7 @@ export class RewardDetailModalComponent {
         return {
           text: 'Disponible para canjear',
           icon: 'gift-outline',
-          color: 'success'
+          color: 'primary'
         };
       case 'exchanged':
         return {
