@@ -92,15 +92,16 @@ export class RewardsService {
    * Obtiene los exchanges/canjes de un cliente específico
    */
   getClientExchanges(clientId: string): Observable<Exchange[]> {
-    return this.http.get<{ success: boolean; data: Exchange[] }>(`${this.apiUrl}/rewards/exchanges/client/${clientId}`).pipe(
-      map((response) => {
-        if (response.success && Array.isArray(response.data)) {
-          return response.data;
+    return this.http.get<{ success: boolean; data: { success: boolean; data: Exchange[] } }>(`${this.apiUrl}/rewards/exchanges/client/${clientId}`).pipe(
+      map((response) => {        
+        if (response.success && response.data && response.data.success && Array.isArray(response.data.data)) {
+          const exchanges = response.data.data;
+          return exchanges;
         }
+
         return [];
       }),
-      catchError((error) => {
-        console.error('Error al obtener exchanges del cliente:', error);
+      catchError(() => {
         return of([]);
       })
     );
@@ -110,7 +111,6 @@ export class RewardsService {
    * Intercambia puntos por un reward
    */
   exchangeReward(rewardId: string, clientId: string): Observable<{ success: boolean; message: string; data?: unknown }> {
-    // Validate input parameters
     if (!rewardId || rewardId.trim() === '') {
       throw new Error('El ID del premio es requerido');
     }
