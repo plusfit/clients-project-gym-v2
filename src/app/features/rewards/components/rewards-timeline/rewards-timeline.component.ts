@@ -1,16 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import {
-    IonIcon,
-    IonText
+  IonIcon,
+  IonText
 } from '@ionic/angular/standalone';
+import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
 import { addIcons } from 'ionicons';
 import {
-    checkmarkCircleOutline,
-    giftOutline,
-    lockClosedOutline,
-    starOutline,
-    trophyOutline
+  checkmarkCircleOutline,
+  giftOutline,
+  lockClosedOutline,
+  starOutline,
+  trophyOutline
 } from 'ionicons/icons';
 import { Exchange } from '../../interfaces/exchange.interface';
 import { Reward } from '../../interfaces/reward.interface';
@@ -101,7 +102,7 @@ export class RewardsTimelineComponent implements OnChanges {
 
   private getRewardStatus(reward: Reward): 'available' | 'exchanged' | 'locked' {
     if (Array.isArray(this.exchanges)) {
-      const completedExchanges = this.exchanges.filter(exchange => exchange.status === 'completed');
+      const completedExchanges = this.exchanges.filter(exchange => exchange.status === ExchangeStatus.PENDING || exchange.status === ExchangeStatus.COMPLETED);
       
       const isExchanged = completedExchanges.some(exchange => {
         const matches = exchange.rewardId === reward.id;

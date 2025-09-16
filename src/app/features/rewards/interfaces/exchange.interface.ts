@@ -1,3 +1,5 @@
+import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
+
 /**
  * Exchange entity - represents a reward exchange in the system
  * Based on the MongoDB schema and backend entity
@@ -43,7 +45,7 @@ export interface Exchange {
   exchangeDate: Date;
 
   /** Status of the exchange */
-  status: 'completed' | 'pending' | 'cancelled';
+  status: ExchangeStatus;
 
   /** Creation timestamp */
   createdAt: Date;

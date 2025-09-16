@@ -3,25 +3,26 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-    IonButton,
-    IonContent,
-    IonIcon,
-    IonSpinner,
-    IonText,
-    ModalController
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonSpinner,
+  IonText,
+  ModalController
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { AppHeaderComponent } from '@shared/components/app-header/app-header.component';
+import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
 import { ToastService } from '@shared/services/toast.service';
 import { addIcons } from 'ionicons';
 import {
-    alertCircleOutline,
-    checkmarkCircleOutline,
-    giftOutline,
-    refreshOutline,
-    searchOutline,
-    star,
-    starOutline
+  alertCircleOutline,
+  checkmarkCircleOutline,
+  giftOutline,
+  refreshOutline,
+  searchOutline,
+  star,
+  starOutline
 } from 'ionicons/icons';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -219,11 +220,7 @@ export class RewardsPage implements OnInit, OnDestroy {
       return;
     }
 
-    // Confirm exchange
-    const confirmExchange = await this.showExchangeConfirmation(reward);
-    if (!confirmExchange) {
-      return;
-    }
+    // No confirmation needed - proceed directly
 
     // Validate reward ID before proceeding
     if (!reward.id || reward.id.trim() === '') {
@@ -260,16 +257,6 @@ export class RewardsPage implements OnInit, OnDestroy {
     }
   }
 
-  private async showExchangeConfirmation(reward: Reward): Promise<boolean> {
-    return new Promise((resolve) => {
-      // For now, return true. In a real app, you'd show an alert/modal
-      // You can integrate with Ionic AlertController here
-      const confirmed = confirm(
-        `¿Estás seguro de que quieres canjear "${reward.name}" por ${reward.pointsRequired} puntos?`
-      );
-      resolve(confirmed);
-    });
-  }
 
   async onTimelineRewardClick(reward: Reward) {
     const user = this.store.selectSnapshot(AuthState.getUser);
@@ -277,8 +264,8 @@ export class RewardsPage implements OnInit, OnDestroy {
   
     let isExchanged = false;
     if (Array.isArray(this.exchanges)) {
-      const completedExchanges = this.exchanges.filter(exchange => exchange.status === 'completed');
-      
+      const completedExchanges = this.exchanges.filter(exchange => exchange.status === ExchangeStatus.COMPLETED || exchange.status === ExchangeStatus.PENDING);
+
       isExchanged = completedExchanges.some(exchange => {
         const matches = exchange.rewardId === reward.id;
         return matches;

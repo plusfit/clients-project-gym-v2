@@ -5,8 +5,6 @@ import { User } from "@feature/auth/interfaces/user.interface";
 import { GetCurrentUser } from "@feature/auth/state/auth.actions";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { HomeState, LoadRoutineForToday } from "@feature/home/state/home.state";
-import { Exchange } from "@feature/rewards/interfaces/exchange.interface";
-import { Reward } from "@feature/rewards/interfaces/reward.interface";
 import { RewardsService } from "@feature/rewards/services/rewards.service";
 import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
@@ -22,6 +20,7 @@ import {
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
+import { ExchangeStatus } from "@shared/enums/exchange-status.enum";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
 import { Observable, Subject, Subscription, combineLatest, interval } from "rxjs";
 import { distinctUntilChanged, map, skip, take, takeUntil } from "rxjs/operators";
@@ -188,7 +187,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		]).pipe(
 			takeUntil(this.destroy$),
 			map(([rewards, exchanges]) => {
-				const completedExchanges = exchanges.filter(exchange => exchange.status === 'completed');
+				const completedExchanges = exchanges.filter(exchange => exchange.status === ExchangeStatus.COMPLETED || exchange.status === ExchangeStatus.PENDING);
 
 				// Filtrar rewards disponibles: enabled, suficientes puntos, y no canjeados
 				const availableRewards = rewards.filter(reward => {
