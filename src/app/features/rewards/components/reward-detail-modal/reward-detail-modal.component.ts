@@ -1,32 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
-    IonButton,
-    IonButtons,
-    IonContent,
-    IonHeader,
-    IonIcon,
-    IonImg,
-    IonText,
-    IonTitle,
-    IonToolbar,
-    ModalController
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonImg,
+  IonText,
+  IonTitle,
+  IonToolbar,
+  ModalController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-    checkmarkCircleOutline,
-    closeOutline,
-    giftOutline,
-    lockClosedOutline,
-    starOutline,
-    trophyOutline
+  checkmarkCircleOutline,
+  closeOutline,
+  giftOutline,
+  lockClosedOutline,
+  starOutline,
+  trophyOutline
 } from 'ionicons/icons';
 import { Reward } from '../../interfaces/reward.interface';
 
 export interface RewardDetailData {
   reward: Reward;
   userPoints: number;
-  status: 'available' | 'exchanged' | 'locked';
+  status: 'available' | 'exchanged' | 'pending' | 'locked';
 }
 
 @Component({
@@ -69,7 +69,7 @@ export class RewardDetailModalComponent {
     return this.data.userPoints;
   }
 
-  get status(): 'available' | 'exchanged' | 'locked' {
+  get status(): 'available' | 'exchanged' | 'pending' | 'locked' {
     return this.data.status;
   }
 
@@ -89,6 +89,12 @@ export class RewardDetailModalComponent {
         return {
           text: 'Ya canjeado',
           icon: 'trophy-outline',
+          color: 'success'
+        };
+      case 'pending':
+        return {
+          text: 'Canje pendiente',
+          icon: 'checkmark-circle-outline',
           color: 'warning'
         };
       case 'locked':
