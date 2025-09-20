@@ -3,12 +3,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-  IonButton,
-  IonContent,
-  IonIcon,
-  IonSpinner,
-  IonText,
-  ModalController
+    IonButton,
+    IonContent,
+    IonIcon,
+    IonSpinner,
+    IonText,
+    ModalController
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { AppHeaderComponent } from '@shared/components/app-header/app-header.component';
@@ -16,13 +16,13 @@ import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
 import { ToastService } from '@shared/services/toast.service';
 import { addIcons } from 'ionicons';
 import {
-  alertCircleOutline,
-  checkmarkCircleOutline,
-  giftOutline,
-  refreshOutline,
-  searchOutline,
-  star,
-  starOutline
+    alertCircleOutline,
+    checkmarkCircleOutline,
+    giftOutline,
+    refreshOutline,
+    searchOutline,
+    star,
+    starOutline
 } from 'ionicons/icons';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -262,23 +262,35 @@ export class RewardsPage implements OnInit, OnDestroy {
     const user = this.store.selectSnapshot(AuthState.getUser);
     if (!user) return;
   
-    let isExchanged = false;
-    if (Array.isArray(this.exchanges)) {
-      const completedExchanges = this.exchanges.filter(exchange => exchange.status === ExchangeStatus.COMPLETED || exchange.status === ExchangeStatus.PENDING);
-
-      isExchanged = completedExchanges.some(exchange => {
-        const matches = exchange.rewardId === reward.id;
-        return matches;
-      });
-    }
+    let status: 'available' | 'exchanged' | 'pending' | 'locked';
     
-    let status: 'available' | 'exchanged' | 'locked';
-    if (isExchanged) {
-      status = 'exchanged';
-    } else if (this.userPoints >= reward.pointsRequired) {
-      status = 'available';
+    if (Array.isArray(this.exchanges)) {
+      // Buscar exchanges para este reward
+      const rewardExchanges = this.exchanges.filter(exchange => exchange.rewardId === reward.id);
+      
+      // Verificar si hay exchange pendiente
+      const pendingExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.PENDING);
+      if (pendingExchange) {
+        status = 'pending';
+      } 
+      // Verificar si hay exchange completado
+      else {
+        const completedExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.COMPLETED);
+        if (completedExchange) {
+          status = 'exchanged';
+        } else if (this.userPoints >= reward.pointsRequired) {
+          status = 'available';
+        } else {
+          status = 'locked';
+        }
+      }
     } else {
-      status = 'locked';
+      // Fallback logic when exchanges is not an array
+      if (this.userPoints >= reward.pointsRequired) {
+        status = 'available';
+      } else {
+        status = 'locked';
+      }
     }
 
     // Open modal with reward details
