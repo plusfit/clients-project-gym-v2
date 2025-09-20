@@ -30,6 +30,7 @@
         class="reward-checkpoint"
         [class.available]="rewardState.status === 'available'"
         [class.exchanged]="rewardState.status === 'exchanged'"
+        [class.pending]="rewardState.status === 'pending'"
         [class.locked]="rewardState.status === 'locked'"
         [style.top.%]="rewardState.position"
         (click)="onRewardClick(rewardState, $event)">

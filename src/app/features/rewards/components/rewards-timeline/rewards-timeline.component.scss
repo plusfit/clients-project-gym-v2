@@ -173,8 +173,24 @@
 
   &.exchanged {
     .reward-badge {
+      background: linear-gradient(135deg, var(--ion-color-success) 0%, var(--ion-color-success-shade) 100%);
+      box-shadow: 0 4px 16px rgba(var(--ion-color-success-rgb), 0.4);
+    }
+
+    .checkpoint-line {
+      background: var(--ion-color-success);
+    }
+
+    .reward-icon {
+      color: var(--ion-color-success-contrast);
+    }
+  }
+
+  &.pending {
+    .reward-badge {
       background: linear-gradient(135deg, var(--ion-color-warning) 0%, var(--ion-color-warning-shade) 100%);
       box-shadow: 0 4px 16px rgba(var(--ion-color-warning-rgb), 0.4);
+      animation: pulse-pending 2s infinite;
     }
 
     .checkpoint-line {
@@ -318,6 +334,15 @@
   }
 
   &.exchanged {
+    border-color: var(--ion-color-success);
+    box-shadow: 0 4px 12px rgba(var(--ion-color-success-rgb), 0.2);
+
+    .reward-points {
+      color: var(--ion-color-success);
+    }
+  }
+
+  &.pending {
     border-color: var(--ion-color-warning);
     box-shadow: 0 4px 12px rgba(var(--ion-color-warning-rgb), 0.2);
 
@@ -520,6 +545,15 @@
   }
   50% {
     box-shadow: 0 4px 24px rgba(var(--ion-color-primary-rgb), 0.8), 0 4px 16px rgba(21, 101, 192, 0.6);
+  }
+}
+
+@keyframes pulse-pending {
+  0%, 100% {
+    box-shadow: 0 4px 16px rgba(var(--ion-color-warning-rgb), 0.4), 0 2px 8px rgba(var(--ion-color-warning-rgb), 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 24px rgba(var(--ion-color-warning-rgb), 0.8), 0 4px 16px rgba(var(--ion-color-warning-rgb), 0.6);
   }
 }
 

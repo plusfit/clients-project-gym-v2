@@ -18,7 +18,7 @@ import { Reward } from '../../interfaces/reward.interface';
 
 export interface RewardState {
   reward: Reward;
-  status: 'available' | 'exchanged' | 'locked';
+  status: 'available' | 'exchanged' | 'pending' | 'locked';
   position: number; // Posición en porcentaje (0-100)
 }
 
@@ -100,16 +100,20 @@ export class RewardsTimelineComponent implements OnChanges {
     this.maxPoints = effectiveMaxPoints;
   }
 
-  private getRewardStatus(reward: Reward): 'available' | 'exchanged' | 'locked' {
+  private getRewardStatus(reward: Reward): 'available' | 'exchanged' | 'pending' | 'locked' {
     if (Array.isArray(this.exchanges)) {
-      const completedExchanges = this.exchanges.filter(exchange => exchange.status === ExchangeStatus.PENDING || exchange.status === ExchangeStatus.COMPLETED);
+      // Buscar exchanges para este reward
+      const rewardExchanges = this.exchanges.filter(exchange => exchange.rewardId === reward.id);
       
-      const isExchanged = completedExchanges.some(exchange => {
-        const matches = exchange.rewardId === reward.id;
-        return matches;
-      });
-            
-      if (isExchanged) {
+      // Verificar si hay exchange pendiente
+      const pendingExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.PENDING);
+      if (pendingExchange) {
+        return 'pending';
+      }
+
+      // Verificar si hay exchange completado
+      const completedExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.COMPLETED);
+      if (completedExchange) {
         return 'exchanged';
       }
     } else {
@@ -129,12 +133,14 @@ export class RewardsTimelineComponent implements OnChanges {
     this.rewardClick.emit(rewardState.reward);
   }
 
-  getRewardIcon(status: 'available' | 'exchanged' | 'locked'): string {
+  getRewardIcon(status: 'available' | 'exchanged' | 'pending' | 'locked'): string {
     switch (status) {
       case 'available':
         return 'gift-outline';
       case 'exchanged':
         return 'trophy-outline';
+      case 'pending':
+        return 'checkmark-circle-outline';
       case 'locked':
         return 'lock-closed-outline';
       default:
@@ -142,12 +148,14 @@ export class RewardsTimelineComponent implements OnChanges {
     }
   }
 
-  getStatusText(status: 'available' | 'exchanged' | 'locked'): string {
+  getStatusText(status: 'available' | 'exchanged' | 'pending' | 'locked'): string {
     switch (status) {
       case 'available':
         return 'Disponible';
       case 'exchanged':
         return 'Canjeado';
+      case 'pending':
+        return 'Pendiente';
       case 'locked':
         return 'Bloqueado';
       default:
