@@ -37,11 +37,9 @@ ion-header {
 }
 
 .plan-header {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary-dark),
-    var(--color-secondary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--color-primary-dark),
+      var(--color-secondary-dark));
   padding-bottom: 8px;
 }
 
@@ -245,74 +243,91 @@ ion-card-subtitle {
     margin-bottom: 8px;
     border-radius: 8px;
   }
+
   .plan-header {
     padding-bottom: 4px;
   }
+
   ion-card-title {
     padding-top: 18px;
     font-size: 19px;
     margin-bottom: 7px;
   }
+
   ion-card-subtitle {
     font-size: 13px;
     gap: 7px;
   }
+
   .level-badge,
   .days-badge {
     padding: 5px 9px;
     font-size: 13px;
     border-radius: 9px;
   }
+
   .plan-description {
     font-size: 15px;
     margin: 8px 0 18px 0;
   }
+
   .plan-details {
     padding: 14px;
     gap: 14px;
     font-size: 15px;
   }
+
   .detail-content h4 {
     font-size: 16px;
     margin-bottom: 5px;
   }
+
   .detail-content p {
     font-size: 15px;
   }
+
   .plan-message {
     font-size: 14px;
     padding: 11px 14px;
     margin: 16px 0;
   }
+
   .start-button {
     font-size: 16px;
     height: 44px;
     margin-top: 16px;
   }
+
   .enrolled-message {
     font-size: 15px;
     padding: 14px;
     margin: 16px 0 8px 0;
   }
+
   .calendar-button {
     margin-top: 12px;
     font-size: 15px;
   }
+
   .no-plan-container {
     padding: 16px 4px;
   }
+
   .no-plan-icon {
     font-size: 45px;
     margin-bottom: 12px;
   }
+
   .onboarding-button {
     font-size: 16px;
     margin-top: 16px;
   }
+
   .plan-tags {
     margin-bottom: 14px;
     gap: 6px;
   }
+
   .tag-badge {
     font-size: 12px;
     padding: 4px 8px;
@@ -326,44 +341,54 @@ ion-card-subtitle {
     margin-bottom: 4px;
     border-radius: 6px;
   }
+
   .plan-details {
     padding: 6px;
     gap: 6px;
   }
+
   .plan-message {
     font-size: 13px;
     padding: 8px 8px;
     margin: 10px 0;
   }
+
   .start-button {
     font-size: 14px;
     height: 38px;
     margin-top: 10px;
   }
+
   .enrolled-message {
     font-size: 13px;
     padding: 10px;
     margin: 10px 0 5px 0;
   }
+
   .calendar-button {
     margin-top: 8px;
     font-size: 13px;
   }
+
   .no-plan-container {
     padding: 8px 2px;
   }
+
   .no-plan-icon {
     font-size: 32px;
     margin-bottom: 8px;
   }
+
   .onboarding-button {
     font-size: 14px;
     margin-top: 10px;
   }
+
   .plan-tags {
     margin-bottom: 10px;
     gap: 4px;
   }
+
   .tag-badge {
     font-size: 11px;
     padding: 3px 6px;
@@ -380,4 +405,196 @@ ion-card-subtitle {
   padding: 4px 8px;
   margin-top: 4px;
   font-weight: 500;
+}
+
+// Estilos para la tarjeta de días disponibles
+.available-days-card {
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 16px rgba(0, 68, 148, 0.3);
+  margin-top: 10px;
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
+
+  ion-card-content {
+    padding: 0;
+  }
+}
+
+// Estilos para días disponibles
+.available-days-section {
+  padding: 12px;
+  color: white;
+
+  .available-days-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    .header-left {
+      display: flex;
+      align-items: center;
+
+      ion-icon {
+        font-size: 18px;
+        margin-right: 6px;
+        color: rgba(255, 255, 255, 0.9);
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+      }
+    }
+
+    .help-button {
+      --color: rgba(255, 255, 255, 0.8);
+      --background: transparent;
+      --padding-start: 4px;
+      --padding-end: 4px;
+      --padding-top: 4px;
+      --padding-bottom: 4px;
+      margin: 0;
+
+      ion-icon {
+        font-size: 16px;
+      }
+
+      &:hover {
+        --color: rgba(255, 255, 255, 1);
+      }
+    }
+  }
+
+  .available-days-content {
+    .days-counter {
+      text-align: center;
+      margin-bottom: 8px;
+
+      .available-number {
+        display: block;
+        font-size: 28px;
+        font-weight: 800;
+        line-height: 1;
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .total-days {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 1px;
+      }
+
+      .days-label {
+        display: block;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        margin-top: 1px;
+      }
+    }
+
+    .days-progress {
+      .progress-bar {
+        background: rgba(255, 255, 255, 0.2);
+        height: 4px;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 4px;
+
+        .progress-fill {
+          background: linear-gradient(90deg, #ffffff 0%, #e0f2ff 100%);
+          height: 100%;
+          border-radius: 2px;
+          transition: width 0.3s ease;
+          box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .progress-text {
+        display: block;
+        text-align: center;
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+      }
+    }
+  }
+
+  .loading-days {
+    text-align: center;
+    padding: 8px 0;
+
+    p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 12px;
+    }
+  }
+}
+
+// Responsive para días disponibles
+@media (max-width: 768px) {
+  .available-days-card {
+    margin-bottom: 10px;
+  }
+
+  .available-days-section {
+    padding: 10px;
+
+    .available-days-content .days-counter .available-number {
+      font-size: 24px;
+    }
+
+    .available-days-header {
+      margin-bottom: 6px;
+
+      .header-left {
+        ion-icon {
+          font-size: 16px;
+        }
+
+        h3 {
+          font-size: 13px;
+        }
+      }
+
+      .help-button ion-icon {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Estilos para el alert de ayuda
+:host ::ng-deep .help-alert {
+  .alert-wrapper {
+    .alert-head {
+      text-align: center;
+
+      .alert-title {
+        color: var(--color-primary-dark);
+        font-weight: 600;
+      }
+    }
+
+    .alert-message {
+      text-align: left;
+      line-height: 1.5;
+      color: var(--color-text-medium);
+    }
+
+    .alert-button-group {
+      .alert-button {
+        color: var(--color-primary-dark);
+        font-weight: 500;
+      }
+    }
+  }
 }
