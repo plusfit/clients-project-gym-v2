@@ -258,7 +258,7 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 	async showAvailableDaysHelp() {
 		const alert = await this.alertCtrl.create({
 			header: "Días Disponibles",
-			message: "Los días disponibles representan la cantidad de días que has pagado.",
+			message: "Los días disponibles representan la cantidad de días restantes del plan que has abonado.",
 			buttons: [
 				{
 					text: "Entendido",
@@ -269,5 +269,20 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 		});
 
 		await alert.present();
+	}
+
+	getDaysColorClass(): string {
+		if (this.availableDays === null) return "";
+
+		if (this.availableDays === 0) {
+			return "danger"; // Rojo para 0 días
+		}
+		if (this.availableDays < 5) {
+			return "warning-low"; // Rojizo para menos de 5
+		}
+		if (this.availableDays < 10) {
+			return "warning"; // Ámbar para menos de 10
+		}
+		return "success"; // Verde para 10 o más
 	}
 }

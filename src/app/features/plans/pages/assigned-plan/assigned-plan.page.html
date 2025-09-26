@@ -119,7 +119,7 @@
           
           <div class="available-days-content" *ngIf="!loadingAvailableDays">
             <div class="days-counter">
-              <span class="available-number">{{ availableDays }}</span>
+              <span class="available-number" [class]="getDaysColorClass()">{{ availableDays }}</span>
               <span class="total-days" *ngIf="totalDays">de {{ totalDays }}</span>
             </div>
             

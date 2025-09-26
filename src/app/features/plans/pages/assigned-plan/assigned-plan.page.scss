@@ -423,14 +423,14 @@ ion-card-subtitle {
 
 // Estilos para días disponibles
 .available-days-section {
-  padding: 12px;
+
   color: white;
 
   .available-days-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 
     .header-left {
       display: flex;
@@ -472,23 +472,40 @@ ion-card-subtitle {
   .available-days-content {
     .days-counter {
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
 
       .available-number {
         display: block;
-        font-size: 28px;
-        font-weight: 800;
+        font-size: 42px;
+        font-weight: 900;
         line-height: 1;
-        color: #fff;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+        transition: all 0.3s ease;
+
+        // Colores según cantidad de días
+        &.danger {
+          color: #ff4444; // Rojo para 0 días
+        }
+
+        &.warning-low {
+          color: #ff8800; // Rojizo para menos de 5
+        }
+
+        &.warning {
+          color: #ffbb33; // Ámbar para menos de 10
+        }
+
+        &.success {
+          color: #00dd88; // Verde para 10 o más
+        }
       }
 
       .total-days {
         display: block;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 500;
         color: rgba(255, 255, 255, 0.8);
-        margin-top: 1px;
+        margin-top: 0;
       }
 
       .days-label {
@@ -503,10 +520,10 @@ ion-card-subtitle {
     .days-progress {
       .progress-bar {
         background: rgba(255, 255, 255, 0.2);
-        height: 4px;
+        height: 3px;
         border-radius: 2px;
         overflow: hidden;
-        margin-bottom: 4px;
+        margin-bottom: 3px;
 
         .progress-fill {
           background: linear-gradient(90deg, #ffffff 0%, #e0f2ff 100%);
@@ -529,12 +546,12 @@ ion-card-subtitle {
 
   .loading-days {
     text-align: center;
-    padding: 8px 0;
+    padding: 6px 0;
 
     p {
       margin: 0;
       color: rgba(255, 255, 255, 0.8);
-      font-size: 12px;
+      font-size: 11px;
     }
   }
 }
@@ -546,14 +563,14 @@ ion-card-subtitle {
   }
 
   .available-days-section {
-    padding: 10px;
+
 
     .available-days-content .days-counter .available-number {
-      font-size: 24px;
+      font-size: 36px;
     }
 
     .available-days-header {
-      margin-bottom: 6px;
+      margin-bottom: 4px;
 
       .header-left {
         ion-icon {
