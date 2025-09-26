@@ -6,11 +6,9 @@
 /* HEADER */
 ion-header {
   --background: transparent;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 100%);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
@@ -33,9 +31,11 @@ ion-header {
     opacity: 0;
     transform: translateX(-100%);
   }
+
   50% {
     opacity: 0.7;
   }
+
   100% {
     opacity: 0;
     transform: translateX(100%);
@@ -84,11 +84,9 @@ ion-card {
 }
 
 ion-card-header {
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-primary-shade) 0%,
-    var(--ion-color-primary) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--ion-color-primary-shade) 0%,
+      var(--ion-color-primary) 100%);
   padding: 16px;
   position: relative;
   overflow: hidden;
@@ -101,12 +99,10 @@ ion-card-header {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      transparent 100%
-    );
+    background: linear-gradient(to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%);
     opacity: 0;
     animation: profile-light-sweep 2.5s ease-in-out infinite;
     pointer-events: none;
@@ -252,13 +248,13 @@ ion-spinner {
   ion-content {
     --padding-bottom: max(60px, calc(env(safe-area-inset-bottom, 20px) + 40px));
   }
-  
+
   .profile-container {
     padding: 12px;
     padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
     gap: 16px;
   }
-  
+
   .logout-button-container {
     padding: 12px;
     padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 16px) + 4px));
@@ -269,15 +265,48 @@ ion-spinner {
   ion-content {
     --padding-bottom: max(70px, calc(env(safe-area-inset-bottom, 20px) + 50px));
   }
-  
+
   .profile-container {
     padding: 8px;
     padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 16px) + 16px));
     gap: 12px;
   }
-  
+
   .logout-button-container {
     padding: 8px;
     padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 16px) + 8px));
+  }
+}
+
+/* Available Days Section */
+.available-days-section {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  .available-days {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+
+    strong {
+      color: var(--ion-color-success);
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+  }
+}
+
+.loading-days {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+
+  p {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
   }
 }
