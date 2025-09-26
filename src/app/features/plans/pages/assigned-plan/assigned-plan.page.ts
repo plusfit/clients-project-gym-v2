@@ -204,10 +204,7 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 	}
 
 	private loadAvailableDays(): void {
-		console.log("🔍 AssignedPlanPage: Iniciando carga de días disponibles");
-
 		if (this.userId && this.userId !== "unknown_user") {
-			console.log("✅ Usuario válido encontrado, ID:", this.userId);
 			this.loadingAvailableDays = true;
 
 			this.userPlanService
@@ -215,24 +212,16 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe({
 					next: (data) => {
-						console.log("📊 Datos recibidos del endpoint:", data);
 						if (data) {
 							this.availableDays = data.availableDays;
 							this.totalDays = data.totalDays;
-							console.log("✅ Días disponibles actualizados:", {
-								available: this.availableDays,
-								total: this.totalDays,
-							});
 						}
 						this.loadingAvailableDays = false;
 					},
-					error: (error) => {
-						console.error("❌ Error al cargar días disponibles:", error);
+					error: () => {
 						this.loadingAvailableDays = false;
 					},
 				});
-		} else {
-			console.log("❌ No se encontró usuario válido o no tiene ID");
 		}
 	}
 

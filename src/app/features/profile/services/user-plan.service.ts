@@ -34,24 +34,15 @@ export class UserPlanService {
 		expiryDate?: string;
 	} | null> {
 		const url = `${this.apiUrl}/clients/available-days/${userId}`;
-		console.log("🌐 UserPlanService: Haciendo petición HTTP a:", url);
-		console.log("🔧 API URL configurada:", this.apiUrl);
 
 		return this.http.get<AvailableDaysResponse>(url).pipe(
 			map((response) => {
-				console.log("📥 Respuesta del servidor:", response);
 				if (response.success) {
 					return response.data;
 				}
 				return null;
 			}),
-			catchError((error) => {
-				console.error("❌ Error en petición HTTP:", error);
-				console.error("🔍 Detalles del error:", {
-					message: error.message,
-					status: error.status,
-					url: error.url,
-				});
+			catchError(() => {
 				return of(null);
 			}),
 		);
