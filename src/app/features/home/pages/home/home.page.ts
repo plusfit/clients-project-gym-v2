@@ -10,13 +10,13 @@ import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
-    IonButton,
-    IonCol,
-    IonContent,
-    IonIcon,
-    IonRow,
-    IonSpinner,
-    ViewWillEnter,
+	IonButton,
+	IonCol,
+	IonContent,
+	IonIcon,
+	IonRow,
+	IonSpinner,
+	ViewWillEnter,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
