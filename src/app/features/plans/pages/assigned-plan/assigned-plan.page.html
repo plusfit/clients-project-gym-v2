@@ -134,6 +134,12 @@
                 {{ ((availableDays / totalDays) * 100) | number:'1.0-0' }}% disponible
               </span>
             </div>
+            
+            <!-- Mensaje de advertencia cuando quedan pocos días -->
+            <div class="payment-warning" *ngIf="availableDays !== null && availableDays < 10">
+              <ion-icon name="warning-outline"></ion-icon>
+              <p>Recuerda abonar a la brevedad para no perder el acceso</p>
+            </div>
           </div>
           
           <div class="loading-days" *ngIf="loadingAvailableDays">

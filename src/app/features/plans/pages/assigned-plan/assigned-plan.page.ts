@@ -33,6 +33,7 @@ import {
 	ribbonOutline,
 	shapesOutline,
 	trophyOutline,
+	warningOutline,
 } from "ionicons/icons";
 import { Observable, Subject, Subscription } from "rxjs";
 import { map, takeUntil } from "rxjs/operators";
@@ -123,6 +124,7 @@ export class AssignedPlanPage implements OnInit, OnDestroy {
 			createOutline,
 			fitnessOutline,
 			helpCircleOutline,
+			warningOutline,
 		});
 	}
 
