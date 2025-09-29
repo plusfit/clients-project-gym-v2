@@ -15,8 +15,8 @@ export interface Reward {
   /** Points required to redeem the reward (required, minimum 1) */
   pointsRequired: number;
 
-  /** Whether the reward is enabled for redemption */
-  enabled: boolean;
+  /** Whether the reward is disabled for redemption */
+  disabled: boolean;
 
   /** Total number of times this reward has been redeemed */
   totalExchanges: number;
