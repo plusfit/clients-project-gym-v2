@@ -72,7 +72,7 @@ export class RewardsState {
 
   @Selector()
   static getEnabledRewards(state: RewardsStateModel): Reward[] {
-    return state.rewards.filter(reward => reward.enabled);
+    return state.rewards.filter(reward => !reward.disabled);
   }
 
   // Actions

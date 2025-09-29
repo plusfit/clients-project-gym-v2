@@ -188,13 +188,13 @@ export class RewardsPage implements OnInit, OnDestroy {
 
     // Apply availability filter
     if (this.showOnlyAvailable) {
-      filtered = filtered.filter(reward => reward.enabled);
+      filtered = filtered.filter(reward => !reward.disabled);
     }
 
     // Apply affordable filter
     if (this.showOnlyAffordable) {
       filtered = filtered.filter(reward => 
-        reward.enabled && this.userPoints >= reward.pointsRequired
+        !reward.disabled && this.userPoints >= reward.pointsRequired
       );
     }
 
@@ -202,7 +202,7 @@ export class RewardsPage implements OnInit, OnDestroy {
   }
 
   async onExchangeReward(reward: Reward) {
-    if (!reward.enabled || this.userPoints < reward.pointsRequired) {
+    if (reward.disabled || this.userPoints < reward.pointsRequired) {
       await this.toastService.showToast(
         'No puedes canjear este premio en este momento',
         'warning'

@@ -55,14 +55,14 @@ export class RewardsService {
    */
   getRewards(params: {
     search?: string;
-    enabled?: boolean;
+    disabled?: boolean;
     page?: number;
     limit?: number;
   } = {}): Observable<RewardResponse> {
     const queryParams = new URLSearchParams();
     
     if (params.search) queryParams.set('search', params.search);
-    if (params.enabled !== undefined) queryParams.set('enabled', params.enabled.toString());
+    if (params.disabled !== undefined) queryParams.set('disabled', params.disabled.toString());
     if (params.page) queryParams.set('page', params.page.toString());
     if (params.limit) queryParams.set('limit', params.limit.toString());
 

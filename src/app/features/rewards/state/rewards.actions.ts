@@ -14,7 +14,7 @@ export class LoadRewardsWithFilters {
   static readonly type = '[Rewards] Load Rewards With Filters';
   constructor(public filters: {
     search?: string;
-    enabled?: boolean;
+    disabled?: boolean;
     page?: number;
     limit?: number;
   }) {}
