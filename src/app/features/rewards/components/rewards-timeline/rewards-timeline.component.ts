@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import {
-  IonIcon,
-  IonText
+    IonIcon,
+    IonText
 } from '@ionic/angular/standalone';
 import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
 import { addIcons } from 'ionicons';
 import {
-  checkmarkCircleOutline,
-  giftOutline,
-  lockClosedOutline,
-  starOutline,
-  trophyOutline
+    checkmarkCircleOutline,
+    giftOutline,
+    lockClosedOutline,
+    starOutline,
+    trophyOutline
 } from 'ionicons/icons';
 import { Exchange } from '../../interfaces/exchange.interface';
 import { Reward } from '../../interfaces/reward.interface';
@@ -67,8 +67,8 @@ export class RewardsTimelineComponent implements OnChanges {
   }
 
   private calculateRewardStates() {
-    // Filtrar solo premios habilitados
-    const enabledRewards = this.rewards.filter(reward => reward.enabled);
+    // Filtrar solo premios habilitados (no deshabilitados)
+    const enabledRewards = this.rewards.filter(reward => !reward.disabled);
     
     if (enabledRewards.length === 0) {
       this.rewardStates = [];

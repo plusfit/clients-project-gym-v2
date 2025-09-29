@@ -10,13 +10,13 @@ import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
-	IonButton,
-	IonCol,
-	IonContent,
-	IonIcon,
-	IonRow,
-	IonSpinner,
-	ViewWillEnter,
+    IonButton,
+    IonCol,
+    IonContent,
+    IonIcon,
+    IonRow,
+    IonSpinner,
+    ViewWillEnter,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
@@ -189,9 +189,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 			map(([rewards, exchanges]) => {
 				const completedExchanges = exchanges.filter(exchange => exchange.status === ExchangeStatus.COMPLETED || exchange.status === ExchangeStatus.PENDING);
 
-				// Filtrar rewards disponibles: enabled, suficientes puntos, y no canjeados
+				// Filtrar rewards disponibles: no deshabilitados, suficientes puntos, y no canjeados
 				const availableRewards = rewards.filter(reward => {
-					const isEnabled = reward.enabled;
+					const isEnabled = !reward.disabled;
 					const hasEnoughPoints = this.userPoints >= reward.pointsRequired;
 					const isNotExchanged = !completedExchanges.some(exchange => exchange.rewardId === reward.id);
 
