@@ -1,5 +1,5 @@
 <ion-card
-  [class.disabled]="isFull && !isEnrolled"
+  [class.disabled]="(isFull && !isEnrolled)"
   [class.enrolled]="isEnrolled"
   (click)="handleClick()"
 >
@@ -54,7 +54,7 @@
         <span>Ya inscripto</span>
       </div>
     </ng-container>
-    <div *ngIf="isFull && !isEnrolled" class="full-message">
+    <div *ngIf="isFull && !isEnrolled && !isDisabled" class="full-message">
       <ion-icon name="alert-circle-outline" class="full-icon"></ion-icon>
       <span>No hay cupos disponibles</span>
     </div>

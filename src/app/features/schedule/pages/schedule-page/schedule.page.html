@@ -4,7 +4,7 @@
   <ion-grid class="main-grid">
     <ion-row>
       <ion-col size="12" class="selector-col">
-        <app-day-selector [enrollmentsByDay]="enrollmentsByDay"
+        <app-day-selector [enrollmentsByDay]="enrollmentsByDay" [dayStatuses]="dayStatuses"
           (daySelected)="onDaySelected($event)"></app-day-selector>
       </ion-col>
     </ion-row>
@@ -13,7 +13,6 @@
         <h2 class="schedule-title">Horarios Disponibles <br><span class="available-slots">({{availableSlots}}
             restante{{availableSlots !== 1 ? 's' :
             ''}})</span></h2>
-
         <!-- Loading spinner -->
         <div *ngIf="loading" class="loading-container">
           <ion-spinner name="circular"></ion-spinner>
@@ -28,7 +27,14 @@
 
             <!-- Empty state -->
             <div *ngIf="schedulesForDay.length === 0" class="empty-state">
-              <p>No hay horarios disponibles para este día.</p>
+              <ng-container *ngIf="isDayCompletelyDisabled(); else noSchedulesTemplate">
+                <ion-icon name="information-circle-outline" class="info-day-icon"></ion-icon>
+                <p>No hay horarios configurados para este día.</p>
+                <p class="disabled-day-subtitle">Selecciona otro día para ver los horarios disponibles.</p>
+              </ng-container>
+              <ng-template #noSchedulesTemplate>
+                <p>No hay horarios disponibles para este día.</p>
+              </ng-template>
             </div>
           </div>
         </div>

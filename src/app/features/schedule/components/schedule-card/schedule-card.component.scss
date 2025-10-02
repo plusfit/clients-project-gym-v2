@@ -234,3 +234,82 @@ ion-card-content {
   font-size: 1.3rem;
   margin-right: 8px;
 }
+
+/* Estilos para horarios deshabilitados */
+ion-card.schedule-disabled {
+  opacity: 0.8;
+  /* Permitir interacción */
+  background: rgba(80, 80, 80, 0.3);
+  border: 1px dashed rgba(255, 165, 0, 0.5);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255, 165, 0, 0.05),
+      rgba(255, 165, 0, 0.05) 10px,
+      rgba(255, 165, 0, 0.1) 10px,
+      rgba(255, 165, 0, 0.1) 20px
+    );
+    border-radius: 12px;
+    pointer-events: none;
+  }
+
+  ion-card-header {
+    background: linear-gradient(
+      135deg,
+      var(--ion-color-warning-shade) 0%,
+      var(--ion-color-warning) 100%
+    );
+  }
+}
+
+.disabled-badge {
+  font-size: 0.7rem;
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+}
+
+.disabled-message {
+  display: flex;
+  align-items: flex-start;
+  background-color: rgba(var(--ion-color-warning-rgb), 0.15);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.disabled-icon {
+  color: var(--ion-color-warning);
+  font-size: 1.3rem;
+  margin-right: 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.disabled-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.disabled-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.disabled-reason {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-style: italic;
+}
