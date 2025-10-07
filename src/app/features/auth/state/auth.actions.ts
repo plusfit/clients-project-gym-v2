@@ -56,3 +56,12 @@ export class ForgotPassword {
 	static readonly type = "[Auth] Forgot Password";
 	constructor(public email: string) {}
 }
+
+export class ShowPasswordReminder {
+	static readonly type = "[Auth] Show Password Reminder";
+	constructor(public password: string) {}
+}
+
+export class HidePasswordReminder {
+	static readonly type = "[Auth] Hide Password Reminder";
+}

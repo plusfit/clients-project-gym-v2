@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, ViewChild } from "@angular/core";
 import {
 	AbstractControl,
 	FormBuilder,
@@ -10,25 +10,48 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RecaptchaService } from "@core/services/recaptcha.service";
-import { GoogleLogin, GoogleRegister, Register } from "@feature/auth/state/auth.actions";
-import { IonicModule } from "@ionic/angular";
-import { IonSpinner } from "@ionic/angular/standalone";
-import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
-import { RecaptchaBadgeComponent } from "@shared/components/recaptcha-badge/recaptcha-badge.component";
+import { GoogleLogin, GoogleRegister, HidePasswordReminder, Register } from "@feature/auth/state/auth.actions";
+import { AuthState } from "@feature/auth/state/auth.state";
+import { 
+	IonButton, 
+	IonContent, 
+	IonIcon, 
+	IonInput, 
+	IonItem, 
+	IonList, 
+	IonModal, 
+	IonSpinner, 
+	IonText 
+} from "@ionic/angular/standalone";
+import { Actions, Select, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
 import { mailOutline } from "ionicons/icons";
 import { lockClosedOutline } from "ionicons/icons";
 import { logInOutline } from "ionicons/icons";
 import { eyeOffOutline, eyeOutline } from "ionicons/icons";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, Subject, takeUntil } from "rxjs";
+import { PasswordReminderModalComponent } from "../password-reminder-modal/password-reminder-modal.component";
 
 @Component({
 	selector: "app-register-form",
 	standalone: true,
 	templateUrl: "./register-form.component.html",
 	styleUrls: ["./register-form.component.scss"],
-	imports: [CommonModule, IonicModule, ReactiveFormsModule, IonSpinner, RecaptchaBadgeComponent],
+	imports: [
+		CommonModule, 
+		ReactiveFormsModule, 
+		IonSpinner, 
+		IonModal,
+		IonContent,
+		IonList,
+		IonItem,
+		IonIcon,
+		IonInput,
+		IonText,
+		IonButton,
+		PasswordReminderModalComponent
+	],
 })
 export class RegisterFormComponent implements OnDestroy {
 	form: FormGroup;
@@ -36,6 +59,11 @@ export class RegisterFormComponent implements OnDestroy {
 	isLoading = false;
 	showPassword = false;
 	showRepeatPassword = false;
+
+	@Select(AuthState.getShowPasswordReminder) showPasswordReminder$!: Observable<boolean>;
+	@Select(AuthState.getRegisteredPassword) registeredPassword$!: Observable<string | undefined>;
+
+	@ViewChild('passwordReminderModal', { static: false }) passwordReminderModal!: IonModal;
 
 	constructor(
 		private fb: FormBuilder,
@@ -45,13 +73,7 @@ export class RegisterFormComponent implements OnDestroy {
 		private toastService: ToastService,
 		private recaptchaService: RecaptchaService,
 	) {
-		addIcons({
-			"mail-outline": mailOutline,
-			"lock-closed-outline": lockClosedOutline,
-			"log-in-outline": logInOutline,
-			"eye-outline": eyeOutline,
-			"eye-off-outline": eyeOffOutline,
-		});
+		addIcons({mailOutline,lockClosedOutline,logInOutline,eyeOutline,eyeOffOutline});
 
 		this.form = this.fb.group(
 			{
@@ -119,8 +141,8 @@ export class RegisterFormComponent implements OnDestroy {
 				this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
 					this.isLoading = false;
 					this.toastService.showSuccess("Cliente creado correctamente");
-					this.form.reset();
-					this.router.navigate(["/login"]);
+					// El modal se mostrará automáticamente desde el estado
+					// No navegamos inmediatamente, esperamos a que el usuario confirme el modal
 				});
 
 				this.actions.pipe(ofActionErrored(Register), takeUntil(this._destroyed)).subscribe(() => {
@@ -180,5 +202,18 @@ export class RegisterFormComponent implements OnDestroy {
 	ngOnDestroy(): void {
 		this._destroyed.next();
 		this._destroyed.complete();
+	}
+
+	onPasswordReminderConfirm() {
+		// Cerrar el modal directamente
+		if (this.passwordReminderModal) {
+			this.passwordReminderModal.dismiss();
+		}
+		
+		// Actualizar el estado
+		this.store.dispatch(new HidePasswordReminder());
+		
+		// Navegar al login
+		this.router.navigate(["/login"]);
 	}
 }

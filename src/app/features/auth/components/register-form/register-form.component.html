@@ -79,4 +79,18 @@
       <!-- <app-recaptcha-badge></app-recaptcha-badge> -->
     </form>
   </div>
+
+  <!-- Modal de recordatorio de contraseña -->
+  <ion-modal 
+    #passwordReminderModal
+    [isOpen]="showPasswordReminder$ | async" 
+    (ionModalDidDismiss)="onPasswordReminderConfirm()"
+    [canDismiss]="true">
+    <ng-template>
+      <app-password-reminder-modal 
+        [password]="(registeredPassword$ | async) || undefined"
+        (confirm)="onPasswordReminderConfirm()">
+      </app-password-reminder-modal>
+    </ng-template>
+  </ion-modal>
 </ion-content>
