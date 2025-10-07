@@ -408,3 +408,51 @@ ion-spinner {
   margin-bottom: 16px;
   color: var(--ion-color-primary);
 }
+
+// Banner de días deshabilitados
+.disabled-days-banner {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--ion-color-warning-rgb), 0.15) 0%,
+    rgba(var(--ion-color-warning-rgb), 0.25) 100%
+  );
+  border: 1px solid rgba(var(--ion-color-warning-rgb), 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+
+  .banner-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--ion-color-warning);
+    font-size: 1rem;
+
+    ion-icon {
+      font-size: 1.2rem;
+    }
+  }
+
+  .disabled-day-item {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    border-left: 3px solid var(--ion-color-warning);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.4;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      color: var(--ion-color-warning);
+      font-weight: 600;
+    }
+  }
+}
