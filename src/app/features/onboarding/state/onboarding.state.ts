@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { catchError, switchMap, tap } from "rxjs/operators";
 import { Step1, Step2, Step3 } from "../interfaces/onboarding.interfaces";
 import { OnboardingService } from "../services/onboarding.service";
-import { InitOnboarding, LoadOnboardingData, SetStep1, SetStep2, SetStep3 } from "./onboarding.actions";
+import { InitOnboarding, LoadOnboardingData, SetCIFromRegister, SetStep1, SetStep2, SetStep3 } from "./onboarding.actions";
 
 export interface OnBoardingStateModel {
 	isInitialized: boolean;
@@ -14,6 +14,7 @@ export interface OnBoardingStateModel {
 	step2: Step2 | null;
 	step3: Step3 | null;
 	currentStep: number;
+	ciFromRegister?: string;
 }
 
 @Injectable()
@@ -26,14 +27,20 @@ export interface OnBoardingStateModel {
 		step2: null,
 		step3: null,
 		currentStep: 1,
+		ciFromRegister: undefined,
 	},
 })
 export class OnboardingState {
-	constructor(private onboardingService: OnboardingService) {}
+	constructor(private onboardingService: OnboardingService) { }
 
 	@Selector()
 	static getStep1(state: OnBoardingStateModel) {
 		return state.step1;
+	}
+
+	@Selector()
+	static getCIFromRegister(state: OnBoardingStateModel) {
+		return state.ciFromRegister;
 	}
 
 	@Selector()
@@ -232,5 +239,12 @@ export class OnboardingState {
 				return of(state);
 			}),
 		);
+	}
+
+	@Action(SetCIFromRegister)
+	setCIFromRegister(ctx: StateContext<OnBoardingStateModel>, action: SetCIFromRegister) {
+		ctx.patchState({
+			ciFromRegister: action.ci,
+		});
 	}
 }

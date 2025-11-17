@@ -61,6 +61,7 @@ import {
   callOutline,
   camera,
   cardOutline,
+  checkmarkCircle,
   close,
   fingerPrintOutline,
   homeOutline,
@@ -188,6 +189,7 @@ export class OnboardingStep1Component implements OnInit {
       'finger-print-outline': fingerPrintOutline,
       image,
       close,
+      'checkmark-circle': checkmarkCircle,
     });
 
     this.userForm = this.fb.group({
@@ -233,6 +235,18 @@ export class OnboardingStep1Component implements OnInit {
 
     this.obtenerUserID();
 
+    // Cargar CI desde el registro si existe
+    this.store
+      .select(OnboardingState.getCIFromRegister)
+      .pipe(take(1))
+      .subscribe((ciFromRegister) => {
+        if (ciFromRegister) {
+          this.userForm.patchValue({ ci: ciFromRegister });
+          // Deshabilitar el campo CI para que no se pueda editar
+          this.userForm.get('ci')?.disable();
+        }
+      });
+
     this.store
       .dispatch(new LoadOnboardingData())
       .pipe(
@@ -249,6 +263,15 @@ export class OnboardingStep1Component implements OnInit {
             .subscribe((step1Data) => {
               if (step1Data) {
                 this.userForm.patchValue(step1Data);
+                // Si ya hay datos de step1, re-deshabilitar la CI si vino del registro
+                this.store
+                  .select(OnboardingState.getCIFromRegister)
+                  .pipe(take(1))
+                  .subscribe((ciFromRegister) => {
+                    if (ciFromRegister) {
+                      this.userForm.get('ci')?.disable();
+                    }
+                  });
                 if (step1Data.avatarUrl) {
                   this.avatarUrlPreview = step1Data.avatarUrl;
                 }
@@ -531,7 +554,8 @@ export class OnboardingStep1Component implements OnInit {
       });
       await loading.present();
 
-      const step1Data = { ...this.userForm.value };
+      // Usar getRawValue() para incluir campos deshabilitados (como CI)
+      const step1Data = { ...this.userForm.getRawValue() };
       let finalAvatarUrl: string | null = this.avatarUrlPreview;
 
       if (this.avatarFileToUpload && this.currentUserId) {

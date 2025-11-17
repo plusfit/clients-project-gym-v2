@@ -90,12 +90,16 @@
           </ion-text>
           <ion-item>
             <ion-icon name="card-outline" slot="start"></ion-icon>
-            <ion-input formControlName="ci" placeholder="Cédula de identidad"></ion-input>
+            <ion-input formControlName="ci" placeholder="Cédula de identidad" [readonly]="userForm.get('ci')?.disabled || false"></ion-input>
           </ion-item>
           <ion-text color="danger" *ngIf="isInvalid('ci')">
             Ingrese una cédula válida (8 dígitos sin puntos ni guiones).
           </ion-text>
-          <ion-text class="helper-text">Ingrese su cédula (8 dígitos sin puntos ni guiones).</ion-text>
+          <ion-text class="helper-text" *ngIf="!userForm.get('ci')?.disabled">Ingrese su cédula (8 dígitos sin puntos ni guiones).</ion-text>
+          <ion-text class="helper-text" color="medium" *ngIf="userForm.get('ci')?.disabled">
+            <ion-icon name="checkmark-circle" style="vertical-align: middle;"></ion-icon>
+            Cédula verificada en el registro.
+          </ion-text>
         </ion-list>
       </div>
     </form>
