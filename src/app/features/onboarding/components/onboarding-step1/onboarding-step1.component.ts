@@ -235,15 +235,14 @@ export class OnboardingStep1Component implements OnInit {
 
     this.obtenerUserID();
 
-    // Cargar CI desde el registro si existe
+    // Cargar CI desde el registro si existe (pero dejarla editable)
     this.store
       .select(OnboardingState.getCIFromRegister)
       .pipe(take(1))
       .subscribe((ciFromRegister) => {
         if (ciFromRegister) {
           this.userForm.patchValue({ ci: ciFromRegister });
-          // Deshabilitar el campo CI para que no se pueda editar
-          this.userForm.get('ci')?.disable();
+          // Dejamos el campo habilitado por si el usuario necesita corregirlo
         }
       });
 
@@ -263,15 +262,6 @@ export class OnboardingStep1Component implements OnInit {
             .subscribe((step1Data) => {
               if (step1Data) {
                 this.userForm.patchValue(step1Data);
-                // Si ya hay datos de step1, re-deshabilitar la CI si vino del registro
-                this.store
-                  .select(OnboardingState.getCIFromRegister)
-                  .pipe(take(1))
-                  .subscribe((ciFromRegister) => {
-                    if (ciFromRegister) {
-                      this.userForm.get('ci')?.disable();
-                    }
-                  });
                 if (step1Data.avatarUrl) {
                   this.avatarUrlPreview = step1Data.avatarUrl;
                 }
@@ -554,8 +544,7 @@ export class OnboardingStep1Component implements OnInit {
       });
       await loading.present();
 
-      // Usar getRawValue() para incluir campos deshabilitados (como CI)
-      const step1Data = { ...this.userForm.getRawValue() };
+      const step1Data = { ...this.userForm.value };
       let finalAvatarUrl: string | null = this.avatarUrlPreview;
 
       if (this.avatarFileToUpload && this.currentUserId) {
