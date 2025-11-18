@@ -10,6 +10,23 @@
         <h2 class="section-title">Crear tu cuenta</h2>
         <ion-list>
           <ion-item>
+            <ion-icon name="card-outline" slot="start"></ion-icon>
+            <ion-input formControlName="ci" type="tel" placeholder="Cédula de identidad" maxlength="8"></ion-input>
+          </ion-item>
+          <ion-text color="danger" *ngIf="isInvalid('ci') && form.get('ci')?.hasError('required')">
+            La cédula es obligatoria.
+          </ion-text>
+          <ion-text color="danger" *ngIf="isInvalid('ci') && form.get('ci')?.hasError('pattern')">
+            Ingrese una cédula válida (8 dígitos).
+          </ion-text>
+          <ion-text color="danger" *ngIf="form.get('ci')?.hasError('ciAlreadyExists') && !form.get('ci')?.hasError('pattern')">
+            Esta cédula ya está registrada.
+          </ion-text>
+          <ion-text color="medium" *ngIf="form.get('ci')?.pending" class="validating-text">
+            <ion-spinner name="dots"></ion-spinner> Validando...
+          </ion-text>
+
+          <ion-item>
             <ion-icon name="mail-outline" slot="start"></ion-icon>
             <ion-input formControlName="email" type="email" placeholder="Email"></ion-input>
           </ion-item>

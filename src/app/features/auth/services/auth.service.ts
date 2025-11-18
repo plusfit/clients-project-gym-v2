@@ -27,7 +27,7 @@ export class AuthService {
 	constructor(
 		private _auth: Auth,
 		private http: HttpClient,
-	) {}
+	) { }
 
 	loginFirebase(authCredentials: LoginCredentials): any {
 		const { email, password } = authCredentials;
@@ -53,7 +53,7 @@ export class AuthService {
 			try {
 				const decoded: any = jwtDecode(token);
 				userId = decoded?._id || decoded?.id || null;
-			} catch {}
+			} catch { }
 		}
 		if (!userId) {
 			userId = localStorage.getItem("userId");
@@ -121,5 +121,9 @@ export class AuthService {
 
 	forgotPassword(email: string): Observable<any> {
 		return from(sendPasswordResetEmail(this._auth, email));
+	}
+
+	validateCI(ci: string): Observable<{ success: boolean; data: boolean }> {
+		return this.http.get<{ success: boolean; data: boolean }>(`${environment.apiUrl}/clients/validate/ci/${ci}`);
 	}
 }
