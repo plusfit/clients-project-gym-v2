@@ -2,6 +2,7 @@ export interface RegisterCredentials {
 	email: string;
 	password: string;
 	recaptchaToken?: string;
+	invitationCode: string;
 }
 
 export interface RegisterResponse {
@@ -27,18 +28,7 @@ export interface FirebaseAuthResponse {
 	password: string;
 }
 
-export interface RegisterResponse {
-	success: boolean;
-	data: {
-		_id: string;
-		identifier: string;
-		role: string;
-	};
-}
 
-export interface FirebaseRegisterResponse {
-	user: any;
-}
 export interface User {
 	_id: string;
 	role: UserRole;
@@ -91,4 +81,38 @@ export interface RefreshTokenPayload {
 export interface RefreshToken {
 	refreshToken?: string;
 	accessToken?: string;
+}
+
+export interface LoginPayload {
+	token: string;
+	recaptchaToken?: string;
+	password?: string;
+}
+
+export interface RegisterPayload {
+	email: string;
+	password?: string;
+	displayName?: string;
+	photoURL?: string;
+	recaptchaToken?: string;
+	invitationCode?: string;
+}
+
+export interface GoogleAuthPayload {
+	idToken: string;
+	name?: string;
+	avatarUrl?: string;
+	recaptchaToken?: string;
+}
+
+export interface ValidateCIResponse {
+	success: boolean;
+	data: boolean;
+}
+
+export interface ValidateInvitationCodeResponse {
+	success: boolean;
+	data: {
+		valid: boolean;
+	};
 }
