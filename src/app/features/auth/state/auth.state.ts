@@ -208,7 +208,7 @@ export class AuthState {
 		const { email, password, recaptchaToken } = action.credentials;
 		return this.authService.registerFirebase(email, password).pipe(
 			exhaustMap((firebaseResponse: FirebaseRegisterResponse) => {
-				return this.authService.register(firebaseResponse.user.email, password, undefined, undefined, recaptchaToken).pipe(
+				return this.authService.register(firebaseResponse.user.email, password, undefined, undefined, recaptchaToken, action.credentials.invitationCode).pipe(
 					tap((res: RegisterResponse) => {
 						this.toastService.showSuccess("Usuario registrado correctamente");
 						// Almacenar la contraseña y mostrar el modal de recordatorio

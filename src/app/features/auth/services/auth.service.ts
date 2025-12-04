@@ -14,10 +14,15 @@ import { Observable, from, of, throwError } from "rxjs";
 import { delay, map } from "rxjs/operators";
 import {
 	AuthResponse,
+	GoogleAuthPayload,
 	LoginCredentials,
+	LoginPayload,
 	RefreshTokenPayload,
+	RegisterPayload,
 	RegisterResponse,
 	User,
+	ValidateCIResponse,
+	ValidateInvitationCodeResponse,
 } from "../interfaces/user.interface";
 
 @Injectable({
@@ -35,7 +40,7 @@ export class AuthService {
 	}
 
 	login(token: string, recaptchaToken?: string, password?: string): Observable<AuthResponse> {
-		const payload: { token: string; recaptchaToken?: string; password?: string } = { token };
+		const payload: LoginPayload = { token };
 		if (recaptchaToken) {
 			payload.recaptchaToken = recaptchaToken;
 		}
@@ -81,12 +86,14 @@ export class AuthService {
 		displayName?: string,
 		photoURL?: string,
 		recaptchaToken?: string,
+		invitationCode?: string,
 	): Observable<RegisterResponse> {
-		const payload: { email: string; password?: string; displayName?: string; photoURL?: string; recaptchaToken?: string } = { email };
+		const payload: RegisterPayload = { email };
 		if (password) payload.password = password;
 		if (displayName) payload.displayName = displayName;
 		if (photoURL) payload.photoURL = photoURL;
 		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
+		if (invitationCode) payload.invitationCode = invitationCode;
 
 		return this.http.post<RegisterResponse>(`${environment.apiUrl}/auth/register`, payload);
 	}
@@ -105,7 +112,7 @@ export class AuthService {
 	}
 
 	googleAuth(idToken: string, name?: string, photoURL?: string, recaptchaToken?: string): Observable<AuthResponse> {
-		const payload: { idToken: string; name?: string; avatarUrl?: string; recaptchaToken?: string } = { idToken };
+		const payload: GoogleAuthPayload = { idToken };
 		if (name) payload.name = name;
 		if (photoURL) payload.avatarUrl = photoURL;
 		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
@@ -123,7 +130,11 @@ export class AuthService {
 		return from(sendPasswordResetEmail(this._auth, email));
 	}
 
-	validateCI(ci: string): Observable<{ success: boolean; data: boolean }> {
-		return this.http.get<{ success: boolean; data: boolean }>(`${environment.apiUrl}/clients/validate/ci/${ci}`);
+	validateCI(ci: string): Observable<ValidateCIResponse> {
+		return this.http.get<ValidateCIResponse>(`${environment.apiUrl}/clients/validate/ci/${ci}`);
+	}
+
+	validateInvitationCode(code: string): Observable<ValidateInvitationCodeResponse> {
+		return this.http.get<ValidateInvitationCodeResponse>(`${environment.apiUrl}/auth/invitation-code/validate/${code}`);
 	}
 }
