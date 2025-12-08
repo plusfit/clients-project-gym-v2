@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { Plan } from "@feature/profile/interfaces/plan.interface";
+import { UserPlanService } from "@feature/profile/services/user-plan.service";
 import { LoadPlan } from "@feature/profile/state/user.actions";
 import { UserState } from "@feature/profile/state/user.state";
 import { DaySelectorComponent } from "@feature/schedule/components/day-selector/day-selector.component";
@@ -64,6 +65,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	scheduleCardElements!: QueryList<ElementRef>;
 
 	availableSlots = 0;
+	availableDays: number | null = null;
 
 	private subscriptions = new Subscription();
 
@@ -71,6 +73,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		private scheduleFacade: ScheduleFacadeService,
 		private store: Store,
 		private toastService: ToastService,
+		private userPlanService: UserPlanService,
 	) {
 		this.schedules$ = this.scheduleFacade.schedules$;
 	}
@@ -88,6 +91,17 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (user.planId) {
 					this.store.dispatch(new LoadPlan(user.planId));
 				}
+
+				this.userPlanService.getAvailableDays(user._id).subscribe({
+					next: (data) => {
+						if (data) {
+							this.availableDays = data.availableDays;
+						}
+					},
+					error: (err) => {
+						console.error("Error loading available days", err);
+					},
+				});
 			}
 		});
 		this.subscriptions.add(userSub);
@@ -240,6 +254,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Si el usuario ya está inscripto, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {
+			if (this.availableDays !== null && this.availableDays <= 0) {
+				this.toastService.showWarning("No tienes días disponibles para inscribirte. Por favor renueva tu plan.");
+				return;
+			}
+
 			// Verificamos si el usuario ya está inscrito en el mismo día
 			if (!this.checkDayEnrollmentLimit(schedule)) {
 				this.toastService.showWarning(
@@ -291,6 +310,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 							const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 							this.calculateEnrollments(updatedSchedules);
 							this.calculateEnrollmentsByDay(updatedSchedules);
+
+							// Reload available days
+							this.userPlanService.getAvailableDays(this.currentUserId).subscribe((data) => {
+								if (data) this.availableDays = data.availableDays;
+							});
 						}, 300);
 					},
 					error: (error) => {
@@ -330,6 +354,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 						const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 						this.calculateEnrollments(updatedSchedules);
 						this.calculateEnrollmentsByDay(updatedSchedules);
+
+						// Reload available days
+						this.userPlanService.getAvailableDays(this.currentUserId).subscribe((data) => {
+							if (data) this.availableDays = data.availableDays;
+						});
 					},
 					error: (error) => {
 						this.loading = false;
