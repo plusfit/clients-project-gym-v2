@@ -1,7 +1,8 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy } from "@angular/core";
+import { Component, OnDestroy, ViewChild } from "@angular/core";
 import {
 	AbstractControl,
+	AsyncValidatorFn,
 	FormBuilder,
 	FormGroup,
 	ReactiveFormsModule,
@@ -10,25 +11,50 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import { RecaptchaService } from "@core/services/recaptcha.service";
-import { GoogleLogin, GoogleRegister, Register } from "@feature/auth/state/auth.actions";
-import { IonicModule } from "@ionic/angular";
-import { IonSpinner } from "@ionic/angular/standalone";
-import { Actions, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
-import { RecaptchaBadgeComponent } from "@shared/components/recaptcha-badge/recaptcha-badge.component";
+import { AuthService } from "@feature/auth/services/auth.service";
+import { GoogleLogin, GoogleRegister, HidePasswordReminder, Register } from "@feature/auth/state/auth.actions";
+import { AuthState } from "@feature/auth/state/auth.state";
+import { SetCIFromRegister } from "@feature/onboarding/state/onboarding.actions";
+import {
+	IonButton,
+	IonContent,
+	IonIcon,
+	IonInput,
+	IonItem,
+	IonList,
+	IonModal,
+	IonSpinner,
+	IonText
+} from "@ionic/angular/standalone";
+import { Actions, Select, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
-import { mailOutline } from "ionicons/icons";
+import { cardOutline, mailOutline } from "ionicons/icons";
 import { lockClosedOutline } from "ionicons/icons";
 import { logInOutline } from "ionicons/icons";
 import { eyeOffOutline, eyeOutline } from "ionicons/icons";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, Subject, catchError, map, of, takeUntil } from "rxjs";
+import { PasswordReminderModalComponent } from "../password-reminder-modal/password-reminder-modal.component";
 
 @Component({
 	selector: "app-register-form",
 	standalone: true,
 	templateUrl: "./register-form.component.html",
 	styleUrls: ["./register-form.component.scss"],
-	imports: [CommonModule, IonicModule, ReactiveFormsModule, IonSpinner, RecaptchaBadgeComponent],
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		IonSpinner,
+		IonModal,
+		IonContent,
+		IonList,
+		IonItem,
+		IonIcon,
+		IonInput,
+		IonText,
+		IonButton,
+		PasswordReminderModalComponent
+	],
 })
 export class RegisterFormComponent implements OnDestroy {
 	form: FormGroup;
@@ -37,6 +63,11 @@ export class RegisterFormComponent implements OnDestroy {
 	showPassword = false;
 	showRepeatPassword = false;
 
+	@Select(AuthState.getShowPasswordReminder) showPasswordReminder$!: Observable<boolean>;
+	@Select(AuthState.getRegisteredPassword) registeredPassword$!: Observable<string | undefined>;
+
+	@ViewChild('passwordReminderModal', { static: false }) passwordReminderModal!: IonModal;
+
 	constructor(
 		private fb: FormBuilder,
 		private router: Router,
@@ -44,17 +75,13 @@ export class RegisterFormComponent implements OnDestroy {
 		private actions: Actions,
 		private toastService: ToastService,
 		private recaptchaService: RecaptchaService,
+		private authService: AuthService,
 	) {
-		addIcons({
-			"mail-outline": mailOutline,
-			"lock-closed-outline": lockClosedOutline,
-			"log-in-outline": logInOutline,
-			"eye-outline": eyeOutline,
-			"eye-off-outline": eyeOffOutline,
-		});
+		addIcons({ cardOutline, mailOutline, lockClosedOutline, logInOutline, eyeOutline, eyeOffOutline });
 
 		this.form = this.fb.group(
 			{
+				ci: ["", [Validators.required, Validators.pattern(/^\d{8}$/)], [this.ciAvailableValidator()]],
 				email: ["", [Validators.required, Validators.email]],
 				repeatEmail: ["", [Validators.required, Validators.email]],
 				password: ["", [Validators.required, this.passwordValidator]],
@@ -92,6 +119,23 @@ export class RegisterFormComponent implements OnDestroy {
 		return pass === repeat ? null : { passwordsDontMatch: true };
 	}
 
+	ciAvailableValidator(): AsyncValidatorFn {
+		return (control: AbstractControl): Observable<ValidationErrors | null> => {
+			if (!control.value || control.value.length !== 8) {
+				return of(null);
+			}
+
+			return this.authService.validateCI(control.value).pipe(
+				map((response) => {
+					// Si data es true, el usuario existe (CI ya está registrado)
+					// Si data es false, el usuario no existe (CI disponible)
+					return response.data ? { ciAlreadyExists: true } : null;
+				}),
+				catchError(() => of(null))
+			);
+		};
+	}
+
 	togglePasswordVisibility() {
 		this.showPassword = !this.showPassword;
 	}
@@ -118,9 +162,14 @@ export class RegisterFormComponent implements OnDestroy {
 
 				this.actions.pipe(ofActionSuccessful(Register), takeUntil(this._destroyed)).subscribe(() => {
 					this.isLoading = false;
+					// Guardar la CI en el estado de onboarding para usarla en el step1
+					const ci = this.form.get('ci')?.value;
+					if (ci) {
+						this.store.dispatch(new SetCIFromRegister(ci));
+					}
 					this.toastService.showSuccess("Cliente creado correctamente");
-					this.form.reset();
-					this.router.navigate(["/login"]);
+					// El modal se mostrará automáticamente desde el estado
+					// No navegamos inmediatamente, esperamos a que el usuario confirme el modal
 				});
 
 				this.actions.pipe(ofActionErrored(Register), takeUntil(this._destroyed)).subscribe(() => {
@@ -180,5 +229,18 @@ export class RegisterFormComponent implements OnDestroy {
 	ngOnDestroy(): void {
 		this._destroyed.next();
 		this._destroyed.complete();
+	}
+
+	onPasswordReminderConfirm() {
+		// Cerrar el modal directamente
+		if (this.passwordReminderModal) {
+			this.passwordReminderModal.dismiss();
+		}
+
+		// Actualizar el estado
+		this.store.dispatch(new HidePasswordReminder());
+
+		// Navegar al onboarding después del registro exitoso
+		this.router.navigate(["/onboarding"]);
 	}
 }

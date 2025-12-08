@@ -27,17 +27,20 @@ export class AuthService {
 	constructor(
 		private _auth: Auth,
 		private http: HttpClient,
-	) {}
+	) { }
 
 	loginFirebase(authCredentials: LoginCredentials): any {
 		const { email, password } = authCredentials;
 		return from(signInWithEmailAndPassword(this._auth, email, password));
 	}
 
-	login(token: string, recaptchaToken?: string): Observable<AuthResponse> {
-		const payload: { token: string; recaptchaToken?: string } = { token };
+	login(token: string, recaptchaToken?: string, password?: string): Observable<AuthResponse> {
+		const payload: { token: string; recaptchaToken?: string; password?: string } = { token };
 		if (recaptchaToken) {
 			payload.recaptchaToken = recaptchaToken;
+		}
+		if (password) {
+			payload.password = password;
 		}
 		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, payload);
 	}
@@ -50,7 +53,7 @@ export class AuthService {
 			try {
 				const decoded: any = jwtDecode(token);
 				userId = decoded?._id || decoded?.id || null;
-			} catch {}
+			} catch { }
 		}
 		if (!userId) {
 			userId = localStorage.getItem("userId");
@@ -74,11 +77,13 @@ export class AuthService {
 
 	register(
 		email: string,
+		password?: string,
 		displayName?: string,
 		photoURL?: string,
 		recaptchaToken?: string,
 	): Observable<RegisterResponse> {
-		const payload: { email: string; displayName?: string; photoURL?: string; recaptchaToken?: string } = { email };
+		const payload: { email: string; password?: string; displayName?: string; photoURL?: string; recaptchaToken?: string } = { email };
+		if (password) payload.password = password;
 		if (displayName) payload.displayName = displayName;
 		if (photoURL) payload.photoURL = photoURL;
 		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
@@ -116,5 +121,9 @@ export class AuthService {
 
 	forgotPassword(email: string): Observable<any> {
 		return from(sendPasswordResetEmail(this._auth, email));
+	}
+
+	validateCI(ci: string): Observable<{ success: boolean; data: boolean }> {
+		return this.http.get<{ success: boolean; data: boolean }>(`${environment.apiUrl}/clients/validate/ci/${ci}`);
 	}
 }

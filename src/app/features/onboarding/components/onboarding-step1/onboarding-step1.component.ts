@@ -61,6 +61,7 @@ import {
   callOutline,
   camera,
   cardOutline,
+  checkmarkCircle,
   close,
   fingerPrintOutline,
   homeOutline,
@@ -188,6 +189,7 @@ export class OnboardingStep1Component implements OnInit {
       'finger-print-outline': fingerPrintOutline,
       image,
       close,
+      'checkmark-circle': checkmarkCircle,
     });
 
     this.userForm = this.fb.group({
@@ -232,6 +234,17 @@ export class OnboardingStep1Component implements OnInit {
     }
 
     this.obtenerUserID();
+
+    // Cargar CI desde el registro si existe (pero dejarla editable)
+    this.store
+      .select(OnboardingState.getCIFromRegister)
+      .pipe(take(1))
+      .subscribe((ciFromRegister) => {
+        if (ciFromRegister) {
+          this.userForm.patchValue({ ci: ciFromRegister });
+          // Dejamos el campo habilitado por si el usuario necesita corregirlo
+        }
+      });
 
     this.store
       .dispatch(new LoadOnboardingData())

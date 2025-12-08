@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Schedule } from "@feature/schedule/state/schedule.state";
-import { Observable, map } from "rxjs";
+import { Observable, map, of } from "rxjs";
 import { environment } from "../../../../environments/environment";
 
 interface ScheduleResponse {
@@ -18,6 +18,7 @@ export class ScheduleService {
 	constructor(private http: HttpClient) {}
 
 	getSchedules(): Observable<Schedule[]> {
+		// Usar datos reales del backend
 		return this.http.get<ScheduleResponse>(this.apiUrl).pipe(
 			map((response) => {
 				if (response.success) {

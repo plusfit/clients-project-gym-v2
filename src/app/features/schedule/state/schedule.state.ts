@@ -8,6 +8,8 @@ export interface Schedule {
 	maxCount: number;
 	clients: string[];
 	day: string;
+	disabled?: boolean; // Campo para controlar si el horario está habilitado
+	disabledReason?: string; // Razón por la cual el horario está deshabilitado
 }
 
 export interface ScheduleStateModel {

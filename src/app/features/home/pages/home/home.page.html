@@ -38,6 +38,18 @@
       </ion-card-content>
     </ion-card>
 
+       <ng-container *ngIf="getDisabledDaysInfo() | async as disabledDays">
+      <div class="disabled-days-banner" *ngIf="disabledDays.length > 0">
+        <div class="banner-header">
+          <ion-icon name="warning-outline" color="warning"></ion-icon>
+          <span>Días cerrados</span>
+        </div>
+        <div class="disabled-day-item" *ngFor="let disabledDay of disabledDays">
+          <strong>{{ disabledDay.day }}:</strong> {{ disabledDay.reason }}
+        </div>
+      </div>
+    </ng-container>
+
     <!-- Estadísticas  TODO: Ver que mostrar. -->
     <!-- <div class="stats-container">
       <div class="stat-card">
