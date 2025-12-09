@@ -224,8 +224,8 @@ export class RegisterFormComponent implements OnDestroy, OnInit {
 		try {
 			// Ejecutar reCAPTCHA antes del registro con Google
 			const recaptchaToken = await this.recaptchaService.executeRecaptcha("google_register");
-
-			this.store.dispatch(new GoogleRegister(recaptchaToken));
+			const invitationCode = this.form.get('invitationCode')?.value;
+			this.store.dispatch(new GoogleRegister(recaptchaToken, invitationCode));
 
 			this.actions.pipe(ofActionSuccessful(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
 				this.isLoading = false;

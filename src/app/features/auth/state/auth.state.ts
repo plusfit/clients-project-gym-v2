@@ -268,7 +268,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken, action.invitationCode).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
@@ -322,7 +322,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken, action.invitationCode).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {

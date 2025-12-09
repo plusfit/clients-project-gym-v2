@@ -103,6 +103,7 @@ export interface GoogleAuthPayload {
 	name?: string;
 	avatarUrl?: string;
 	recaptchaToken?: string;
+	invitationCode?: string;
 }
 
 export interface ValidateCIResponse {

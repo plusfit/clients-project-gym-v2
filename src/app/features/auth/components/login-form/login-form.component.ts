@@ -8,7 +8,7 @@ import {
 	ValidationErrors,
 	Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { RecaptchaService } from "@core/services/recaptcha.service";
 import { ForgotPassword, GoogleLogin, Login } from "@feature/auth/state/auth.actions";
 import {
@@ -55,6 +55,7 @@ export class LoginFormComponent implements OnDestroy {
 	constructor(
 		private fb: FormBuilder,
 		private router: Router,
+		private route: ActivatedRoute,
 		private store: Store,
 		private actions: Actions,
 		private toastService: ToastService,
@@ -159,10 +160,10 @@ export class LoginFormComponent implements OnDestroy {
 		this.isLoading = true;
 
 		try {
-			// Ejecutar reCAPTCHA antes del login con Google
-			const recaptchaToken = await this.recaptchaService.executeRecaptcha("google_login");
-
-			this.store.dispatch(new GoogleLogin(recaptchaToken));
+			// No es necesario ejecutar reCAPTCHA para Google Login ya que el Guard lo permite si no se envía token
+			// y la seguridad la provee el propio token de Google
+			const code = this.route.snapshot.queryParams['code'];
+			this.store.dispatch(new GoogleLogin(undefined, code));
 
 			this.actions.pipe(ofActionSuccessful(GoogleLogin), takeUntil(this._destroyed)).subscribe(() => {
 				this.isLoading = false;

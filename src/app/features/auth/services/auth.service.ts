@@ -111,11 +111,12 @@ export class AuthService {
 		return from(signInWithPopup(this._auth, provider));
 	}
 
-	googleAuth(idToken: string, name?: string, photoURL?: string, recaptchaToken?: string): Observable<AuthResponse> {
+	googleAuth(idToken: string, name?: string, photoURL?: string, recaptchaToken?: string, invitationCode?: string): Observable<AuthResponse> {
 		const payload: GoogleAuthPayload = { idToken };
 		if (name) payload.name = name;
 		if (photoURL) payload.avatarUrl = photoURL;
 		if (recaptchaToken) payload.recaptchaToken = recaptchaToken;
+		if (invitationCode) payload.invitationCode = invitationCode;
 
 		return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/google`, payload);
 	}

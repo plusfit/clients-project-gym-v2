@@ -92,8 +92,11 @@
             <ion-icon name="card-outline" slot="start"></ion-icon>
             <ion-input formControlName="ci" placeholder="Cédula de identidad"></ion-input>
           </ion-item>
-          <ion-text color="danger" *ngIf="isInvalid('ci')">
+          <ion-text color="danger" *ngIf="userForm.get('ci')?.hasError('pattern') || userForm.get('ci')?.hasError('required') && userForm.get('ci')?.touched">
             Ingrese una cédula válida (8 dígitos sin puntos ni guiones).
+          </ion-text>
+          <ion-text color="danger" *ngIf="userForm.get('ci')?.hasError('ciAlreadyExists') && userForm.get('ci')?.touched">
+             Esta cédula ya está registrada en el sistema.
           </ion-text>
           <ion-text class="helper-text">Ingrese su cédula (8 dígitos sin puntos ni guiones).</ion-text>
         </ion-list>
