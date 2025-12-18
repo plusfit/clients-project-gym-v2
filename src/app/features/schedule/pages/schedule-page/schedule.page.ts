@@ -375,6 +375,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Si el usuario ya está inscripto, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {
+			// Check if schedule is at capacity
+			if (schedule.clients && schedule.clients.length >= schedule.maxCount) {
+				this.toastService.showWarning(
+					`Este horario está completo (${schedule.clients.length}/${schedule.maxCount} cupos ocupados).`
+				);
+				return;
+			}
+
 			// Verificamos si el usuario ya está inscrito en el mismo día
 			if (!this.checkDayEnrollmentLimit(schedule)) {
 				this.toastService.showWarning(
