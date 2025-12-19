@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { authGuard, authenticatedRedirectGuard, onboardingCompletedGuard } from "@core/guards";
+import { authGuard, authenticatedRedirectGuard, onboardingCompletedGuard, invitationCodeGuard } from "@core/guards";
 import { NotFoundPage } from "@shared/pages/not-found/not-found.page";
 import { TabsPage } from "./tabs.page";
 
@@ -62,7 +62,7 @@ export const routes: Routes = [
 	{
 		path: "registro",
 		loadComponent: () => import("../features/auth/pages/register-page/register.page").then((m) => m.RegisterPage),
-		canActivate: [authenticatedRedirectGuard]
+		canActivate: [authenticatedRedirectGuard, invitationCodeGuard]
 	},
 	{
 		path: "login",
