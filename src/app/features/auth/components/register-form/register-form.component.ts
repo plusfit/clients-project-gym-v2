@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
 	AbstractControl,
 	AsyncValidatorFn,
@@ -9,7 +9,7 @@ import {
 	ValidationErrors,
 	Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { RecaptchaService } from "@core/services/recaptcha.service";
 import { AuthService } from "@feature/auth/services/auth.service";
 import { GoogleLogin, GoogleRegister, HidePasswordReminder, Register } from "@feature/auth/state/auth.actions";
@@ -29,7 +29,7 @@ import {
 import { Actions, Select, Store, ofActionErrored, ofActionSuccessful } from "@ngxs/store";
 import { ToastService } from "@shared/services/toast.service";
 import { addIcons } from "ionicons";
-import { cardOutline, mailOutline } from "ionicons/icons";
+import { cardOutline, mailOutline, ticketOutline } from "ionicons/icons";
 import { lockClosedOutline } from "ionicons/icons";
 import { logInOutline } from "ionicons/icons";
 import { eyeOffOutline, eyeOutline } from "ionicons/icons";
@@ -56,7 +56,7 @@ import { PasswordReminderModalComponent } from "../password-reminder-modal/passw
 		PasswordReminderModalComponent
 	],
 })
-export class RegisterFormComponent implements OnDestroy {
+export class RegisterFormComponent implements OnDestroy, OnInit {
 	form: FormGroup;
 	private _destroyed = new Subject<void>();
 	isLoading = false;
@@ -71,16 +71,18 @@ export class RegisterFormComponent implements OnDestroy {
 	constructor(
 		private fb: FormBuilder,
 		private router: Router,
+		private route: ActivatedRoute,
 		private store: Store,
 		private actions: Actions,
 		private toastService: ToastService,
 		private recaptchaService: RecaptchaService,
 		private authService: AuthService,
 	) {
-		addIcons({ cardOutline, mailOutline, lockClosedOutline, logInOutline, eyeOutline, eyeOffOutline });
+		addIcons({ cardOutline, mailOutline, lockClosedOutline, logInOutline, eyeOutline, eyeOffOutline, ticketOutline });
 
 		this.form = this.fb.group(
 			{
+				invitationCode: ["", [Validators.required], [this.invitationCodeValidator()]],
 				ci: ["", [Validators.required, Validators.pattern(/^\d{8}$/)], [this.ciAvailableValidator()]],
 				email: ["", [Validators.required, Validators.email]],
 				repeatEmail: ["", [Validators.required, Validators.email]],
@@ -91,6 +93,28 @@ export class RegisterFormComponent implements OnDestroy {
 				validators: [this.emailsMatchValidator, this.passwordsMatchValidator],
 			},
 		);
+	}
+
+	ngOnInit() {
+		this.route.queryParams.pipe(takeUntil(this._destroyed)).subscribe(params => {
+			if (params['code']) {
+				this.form.patchValue({ invitationCode: params['code'] });
+			}
+		});
+	}
+
+	invitationCodeValidator(): AsyncValidatorFn {
+		return (control: AbstractControl): Observable<ValidationErrors | null> => {
+			if (!control.value) {
+				return of(null);
+			}
+			return this.authService.validateInvitationCode(control.value).pipe(
+				map((response) => {
+					return response.data.valid ? null : { invalidCode: true };
+				}),
+				catchError(() => of(null))
+			);
+		};
 	}
 
 	emailsMatchValidator(group: AbstractControl): ValidationErrors | null {
@@ -200,8 +224,8 @@ export class RegisterFormComponent implements OnDestroy {
 		try {
 			// Ejecutar reCAPTCHA antes del registro con Google
 			const recaptchaToken = await this.recaptchaService.executeRecaptcha("google_register");
-
-			this.store.dispatch(new GoogleRegister(recaptchaToken));
+			const invitationCode = this.form.get('invitationCode')?.value;
+			this.store.dispatch(new GoogleRegister(recaptchaToken, invitationCode));
 
 			this.actions.pipe(ofActionSuccessful(GoogleRegister), takeUntil(this._destroyed)).subscribe(() => {
 				this.isLoading = false;

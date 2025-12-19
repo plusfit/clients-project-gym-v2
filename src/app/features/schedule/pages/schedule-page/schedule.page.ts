@@ -14,6 +14,7 @@ import { IonCol, IonContent, IonGrid, IonIcon, IonModal, IonRow, IonSpinner } fr
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { ToastService } from "@shared/services/toast.service";
+import { ErrorHandlerService } from "@core/services/error-handler.service";
 import { Observable, Subscription } from "rxjs";
 
 interface DayEnrollment {
@@ -80,6 +81,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		private scheduleFacade: ScheduleFacadeService,
 		private store: Store,
 		private toastService: ToastService,
+		private errorHandler: ErrorHandlerService,
 	) {
 		this.schedules$ = this.scheduleFacade.schedules$;
 	}
@@ -375,6 +377,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			// Si el usuario ya está inscripto, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {
+			// Check if schedule is at capacity
+			if (schedule.clients && schedule.clients.length >= schedule.maxCount) {
+				this.toastService.showWarning(
+					`Este horario está completo (${schedule.clients.length}/${schedule.maxCount} cupos ocupados).`
+				);
+				return;
+			}
+
 			// Verificamos si el usuario ya está inscrito en el mismo día
 			if (!this.checkDayEnrollmentLimit(schedule)) {
 				this.toastService.showWarning(
@@ -431,10 +441,13 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al inscribirse: ${error.message}`;
+						const errorMessage = this.errorHandler.handleError(error, false);
+						this.error = `Error al inscribirse: ${errorMessage}`;
 
-						// Show error toast
-						this.toastService.showError(`No se pudo completar la inscripción: ${error.message || "Error desconocido"}`);
+						// Show error toast - No mostramos toast aquí porque errorHandler ya lo muestra si showToast es true
+						// Pero en el plan decidimos mantenerlo con el mensaje corregido para consistencia, 
+						// aunque el interceptor ya muestra uno. Para evitar doble toast, usaremos false en handleError.
+						this.toastService.showError(`No se pudo completar la inscripción: ${errorMessage}`);
 
 						this.closeModals();
 					},
@@ -470,11 +483,12 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al desinscribirse: ${error.message}`;
+						const errorMessage = this.errorHandler.handleError(error, false);
+						this.error = `Error al desinscribirse: ${errorMessage}`;
 
 						// Show error toast
 						this.toastService.showError(
-							`No se pudo completar la desinscripción: ${error.message || "Error desconocido"}`,
+							`No se pudo completar la desinscripción: ${errorMessage}`,
 						);
 
 						this.closeModals();
