@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ToastService } from '@shared/services/toast.service';
 
 @Injectable({
@@ -26,6 +27,21 @@ export class ErrorHandlerService {
    */
   private translateError(error: unknown): string {
     let errorMessage = '';
+
+    // Si es un error de Angular HTTP
+    if (error instanceof HttpErrorResponse) {
+      const httpError = error as any;
+      if (httpError.error && typeof httpError.error === 'object') {
+        // Estructura NestJS estándar { success, data: { message, ... }, ... }
+        if (httpError.error.data && httpError.error.data.message) {
+          return httpError.error.data.message;
+        }
+        // Estructura sugerida { message, ... }
+        if (httpError.error.message) {
+          return httpError.error.message;
+        }
+      }
+    }
 
     // Extraer el mensaje del error
     if (error && typeof error === 'object' && 'code' in error) {
