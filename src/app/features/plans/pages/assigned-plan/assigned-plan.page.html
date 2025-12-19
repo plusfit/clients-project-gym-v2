@@ -98,6 +98,56 @@
         </ion-button>
       </ion-card-content>
     </ion-card>
+
+    <!-- Sección de días disponibles independiente - DESPUÉS del plan -->
+    <ion-card class="available-days-card" *ngIf="availableDays !== null || loadingAvailableDays">
+      <ion-card-content>
+        <div class="available-days-section">
+          <div class="available-days-header">
+            <div class="header-left">
+              <ion-icon name="calendar-number-outline"></ion-icon>
+              <h3>Días Disponibles</h3>
+            </div>
+            <ion-button 
+              fill="clear" 
+              size="small" 
+              class="help-button"
+              (click)="showAvailableDaysHelp()">
+              <ion-icon name="help-circle-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          
+          <div class="available-days-content" *ngIf="!loadingAvailableDays">
+            <div class="days-counter">
+              <span class="available-number" [class]="getDaysColorClass()">{{ availableDays }}</span>
+              <span class="total-days" *ngIf="totalDays">de {{ totalDays }}</span>
+            </div>
+            
+            <div class="days-progress" *ngIf="totalDays && availableDays !== null">
+              <div class="progress-bar">
+                <div 
+                  class="progress-fill" 
+                  [style.width.%]="(availableDays / totalDays) * 100">
+                </div>
+              </div>
+              <span class="progress-text">
+                {{ ((availableDays / totalDays) * 100) | number:'1.0-0' }}% disponible
+              </span>
+            </div>
+            
+            <!-- Mensaje de advertencia cuando quedan pocos días -->
+            <div class="payment-warning" *ngIf="availableDays !== null && availableDays < 10">
+              <ion-icon name="warning-outline"></ion-icon>
+              <p>Recuerda abonar a la brevedad para no perder el acceso</p>
+            </div>
+          </div>
+          
+          <div class="loading-days" *ngIf="loadingAvailableDays">
+            <p>Cargando días disponibles...</p>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 
   <ng-template #noPlan>
