@@ -35,12 +35,12 @@ export class GetNewToken {
 
 export class GoogleLogin {
 	static readonly type = "[Auth] Google Login";
-	constructor(public recaptchaToken?: string) {}
+	constructor(public recaptchaToken?: string, public invitationCode?: string) {}
 }
 
 export class GoogleRegister {
 	static readonly type = "[Auth] Google Register";
-	constructor(public recaptchaToken?: string) {}
+	constructor(public recaptchaToken?: string, public invitationCode?: string) {}
 }
 
 export class SetOnboardingCompleted {
@@ -55,4 +55,13 @@ export class UpdateUser {
 export class ForgotPassword {
 	static readonly type = "[Auth] Forgot Password";
 	constructor(public email: string) {}
+}
+
+export class ShowPasswordReminder {
+	static readonly type = "[Auth] Show Password Reminder";
+	constructor(public password: string) {}
+}
+
+export class HidePasswordReminder {
+	static readonly type = "[Auth] Hide Password Reminder";
 }

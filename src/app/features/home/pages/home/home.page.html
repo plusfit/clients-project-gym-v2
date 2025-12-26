@@ -40,6 +40,32 @@
       <p class="ion-text-center">"{{ message }}"</p>
     </div>
 
+    <!-- Advertencia de pago cuando quedan pocos días -->
+    <ion-card class="payment-warning-card" *ngIf="showPaymentWarning">
+      <ion-card-content>
+        <div class="warning-content">
+          <ion-icon name="warning-outline" class="warning-icon"></ion-icon>
+          <div class="warning-text">
+            <h4>Recordatorio importante</h4>
+            <p>Recuerda abonar a la brevedad para no perder el acceso</p>
+          </div>
+          <div class="close-x" (click)="dismissWarning()">×</div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+       <ng-container *ngIf="getDisabledDaysInfo() | async as disabledDays">
+      <div class="disabled-days-banner" *ngIf="disabledDays.length > 0">
+        <div class="banner-header">
+          <ion-icon name="warning-outline" color="warning"></ion-icon>
+          <span>Días cerrados</span>
+        </div>
+        <div class="disabled-day-item" *ngFor="let disabledDay of disabledDays">
+          <strong>{{ disabledDay.day }}:</strong> {{ disabledDay.reason }}
+        </div>
+      </div>
+    </ng-container>
+
     <!-- Estadísticas  TODO: Ver que mostrar. -->
     <!-- <div class="stats-container">
       <div class="stat-card">
@@ -91,7 +117,7 @@
           <h3>Tu rutina para hoy</h3>
         </div>
 
-        <app-routine-card [routine]="routine" (exerciseClicked)="onExerciseClicked($event)"></app-routine-card>
+        <app-routine-card [routine]="routine"></app-routine-card>
       </div>
     </ng-container>
 

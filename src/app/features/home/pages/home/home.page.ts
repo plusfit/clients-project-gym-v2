@@ -1,16 +1,20 @@
-import { AsyncPipe, DatePipe, NgIf } from "@angular/common";
+import { AsyncPipe, DatePipe, NgFor, NgIf } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { User } from "@feature/auth/interfaces/user.interface";
 import { GetCurrentUser } from "@feature/auth/state/auth.actions";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { HomeState, LoadRoutineForToday } from "@feature/home/state/home.state";
+import { UserPlanService } from "@feature/profile/services/user-plan.service";
 import { RewardsService } from "@feature/rewards/services/rewards.service";
 import { SubRoutine } from "@feature/routine/interfaces/routine.interface";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
+import { Schedule } from "@feature/schedule/state/schedule.state";
 import { ScheduleState } from "@feature/schedule/state/schedule.state";
 import {
 	IonButton,
+	IonCard,
+	IonCardContent,
 	IonCol,
 	IonContent,
 	IonIcon,
@@ -22,6 +26,8 @@ import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { ExchangeStatus } from "@shared/enums/exchange-status.enum";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
+import { addIcons } from "ionicons";
+import { warningOutline } from "ionicons/icons";
 import { Observable, Subject, Subscription, combineLatest, interval } from "rxjs";
 import { distinctUntilChanged, map, skip, take, takeUntil } from "rxjs/operators";
 import { RoutineCardComponent } from "../../components/routine-card/routine-card.component";
@@ -33,6 +39,8 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 	imports: [
 		IonContent,
 		IonButton,
+		IonCard,
+		IonCardContent,
 		IonIcon,
 		IonSpinner,
 		DatePipe,
@@ -42,6 +50,7 @@ import { RoutineCardComponent } from "../../components/routine-card/routine-card
 		AsyncPipe,
 		DayTranslatePipe,
 		NgIf,
+		NgFor,
 		RouterLink,
 		AppHeaderComponent,
 	],
@@ -64,13 +73,52 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	@Select(HomeState.getMotivationalMessage)
 	motivationalMessage$!: Observable<string>;
 	@Select(AuthState.getUser) user$!: Observable<User | null>;
+	@Select(ScheduleState.getSchedules) schedules$!: Observable<Schedule[]>;
+
+	// Propiedades para días disponibles
+	availableDays: number | null = null;
+	showPaymentWarning = false;
 
 	constructor(
 		private store: Store,
 		private router: Router,
 		private scheduleFacade: ScheduleFacadeService,
 		private rewardsService: RewardsService,
-	) {}
+		private userPlanService: UserPlanService,
+	) {
+		addIcons({
+			warningOutline,
+		});
+	}
+
+	/**
+	 * Obtiene la información de días deshabilitados para mostrar en el banner
+	 */
+	getDisabledDaysInfo(): Observable<{day: string, reason: string}[]> {
+		return this.schedules$.pipe(
+			map(schedules => {
+				if (!schedules) return [];
+				
+				const disabledDaysMap = new Map<string, string>();
+				
+				for (const schedule of schedules) {
+					if (schedule.disabled && schedule.disabledReason) {
+						const dayName = schedule.day; // Usar directamente el nombre del día que ya viene como string
+						// Solo agregar si el día no está ya en el mapa
+						if (!disabledDaysMap.has(dayName)) {
+							disabledDaysMap.set(dayName, schedule.disabledReason);
+						}
+					}
+				}
+				
+				// Convertir el mapa a array
+				return Array.from(disabledDaysMap.entries()).map(([day, reason]) => ({
+					day,
+					reason
+				}));
+			})
+		);
+	}
 
 	ngOnInit(): void {
 		// Reloj en tiempo real con actualización cada segundo
@@ -83,39 +131,47 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 
 		// Setup rewards subscription
 		this.setupRewardsSubscription();
+		// Cargar días disponibles
+		this.loadAvailableDays();
 
 		// Escuchar cambios en el estado de schedules y recargar la rutina
-		this.schedulesSubscription = this.store.select(ScheduleState.getSchedules).pipe(
-			skip(1), // Saltar la primera emisión (inicial)
-			distinctUntilChanged((prev, curr) => {
-				// Comparar solo los clientes de cada schedule para detectar cambios de inscripción
-				const prevClients = prev.map(s => ({ id: s._id, clients: s.clients }));
-				const currClients = curr.map(s => ({ id: s._id, clients: s.clients }));
-				return JSON.stringify(prevClients) === JSON.stringify(currClients);
-			})
-		).subscribe(() => {
-			// Solo recargar si no está actualmente cargando
-			const isCurrentlyLoading = this.store.selectSnapshot(state => state.home.loading);
-			if (!isCurrentlyLoading) {
-				this.store.dispatch(new LoadRoutineForToday());
-			}
-		});
+		this.schedulesSubscription = this.store
+			.select(ScheduleState.getSchedules)
+			.pipe(
+				skip(1), // Saltar la primera emisión (inicial)
+				distinctUntilChanged((prev, curr) => {
+					// Comparar solo los clientes de cada schedule para detectar cambios de inscripción
+					const prevClients = prev.map((s) => ({ id: s._id, clients: s.clients }));
+					const currClients = curr.map((s) => ({ id: s._id, clients: s.clients }));
+					return JSON.stringify(prevClients) === JSON.stringify(currClients);
+				}),
+			)
+			.subscribe(() => {
+				// Solo recargar si no está actualmente cargando
+				const isCurrentlyLoading = this.store.selectSnapshot((state) => state.home.loading);
+				if (!isCurrentlyLoading) {
+					this.store.dispatch(new LoadRoutineForToday());
+				}
+			});
 	}
 
 	private loadInitialData(): void {
 		const currentSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
-		
+
 		if (!currentSchedules || currentSchedules.length === 0) {
 			// Si no hay schedules cargados, cargarlos primero
 			this.scheduleFacade.loadSchedules();
-			
+
 			// Esperar a que se carguen los schedules antes de cargar la rutina
-			this.store.select(ScheduleState.getSchedules).pipe(
-				skip(1), // Saltar el estado inicial vacío
-				take(1)  // Tomar solo la primera emisión después de cargar
-			).subscribe(() => {
-				this.store.dispatch(new LoadRoutineForToday());
-			});
+			this.store
+				.select(ScheduleState.getSchedules)
+				.pipe(
+					skip(1), // Saltar el estado inicial vacío
+					take(1), // Tomar solo la primera emisión después de cargar
+				)
+				.subscribe(() => {
+					this.store.dispatch(new LoadRoutineForToday());
+				});
 		} else {
 			// Si ya hay schedules, cargar la rutina directamente
 			this.store.dispatch(new LoadRoutineForToday());
@@ -140,10 +196,6 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 
 		// Recargar premios disponibles cada vez que se entre a la página
 		this.refreshRewardsData();
-	}
-
-	onExerciseClicked(exercise: any) {
-		this.router.navigate(["/cliente/rutinas", exercise.id]);
 	}
 
 	reloadRoutine() {
@@ -223,6 +275,29 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 
 			// Recalcular premios disponibles con datos frescos
 			this.calculateAvailableRewards(user._id);
+		}
+	}
+
+	dismissWarning() {
+		this.showPaymentWarning = false;
+	}
+
+	private loadAvailableDays(): void {
+		const user = this.store.selectSnapshot(AuthState.getUser) as User | null;
+
+		if (user?._id) {
+			this.userPlanService.getAvailableDays(user._id).subscribe({
+				next: (data) => {
+					if (data) {
+						this.availableDays = data.availableDays;
+						this.showPaymentWarning = data.availableDays < 10;
+					}
+				},
+				error: () => {
+					// Error silencioso, no mostrar advertencia si no se puede cargar
+					this.showPaymentWarning = false;
+				},
+			});
 		}
 	}
 }

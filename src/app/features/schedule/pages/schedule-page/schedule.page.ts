@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from "@angular/core";
 import { AuthState } from "@feature/auth/state/auth.state";
 import { Plan } from "@feature/profile/interfaces/plan.interface";
+import { UserPlanService } from "@feature/profile/services/user-plan.service";
 import { LoadPlan } from "@feature/profile/state/user.actions";
 import { UserState } from "@feature/profile/state/user.state";
 import { DaySelectorComponent } from "@feature/schedule/components/day-selector/day-selector.component";
@@ -10,15 +11,22 @@ import { ScheduleCardComponent } from "@feature/schedule/components/schedule-car
 import { UnsubscribeConfirmationModalComponent } from "@feature/schedule/components/unsubscribe-confirmation-modal/unsubscribe-confirmation-modal.component";
 import { ScheduleFacadeService } from "@feature/schedule/services/schedule-facade.service";
 import { Schedule, ScheduleState } from "@feature/schedule/state/schedule.state";
-import { IonCol, IonContent, IonGrid, IonModal, IonRow, IonSpinner } from "@ionic/angular/standalone";
+import { IonCol, IonContent, IonGrid, IonIcon, IonModal, IonRow, IonSpinner } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
 import { ToastService } from "@shared/services/toast.service";
+import { ErrorHandlerService } from "@core/services/error-handler.service";
 import { Observable, Subscription } from "rxjs";
 
 interface DayEnrollment {
 	day: string;
 	count: number;
+}
+
+interface DayStatus {
+	day: string;
+	disabled: boolean;
+	hasSchedules: boolean;
 }
 
 @Component({
@@ -38,6 +46,7 @@ interface DayEnrollment {
 		IonRow,
 		IonCol,
 		IonSpinner,
+		IonIcon,
 		AppHeaderComponent,
 	],
 })
@@ -55,6 +64,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	enrolledDaysCount = 0;
 	totalEnrollments = 0;
 	enrollmentsByDay: DayEnrollment[] = [];
+	dayStatuses: DayStatus[] = [];
+	disabledDaysInfo: Array<{day: string, reasons: string[]}> = []; // Información de días deshabilitados para el home
 
 	showEnrollModal = false;
 	showUnsubscribeModal = false;
@@ -64,6 +75,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	scheduleCardElements!: QueryList<ElementRef>;
 
 	availableSlots = 0;
+	availableDays: number | null = null;
 
 	private subscriptions = new Subscription();
 
@@ -71,12 +83,13 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		private scheduleFacade: ScheduleFacadeService,
 		private store: Store,
 		private toastService: ToastService,
+		private userPlanService: UserPlanService,
+		private errorHandler: ErrorHandlerService,
 	) {
 		this.schedules$ = this.scheduleFacade.schedules$;
 	}
 
 	ngOnInit(): void {
-		// Load schedules from backend
 		this.loading = true;
 		this.scheduleFacade.loadSchedules();
 
@@ -88,6 +101,17 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				if (user.planId) {
 					this.store.dispatch(new LoadPlan(user.planId));
 				}
+
+				this.userPlanService.getAvailableDays(user._id).subscribe({
+					next: (data) => {
+						if (data) {
+							this.availableDays = data.availableDays;
+						}
+					},
+					error: (err) => {
+						console.error("Error loading available days", err);
+					},
+				});
 			}
 		});
 		this.subscriptions.add(userSub);
@@ -109,6 +133,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			this.filterSchedules(schedules);
 			this.calculateEnrollments(schedules);
 			this.calculateEnrollmentsByDay(schedules);
+			this.calculateDayStatuses(schedules);
+			this.disabledDaysInfo = this.getDisabledDaysInfo(); // Actualizar información de días deshabilitados
 		});
 		this.subscriptions.add(schedulesSub);
 	}
@@ -130,11 +156,15 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.selectedDay = day;
 		const schedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 		this.filterSchedules(schedules);
+
+		// Ya no mostramos warning por días deshabilitados, permitimos acceso completo
+		// El usuario verá la información visual en la interfaz
 	}
 
 	filterSchedules(schedules: Schedule[]) {
 		this.schedulesForDay = schedules
 			.filter((schedule) => schedule.day === this.selectedDay)
+			// Incluir todos los horarios para mostrar, incluso los deshabilitados (con indicación visual)
 			.sort((a, b) => {
 				const timeA = Number.parseInt(a.startTime, 10);
 				const timeB = Number.parseInt(b.startTime, 10);
@@ -193,6 +223,107 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		}));
 	}
 
+	calculateDayStatuses(schedules: Schedule[]) {
+		const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+		
+		this.dayStatuses = days.map(day => {
+			const daySchedules = schedules.filter(schedule => schedule.day === day);
+			const hasSchedules = daySchedules.length > 0;
+			
+			// Un día está DESHABILITADO solo si:
+			// 1. Tiene horarios Y todos están explícitamente deshabilitados (disabled === true)
+			// Los días sin horarios NO se consideran deshabilitados, solo no tienen horarios
+			let isDayDisabled = false;
+			if (hasSchedules) {
+				const enabledSchedules = daySchedules.filter(schedule => schedule.disabled !== true);
+				isDayDisabled = enabledSchedules.length === 0; // Solo si TODOS están disabled = true
+			}
+			
+			return {
+				day,
+				disabled: isDayDisabled,
+				hasSchedules
+			};
+		});
+
+		// Ya NO cambiamos automáticamente el día seleccionado
+		// Los usuarios pueden ver días deshabilitados y acceder a ellos
+	}
+
+	isDayCompletelyDisabled(): boolean {
+		const dayStatus = this.dayStatuses.find(status => status.day === this.selectedDay);
+		// Solo retorna true si el día está explícitamente deshabilitado
+		// NO bloquea días sin horarios, solo días con horarios deshabilitados
+		return dayStatus ? dayStatus.disabled : false;
+	}
+
+	getDisabledDayReason(): string {
+		const dayStatus = this.dayStatuses.find(status => status.day === this.selectedDay);
+		if (!dayStatus) {
+			return 'No hay información disponible para este día.';
+		}
+		
+		if (!dayStatus.hasSchedules) {
+			return 'No hay horarios configurados para este día.';
+		}
+
+		if (dayStatus.disabled) {
+			// Obtener todas las razones de los horarios deshabilitados del día
+			const daySchedules = this.schedulesForDay.filter(schedule => schedule.disabled === true);
+			const reasons = daySchedules
+				.map(schedule => schedule.disabledReason)
+				.filter(reason => reason) // Filtrar razones vacías
+				.filter((reason, index, array) => array.indexOf(reason) === index); // Eliminar duplicados
+			
+			if (reasons.length > 0) {
+				return reasons.length === 1 
+					? `Razón: ${reasons[0]}`
+					: `Razones: ${reasons.join(', ')}`;
+			}
+			
+			return 'Todos los horarios de este día están deshabilitados sin razón específica.';
+		}
+		
+		return 'Este día está disponible.';
+	}
+
+	/**
+	 * Obtiene todos los días deshabilitados con sus razones para mostrar en el home
+	 */
+	getDisabledDaysInfo(): Array<{day: string, reasons: string[]}> {
+		const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
+		const disabledDaysInfo: Array<{day: string, reasons: string[]}> = [];
+		
+		const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+		
+		for (const day of days) {
+			const daySchedules = allSchedules.filter(schedule => schedule.day === day);
+			const disabledSchedules = daySchedules.filter(schedule => schedule.disabled === true);
+			
+			if (disabledSchedules.length > 0) {
+				const reasons = disabledSchedules
+					.map(schedule => schedule.disabledReason)
+					.filter((reason): reason is string => reason !== undefined && reason.trim() !== '')
+					.filter((reason, index, arr) => arr.indexOf(reason) === index); // Eliminar duplicados
+				
+				if (reasons.length > 0) {
+					disabledDaysInfo.push({
+						day,
+						reasons
+					});
+				} else {
+					// Si hay horarios deshabilitados pero sin razón
+					disabledDaysInfo.push({
+						day,
+						reasons: ['Sin razón especificada']
+					});
+				}
+			}
+		}
+		
+		return disabledDaysInfo;
+	}
+
 	checkMaxEnrollmentsLimit(newSchedule: Schedule): boolean {
 		// Si el usuario ya está inscripto en este horario, no hay problema
 		if (newSchedule.clients?.includes(this.currentUserId)) {
@@ -236,10 +367,43 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	onScheduleClicked(schedule: Schedule) {
 		this.selectedSchedule = schedule;
 
+		// Si el horario está deshabilitado, mostrar información pero permitir agendar/desagendar
+		if (schedule.disabled === true) {
+			const reason = schedule.disabledReason || 'Sin razón especificada';
+			
+			// Si el usuario ya está inscrito, permitir desinscripción con aviso
+			if (schedule.clients?.includes(this.currentUserId)) {
+				this.toastService.showInfo(
+					`ℹ️ Este horario tiene limitaciones (${reason}). Puedes desanotarte si lo deseas.`,
+				);
+				this.showUnsubscribeModal = true;
+				return;
+			}
+			
+			// Si no está inscrito, permitir inscripción con aviso
+			this.toastService.showInfo(
+				`ℹ️ Este horario tiene limitaciones (${reason}). Aún puedes anotarte, pero considera las limitaciones.`,
+			);
+			// Continuar con la lógica normal de inscripción
+		}
+
 		if (schedule.clients?.includes(this.currentUserId)) {
 			// Si el usuario ya está inscripto, se abre el modal de desinscripción
 			this.showUnsubscribeModal = true;
 		} else {
+			if (this.availableDays !== null && this.availableDays <= 0) {
+				this.toastService.showWarning("No tienes días disponibles para inscribirte. Por favor renueva tu plan.");
+				return;
+			}
+
+			// Check if schedule is at capacity
+			if (schedule.clients && schedule.clients.length >= schedule.maxCount) {
+				this.toastService.showWarning(
+					`Este horario está completo (${schedule.clients.length}/${schedule.maxCount} cupos ocupados).`
+				);
+				return;
+			}
+
 			// Verificamos si el usuario ya está inscrito en el mismo día
 			if (!this.checkDayEnrollmentLimit(schedule)) {
 				this.toastService.showWarning(
@@ -291,14 +455,22 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 							const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 							this.calculateEnrollments(updatedSchedules);
 							this.calculateEnrollmentsByDay(updatedSchedules);
+
+							// Reload available days
+							this.userPlanService.getAvailableDays(this.currentUserId).subscribe((data) => {
+								if (data) this.availableDays = data.availableDays;
+							});
 						}, 300);
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al inscribirse: ${error.message}`;
+						const errorMessage = this.errorHandler.handleError(error, false);
+						this.error = `Error al inscribirse: ${errorMessage}`;
 
-						// Show error toast
-						this.toastService.showError(`No se pudo completar la inscripción: ${error.message || "Error desconocido"}`);
+						// Show error toast - No mostramos toast aquí porque errorHandler ya lo muestra si showToast es true
+						// Pero en el plan decidimos mantenerlo con el mensaje corregido para consistencia, 
+						// aunque el interceptor ya muestra uno. Para evitar doble toast, usaremos false en handleError.
+						this.toastService.showError(`No se pudo completar la inscripción: ${errorMessage}`);
 
 						this.closeModals();
 					},
@@ -330,14 +502,20 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 						const updatedSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
 						this.calculateEnrollments(updatedSchedules);
 						this.calculateEnrollmentsByDay(updatedSchedules);
+
+						// Reload available days
+						this.userPlanService.getAvailableDays(this.currentUserId).subscribe((data) => {
+							if (data) this.availableDays = data.availableDays;
+						});
 					},
 					error: (error) => {
 						this.loading = false;
-						this.error = `Error al desinscribirse: ${error.message}`;
+						const errorMessage = this.errorHandler.handleError(error, false);
+						this.error = `Error al desinscribirse: ${errorMessage}`;
 
 						// Show error toast
 						this.toastService.showError(
-							`No se pudo completar la desinscripción: ${error.message || "Error desconocido"}`,
+							`No se pudo completar la desinscripción: ${errorMessage}`,
 						);
 
 						this.closeModals();

@@ -21,12 +21,14 @@ import {
 	GetNewToken,
 	GoogleLogin,
 	GoogleRegister,
+	HidePasswordReminder,
 	Login,
 	Logout,
 	RefreshSession,
 	Register,
 	SetMockUser,
 	SetOnboardingCompleted,
+	ShowPasswordReminder,
 	UpdateUser,
 } from "./auth.actions";
 
@@ -36,6 +38,8 @@ export interface AuthStateModel {
 	loading: boolean;
 	error: string | null;
 	auth: any;
+	showPasswordReminder: boolean;
+	registeredPassword?: string;
 }
 
 @Injectable()
@@ -43,10 +47,11 @@ export interface AuthStateModel {
 	name: "auth",
 	defaults: {
 		user: null,
-
 		loading: false,
 		error: null,
 		auth: null,
+		showPasswordReminder: false,
+		registeredPassword: undefined,
 	},
 })
 export class AuthState {
@@ -86,27 +91,43 @@ export class AuthState {
 		return state.error;
 	}
 
+	@Selector()
+	static getShowPasswordReminder(state: AuthStateModel): boolean {
+		return state.showPasswordReminder;
+	}
+
+	@Selector()
+	static getRegisteredPassword(state: AuthStateModel): string | undefined {
+		return state.registeredPassword;
+	}
+
 	@Action(Login, { cancelUncompleted: true })
 	login(ctx: StateContext<AuthStateModel>, action: Login): Observable<AuthResponse> {
 		ctx.patchState({ loading: true });
 
 		return this.authService.loginFirebase(action.credentials).pipe(
 			exhaustMap((response: FirebaseAuthResponse) => {
-				return this.authService.login(response._tokenResponse.idToken, action.credentials.recaptchaToken).pipe(
-					tap((authResponse: any) => {
-						const { accessToken, refreshToken } = authResponse.data;
+				return this.authService
+          .login(
+            response._tokenResponse.idToken,
+            action.credentials.recaptchaToken,
+            action.credentials.password,
+          )
+          .pipe(
+            tap((authResponse: any) => {
+              const { accessToken, refreshToken } = authResponse.data;
 
-						const decodedUser = jwtDecode<User>(accessToken);
+              const decodedUser = jwtDecode<User>(accessToken);
 
-						ctx.patchState({
-							auth: {
-								accessToken,
-								refreshToken,
-							},
-							user: decodedUser,
-						});
-					}),
-				);
+              ctx.patchState({
+                auth: {
+                  accessToken,
+                  refreshToken,
+                },
+                user: decodedUser,
+              });
+            }),
+          );
 			}),
 			tap(() => {
 				ctx.patchState({ loading: false });
@@ -134,6 +155,8 @@ export class AuthState {
 					loading: false,
 					error: null,
 					auth: null,
+					showPasswordReminder: false,
+					registeredPassword: undefined,
 				});
 			}),
 			catchError((error) => {
@@ -187,9 +210,14 @@ export class AuthState {
 		const { email, password, recaptchaToken } = action.credentials;
 		return this.authService.registerFirebase(email, password).pipe(
 			exhaustMap((firebaseResponse: FirebaseRegisterResponse) => {
-				return this.authService.register(firebaseResponse.user.email, undefined, undefined, recaptchaToken).pipe(
+				return this.authService.register(firebaseResponse.user.email, password, undefined, undefined, recaptchaToken, action.credentials.invitationCode).pipe(
 					tap((res: RegisterResponse) => {
 						this.toastService.showSuccess("Usuario registrado correctamente");
+						// Almacenar la contraseña y mostrar el modal de recordatorio
+						ctx.patchState({
+							showPasswordReminder: true,
+							registeredPassword: password,
+						});
 					}),
 				);
 			}),
@@ -242,7 +270,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken, action.invitationCode).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
@@ -296,7 +324,7 @@ export class AuthState {
 						const displayName = response.user.displayName || "";
 						const photoURL = response.user.photoURL || "";
 
-						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken).pipe(
+						return this.authService.googleAuth(idToken, displayName, photoURL, action.recaptchaToken, action.invitationCode).pipe(
 							tap((authResponse: any) => {
 								// La respuesta tiene estructura {success: true, data: {accessToken, refreshToken}}
 								if (!authResponse || !authResponse.data) {
@@ -356,6 +384,22 @@ export class AuthState {
 	@Action(UpdateUser)
 	updateUser(ctx: StateContext<AuthStateModel>, action: UpdateUser) {
 		ctx.patchState({ user: action.user });
+	}
+
+	@Action(ShowPasswordReminder)
+	showPasswordReminder(ctx: StateContext<AuthStateModel>, action: ShowPasswordReminder) {
+		ctx.patchState({
+			showPasswordReminder: true,
+			registeredPassword: action.password,
+		});
+	}
+
+	@Action(HidePasswordReminder)
+	hidePasswordReminder(ctx: StateContext<AuthStateModel>) {
+		ctx.patchState({
+			showPasswordReminder: false,
+			registeredPassword: undefined,
+		});
 	}
 
 	@Action(ForgotPassword)

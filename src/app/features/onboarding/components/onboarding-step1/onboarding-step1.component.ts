@@ -20,6 +20,9 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
+  AsyncValidatorFn,
+  ValidationErrors,
 } from '@angular/forms';
 import {
   Camera,
@@ -29,6 +32,7 @@ import {
 } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { User } from '@feature/auth/interfaces/user.interface';
+import { AuthService } from '@feature/auth/services/auth.service';
 import { AuthState } from '@feature/auth/state/auth.state';
 import {
   ActionSheetController,
@@ -61,6 +65,7 @@ import {
   callOutline,
   camera,
   cardOutline,
+  checkmarkCircle,
   close,
   fingerPrintOutline,
   homeOutline,
@@ -69,7 +74,7 @@ import {
   peopleOutline,
   personOutline,
 } from 'ionicons/icons';
-import { finalize, take } from 'rxjs';
+import { finalize, take, map, catchError, of, Observable } from 'rxjs';
 import { LoadOnboardingData, SetStep1 } from '../../state/onboarding.actions';
 import { OnboardingState } from '../../state/onboarding.state';
 import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.component';
@@ -167,6 +172,7 @@ export class OnboardingStep1Component implements OnInit {
   private toastService = inject(ToastService);
   private cdr = inject(ChangeDetectorRef);
   private platform = inject(Platform);
+  private authService = inject(AuthService);
 
   constructor(
     private fb: FormBuilder,
@@ -188,6 +194,7 @@ export class OnboardingStep1Component implements OnInit {
       'finger-print-outline': fingerPrintOutline,
       image,
       close,
+      'checkmark-circle': checkmarkCircle,
     });
 
     this.userForm = this.fb.group({
@@ -197,7 +204,7 @@ export class OnboardingStep1Component implements OnInit {
       mutual: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
       sex: ['', Validators.required],
-      ci: ['', [Validators.required, Validators.pattern(/^\d{8}$/)]],
+      ci: ['', [Validators.required, Validators.pattern(/^\d{8}$/)], [this.ciAvailableValidator()]],
       avatarUrl: [null],
     });
   }
@@ -232,6 +239,17 @@ export class OnboardingStep1Component implements OnInit {
     }
 
     this.obtenerUserID();
+
+    // Cargar CI desde el registro si existe (pero dejarla editable)
+    this.store
+      .select(OnboardingState.getCIFromRegister)
+      .pipe(take(1))
+      .subscribe((ciFromRegister) => {
+        if (ciFromRegister) {
+          this.userForm.patchValue({ ci: ciFromRegister });
+          // Dejamos el campo habilitado por si el usuario necesita corregirlo
+        }
+      });
 
     this.store
       .dispatch(new LoadOnboardingData())
@@ -588,6 +606,23 @@ export class OnboardingStep1Component implements OnInit {
     } else {
       this.userForm.markAllAsTouched();
     }
+  }
+
+  ciAvailableValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (!control.value || control.value.length !== 8) {
+        return of(null);
+      }
+
+      return this.authService.validateCI(control.value).pipe(
+        map((response) => {
+          // Si data es true, el usuario existe (CI ya está registrado)
+          // Si data es false, el usuario no existe (CI disponible)
+          return response.data ? { ciAlreadyExists: true } : null;
+        }),
+        catchError(() => of(null))
+      );
+    };
   }
 
   private goToNextStep(currentStep: number, step1Data: any) {
