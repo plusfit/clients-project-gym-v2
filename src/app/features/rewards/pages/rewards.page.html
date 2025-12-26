@@ -1,0 +1,51 @@
+<app-header title="Premios" [showBackButton]="false"></app-header>
+
+<ion-content class="rewards-content">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <ion-spinner name="circles" color="primary"></ion-spinner>
+    <ion-text color="medium">
+      <p>Cargando premios...</p>
+    </ion-text>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !isLoading">
+    <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
+    <ion-text color="danger">
+      <h3>Error al cargar premios</h3>
+      <p>{{ error }}</p>
+    </ion-text>
+    <ion-button fill="outline" color="primary" (click)="loadRewards()">
+      Reintentar
+    </ion-button>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !error">
+    <!-- View Toggle (Optional for future use) -->
+    <!-- <div class="view-toggle">
+      <ion-button 
+        fill="clear" 
+        [color]="viewMode === 'timeline' ? 'primary' : 'medium'"
+        (click)="toggleViewMode()">
+        Timeline
+      </ion-button>
+      <ion-button 
+        fill="clear" 
+        [color]="viewMode === 'grid' ? 'primary' : 'medium'"
+        (click)="toggleViewMode()">
+        Grid
+      </ion-button>
+    </div> -->
+
+    <!-- Timeline View -->
+    <app-rewards-timeline
+      [rewards]="rewards"
+      [userPoints]="userPoints"
+      [exchanges]="exchanges"
+      (rewardClick)="onTimelineRewardClick($event)">
+    </app-rewards-timeline>
+  </div>
+
+</ion-content>

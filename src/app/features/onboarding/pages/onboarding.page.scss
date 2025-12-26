@@ -15,3 +15,6 @@ ion-header {
 .onboarding-content {
   --background: var(--ion-background-color);
 }
+ion-content {
+  --background: linear-gradient(135deg, rgba(30, 30, 30, 0.7) 0%, rgba(21, 101, 192, 0.05) 50%, rgba(30, 30, 30, 0.7) 100%);
+}

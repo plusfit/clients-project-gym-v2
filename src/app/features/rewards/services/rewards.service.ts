@@ -1,0 +1,134 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { Exchange } from '../interfaces/exchange.interface';
+import { Reward, RewardResponse } from '../interfaces/reward.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class RewardsService {
+  private apiUrl = environment.apiUrl;
+
+  constructor(private http: HttpClient) {}
+
+  /**
+   * Obtiene todos los rewards disponibles
+   */
+  getAllRewards(): Observable<Reward[]> {
+    return this.http.get<RewardResponse>(`${this.apiUrl}/rewards/catalog`).pipe(
+      map((response) => {
+        if (response.success && response.data.success) {
+          return response.data.data;
+        }
+        return [];
+      }),
+      catchError((error) => {
+        console.error('Error al obtener rewards:', error);
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Obtiene un reward específico por su ID
+   */
+  getRewardById(id: string): Observable<Reward | null> {
+    return this.http.get<{ success: boolean; data: Reward }>(`${this.apiUrl}/rewards/${id}`).pipe(
+      map((response) => {
+        if (response.success) {
+          return response.data;
+        }
+        return null;
+      }),
+      catchError((error) => {
+        console.error('Error al obtener reward:', error);
+        return of(null);
+      })
+    );
+  }
+
+  /**
+   * Obtiene rewards con filtros y paginación
+   */
+  getRewards(params: {
+    search?: string;
+    disabled?: boolean;
+    page?: number;
+    limit?: number;
+  } = {}): Observable<RewardResponse> {
+    const queryParams = new URLSearchParams();
+    
+    if (params.search) queryParams.set('search', params.search);
+    if (params.disabled !== undefined) queryParams.set('disabled', params.disabled.toString());
+    if (params.page) queryParams.set('page', params.page.toString());
+    if (params.limit) queryParams.set('limit', params.limit.toString());
+
+    const url = `${this.apiUrl}/rewards${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+    
+    return this.http.get<RewardResponse>(url).pipe(
+      catchError((error) => {
+        console.error('Error al obtener rewards con filtros:', error);
+        return of({
+          success: false,
+          data: {
+            success: false,
+            data: [],
+            pagination: {
+              currentPage: 1,
+              totalPages: 0,
+              totalCount: 0,
+              limit: 10
+            }
+          }
+        });
+      })
+    );
+  }
+
+  /**
+   * Obtiene los exchanges/canjes de un cliente específico
+   */
+  getClientExchanges(clientId: string): Observable<Exchange[]> {
+    return this.http.get<{ success: boolean; data: { success: boolean; data: Exchange[] } }>(`${this.apiUrl}/rewards/exchanges/client/${clientId}`).pipe(
+      map((response) => {        
+        if (response.success && response.data && response.data.success && Array.isArray(response.data.data)) {
+          const exchanges = response.data.data;
+          return exchanges;
+        }
+
+        return [];
+      }),
+      catchError(() => {
+        return of([]);
+      })
+    );
+  }
+
+  /**
+   * Intercambia puntos por un reward
+   */
+  exchangeReward(rewardId: string, clientId: string): Observable<{ success: boolean; message: string; data?: unknown }> {
+    if (!rewardId || rewardId.trim() === '') {
+      throw new Error('El ID del premio es requerido');
+    }
+
+    if (!clientId || clientId.trim() === '') {
+      throw new Error('El ID del cliente es requerido');
+    }
+
+    const payload = {
+      rewardId: rewardId.trim(),
+      clientId: clientId.trim()
+    };
+
+    return this.http.post<{ success: boolean; message: string; data?: unknown }>(`${this.apiUrl}/rewards/exchange`, payload).pipe(
+      catchError((error) => {
+        console.error('Error al intercambiar reward:', error);
+        throw error;
+      })
+    );
+  }
+}

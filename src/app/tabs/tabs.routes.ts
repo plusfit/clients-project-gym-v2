@@ -38,6 +38,10 @@ export const routes: Routes = [
 				loadComponent: () => import("@feature/profile/pages/profile.page").then((m) => m.ProfilePage),
 			},
 			{
+				path: "premios",
+				loadComponent: () => import("@feature/rewards/pages/rewards.page").then((m) => m.RewardsPage),
+			},
+			{
 				path: "",
 				redirectTo: "/cliente/inicio",
 				pathMatch: "full",

@@ -1,18 +1,18 @@
 import {
-  provideHttpClient,
-  withFetch,
-  withInterceptors,
+    provideHttpClient,
+    withFetch,
+    withInterceptors,
 } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
-  PreloadAllModules,
-  RouteReuseStrategy,
-  provideRouter,
-  withPreloading,
+    PreloadAllModules,
+    RouteReuseStrategy,
+    provideRouter,
+    withPreloading,
 } from '@angular/router';
 import {
-  IonicRouteStrategy,
-  provideIonicAngular,
+    IonicRouteStrategy,
+    provideIonicAngular,
 } from '@ionic/angular/standalone';
 
 import { importProvidersFrom } from '@angular/core';
@@ -27,12 +27,13 @@ import { AuthState } from '@feature/auth/state/auth.state';
 import { HomeState } from '@feature/home/state/home.state';
 import { OnboardingState } from '@feature/onboarding/state/onboarding.state';
 import { UserState } from '@feature/profile/state/user.state';
+import { RewardsState } from '@feature/rewards/state/rewards.state';
 import { RoutineState } from '@feature/routine/state/routine.state';
 import { ScheduleState } from '@feature/schedule/state/schedule.state';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import {
-  LOCAL_STORAGE_ENGINE,
-  NgxsStoragePluginModule,
+    LOCAL_STORAGE_ENGINE,
+    NgxsStoragePluginModule,
 } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { register } from 'swiper/element/bundle';
@@ -66,6 +67,7 @@ bootstrapApplication(AppComponent, {
           UserState,
           AuthState,
           OnboardingState,
+          RewardsState,
         ],
         {
           developmentMode: !environment.production,
