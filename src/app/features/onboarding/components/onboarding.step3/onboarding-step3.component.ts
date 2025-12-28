@@ -73,8 +73,7 @@ export enum InjuryType {
     IonContent,
     IonItem,
     IonLabel,
-    IonSelect,
-    IonSelectOption,
+
     IonIcon,
     IonFooter,
     IonToolbar,

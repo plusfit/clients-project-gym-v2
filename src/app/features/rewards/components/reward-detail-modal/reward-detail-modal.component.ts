@@ -37,7 +37,7 @@ export interface RewardDetailData {
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonButtons,
+
     IonButton,
     IonIcon,
     IonContent,
