@@ -476,7 +476,10 @@
     transparent
   );
   background-size: 1rem 1rem;
-  animation: progress-stripes 1s linear infinite;
+  animation: progress-stripes 2s linear infinite; // Slower speed (2s)
+  overflow: hidden;
+  position: relative;
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   
   &.complete {
     background-color: var(--ion-color-success); // Make it green if complete
@@ -492,6 +495,11 @@
     );
      box-shadow: 0 0 10px rgba(var(--ion-color-success-rgb), 0.5);
   }
+}
+
+@keyframes shimmer-horizontal {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .action-button {

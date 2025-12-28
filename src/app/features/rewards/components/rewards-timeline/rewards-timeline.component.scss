@@ -148,19 +148,20 @@
     transparent
   );
   background-size: 20px 20px;
-  animation: bg-scroll 2s linear infinite;
+  animation: bg-scroll 2s linear infinite; // Slower speed (2s)
+  overflow: hidden;
 
-  transition: height 0.3s ease;
+  transition: height 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   min-height: 20px;
   position: absolute;
   top: 0;
   left: 0;
-  box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.6); // Enhanced glow
+  box-shadow: 0 0 15px rgba(var(--ion-color-primary-rgb), 0.6);
 }
 
 @keyframes bg-scroll {
   0% { background-position: 0 0; }
-  100% { background-position: 20px 20px; }
+  100% { background-position: 0 40px; }
 }
 
 
