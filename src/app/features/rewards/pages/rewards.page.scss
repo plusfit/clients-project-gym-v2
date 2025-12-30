@@ -1,6 +1,7 @@
 .rewards-content {
   --background: linear-gradient(135deg, rgba(30, 30, 30, 0.7) 0%, rgba(21, 101, 192, 0.05) 50%, rgba(30, 30, 30, 0.7) 100%);
   --color: white;
+  --overflow: hidden; // Disable ion-content scroll, let timeline-container handle it
 }
 
 .loading-container {

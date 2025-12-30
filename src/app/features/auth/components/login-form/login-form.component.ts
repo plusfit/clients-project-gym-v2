@@ -43,7 +43,7 @@ import { Subject, takeUntil } from "rxjs";
 		IonButton,
 		IonIcon,
 		IonSpinner,
-		RecaptchaBadgeComponent,
+
 	],
 })
 export class LoginFormComponent implements OnDestroy {
