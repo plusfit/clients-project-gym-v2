@@ -193,8 +193,9 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.enrolledDaysCount = enrolledDays.size;
 		this.totalEnrollments = totalCount;
 
-		// Calcular horarios disponibles
-		const maxEnrollments = this.userPlan?.days || 0;
+		// Calcular horarios disponibles con la lógica de 6 horarios para planes de 5 días
+		const planDays = this.userPlan?.days || 0;
+		const maxEnrollments = this.getMaxAllowedSchedules(planDays);
 		this.availableSlots = Math.max(0, maxEnrollments - totalCount);
 	}
 
@@ -324,6 +325,14 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		return disabledDaysInfo;
 	}
 
+	/**
+	 * Obtiene el máximo de horarios permitidos según el plan
+	 * Planes de 5 días permiten 6 horarios, el resto permite plan.days horarios
+	 */
+	private getMaxAllowedSchedules(planDays: number): number {
+		return planDays === 5 ? 6 : planDays;
+	}
+
 	checkMaxEnrollmentsLimit(newSchedule: Schedule): boolean {
 		// Si el usuario ya está inscripto en este horario, no hay problema
 		if (newSchedule.clients?.includes(this.currentUserId)) {
@@ -338,7 +347,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// Obtenemos el máximo de horarios del plan
 		const plan = this.store.selectSnapshot(UserState.getPlan);
-		const maxEnrollments = plan?.days || this.userPlan.days;
+		const planDays = plan?.days || this.userPlan.days;
+		const maxEnrollments = this.getMaxAllowedSchedules(planDays);
 
 		// Si ya está en el límite, no puede inscribirse en un nuevo horario
 		return currentEnrollments < maxEnrollments;
@@ -416,7 +426,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 			if (!this.checkMaxEnrollmentsLimit(schedule)) {
 				// Obtenemos el máximo de horarios del plan
 				const plan = this.store.selectSnapshot(UserState.getPlan);
-				const maxEnrollments = plan?.days || this.userPlan.days;
+				const planDays = plan?.days || this.userPlan.days;
+				const maxEnrollments = this.getMaxAllowedSchedules(planDays);
 
 				// Usar toast warning en lugar de alert
 				this.toastService.showWarning(
