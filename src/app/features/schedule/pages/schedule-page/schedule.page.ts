@@ -65,7 +65,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 	totalEnrollments = 0;
 	enrollmentsByDay: DayEnrollment[] = [];
 	dayStatuses: DayStatus[] = [];
-	disabledDaysInfo: Array<{day: string, reasons: string[]}> = []; // Información de días deshabilitados para el home
+	disabledDaysInfo: Array<{ day: string, reasons: string[] }> = []; // Información de días deshabilitados para el home
 
 	showEnrollModal = false;
 	showUnsubscribeModal = false;
@@ -226,11 +226,11 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	calculateDayStatuses(schedules: Schedule[]) {
 		const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-		
+
 		this.dayStatuses = days.map(day => {
 			const daySchedules = schedules.filter(schedule => schedule.day === day);
 			const hasSchedules = daySchedules.length > 0;
-			
+
 			// Un día está DESHABILITADO solo si:
 			// 1. Tiene horarios Y todos están explícitamente deshabilitados (disabled === true)
 			// Los días sin horarios NO se consideran deshabilitados, solo no tienen horarios
@@ -239,7 +239,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				const enabledSchedules = daySchedules.filter(schedule => schedule.disabled !== true);
 				isDayDisabled = enabledSchedules.length === 0; // Solo si TODOS están disabled = true
 			}
-			
+
 			return {
 				day,
 				disabled: isDayDisabled,
@@ -263,7 +263,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		if (!dayStatus) {
 			return 'No hay información disponible para este día.';
 		}
-		
+
 		if (!dayStatus.hasSchedules) {
 			return 'No hay horarios configurados para este día.';
 		}
@@ -275,38 +275,38 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				.map(schedule => schedule.disabledReason)
 				.filter(reason => reason) // Filtrar razones vacías
 				.filter((reason, index, array) => array.indexOf(reason) === index); // Eliminar duplicados
-			
+
 			if (reasons.length > 0) {
-				return reasons.length === 1 
+				return reasons.length === 1
 					? `Razón: ${reasons[0]}`
 					: `Razones: ${reasons.join(', ')}`;
 			}
-			
+
 			return 'Todos los horarios de este día están deshabilitados sin razón específica.';
 		}
-		
+
 		return 'Este día está disponible.';
 	}
 
 	/**
 	 * Obtiene todos los días deshabilitados con sus razones para mostrar en el home
 	 */
-	getDisabledDaysInfo(): Array<{day: string, reasons: string[]}> {
+	getDisabledDaysInfo(): Array<{ day: string, reasons: string[] }> {
 		const allSchedules = this.store.selectSnapshot(ScheduleState.getSchedules);
-		const disabledDaysInfo: Array<{day: string, reasons: string[]}> = [];
-		
+		const disabledDaysInfo: Array<{ day: string, reasons: string[] }> = [];
+
 		const days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-		
+
 		for (const day of days) {
 			const daySchedules = allSchedules.filter(schedule => schedule.day === day);
 			const disabledSchedules = daySchedules.filter(schedule => schedule.disabled === true);
-			
+
 			if (disabledSchedules.length > 0) {
 				const reasons = disabledSchedules
 					.map(schedule => schedule.disabledReason)
 					.filter((reason): reason is string => reason !== undefined && reason.trim() !== '')
 					.filter((reason, index, arr) => arr.indexOf(reason) === index); // Eliminar duplicados
-				
+
 				if (reasons.length > 0) {
 					disabledDaysInfo.push({
 						day,
@@ -321,7 +321,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				}
 			}
 		}
-		
+
 		return disabledDaysInfo;
 	}
 
@@ -365,8 +365,8 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		// Verificamos si ya está inscrito en algún horario del mismo día
 		const isAlreadyEnrolledInDay = allSchedules.some(
-			(schedule) => 
-				schedule.day === newSchedule.day && 
+			(schedule) =>
+				schedule.day === newSchedule.day &&
 				schedule.clients?.includes(this.currentUserId)
 		);
 
@@ -380,7 +380,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		// Si el horario está deshabilitado, mostrar información pero permitir agendar/desagendar
 		if (schedule.disabled === true) {
 			const reason = schedule.disabledReason || 'Sin razón especificada';
-			
+
 			// Si el usuario ya está inscrito, permitir desinscripción con aviso
 			if (schedule.clients?.includes(this.currentUserId)) {
 				this.toastService.showInfo(
@@ -389,7 +389,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.showUnsubscribeModal = true;
 				return;
 			}
-			
+
 			// Si no está inscrito, permitir inscripción con aviso
 			this.toastService.showInfo(
 				`ℹ️ Este horario tiene limitaciones (${reason}). Aún puedes anotarte, pero considera las limitaciones.`,
