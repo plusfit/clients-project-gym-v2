@@ -37,7 +37,7 @@
 
     <!-- Motivación del día -->
     <div class="motivation-banner" *ngIf="motivationalMessage$ | async as message">
-      <p class="ion-text-center">"{{ message }}"</p>
+      <p class="ion-text-center">{{ message }}</p>
     </div>
 
     <!-- Advertencia de pago cuando quedan pocos días -->

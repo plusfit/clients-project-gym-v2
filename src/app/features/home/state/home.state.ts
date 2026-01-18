@@ -21,7 +21,7 @@ export class LoadRoutineForToday {
 
 export class SetHomeData {
 	static readonly type = "[Home] Set Home Data";
-	constructor(public payload: Partial<HomeStateModel>) {}
+	constructor(public payload: Partial<HomeStateModel>) { }
 }
 
 @State<HomeStateModel>({
@@ -38,14 +38,14 @@ export class SetHomeData {
 			"Un día más para superarte! 🔥", // Miércoles
 			"Te espera tu familia Plus! 🏋️", // Jueves
 			"Un día más en plusfit es un día más saludable! ⚡", // Viernes
-			"El fin de semana es para seguir creciendo. ¡No hay descanso para los campeones! 🏆", // Sábado
-			"Recarga energías y prepárate para la próxima semana. ¡El descanso también es parte del éxito! 🧘", // Domingo
+			"¡Con todo esta mañana! ☀️ Entrena, ríe y disfruta tu finde. ¡Te esperamos! 😁💪", // Sábado
+			"¡Pausa necesaria!, disfruta de tu domingo de relax 💆🏻. Mañana volvemos a las risas y al entrenamiento 😁 ¡te extrañamos! ❤️ ", // Domingo
 		],
 	},
 })
 @Injectable()
 export class HomeState {
-	constructor(private homeService: HomeService) {}
+	constructor(private homeService: HomeService) { }
 
 	@Selector()
 	static getRoutine(state: HomeStateModel): SubRoutine | null {
