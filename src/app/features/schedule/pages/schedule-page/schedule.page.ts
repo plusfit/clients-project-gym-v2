@@ -490,6 +490,42 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 	}
 
+	/**
+	 * Valida si se puede cancelar un turno basándose en el día y hora
+	 * Solo se puede cancelar si falta más de 1 hora para el inicio
+	 */
+	private canCancelAppointment(appointmentDay: string, appointmentHour: number): boolean {
+		const daysOfWeek = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+
+		const now = new Date();
+		const currentDayIndex = now.getDay(); // 0 = Domingo, 1 = Lunes, etc.
+		const currentHour = now.getHours();
+
+		const appointmentDayIndex = daysOfWeek.indexOf(appointmentDay);
+
+		if (appointmentDayIndex === -1) {
+			console.error('Día de la semana inválido:', appointmentDay);
+			return false;
+		}
+
+		// Si el día del turno ya pasó en la semana actual
+		if (appointmentDayIndex < currentDayIndex) {
+			return false;
+		}
+
+		// Si es el mismo día
+		if (appointmentDayIndex === currentDayIndex) {
+			const limitHour = appointmentHour - 1;
+
+			// Si ya llegamos a la hora límite o la pasamos
+			if (currentHour >= limitHour) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	onUnsubscribeConfirmed() {
 		if (this.selectedSchedule && this.currentUserId) {
 			this.loading = true;
@@ -497,6 +533,17 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				startTime: this.selectedSchedule.startTime || "",
 				day: this.selectedSchedule.day || "",
 			};
+
+			// Validar si se puede cancelar el turno
+			const appointmentHour = Number.parseInt(scheduleInfo.startTime, 10);
+			if (!this.canCancelAppointment(scheduleInfo.day, appointmentHour)) {
+				this.loading = false;
+				this.closeModals();
+				this.toastService.showWarning(
+					'No puedes cancelar este turno porque falta menos de 1 hora para su inicio. La cancelación se habilitará el próximo domingo.'
+				);
+				return;
+			}
 
 			const unenrollSub = this.scheduleFacade
 				.unenrollUserFromSchedule(this.selectedSchedule._id, this.currentUserId)
