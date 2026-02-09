@@ -8,6 +8,16 @@
           (daySelected)="onDaySelected($event)"></app-day-selector>
       </ion-col>
     </ion-row>
+    
+    <ion-row>
+      <ion-col size="12">
+        <div class="info-message">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <span>Puedes cancelar tu turno cuando falte más de 1h para el inicio. Pasado el tiempo podrás cancelarlo desde el próximo domingo.</span>
+        </div>
+      </ion-col>
+    </ion-row>
+
     <ion-row class="schedule-row">
       <ion-col size="12" class="schedule-col">
         <h2 class="schedule-title">Horarios Disponibles <br><span class="available-slots">({{availableSlots}}

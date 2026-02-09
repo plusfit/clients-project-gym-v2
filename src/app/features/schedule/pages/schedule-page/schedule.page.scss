@@ -6,11 +6,9 @@
 /* HEADER */
 ion-header {
   --background: transparent;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.2) 100%);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
@@ -34,7 +32,8 @@ ion-title {
 /* CONTENT */
 .container {
   padding: 16px;
-  --overflow: hidden; /* Prevent page scroll */
+  --overflow: hidden;
+  /* Prevent page scroll */
   display: flex;
   flex-direction: column;
 }
@@ -48,6 +47,30 @@ ion-title {
 
 .selector-col {
   padding-bottom: 8px;
+}
+
+.info-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
+  border-left: 3px solid var(--ion-color-primary);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: #ffffff;
+
+  ion-icon {
+    font-size: 18px;
+    color: var(--ion-color-primary-tint);
+    flex-shrink: 0;
+  }
+
+  span {
+    flex: 1;
+  }
 }
 
 .schedule-col {
@@ -76,20 +99,7 @@ ion-title {
   position: relative;
   padding-left: 16px;
 
-  &::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(
-      to bottom,
-      var(--ion-color-primary),
-      var(--ion-color-primary-tint)
-    );
-    border-radius: 4px;
-  }
+
 }
 
 /* LISTA DE HORARIOS */
@@ -99,10 +109,10 @@ ion-title {
   flex: 1;
   overflow: hidden;
   height: 100%;
-  max-height: calc(
-    100% - 55px
-  ); /* Slightly adjusted for title to provide more space */
-  margin-bottom: 4px; /* Add a bit of bottom margin */
+  max-height: calc(100% - 55px);
+  /* Slightly adjusted for title to provide more space */
+  margin-bottom: 4px;
+  /* Add a bit of bottom margin */
 }
 
 .schedule-cards-wrapper {
@@ -111,8 +121,10 @@ ion-title {
   gap: 8px;
   overflow-y: auto;
   height: 100%;
-  padding-right: 8px; /* Padding for the scrollbar */
-  padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 16px) + 16px)); /* Increased padding to prevent the last item from being cut off */
+  padding-right: 8px;
+  /* Padding for the scrollbar */
+  padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 16px) + 16px));
+  /* Increased padding to prevent the last item from being cut off */
 
   /* Estilos para el scrollbar */
   &::-webkit-scrollbar {
@@ -258,6 +270,7 @@ ion-modal {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -265,9 +278,12 @@ ion-modal {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.6;
   }
@@ -287,18 +303,22 @@ ion-modal {
   .container {
     padding: 8px;
   }
+
   .schedule-title {
     font-size: 1.1rem;
     padding-left: 8px;
     margin-bottom: 10px;
   }
+
   .main-grid {
     padding: 0;
   }
+
   .schedule-list {
     max-height: calc(100% - 40px);
     margin-bottom: 2px;
   }
+
   .schedule-cards-wrapper {
     gap: 4px;
     padding-right: 2px;
@@ -355,10 +375,12 @@ ion-modal {
       }
     }
   }
+
   .loading-container,
   .empty-state {
     padding: 1rem;
   }
+
   ion-modal {
     --width: 98%;
     --max-width: 98vw;
@@ -370,28 +392,34 @@ ion-modal {
   .container {
     padding: 2px;
   }
+
   .schedule-title {
     font-size: 0.95rem;
     padding-left: 4px;
     margin-bottom: 6px;
   }
+
   .schedule-list {
     max-height: calc(100% - 28px);
   }
+
   .schedule-cards-wrapper {
     gap: 2px;
     padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 16px) + 0px));
   }
+
   .loading-container,
   .empty-state {
     padding: 0.5rem;
   }
+
   ion-modal {
     --width: 100vw;
     --max-width: 100vw;
     --border-radius: 4px;
   }
 }
+
 ion-content {
   --background: linear-gradient(135deg, rgba(30, 30, 30, 0.7) 0%, rgba(21, 101, 192, 0.05) 50%, rgba(30, 30, 30, 0.7) 100%);
 }
