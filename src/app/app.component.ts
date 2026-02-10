@@ -11,7 +11,7 @@ import { SplashScreenComponent } from "@shared/components/splash-screen/splash-s
 	imports: [IonApp, IonRouterOutlet, SplashScreenComponent],
 })
 export class AppComponent implements OnInit {
-	constructor(private recaptchaService: RecaptchaService) {}
+	constructor(private recaptchaService: RecaptchaService) { }
 
 	ngOnInit(): void {
 		// Inicializar reCAPTCHA con la site key
