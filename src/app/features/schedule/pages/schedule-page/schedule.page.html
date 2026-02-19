@@ -8,6 +8,16 @@
           (daySelected)="onDaySelected($event)"></app-day-selector>
       </ion-col>
     </ion-row>
+    
+    <ion-row>
+      <ion-col size="12">
+        <div class="info-message">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <span>Recuerda cancelar tu turno con al menos 1 hora de anticipación. De lo contrario, si no asistes, perderás el turno y solo podrás agendar uno nuevo a partir del próximo domingo.</span>
+        </div>
+      </ion-col>
+    </ion-row>
+
     <ion-row class="schedule-row">
       <ion-col size="12" class="schedule-col">
         <h2 class="schedule-title">Horarios Disponibles <br><span class="available-slots">({{availableSlots}}
