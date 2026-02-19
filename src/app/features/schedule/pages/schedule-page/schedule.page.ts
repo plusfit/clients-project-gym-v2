@@ -540,7 +540,7 @@ export class SchedulePageComponent implements OnInit, OnDestroy, AfterViewInit {
 				this.loading = false;
 				this.closeModals();
 				this.toastService.showWarning(
-					'No puedes cancelar este turno porque falta menos de 1 hora para su inicio. La cancelación se habilitará el próximo domingo.'
+					'No puedes cancelar este turno porque ya pasó el tiempo de cancelación (1 hora previa al turno).',
 				);
 				return;
 			}
