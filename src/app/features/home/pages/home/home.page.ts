@@ -98,13 +98,13 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	/**
 	 * Obtiene la información de días deshabilitados para mostrar en el banner
 	 */
-	getDisabledDaysInfo(): Observable<{day: string, reason: string}[]> {
+	getDisabledDaysInfo(): Observable<{ day: string, reason: string }[]> {
 		return this.schedules$.pipe(
 			map(schedules => {
 				if (!schedules) return [];
-				
+
 				const disabledDaysMap = new Map<string, string>();
-				
+
 				for (const schedule of schedules) {
 					if (schedule.disabled && schedule.disabledReason) {
 						const dayName = schedule.day; // Usar directamente el nombre del día que ya viene como string
@@ -114,7 +114,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 						}
 					}
 				}
-				
+
 				// Convertir el mapa a array
 				return Array.from(disabledDaysMap.entries()).map(([day, reason]) => ({
 					day,
