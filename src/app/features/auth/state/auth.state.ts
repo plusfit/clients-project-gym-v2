@@ -158,6 +158,9 @@ export class AuthState {
 					showPasswordReminder: false,
 					registeredPassword: undefined,
 				});
+				
+				// Limpiar datos de cumpleaños del localStorage
+				localStorage.removeItem('birthdayModalClosed');
 			}),
 			catchError((error) => {
 				ctx.patchState({

@@ -81,6 +81,8 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	availableDays: number | null = null;
 	showPaymentWarning = false;
 	private birthdayModalShown = false;
+	showBirthdayBanner = false;
+	userName = '';
 
 	constructor(
 		private store: Store,
@@ -277,10 +279,20 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 			// Actualizar puntos del usuario
 			this.store.dispatch(new GetCurrentUser());
 
-			// Verificar si es el cumpleaños del usuario y mostrar modal
-			if (!this.birthdayModalShown && user.userInfo?.dateBirthday && this.isBirthday(new Date(user.userInfo.dateBirthday))) {
-				this.showBirthdayModal(user.userInfo.name || '');
-				this.birthdayModalShown = true;
+			// Verificar si es el cumpleaños del usuario y mostrar modal o banner
+			if (user.userInfo?.dateBirthday && this.isBirthday(new Date(user.userInfo.dateBirthday))) {
+				this.userName = user.userInfo.name || '';
+				const today = new Date().toDateString();
+				const birthdayModalClosedToday = localStorage.getItem('birthdayModalClosed') === today;
+				
+				if (!this.birthdayModalShown && !birthdayModalClosedToday) {
+					// Mostrar modal si no se ha mostrado en esta sesión ni se cerró hoy
+					this.showBirthdayModal(this.userName);
+					this.birthdayModalShown = true;
+				} else if (birthdayModalClosedToday) {
+					// Mostrar banner si ya se cerró el modal hoy
+					this.showBirthdayBanner = true;
+				}
 			}
 
 			// Recalcular premios disponibles con datos frescos
@@ -331,5 +343,15 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		});
 
 		await modal.present();
+		
+		// Cuando el modal se cierre, guardar en localStorage y mostrar banner
+		const { data } = await modal.onDidDismiss();
+		const today = new Date().toDateString();
+		localStorage.setItem('birthdayModalClosed', today);
+		this.showBirthdayBanner = true;
+	}
+
+	dismissBirthdayBanner(): void {
+		this.showBirthdayBanner = false;
 	}
 }
