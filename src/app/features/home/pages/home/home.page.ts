@@ -20,10 +20,12 @@ import {
 	IonIcon,
 	IonRow,
 	IonSpinner,
+	ModalController,
 	ViewWillEnter,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
+import { BirthdayModalComponent } from "@shared/components/birthday-modal/birthday-modal.component";
 import { ExchangeStatus } from "@shared/enums/exchange-status.enum";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
 import { addIcons } from "ionicons";
@@ -78,6 +80,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	// Propiedades para días disponibles
 	availableDays: number | null = null;
 	showPaymentWarning = false;
+	private birthdayModalShown = false;
 
 	constructor(
 		private store: Store,
@@ -85,6 +88,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		private scheduleFacade: ScheduleFacadeService,
 		private rewardsService: RewardsService,
 		private userPlanService: UserPlanService,
+		private modalController: ModalController,
 	) {
 		addIcons({
 			warningOutline,
@@ -273,6 +277,12 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 			// Actualizar puntos del usuario
 			this.store.dispatch(new GetCurrentUser());
 
+			// Verificar si es el cumpleaños del usuario y mostrar modal
+			if (!this.birthdayModalShown && user.userInfo?.dateBirthday && this.isBirthday(new Date(user.userInfo.dateBirthday))) {
+				this.showBirthdayModal(user.userInfo.name || '');
+				this.birthdayModalShown = true;
+			}
+
 			// Recalcular premios disponibles con datos frescos
 			this.calculateAvailableRewards(user._id);
 		}
@@ -299,5 +309,27 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 				},
 			});
 		}
+	}
+
+	isBirthday(birthday: Date): boolean {
+		const today = new Date();
+		const birthdayDate = new Date(birthday);
+		return (
+			today.getDate() === birthdayDate.getDate() &&
+			today.getMonth() === birthdayDate.getMonth()
+		);
+	}
+
+	async showBirthdayModal(userName: string): Promise<void> {
+		const modal = await this.modalController.create({
+			component: BirthdayModalComponent,
+			componentProps: {
+				userName: userName
+			},
+			cssClass: 'birthday-modal',
+			backdropDismiss: false
+		});
+
+		await modal.present();
 	}
 }
