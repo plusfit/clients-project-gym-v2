@@ -59,7 +59,7 @@ export class AuthState {
 		private authService: AuthService,
 		private toastService: ToastService,
 		private errorHandler: ErrorHandlerService,
-	) {}
+	) { }
 
 	@Selector()
 	static accessToken(state: AuthStateModel): string | undefined {
@@ -108,26 +108,26 @@ export class AuthState {
 		return this.authService.loginFirebase(action.credentials).pipe(
 			exhaustMap((response: FirebaseAuthResponse) => {
 				return this.authService
-          .login(
-            response._tokenResponse.idToken,
-            action.credentials.recaptchaToken,
-            action.credentials.password,
-          )
-          .pipe(
-            tap((authResponse: any) => {
-              const { accessToken, refreshToken } = authResponse.data;
+					.login(
+						response._tokenResponse.idToken,
+						action.credentials.recaptchaToken,
+						action.credentials.password,
+					)
+					.pipe(
+						tap((authResponse: any) => {
+							const { accessToken, refreshToken } = authResponse.data;
 
-              const decodedUser = jwtDecode<User>(accessToken);
+							const decodedUser = jwtDecode<User>(accessToken);
 
-              ctx.patchState({
-                auth: {
-                  accessToken,
-                  refreshToken,
-                },
-                user: decodedUser,
-              });
-            }),
-          );
+							ctx.patchState({
+								auth: {
+									accessToken,
+									refreshToken,
+								},
+								user: decodedUser,
+							});
+						}),
+					);
 			}),
 			tap(() => {
 				ctx.patchState({ loading: false });
@@ -158,7 +158,7 @@ export class AuthState {
 					showPasswordReminder: false,
 					registeredPassword: undefined,
 				});
-				
+
 				// Limpiar datos de cumpleaños del localStorage
 				localStorage.removeItem('birthdayModalClosed');
 			}),

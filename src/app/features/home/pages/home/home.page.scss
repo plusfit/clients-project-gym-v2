@@ -172,6 +172,7 @@ ion-content {
   overflow: hidden;
   margin-bottom: 24px;
   background: linear-gradient(135deg, rgba(30, 30, 30, 0.7) 0%, rgba(21, 101, 192, 0.05) 50%, rgba(30, 30, 30, 0.7) 100%);
+
   .section-title h3 {
     color: white;
     text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
@@ -461,12 +462,10 @@ ion-spinner {
 .rewards-notification-box {
   margin-bottom: 24px;
   border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    #1565c0 0%,
-    #1976d2 50%,
-    #0d47a1 100%
-  );
+  background: linear-gradient(135deg,
+      #1565c0 0%,
+      #1976d2 50%,
+      #0d47a1 100%);
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.25),
     0 0 15px rgba(33, 150, 243, 0.3);
@@ -476,6 +475,7 @@ ion-spinner {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 20px;
+
   &:hover {
     transform: translateY(-2px);
     box-shadow:
@@ -496,12 +496,10 @@ ion-spinner {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      transparent 100%
-    );
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%);
     animation: rewards-shine 3s ease-in-out infinite;
     z-index: 1;
   }
@@ -585,9 +583,11 @@ ion-spinner {
   0% {
     left: -100%;
   }
+
   50% {
     left: 100%;
   }
+
   100% {
     left: 100%;
   }
@@ -597,12 +597,10 @@ ion-spinner {
 .birthday-banner {
   margin-bottom: 24px;
   border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    #d946ef 0%,
-    #a21caf 50%,
-    #86198f 100%
-  );
+  background: linear-gradient(135deg,
+      #d946ef 0%,
+      #a21caf 50%,
+      #86198f 100%);
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.25),
     0 0 15px rgba(236, 72, 153, 0.4);
@@ -620,12 +618,10 @@ ion-spinner {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.3) 50%,
-      transparent 100%
-    );
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%);
     animation: birthday-shine 2s ease-in-out infinite;
     z-index: 1;
   }
@@ -709,9 +705,11 @@ ion-spinner {
   0% {
     left: -100%;
   }
+
   50% {
     left: 100%;
   }
+
   100% {
     left: 100%;
   }
@@ -722,19 +720,24 @@ ion-spinner {
     opacity: 0;
     transform: scale(0.8) translateY(-20px);
   }
+
   60% {
     opacity: 1;
     transform: scale(1.05) translateY(0);
   }
+
   100% {
     transform: scale(1);
   }
 }
 
 @keyframes birthday-icon-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -742,11 +745,9 @@ ion-spinner {
 
 // Banner de días deshabilitados
 .disabled-days-banner {
-  background: linear-gradient(
-    90deg,
-    rgba(var(--ion-color-warning-rgb), 0.15) 0%,
-    rgba(var(--ion-color-warning-rgb), 0.25) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(var(--ion-color-warning-rgb), 0.15) 0%,
+      rgba(var(--ion-color-warning-rgb), 0.25) 100%);
   border: 1px solid rgba(var(--ion-color-warning-rgb), 0.3);
   border-radius: 12px;
   padding: 16px;

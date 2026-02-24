@@ -284,7 +284,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 				this.userName = user.userInfo.name || '';
 				const today = new Date().toDateString();
 				const birthdayModalClosedToday = localStorage.getItem('birthdayModalClosed') === today;
-				
+
 				if (!this.birthdayModalShown && !birthdayModalClosedToday) {
 					// Mostrar modal si no se ha mostrado en esta sesión ni se cerró hoy
 					this.showBirthdayModal(this.userName);
@@ -343,7 +343,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		});
 
 		await modal.present();
-		
+
 		// Cuando el modal se cierre, guardar en localStorage y mostrar banner
 		const { data } = await modal.onDidDismiss();
 		const today = new Date().toDateString();
