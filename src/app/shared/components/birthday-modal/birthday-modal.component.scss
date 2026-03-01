@@ -1,0 +1,272 @@
+.birthday-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 16px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.birthday-modal-content {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 24px;
+    padding: 32px 24px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: hidden;
+
+    @media (max-width: 480px) {
+        padding: 28px 20px;
+        border-radius: 20px;
+        max-width: 95%;
+    }
+
+    @media (max-height: 600px) {
+        padding: 20px 16px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+}
+
+.close-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+
+    ion-icon {
+        font-size: 24px;
+        color: white;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+
+    &:active {
+        transform: scale(0.9) rotate(90deg);
+    }
+
+    @media (max-width: 480px) {
+        width: 36px;
+        height: 36px;
+
+        ion-icon {
+            font-size: 20px;
+        }
+    }
+}
+
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ffd700;
+    top: -10px;
+    opacity: 0;
+    animation: confetti-fall 3s linear infinite;
+
+    &:nth-child(odd) {
+        background: #ff69b4;
+    }
+
+    &:nth-child(3n) {
+        background: #00ffff;
+    }
+
+    &:nth-child(4n) {
+        background: #7fff00;
+    }
+
+    &:nth-child(5n) {
+        background: #ff6347;
+    }
+
+    @for $i from 1 through 50 {
+        &:nth-child(#{$i}) {
+            left: random(100) * 1%;
+            animation-delay: random(3000) * 0.001s;
+            animation-duration: (2 + random(2)) * 1s;
+        }
+    }
+}
+
+.modal-body {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.gift-icon {
+    margin: 0 auto 24px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: bounce 1s ease-in-out infinite;
+
+    ion-icon {
+        font-size: 48px;
+        color: white;
+    }
+
+    @media (max-width: 480px) {
+        width: 70px;
+        height: 70px;
+        margin-bottom: 20px;
+
+        ion-icon {
+            font-size: 40px;
+        }
+    }
+}
+
+.birthday-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 16px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+
+    @media (max-width: 480px) {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    @media (max-width: 360px) {
+        font-size: 22px;
+    }
+}
+
+.birthday-message {
+    font-size: 24px;
+    color: white;
+    margin: 0 0 16px;
+    font-weight: 600;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+
+    @media (max-width: 480px) {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+}
+
+.birthday-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 24px;
+    line-height: 1.5;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media (max-width: 480px) {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+}
+
+.celebration-emoji {
+    font-size: 48px;
+    animation: pulse 1.5s ease-in-out infinite;
+
+    @media (max-width: 480px) {
+        font-size: 36px;
+    }
+}
+
+// Animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes confetti-fall {
+    0% {
+        top: -10px;
+        opacity: 1;
+        transform: rotate(0deg);
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0.5;
+        transform: rotate(720deg);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}

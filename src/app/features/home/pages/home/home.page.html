@@ -19,6 +19,20 @@
       </div>
     </div>
 
+    <!-- Banner de cumpleaños (después de cerrar el modal) -->
+    <div class="birthday-banner" *ngIf="showBirthdayBanner">
+      <div class="birthday-banner-content">
+        <div class="birthday-banner-icon">
+          <ion-icon name="gift-outline"></ion-icon>
+        </div>
+        <div class="birthday-banner-text">
+          <h3>¡Feliz Cumpleaños<span *ngIf="userName">, {{ userName }}</span>! 🎉</h3>
+          <p>Que tengas un día increíble</p>
+        </div>
+        <div class="birthday-banner-close" (click)="dismissBirthdayBanner()">×</div>
+      </div>
+    </div>
+
     <!-- Box de premios disponibles -->
     <div class="rewards-notification-box" *ngIf="availableRewardsCount > 0" (click)="goToRewards()">
       <div class="rewards-content">

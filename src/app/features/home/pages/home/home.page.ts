@@ -20,10 +20,12 @@ import {
 	IonIcon,
 	IonRow,
 	IonSpinner,
+	ModalController,
 	ViewWillEnter,
 } from "@ionic/angular/standalone";
 import { Select, Store } from "@ngxs/store";
 import { AppHeaderComponent } from "@shared/components/app-header/app-header.component";
+import { BirthdayModalComponent } from "@shared/components/birthday-modal/birthday-modal.component";
 import { ExchangeStatus } from "@shared/enums/exchange-status.enum";
 import { DayTranslatePipe } from "@shared/pipes/day-translate.pipe";
 import { addIcons } from "ionicons";
@@ -78,6 +80,9 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	// Propiedades para días disponibles
 	availableDays: number | null = null;
 	showPaymentWarning = false;
+	private birthdayModalShown = false;
+	showBirthdayBanner = false;
+	userName = '';
 
 	constructor(
 		private store: Store,
@@ -85,6 +90,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		private scheduleFacade: ScheduleFacadeService,
 		private rewardsService: RewardsService,
 		private userPlanService: UserPlanService,
+		private modalController: ModalController,
 	) {
 		addIcons({
 			warningOutline,
@@ -94,13 +100,13 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 	/**
 	 * Obtiene la información de días deshabilitados para mostrar en el banner
 	 */
-	getDisabledDaysInfo(): Observable<{day: string, reason: string}[]> {
+	getDisabledDaysInfo(): Observable<{ day: string, reason: string }[]> {
 		return this.schedules$.pipe(
 			map(schedules => {
 				if (!schedules) return [];
-				
+
 				const disabledDaysMap = new Map<string, string>();
-				
+
 				for (const schedule of schedules) {
 					if (schedule.disabled && schedule.disabledReason) {
 						const dayName = schedule.day; // Usar directamente el nombre del día que ya viene como string
@@ -110,7 +116,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 						}
 					}
 				}
-				
+
 				// Convertir el mapa a array
 				return Array.from(disabledDaysMap.entries()).map(([day, reason]) => ({
 					day,
@@ -273,6 +279,22 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 			// Actualizar puntos del usuario
 			this.store.dispatch(new GetCurrentUser());
 
+			// Verificar si es el cumpleaños del usuario y mostrar modal o banner
+			if (user.userInfo?.dateBirthday && this.isBirthday(new Date(user.userInfo.dateBirthday))) {
+				this.userName = user.userInfo.name || '';
+				const today = new Date().toDateString();
+				const birthdayModalClosedToday = localStorage.getItem('birthdayModalClosed') === today;
+
+				if (!this.birthdayModalShown && !birthdayModalClosedToday) {
+					// Mostrar modal si no se ha mostrado en esta sesión ni se cerró hoy
+					this.showBirthdayModal(this.userName);
+					this.birthdayModalShown = true;
+				} else if (birthdayModalClosedToday) {
+					// Mostrar banner si ya se cerró el modal hoy
+					this.showBirthdayBanner = true;
+				}
+			}
+
 			// Recalcular premios disponibles con datos frescos
 			this.calculateAvailableRewards(user._id);
 		}
@@ -299,5 +321,37 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 				},
 			});
 		}
+	}
+
+	isBirthday(birthday: Date): boolean {
+		const today = new Date();
+		const birthdayDate = new Date(birthday);
+		return (
+			today.getDate() === birthdayDate.getDate() &&
+			today.getMonth() === birthdayDate.getMonth()
+		);
+	}
+
+	async showBirthdayModal(userName: string): Promise<void> {
+		const modal = await this.modalController.create({
+			component: BirthdayModalComponent,
+			componentProps: {
+				userName: userName
+			},
+			cssClass: 'birthday-modal',
+			backdropDismiss: false
+		});
+
+		await modal.present();
+
+		// Cuando el modal se cierre, guardar en localStorage y mostrar banner
+		const { data } = await modal.onDidDismiss();
+		const today = new Date().toDateString();
+		localStorage.setItem('birthdayModalClosed', today);
+		this.showBirthdayBanner = true;
+	}
+
+	dismissBirthdayBanner(): void {
+		this.showBirthdayBanner = false;
 	}
 }

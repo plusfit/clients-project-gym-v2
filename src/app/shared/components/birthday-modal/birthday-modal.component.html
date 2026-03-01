@@ -1,0 +1,36 @@
+<div class="birthday-modal-overlay" (click)="closeModal()">
+  <div class="birthday-modal-content" (click)="$event.stopPropagation()">
+    <!-- Close Button -->
+    <button class="close-button" (click)="closeModal()" aria-label="Cerrar">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+
+    <!-- Confetti Animation -->
+    <div class="confetti-container">
+      <div class="confetti" *ngFor="let item of [].constructor(50); let i = index"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="modal-body">
+      <div class="gift-icon">
+        <ion-icon name="gift-outline"></ion-icon>
+      </div>
+
+      <h1 class="birthday-title">
+        ¡Feliz Cumpleaños<span *ngIf="userName">, {{ userName }}</span>!
+      </h1>
+
+      <p class="birthday-message">
+        🎉 Hoy es tu día especial 🎉
+      </p>
+
+      <p class="birthday-subtitle">
+        ¡Que tengas un día lleno de alegría, salud y momentos inolvidables!
+      </p>
+
+      <div class="celebration-emoji">
+        🎂🎈🎁
+      </div>
+    </div>
+  </div>
+</div>
