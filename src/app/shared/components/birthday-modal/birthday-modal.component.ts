@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
-    IonButton,
-    IonContent,
     IonIcon,
     ModalController
 } from '@ionic/angular/standalone';
@@ -14,8 +12,6 @@ import { closeOutline, giftOutline } from 'ionicons/icons';
     standalone: true,
     imports: [
         CommonModule,
-        IonContent,
-        IonButton,
         IonIcon
     ],
     templateUrl: './birthday-modal.component.html',

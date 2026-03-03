@@ -2,12 +2,13 @@ import { CommonModule } from "@angular/common";
 import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon } from "@ionic/angular/standalone";
 import { ExperienceLevelPipe } from "@shared/pipes/experience-level-translate.pipe";
+import { GoalPipe } from "@shared/pipes/plan-goal.translate.pipe";
 import { Subject } from "rxjs";
 
 @Component({
 	selector: "app-profile-plan-info",
 	standalone: true,
-	imports: [CommonModule, IonCardContent, IonIcon, IonCard, IonCardHeader, IonCardTitle, ExperienceLevelPipe],
+	imports: [CommonModule, IonCardContent, IonIcon, IonCard, IonCardHeader, IonCardTitle, ExperienceLevelPipe, GoalPipe],
 	templateUrl: "./profile-plan-info.component.html",
 	styleUrl: "../../pages/profile.page.scss",
 })
@@ -15,6 +16,7 @@ export class ProfilePlanInfoComponent implements OnDestroy {
 	@Input() planName = "";
 	@Input() planDays = 0;
 	@Input() planLevel = "";
+	@Input() planGoal = "";
 
 	private destroy$ = new Subject<void>();
 

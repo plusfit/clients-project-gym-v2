@@ -1,28 +1,45 @@
 <ion-card class="profile-card">
-  <div class="image-container">
+  <div class="banner-section">
+    <!-- Imagen de fondo difuminada para rellenar huecos -->
     <img
-      class="profile-image"
-      [ngSrc]="imageUrl"
-      width="800"
-      height="350"
-      priority="high"
+      class="profile-banner-bg"
+      [src]="imageUrl"
+      alt=""
+      aria-hidden="true"
+    />
+    
+    <div class="loading-overlay" *ngIf="!isImageLoaded">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
+    
+    <div class="image-overlay-gradient"></div>
+
+    <img
+      class="profile-banner-image"
+      [src]="imageUrl"
+      (load)="onImageLoad()"
+      [ngClass]="{'loaded': isImageLoaded}"
       alt="Imagen de perfil"
     />
+    
+    <ion-button 
+      class="change-photo-btn-transparent" 
+      shape="round" 
+      (click)="onImageClick()">
+      <ion-icon name="camera-outline" slot="start"></ion-icon>
+      Cambiar foto
+    </ion-button>
   </div>
-  <ion-card-header>
-    <ion-card-title>
-      <ion-icon name="person-circle-outline" class="profile-icon"></ion-icon>
-      <span class="title"> {{ name }} </span>
-    </ion-card-title>
-    <ion-card-subtitle>
-      <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
-      {{ age }} años
-    </ion-card-subtitle>
+
+  <ion-card-header class="profile-header-info">
+    <div class="user-main-info">
+      <ion-card-title class="ion-text-start">
+        <span class="title">{{ name }}</span>
+      </ion-card-title>
+      <ion-card-subtitle class="ion-text-start">
+        <ion-icon name="calendar-outline" class="info-icon"></ion-icon>
+        {{ age }} años
+      </ion-card-subtitle>
+    </div>
   </ion-card-header>
-  <ion-card-content>
-    <p>
-      <ion-icon name="trophy-outline" class="info-icon"></ion-icon>
-      <span>{{ planGoal | goal }}</span>
-    </p>
-  </ion-card-content>
 </ion-card>

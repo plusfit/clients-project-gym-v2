@@ -7,14 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-} from '@angular/fire/storage';
 import {
   FormBuilder,
   FormGroup,
@@ -57,6 +50,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { IonDatetimeModalComponent } from '@shared/components/IonDatetimeModal/ion-datetime-modal.component';
+import { FirebaseStorageService } from '@shared/services/firebase-storage.service';
 import { ToastService } from '@shared/services/toast.service';
 import { addIcons } from 'ionicons';
 import {
@@ -78,54 +72,6 @@ import { finalize, take, map, catchError, of, Observable } from 'rxjs';
 import { LoadOnboardingData, SetStep1 } from '../../state/onboarding.actions';
 import { OnboardingState } from '../../state/onboarding.state';
 import { OnboardingStep2Component } from '../onboarding.step2/onboarding-step2.component';
-
-@Injectable({
-  providedIn: 'root',
-})
-export class FirebaseStorageService {
-  async uploadAvatar(userId: string, base64Image: string): Promise<string> {
-    try {
-      const format = base64Image.split(';')[0].split('/')[1];
-      const blob = this.dataURItoBlob(base64Image);
-      const fileName = `${userId}_${Date.now()}.${format}`;
-      const filePath = `avatars/${fileName}`;
-      const storageInstance = getStorage();
-      const fileRef = ref(storageInstance, filePath);
-
-      try {
-        const snapshot = await uploadBytes(fileRef, blob);
-
-        const downloadURL = await getDownloadURL(fileRef);
-
-        return downloadURL;
-      } catch (uploadError) {
-        console.error('Error uploading image:', uploadError);
-        return base64Image;
-      }
-    } catch (error) {
-      console.error('Error processing image for upload:', error);
-      return base64Image;
-    }
-  }
-
-  private dataURItoBlob(dataURI: string): Blob {
-    let byteString: string;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
-      byteString = atob(dataURI.split(',')[1]);
-    } else {
-      byteString = decodeURIComponent(dataURI.split(',')[1]);
-    }
-
-    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ab], { type: mimeString });
-  }
-}
 
 @Component({
   selector: 'app-step1',

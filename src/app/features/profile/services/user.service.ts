@@ -10,7 +10,7 @@ import { Plan } from "../interfaces/plan.interface";
 	providedIn: "root",
 })
 export class UserService {
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
 	getUser(id: string): Observable<User | null> {
 		return this.http.get<any>(`${environment.apiUrl}/clients/${id}`).pipe(
@@ -35,6 +35,29 @@ export class UserService {
 				return null;
 			}),
 			catchError((error) => {
+				return of(null);
+			}),
+		);
+	}
+
+	/**
+	 * Actualiza el avatar del usuario en el backend
+	 * @param userId ID del usuario
+	 * @param avatarUrl Nueva URL del avatar
+	 * @returns Observable con el usuario actualizado
+	 */
+	updateAvatar(userId: string, avatarUrl: string): Observable<User | null> {
+		return this.http.patch<any>(`${environment.apiUrl}/clients/${userId}/avatar`, {
+			avatarUrl
+		}).pipe(
+			map((response) => {
+				if (response.success) {
+					return response.data;
+				}
+				return null;
+			}),
+			catchError((error) => {
+				console.error('Error actualizando avatar:', error);
 				return of(null);
 			}),
 		);
