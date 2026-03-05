@@ -309,7 +309,7 @@ export class AuthState {
 					loading: false,
 					error: err.message || "Error al ingresar con Google",
 				});
-				this.toastService.showError("Error al ingresar con Google");
+				this.toastService.showError((err.error?.data?.message ? `${err.error.data.message}` : "Error al ingresar con Google"));
 				return throwError(() => err);
 			}),
 		);
