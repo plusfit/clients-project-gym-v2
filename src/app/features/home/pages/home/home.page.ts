@@ -223,7 +223,7 @@ export class HomePage implements OnInit, OnDestroy, ViewWillEnter {
 		this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
 			if (user) {
 				// Obtener puntos del usuario
-				this.userPoints = (user as User & { availablePoints?: number }).availablePoints || 0;
+				this.userPoints = user.availablePoints || 0;
 
 				// Cargar rewards y calcular disponibles
 				this.calculateAvailableRewards(user._id);

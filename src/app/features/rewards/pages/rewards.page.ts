@@ -3,12 +3,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
-    IonButton,
-    IonContent,
-    IonIcon,
-    IonSpinner,
-    IonText,
-    ModalController
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonSpinner,
+  IonText,
+  ModalController
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { AppHeaderComponent } from '@shared/components/app-header/app-header.component';
@@ -16,13 +16,13 @@ import { ExchangeStatus } from '@shared/enums/exchange-status.enum';
 import { ToastService } from '@shared/services/toast.service';
 import { addIcons } from 'ionicons';
 import {
-    alertCircleOutline,
-    checkmarkCircleOutline,
-    giftOutline,
-    refreshOutline,
-    searchOutline,
-    star,
-    starOutline
+  alertCircleOutline,
+  checkmarkCircleOutline,
+  giftOutline,
+  refreshOutline,
+  searchOutline,
+  star,
+  starOutline
 } from 'ionicons/icons';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -67,10 +67,10 @@ export class RewardsPage implements OnInit, OnDestroy {
   error: string | null = null;
   userPoints = 0;
   exchangingRewardId: string | null = null;
-  
+
   // View mode
   viewMode: 'timeline' | 'grid' = 'timeline';
-  
+
   // Filters (for grid view)
   searchTerm = '';
   showOnlyAvailable = false;
@@ -127,9 +127,9 @@ export class RewardsPage implements OnInit, OnDestroy {
     this.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       if (user) {
         // Get user points from availablePoints field
-        this.userPoints = (user as User & { availablePoints?: number }).availablePoints || 0;
+        this.userPoints = user.availablePoints || 0;
         this.applyFilters();
-        
+
         // Load user exchanges
         this.loadUserExchanges(user._id);
       }
@@ -140,7 +140,7 @@ export class RewardsPage implements OnInit, OnDestroy {
     this.store.dispatch(new LoadRewards());
   }
 
-  private loadUserExchanges(userId: string) {    
+  private loadUserExchanges(userId: string) {
     this.rewardsService.getClientExchanges(userId).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -180,7 +180,7 @@ export class RewardsPage implements OnInit, OnDestroy {
     // Apply search filter
     if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(reward => 
+      filtered = filtered.filter(reward =>
         reward.name.toLowerCase().includes(searchLower) ||
         (reward.description?.toLowerCase().includes(searchLower))
       );
@@ -193,7 +193,7 @@ export class RewardsPage implements OnInit, OnDestroy {
 
     // Apply affordable filter
     if (this.showOnlyAffordable) {
-      filtered = filtered.filter(reward => 
+      filtered = filtered.filter(reward =>
         !reward.disabled && this.userPoints >= reward.pointsRequired
       );
     }
@@ -202,6 +202,7 @@ export class RewardsPage implements OnInit, OnDestroy {
   }
 
   async onExchangeReward(reward: Reward) {
+
     if (reward.disabled || this.userPoints < reward.pointsRequired) {
       await this.toastService.showToast(
         'No puedes canjear este premio en este momento',
@@ -235,7 +236,7 @@ export class RewardsPage implements OnInit, OnDestroy {
 
     try {
       await this.store.dispatch(new ExchangeReward(reward.id, user._id)).toPromise();
-      
+
       await this.toastService.showToast(
         `¡Premio "${reward.name}" canjeado exitosamente!`,
         'success'
@@ -244,9 +245,9 @@ export class RewardsPage implements OnInit, OnDestroy {
       // Reload rewards, user data and exchanges to reflect changes
       this.loadRewards();
       this.loadUserExchanges(user._id);
-      // Refresh user data to update available points
-      this.store.dispatch(new GetCurrentUser());
-      
+      // Refresh user data to update available points (this is also done by the action handler)
+      await this.store.dispatch(new GetCurrentUser()).toPromise();
+
     } catch (error: unknown) {
       await this.toastService.showToast(
         (error as Error).message || 'Error al canjear el premio',
@@ -261,18 +262,18 @@ export class RewardsPage implements OnInit, OnDestroy {
   async onTimelineRewardClick(reward: Reward) {
     const user = this.store.selectSnapshot(AuthState.getUser);
     if (!user) return;
-  
+
     let status: 'available' | 'exchanged' | 'pending' | 'locked';
-    
+
     if (Array.isArray(this.exchanges)) {
       // Buscar exchanges para este reward
       const rewardExchanges = this.exchanges.filter(exchange => exchange.rewardId === reward.id);
-      
+
       // Verificar si hay exchange pendiente
       const pendingExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.PENDING);
       if (pendingExchange) {
         status = 'pending';
-      } 
+      }
       // Verificar si hay exchange completado
       else {
         const completedExchange = rewardExchanges.find(exchange => exchange.status === ExchangeStatus.COMPLETED);

@@ -38,6 +38,7 @@ export interface User {
 	routineId?: string;
 	refreshToken?: string;
 	isOnboardingCompleted?: boolean;
+	availablePoints?: number;
 }
 
 export enum UserRole {

@@ -52,6 +52,11 @@ export class UpdateUser {
 	constructor(public user: User) {}
 }
 
+export class UpdateAvailablePoints {
+	static readonly type = "[Auth] Update Available Points";
+	constructor(public points: number) {}
+}
+
 export class ForgotPassword {
 	static readonly type = "[Auth] Forgot Password";
 	constructor(public email: string) {}

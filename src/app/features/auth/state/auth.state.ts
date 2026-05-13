@@ -29,6 +29,7 @@ import {
 	SetMockUser,
 	SetOnboardingCompleted,
 	ShowPasswordReminder,
+	UpdateAvailablePoints,
 	UpdateUser,
 } from "./auth.actions";
 
@@ -387,6 +388,19 @@ export class AuthState {
 	@Action(UpdateUser)
 	updateUser(ctx: StateContext<AuthStateModel>, action: UpdateUser) {
 		ctx.patchState({ user: action.user });
+	}
+
+	@Action(UpdateAvailablePoints)
+	updateAvailablePoints(ctx: StateContext<AuthStateModel>, action: UpdateAvailablePoints) {
+		const state = ctx.getState();
+		if (state.user) {
+			ctx.patchState({
+				user: {
+					...state.user,
+					availablePoints: action.points,
+				},
+			});
+		}
 	}
 
 	@Action(ShowPasswordReminder)

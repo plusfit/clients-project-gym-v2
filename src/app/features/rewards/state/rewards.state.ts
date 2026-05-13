@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { UpdateAvailablePoints } from '../../auth/state/auth.actions';
 import { Reward, RewardResponse } from '../interfaces/reward.interface';
 import { RewardsService } from '../services/rewards.service';
 import {
@@ -154,8 +155,17 @@ export class RewardsState {
     ctx.patchState({ loading: true, error: null });
 
     return this.rewardsService.exchangeReward(action.rewardId, action.clientId).pipe(
-      tap((result) => {
+      tap((result: any) => {
         if (result.success) {
+          // Extraer los puntos restantes de la respuesta (considerando el wrapping de la API)
+          // La respuesta puede estar doblemente envuelta por el interceptor y el controlador
+          const responseData = result.data;
+          const remainingPoints = responseData?.data?.remainingPoints ?? responseData?.remainingPoints;
+
+          if (remainingPoints !== undefined) {
+            ctx.dispatch(new UpdateAvailablePoints(remainingPoints));
+          }
+
           // Update the reward's totalExchanges count locally
           const state = ctx.getState();
           const updatedRewards = state.rewards.map(reward => 
